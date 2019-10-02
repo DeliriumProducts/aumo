@@ -1,6 +1,6 @@
 package aumo
 
-import "github.com/jihzu/gorm"
+import "github.com/jinzhu/gorm"
 
 type User struct {
 	gorm.Model
