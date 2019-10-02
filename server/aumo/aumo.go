@@ -7,9 +7,9 @@ type Config struct {
 }
 
 type Aumo struct {
-	config Config
+	Config
 }
 
 func New(c Config) Aumo {
-	return Aumo{config: c}
+	return Aumo{Config: c}
 }
