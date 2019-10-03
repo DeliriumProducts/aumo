@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
@@ -36,12 +35,5 @@ func main() {
 		DB: db,
 	})
 
-	a.CreateUser("fr3fou", "simo3003@me.com", "fr3fou123/")
-	u, _ := a.GetUserByEmail("simo3003@me.com")
-	si, _ := a.CreateShopItem("Pesho", 34, "pesho", 10)
-	u.SetUserPoints(500000)
-	fmt.Println(u.Points)
-
-	fmt.Println(u.BuyItem(si, 10))
-	fmt.Printf("%+v", u)
+	a.CreateUser("simo", "simo3003@me.com", "123")
 }

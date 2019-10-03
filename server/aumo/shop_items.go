@@ -49,8 +49,9 @@ func (a *Aumo) getShopItem(where ...interface{}) (ShopItem, error) {
 	return si, nil
 }
 
-func (si *ShopItem) SetQuantity(quantity uint) error {
-	return si.a.DB.Model(si).Update("quantity", quantity).Error
+// Update takes in a new struct that has the updated fields
+func (si *ShopItem) Update(newSi ShopItem) error {
+	return si.a.DB.Model(si).Updates(newSi).Error
 }
 
 func (si *ShopItem) Delete() error {

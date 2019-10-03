@@ -7,10 +7,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string     `json:"name"`
-	Email    string     `json:"email"`
-	Password string     `json:"-"`
-	Points   float64    `json:"points"`
+	Name     string     `json:"name" gorm:"not null"`
+	Email    string     `json:"email" gorm:"unique;not null"`
+	Password string     `json:"-" gorm:"not null"`
+	Points   float64    `json:"points" gorm:"not null"`
 	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
 	a        *Aumo
 }
@@ -65,9 +65,9 @@ func (a *Aumo) getUser(where ...interface{}) (User, error) {
 	return user, nil
 }
 
-// SetUserPoints sets the user's points to the provided ones
-func (u *User) SetUserPoints(points float64) error {
-	return u.a.DB.Model(u).Update("points", points).Error
+// Update takes in a new struct that has the updated fields
+func (u *User) Update(newU User) error {
+	return u.a.DB.Model(u).Updates(newU).Error
 }
 
 // ValidatePassword checks if the passed password is the correct one
@@ -79,6 +79,7 @@ func (u *User) ValidatePassword(password string) bool {
 	return false
 }
 
+// BuyItem takes in a shopItem and purchases it if there are enough points
 func (u *User) BuyItem(si ShopItem, quantity uint) error {
 	if u.Points-si.Price*float64(quantity) < 0 {
 		return ErrNotSufficientPoints
@@ -88,13 +89,14 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 		return ErrNotInStock
 	}
 
-	err := u.SetUserPoints(u.Points - si.Price*float64(quantity))
-
+	u.Points = u.Points - si.Price*float64(quantity)
+	err := u.Update(*u)
 	if err != nil {
 		return err
 	}
 
-	err = si.SetQuantity(si.Quantity - quantity)
+	si.Quantity = si.Quantity - quantity
+	err = si.Update(si)
 	if err != nil {
 		return err
 	}
