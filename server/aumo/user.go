@@ -38,7 +38,7 @@ func (a *Aumo) GetUserByEmail(email string) (User, error) {
 	return a.getUser(&User{}, "email = ?", email)
 }
 
-// GetUserById returns a user that has a matching email
+// GetUserById returns a user that has a matching id
 func (a *Aumo) GetUserById(id uint) (User, error) {
 	return a.getUser(&User{}, "id = ?", id)
 }
@@ -65,7 +65,7 @@ func (u *User) ValidatePassword(password string) bool {
 	return false
 }
 
-func (a *Aumo) UpdateUserPoints(userId uint, points float64) {
-
-	// a.DB.Model(a.User).Update("points", cu.User.Points+points)
+// SetUserPoints sets the user's  points to the provided ones
+func (a *Aumo) SetUserPoints(u *User, points float64) {
+	a.DB.Model(u).Update("points", points)
 }
