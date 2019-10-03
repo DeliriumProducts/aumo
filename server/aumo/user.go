@@ -88,7 +88,7 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 		return ErrNotInStock
 	}
 
-	err := u.SetUserPoints(u.Points - si.Price)
+	err := u.SetUserPoints(u.Points - si.Price*float64(quantity))
 
 	if err != nil {
 		return err

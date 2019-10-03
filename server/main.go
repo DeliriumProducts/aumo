@@ -38,7 +38,10 @@ func main() {
 
 	a.CreateUser("fr3fou", "simo3003@me.com", "fr3fou123/")
 	u, _ := a.GetUserByEmail("simo3003@me.com")
-	pwd := u.ValidatePassword("fr3fou123/")
-	a.CreateShopItem("Pesho", 34, "pesho", 10)
-	fmt.Println(pwd)
+	si, _ := a.CreateShopItem("Pesho", 34, "pesho", 10)
+	u.SetUserPoints(500000)
+	fmt.Println(u.Points)
+
+	fmt.Println(u.BuyItem(si, 10))
+	fmt.Printf("%+v", u)
 }
