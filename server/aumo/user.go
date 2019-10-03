@@ -56,6 +56,11 @@ func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 	return user, nil
 }
 
+// SetUserPoints sets the user's  points to the provided ones
+func (a *Aumo) SetUserPoints(u *User, points float64) {
+	a.DB.Model(u).Update("points", points)
+}
+
 // ValidatePassword checks if the passed password is the correct one
 func (u *User) ValidatePassword(password string) bool {
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
@@ -63,9 +68,4 @@ func (u *User) ValidatePassword(password string) bool {
 	}
 
 	return false
-}
-
-// SetUserPoints sets the user's  points to the provided ones
-func (a *Aumo) SetUserPoints(u *User, points float64) {
-	a.DB.Model(u).Update("points", points)
 }
