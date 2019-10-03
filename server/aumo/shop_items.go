@@ -7,10 +7,10 @@ type ShopItem struct {
 	Name        string
 	Price       float64
 	Description string
-	Quantity    int
+	Quantity    uint
 }
 
-func (a *Aumo) AddShopItem(name string, price float64, desc string, quantity int) (ShopItem, error) {
+func (a *Aumo) AddShopItem(name string, price float64, desc string, quantity uint) (ShopItem, error) {
 	shopItem := &ShopItem{
 		Name:        name,
 		Price:       price,

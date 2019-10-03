@@ -11,6 +11,7 @@ type User struct {
 	Email    string  `json:"email"`
 	Password string  `json:"-"`
 	Points   float64 `json:"points"`
+	a        *Aumo
 }
 
 // CreateUser creates a user
@@ -28,7 +29,9 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Points:   0,
 	}
 
-	a.DB.Create(user)
+	if err := a.DB.Create(user).Error; err != nil {
+		return User{}, err
+	}
 
 	return *user, nil
 }
@@ -57,8 +60,8 @@ func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 }
 
 // SetUserPoints sets the user's points to the provided ones
-func (a *Aumo) SetUserPoints(u *User, points float64) {
-	a.DB.Model(u).Update("points", points)
+func (u *User) SetUserPoints(points float64) error {
+	return u.a.DB.Model(u).Update("points", points).Error
 }
 
 // ValidatePassword checks if the passed password is the correct one
@@ -68,4 +71,17 @@ func (u *User) ValidatePassword(password string) bool {
 	}
 
 	return false
+}
+
+func (u *User) BuyItem(si ShopItem, quantity uint) error {
+	if u.Points-si.Price*float64(quantity) < 0 {
+		return ErrNotSufficientPoints
+	}
+
+	if si.Quantity-quantity < 0 {
+		return ErrNotInStock
+	}
+
+	// TODO: Add item to user's inventory
+	_ = u.SetUserPoints(u.Points - si.Price)
 }
