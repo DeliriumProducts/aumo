@@ -8,6 +8,7 @@ type ShopItem struct {
 	Price       float64
 	Description string
 	Quantity    uint
+	a           *Aumo
 }
 
 func (a *Aumo) AddShopItem(name string, price float64, desc string, quantity uint) (ShopItem, error) {

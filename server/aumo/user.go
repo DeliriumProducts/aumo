@@ -33,6 +33,8 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		return User{}, err
 	}
 
+	user.a = a
+
 	return *user, nil
 }
 
@@ -55,6 +57,8 @@ func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 	if err != nil {
 		return User{}, nil
 	}
+
+	user.a = a
 
 	return user, nil
 }
