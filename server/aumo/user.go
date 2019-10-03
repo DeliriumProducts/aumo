@@ -12,7 +12,6 @@ type User struct {
 	Password string     `json:"-" gorm:"not null"`
 	Points   float64    `json:"points" gorm:"not null"`
 	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
-	a        *Aumo
 }
 
 // CreateUser creates a user
@@ -35,8 +34,6 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		return User{}, err
 	}
 
-	user.a = a
-
 	return *user, nil
 }
 
@@ -45,8 +42,8 @@ func (a *Aumo) GetUserByEmail(email string) (User, error) {
 	return a.getUser("email = ?", email)
 }
 
-// GetUserById returns a user that has a matching id
-func (a *Aumo) GetUserById(id uint) (User, error) {
+// GetUserByID returns a user that has a matching id
+func (a *Aumo) GetUserByID(id uint) (User, error) {
 	return a.getUser("id = ?", id)
 }
 
@@ -60,14 +57,17 @@ func (a *Aumo) getUser(where ...interface{}) (User, error) {
 		return User{}, err
 	}
 
-	user.a = a
-
 	return user, nil
 }
 
-// Update takes in a new struct that has the updated fields
-func (u *User) Update(newU User) error {
-	return u.a.DB.Model(u).Updates(newU).Error
+// UpdateUser updates a user
+func (a *Aumo) UpdateUser(old, new User) (User, error) {
+	return old, a.updateX(&old, new)
+}
+
+// DeleteUser deletes a user
+func (a *Aumo) DeleteUser(i User) error {
+	return a.deleteX(i)
 }
 
 // ValidatePassword checks if the passed password is the correct one
@@ -79,27 +79,27 @@ func (u *User) ValidatePassword(password string) bool {
 	return false
 }
 
-// BuyItem takes in a shopItem and purchases it if there are enough points
-func (u *User) BuyItem(si ShopItem, quantity uint) error {
-	if u.Points-si.Price*float64(quantity) < 0 {
-		return ErrNotSufficientPoints
-	}
+// // BuyItem takes in a shopItem and purchases it if there are enough points
+// func (u *User) BuyItem(si ShopItem, quantity uint) error {
+// 	if u.Points-si.Price*float64(quantity) < 0 {
+// 		return ErrNotSufficientPoints
+// 	}
 
-	if si.Quantity-quantity < 0 {
-		return ErrNotInStock
-	}
+// 	if si.Quantity-quantity < 0 {
+// 		return ErrNotInStock
+// 	}
 
-	u.Points = u.Points - si.Price*float64(quantity)
-	err := u.Update(*u)
-	if err != nil {
-		return err
-	}
+// 	u.Points = u.Points - si.Price*float64(quantity)
+// 	err := u.Update(*u)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	si.Quantity = si.Quantity - quantity
-	err = si.Update(si)
-	if err != nil {
-		return err
-	}
+// 	si.Quantity = si.Quantity - quantity
+// 	err = si.Update(si)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return u.a.DB.Model(u).Association("Orders").Append(si).Error
-}
+// 	return u.a.DB.Model(u).Association("Orders").Append(si).Error
+// }

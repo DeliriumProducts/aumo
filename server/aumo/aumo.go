@@ -30,3 +30,13 @@ func New(c Config) Aumo {
 		Config: c,
 	}
 }
+
+// updateX is an internal helper function to update any struct
+func (a *Aumo) updateX(old, new interface{}) error {
+	return a.DB.Model(old).Updates(new).Error
+}
+
+// deleteX is an internal helper function to update any struct
+func (a *Aumo) deleteX(i interface{}) error {
+	return a.DB.Delete(i).Error
+}

@@ -8,7 +8,6 @@ type ShopItem struct {
 	Price       float64
 	Description string
 	Quantity    uint
-	a           *Aumo
 }
 
 // CreateShopItem creates a shop item
@@ -24,13 +23,11 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, quantity 
 		return ShopItem{}, err
 	}
 
-	shopItem.a = a
-
 	return *shopItem, nil
 }
 
-// GetShopItemById returns a user that has a matching email
-func (a *Aumo) GetShopItemById(id uint) (ShopItem, error) {
+// GetShopItemByID returns a user that has a matching email
+func (a *Aumo) GetShopItemByID(id uint) (ShopItem, error) {
 	return a.getShopItem("id = ?", id)
 }
 
@@ -44,16 +41,15 @@ func (a *Aumo) getShopItem(where ...interface{}) (ShopItem, error) {
 		return ShopItem{}, err
 	}
 
-	si.a = a
-
 	return si, nil
 }
 
-// Update takes in a new struct that has the updated fields
-func (si *ShopItem) Update(newSi ShopItem) error {
-	return si.a.DB.Model(si).Updates(newSi).Error
+// UpdateShopItem updates an item
+func (a *Aumo) UpdateShopItem(old, new ShopItem) (ShopItem, error) {
+	return old, a.updateX(&old, new)
 }
 
-func (si *ShopItem) Delete() error {
-	return si.a.DB.Delete(&si).Error
+// DeleteShopItem deletes an item
+func (a *Aumo) DeleteShopItem(i ShopItem) error {
+	return a.deleteX(i)
 }
