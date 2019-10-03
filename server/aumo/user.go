@@ -7,10 +7,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string
-	Email    string
-	Password string
-	Points   float64
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Password string  `json:"-"`
+	Points   float64 `json:"points"`
 }
 
 // CreateUser creates a user
@@ -56,7 +56,7 @@ func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 	return user, nil
 }
 
-// SetUserPoints sets the user's  points to the provided ones
+// SetUserPoints sets the user's points to the provided ones
 func (a *Aumo) SetUserPoints(u *User, points float64) {
 	a.DB.Model(u).Update("points", points)
 }
