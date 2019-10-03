@@ -7,10 +7,11 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string  `json:"name"`
-	Email    string  `json:"email"`
-	Password string  `json:"-"`
-	Points   float64 `json:"points"`
+	Name     string     `json:"name"`
+	Email    string     `json:"email"`
+	Password string     `json:"-"`
+	Points   float64    `json:"points"`
+	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
 	a        *Aumo
 }
 
@@ -52,7 +53,7 @@ func (a *Aumo) GetUserById(id uint) (User, error) {
 func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 	var user User
 
-	err := a.DB.First(out, where...)
+	err := a.DB.First(out, where...).Error
 
 	if err != nil {
 		return User{}, nil
@@ -88,4 +89,5 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 
 	// TODO: Add item to user's inventory
 	_ = u.SetUserPoints(u.Points - si.Price)
+	return nil
 }
