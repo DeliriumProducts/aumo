@@ -11,7 +11,8 @@ type ShopItem struct {
 	a           *Aumo
 }
 
-func (a *Aumo) AddShopItem(name string, price float64, desc string, quantity uint) (ShopItem, error) {
+// CreateShopItem creates a shop item
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, quantity uint) (ShopItem, error) {
 	shopItem := &ShopItem{
 		Name:        name,
 		Price:       price,
@@ -30,17 +31,17 @@ func (a *Aumo) AddShopItem(name string, price float64, desc string, quantity uin
 
 // GetShopItemById returns a user that has a matching email
 func (a *Aumo) GetShopItemById(id uint) (ShopItem, error) {
-	return a.getShopItem(&ShopItem{}, "id = ?", id)
+	return a.getShopItem("id = ?", id)
 }
 
 // getShopItem is an internal helper function to quickly get a shop item
-func (a *Aumo) getShopItem(out interface{}, where ...interface{}) (ShopItem, error) {
+func (a *Aumo) getShopItem(where ...interface{}) (ShopItem, error) {
 	var si ShopItem
 
-	err := a.DB.First(out, where...).Error
+	err := a.DB.First(&si, where...).Error
 
 	if err != nil {
-		return ShopItem{}, nil
+		return ShopItem{}, err
 	}
 
 	si.a = a
@@ -48,4 +49,10 @@ func (a *Aumo) getShopItem(out interface{}, where ...interface{}) (ShopItem, err
 	return si, nil
 }
 
-// func (si *ShopItem)
+func (si *ShopItem) SetQuantity(quantity uint) error {
+	return si.a.DB.Model(si).Update("quantity", quantity).Error
+}
+
+func (si *ShopItem) Delete() error {
+	return si.a.DB.Delete(&si).Error
+}

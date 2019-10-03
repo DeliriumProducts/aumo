@@ -28,6 +28,7 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Email:    email,
 		Password: string(pwd),
 		Points:   0,
+		Orders:   []ShopItem{},
 	}
 
 	if err := a.DB.Create(user).Error; err != nil {
@@ -41,22 +42,22 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 
 // GetUserByEmail returns a user that has a matching email
 func (a *Aumo) GetUserByEmail(email string) (User, error) {
-	return a.getUser(&User{}, "email = ?", email)
+	return a.getUser("email = ?", email)
 }
 
 // GetUserById returns a user that has a matching id
 func (a *Aumo) GetUserById(id uint) (User, error) {
-	return a.getUser(&User{}, "id = ?", id)
+	return a.getUser("id = ?", id)
 }
 
 // getUser is an internal helper function to quickly get a user
-func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
+func (a *Aumo) getUser(where ...interface{}) (User, error) {
 	var user User
 
-	err := a.DB.First(out, where...).Error
+	err := a.DB.First(&user, where...).Error
 
 	if err != nil {
-		return User{}, nil
+		return User{}, err
 	}
 
 	user.a = a
@@ -71,7 +72,7 @@ func (u *User) SetUserPoints(points float64) error {
 
 // ValidatePassword checks if the passed password is the correct one
 func (u *User) ValidatePassword(password string) bool {
-	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err == nil {
 		return true
 	}
 
@@ -87,7 +88,16 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 		return ErrNotInStock
 	}
 
-	// TODO: Add item to user's inventory
-	_ = u.SetUserPoints(u.Points - si.Price)
-	return nil
+	err := u.SetUserPoints(u.Points - si.Price)
+
+	if err != nil {
+		return err
+	}
+
+	err = si.SetQuantity(si.Quantity - quantity)
+	if err != nil {
+		return err
+	}
+
+	return u.a.DB.Model(u).Association("Orders").Append(si).Error
 }

@@ -24,6 +24,8 @@ func New(c Config) Aumo {
 		panic("aumo: no db instance provided")
 	}
 
+	c.DB.AutoMigrate(&User{}, &ShopItem{})
+
 	return Aumo{
 		Config: c,
 	}

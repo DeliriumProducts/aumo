@@ -32,8 +32,6 @@ func main() {
 
 	defer db.Close()
 
-	db.AutoMigrate(&aumo.User{})
-
 	a := aumo.New(aumo.Config{
 		DB: db,
 	})
@@ -41,5 +39,6 @@ func main() {
 	a.CreateUser("fr3fou", "simo3003@me.com", "fr3fou123/")
 	u, _ := a.GetUserByEmail("simo3003@me.com")
 	pwd := u.ValidatePassword("fr3fou123/")
+	a.CreateShopItem("Pesho", 34, "pesho", 10)
 	fmt.Println(pwd)
 }
