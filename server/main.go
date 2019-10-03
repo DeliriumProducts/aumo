@@ -22,7 +22,7 @@ func main() {
 	MYSQL_HOST := os.Getenv("MYSQL_HOST")
 	MYSQL_PORT := os.Getenv("MYSQL_PORT")
 
-	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE
+	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE + "?parseTime=true"
 
 	db, err := gorm.Open("mysql", MYSQL_STRING)
 
