@@ -35,9 +35,19 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 
 // GetUserByEmail returns a user that has a matching email
 func (a *Aumo) GetUserByEmail(email string) (User, error) {
+	return a.getUser(&User{}, "email = ?", email)
+}
+
+// GetUserById returns a user that has a matching email
+func (a *Aumo) GetUserById(id uint) (User, error) {
+	return a.getUser(&User{}, "id = ?", id)
+}
+
+// getUser is an internal helper function to quickly get a user
+func (a *Aumo) getUser(out interface{}, where ...interface{}) (User, error) {
 	var user User
 
-	err := a.DB.First(&user, "email = ?", email)
+	err := a.DB.First(out, where...)
 
 	if err != nil {
 		return User{}, nil
@@ -53,4 +63,9 @@ func (u *User) ValidatePassword(password string) bool {
 	}
 
 	return false
+}
+
+func (a *Aumo) UpdateUserPoints(userId uint, points float64) {
+
+	// a.DB.Model(a.User).Update("points", cu.User.Points+points)
 }
