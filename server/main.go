@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/jinzhu/gorm"
@@ -10,17 +11,22 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
+	err := godotenv.Load()
+	if err != nil {
+		panic(".env file not found")
+	}
+
+	MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_PORT := os.Getenv("MYSQL_DATABASE"), os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), os.Getenv("MYSQL_HOST"), os.Getenv("MYSQL_PORT")
+	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE
+	db, err := gorm.Open("mysql", MYSQL_STRING)
 	if err != nil {
 		panic(err)
 	}
 
 	defer db.Close()
-	a := aumo.New(aumo.Config{})
 
+	db.AutoMigrate(&aumo.User{})
+
+	a := aumo.New(aumo.Config{})
 	fmt.Printf("%+v", a)
-	err = godotenv.Load()
-	if err != nil {
-		panic(".env file not found")
-	}
 }
