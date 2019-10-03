@@ -1,6 +1,8 @@
 package aumo
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Config struct {
 	DB *gorm.DB
@@ -11,5 +13,11 @@ type Aumo struct {
 }
 
 func New(c Config) Aumo {
-	return Aumo{Config: c}
+	if c.DB == nil {
+		panic("aumo: no db instance provided")
+	}
+
+	return Aumo{
+		Config: c,
+	}
 }

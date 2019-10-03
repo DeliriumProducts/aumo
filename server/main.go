@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
@@ -34,6 +33,7 @@ func main() {
 
 	db.AutoMigrate(&aumo.User{})
 
-	a := aumo.New(aumo.Config{})
-	fmt.Printf("%+v", a)
+	_ = aumo.New(aumo.Config{
+		DB: db,
+	})
 }
