@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
@@ -33,7 +34,12 @@ func main() {
 
 	db.AutoMigrate(&aumo.User{})
 
-	_ = aumo.New(aumo.Config{
+	a := aumo.New(aumo.Config{
 		DB: db,
 	})
+
+	a.CreateUser("fr3fou", "simo3003@me.com", "fr3fou123/")
+	u, _ := a.GetUserByEmail("simo3003@me.com")
+	pwd := u.ValidatePassword("fr3fou123/")
+	fmt.Println(pwd)
 }
