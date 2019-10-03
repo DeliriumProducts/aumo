@@ -39,25 +39,16 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 
 // GetUserByEmail returns a user that has a matching email
 func (a *Aumo) GetUserByEmail(email string) (User, error) {
-	return a.getUser("email = ?", email)
+	var user User
+	err := a.firstX(&user, "email = ?", email)
+	return user, err
 }
 
 // GetUserByID returns a user that has a matching id
 func (a *Aumo) GetUserByID(id uint) (User, error) {
-	return a.getUser("id = ?", id)
-}
-
-// getUser is an internal helper function to quickly get a user
-func (a *Aumo) getUser(where ...interface{}) (User, error) {
 	var user User
-
-	err := a.DB.First(&user, where...).Error
-
-	if err != nil {
-		return User{}, err
-	}
-
-	return user, nil
+	err := a.firstX(&user, "id = ?", id)
+	return user, err
 }
 
 // UpdateUser updates a user

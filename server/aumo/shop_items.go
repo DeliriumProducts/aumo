@@ -28,20 +28,9 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, quantity 
 
 // GetShopItemByID returns a user that has a matching email
 func (a *Aumo) GetShopItemByID(id uint) (ShopItem, error) {
-	return a.getShopItem("id = ?", id)
-}
-
-// getShopItem is an internal helper function to quickly get a shop item
-func (a *Aumo) getShopItem(where ...interface{}) (ShopItem, error) {
 	var si ShopItem
-
-	err := a.DB.First(&si, where...).Error
-
-	if err != nil {
-		return ShopItem{}, err
-	}
-
-	return si, nil
+	err := a.findX(&si, "id = ?", id)
+	return si, err
 }
 
 // UpdateShopItem updates an item

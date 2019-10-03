@@ -40,3 +40,13 @@ func (a *Aumo) updateX(old, new interface{}) error {
 func (a *Aumo) deleteX(i interface{}) error {
 	return a.DB.Delete(i).Error
 }
+
+// firstX is an internal helper function to get the first row of any struct
+func (a *Aumo) firstX(dest interface{}, where ...interface{}) error {
+	return a.DB.First(dest, where...).Error
+}
+
+// findX is an internal helper function to get all of the rows of any struct
+func (a *Aumo) findX(dest interface{}, where ...interface{}) error {
+	return a.DB.Find(dest, where...).Error
+}
