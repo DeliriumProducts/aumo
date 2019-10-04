@@ -44,7 +44,7 @@ func main() {
 	})
 
 	log.Println("Aumo server running on port ", ADDRESS)
-	if err := http.ListenAndServe("localhost:"+ADDRESS, w.Router); err != nil {
+	if err := http.ListenAndServe(ADDRESS, w.Router); err != nil {
 		panic(err)
 	}
 }
