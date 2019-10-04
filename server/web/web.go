@@ -27,8 +27,8 @@ func New(c Config) *Web {
 		Router: r,
 	}
 
-	r.Route("/products", func(r chi.Router) {
-		r.Get("/", w.GetProducts)
+	r.Route("/users", func(r chi.Router) {
+		r.Post("/", w.RegisterHandler)
 	})
 
 	return w
