@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
@@ -35,5 +36,8 @@ func main() {
 		DB: db,
 	})
 
-	a.CreateUser("simo", "simo3003@me.com", "123")
+	u, _ := a.CreateUser("simo", "simo3003@me.com", "123")
+	si, _ := a.CreateShopItem("pesho", 5, "asdf", 10)
+	err = a.BuyUserShopItem(u, si, 5)
+	fmt.Println(err)
 }

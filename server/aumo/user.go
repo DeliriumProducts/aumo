@@ -65,7 +65,7 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Name:     name,
 		Email:    email,
 		Password: string(pwd),
-		Points:   0,
+		Points:   5000,
 		Orders:   []ShopItem{},
 	}
 
