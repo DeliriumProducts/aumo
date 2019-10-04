@@ -41,5 +41,7 @@ func main() {
 	fmt.Printf("Receipt: %+v\n", r)
 	err = a.SetReceiptUserID(u, r)
 
-	fmt.Println(err)
+	u2, _ := a.GetUserByID(1)
+
+	fmt.Println(u2)
 }
