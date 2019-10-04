@@ -2,8 +2,10 @@ package web
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi"
 )
 
 type NewReceiptForm struct {
@@ -19,13 +21,32 @@ func (wb *Web) NewReceiptHandler(w http.ResponseWriter, r *http.Request) {
 
 	receipt, err := wb.CreateReceipt(nrw.Content)
 	if err != nil {
-		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	if err := json.NewEncoder(w).Encode(receipt); err != nil {
-		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+func (wb *Web) ReceiptHandler(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+
+	id, err := strconv.ParseInt(param, 10, 32)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	rec, err := wb.GetReceiptByID(uint(id))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(rec); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

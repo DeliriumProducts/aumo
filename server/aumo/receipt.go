@@ -40,6 +40,13 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	return *receipt, nil
 }
 
+// GetReceiptByID gets a receipt by ID
+func (a *Aumo) GetReceiptByID(id uint) (Receipt, error) {
+	var r Receipt
+	err := a.firstX(&r, "id = ?", id)
+	return r, err
+}
+
 // SetReceiptUserID claims the receipt by calling the ClaimReceipt(r) (adds receipt to the receipt list of the user)
 // Sets the user id in the receipt (receipt is claimed by the user)
 func (a *Aumo) SetReceiptUserID(u User, r Receipt) error {
