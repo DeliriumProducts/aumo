@@ -7,16 +7,16 @@ type ShopItem struct {
 	Name        string
 	Price       float64
 	Description string
-	Quantity    uint
+	Stock       uint
 }
 
 // CreateShopItem creates a shop item
-func (a *Aumo) CreateShopItem(name string, price float64, desc string, quantity uint) (ShopItem, error) {
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint) (ShopItem, error) {
 	shopItem := &ShopItem{
 		Name:        name,
 		Price:       price,
 		Description: desc,
-		Quantity:    quantity,
+		Stock:       stock,
 	}
 
 	if err := a.DB.Create(shopItem).Error; err != nil {
@@ -41,4 +41,12 @@ func (a *Aumo) UpdateShopItem(old, new ShopItem) (ShopItem, error) {
 // DeleteShopItem deletes an item
 func (a *Aumo) DeleteShopItem(i ShopItem) error {
 	return a.deleteX(i)
+}
+
+func (si *ShopItem) DecrementStock(i uint) {
+	si.Stock = si.Stock - i
+}
+
+func (si *ShopItem) IncrementStock(i uint) {
+	si.Stock = si.Stock + i
 }
