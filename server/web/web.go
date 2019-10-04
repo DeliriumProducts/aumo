@@ -3,6 +3,9 @@ package web
 import (
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/gorilla/securecookie"
 )
 
 type Config struct {
@@ -12,6 +15,7 @@ type Config struct {
 type Web struct {
 	Config
 	Router *chi.Mux
+	store  *sessions.CookieStore
 }
 
 func New(c Config) *Web {
@@ -21,9 +25,23 @@ func New(c Config) *Web {
 
 	r := chi.NewRouter()
 
+	authKeyOne := securecookie.GenerateRandomKey(64)
+	encryptionKeyOne := securecookie.GenerateRandomKey(32)
+
+	store := sessions.NewCookieStore(
+		authKeyOne,
+		encryptionKeyOne,
+	)
+
+	store.Options = &sessions.Options{
+		MaxAge:   60 * 15,
+		HttpOnly: true,
+	}
+
 	w := &Web{
 		Config: c,
 		Router: r,
+		store:  store,
 	}
 
 	r.Use(ContentTypeJSON)
