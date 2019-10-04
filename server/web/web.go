@@ -27,6 +27,8 @@ func New(c Config) *Web {
 		Router: r,
 	}
 
+	r.Use(ContentTypeJSON)
+
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", w.RegisterHandler)
 	})
