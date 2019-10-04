@@ -4,8 +4,8 @@ import (
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/gorilla/sessions"
 	"github.com/gorilla/securecookie"
+	"github.com/gorilla/sessions"
 )
 
 type Config struct {
@@ -44,6 +44,10 @@ func New(c Config) *Web {
 		store:  store,
 	}
 
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 	r.Use(ContentTypeJSON)
 
 	r.Route("/users", func(r chi.Router) {
