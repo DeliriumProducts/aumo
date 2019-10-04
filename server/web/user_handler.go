@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/fr3fou/aumo/server/aumo"
-	"github.com/gorilla/sessions"
 )
 
 type UserForm struct {
@@ -59,7 +58,7 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	session.Values["user"] = &user
 
-	err = sessions.Save(r, w)
+	err = session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
