@@ -61,5 +61,10 @@ func New(c Config) *Web {
 		r.Get("/{id}", w.ReceiptHandler)
 	})
 
+	r.Route("/shop", func(r chi.Router) {
+		r.Post("/", w.NewShopItemHandler)
+		// r.Get("/{id}", w.ReceiptHandler)
+	})
+
 	return w
 }
