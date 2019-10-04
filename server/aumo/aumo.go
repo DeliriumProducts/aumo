@@ -14,7 +14,8 @@ type Config struct {
 }
 
 type Aumo struct {
-	Config
+	c  Config
+	db *gorm.DB
 }
 
 func New(c Config) *Aumo {
@@ -25,26 +26,27 @@ func New(c Config) *Aumo {
 	c.DB.AutoMigrate(&User{}, &ShopItem{}, &Receipt{})
 
 	return &Aumo{
-		Config: c,
+		c:  c,
+		db: c.DB,
 	}
 }
 
 // updateX is an internal helper function to update any struct
 func (a *Aumo) updateX(i interface{}) error {
-	return a.DB.Model(i).Updates(i).Error
+	return a.db.Model(i).Updates(i).Error
 }
 
 // deleteX is an internal helper function to update any struct
 func (a *Aumo) deleteX(i interface{}) error {
-	return a.DB.Delete(i).Error
+	return a.db.Delete(i).Error
 }
 
 // firstX is an internal helper function to get the first row of any struct
 func (a *Aumo) firstX(dest interface{}, where ...interface{}) error {
-	return a.DB.Set("gorm:auto_preload", true).First(dest, where...).Error
+	return a.db.Set("gorm:auto_preload", true).First(dest, where...).Error
 }
 
 // findX is an internal helper function to get all of the rows of any struct
 func (a *Aumo) findX(dest interface{}, where ...interface{}) error {
-	return a.DB.Set("gorm:auto_preload", true).Find(dest, where...).Error
+	return a.db.Set("gorm:auto_preload", true).Find(dest, where...).Error
 }

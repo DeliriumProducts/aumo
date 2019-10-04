@@ -29,7 +29,7 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uin
 		Stock:       stock,
 	}
 
-	if err := a.DB.Create(shopItem).Error; err != nil {
+	if err := a.db.Create(shopItem).Error; err != nil {
 		return ShopItem{}, err
 	}
 

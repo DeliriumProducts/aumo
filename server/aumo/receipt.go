@@ -34,7 +34,7 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 		Content: content,
 	}
 
-	if err := a.DB.Create(receipt).Error; err != nil {
+	if err := a.db.Create(receipt).Error; err != nil {
 		return Receipt{}, err
 	}
 	return *receipt, nil

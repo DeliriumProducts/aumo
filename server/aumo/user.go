@@ -76,7 +76,7 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Receipts: []Receipt{},
 	}
 
-	if err := a.DB.Create(user).Error; err != nil {
+	if err := a.db.Create(user).Error; err != nil {
 		return User{}, err
 	}
 
