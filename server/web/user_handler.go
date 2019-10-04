@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/fr3fou/aumo/server/aumo"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-chi/chi"
 )
 
@@ -183,7 +182,6 @@ func (wb *Web) BuyHandler(w http.ResponseWriter, r *http.Request) {
 
 func (wb *Web) MeHandler(w http.ResponseWriter, r *http.Request) {
 	u, err := wb.getUserFromRequest(r)
-	spew.Dump(u)
 	if err != nil {
 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
