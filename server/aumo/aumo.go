@@ -1,14 +1,13 @@
+// aumo is the internal library that contains all
+// business logic and necessary DB operations for the aumo project.
+// All (a *Aumo) methods handle DB operations
+// All (u *User) methods and any other struct methods are just
+// convenient wrappers that simply mutate the struct or do some checking
+// they DO NOT have any side effects (other than possibly mutating the original struct)
 package aumo
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
-)
-
-var (
-	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
-	ErrNotInStock          = errors.New("aumo: shop doesn't have enough stock of the item")
 )
 
 type Config struct {
