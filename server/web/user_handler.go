@@ -2,7 +2,6 @@ package web
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -13,20 +12,24 @@ type UserRegisterForm struct {
 }
 
 func (wb *Web) RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		w.Write([]byte(err.Error()))
-	}
-
 	var urm UserRegisterForm
-	json.Unmarshal(body, &urm)
+	if err := json.NewDecoder(r.Body).Decode(&urm); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	user, err := wb.CreateUser(urm.Name, urm.Email, urm.Password)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	res, err := json.Marshal(user)
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
 
-	w.Write(res)
+func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Response) {
+
 }
