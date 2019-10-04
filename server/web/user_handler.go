@@ -2,9 +2,19 @@ package web
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/fr3fou/aumo/server/aumo"
+)
+
+var (
+	ErrBadTypeAssertion = errors.New("web: failed to assert type")
+)
+
+const (
+	CookieStoreKey = "aumo"
+	UserSessionKey = "user"
 )
 
 type UserForm struct {
@@ -40,7 +50,7 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := wb.store.Get(r, "session-name")
+	session, err := wb.store.Get(r, CookieStoreKey)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -56,7 +66,7 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusUnauthorized)
 	}
 
-	session.Values["user"] = &user
+	session.Values[UserSessionKey] = &user
 
 	err = session.Save(r, w)
 	if err != nil {
@@ -65,23 +75,39 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := wb.store.Get(r, "session-name")
+// func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
+// 	session, err := wb.store.Get(r, CookieStoreKey)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Retrieve our struct and type-assert it
+// 	val := session.Values[UserSessionKey]
+// 	user, ok := val.(aumo.User)
+// 	if !ok {
+// 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+
+// 	if err := json.NewEncoder(w).Encode(user); err != nil {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		return
+// 	}
+// }
+
+func (wb *Web) getUserFromRequest(r *http.Request) (aumo.User, error) {
+	session, err := wb.store.Get(r, CookieStoreKey)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return aumo.User{}, err
 	}
 
 	// Retrieve our struct and type-assert it
-	val := session.Values["user"]
+	val := session.Values[UserSessionKey]
 	user, ok := val.(aumo.User)
 	if !ok {
-		http.Error(w, "User unauthorized", http.StatusUnauthorized)
-		return
+		return aumo.User{}, ErrBadTypeAssertion
 	}
 
-	if err := json.NewEncoder(w).Encode(user); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	return user, nil
 }
