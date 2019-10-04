@@ -54,6 +54,11 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 	return nil
 }
 
+// ClaimReceipt claims a receipt and adds it to the receipts array
+func (u *User) ClaimReceipt(r Receipt) {
+	u.Receipts = append(u.Receipts, r)
+}
+
 // CreateUser creates a user
 func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
@@ -68,6 +73,7 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Password: string(pwd),
 		Points:   5000,
 		Orders:   []ShopItem{},
+		Receipts: []Receipt{},
 	}
 
 	if err := a.DB.Create(user).Error; err != nil {

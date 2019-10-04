@@ -17,6 +17,17 @@ type Receipt struct {
 	UserID  sql.NullInt64
 }
 
+// SetUserID claims a receipt with the provided ID
+func (r *Receipt) SetUserID(userID int64) error {
+	if !r.UserID.Valid {
+		return ErrUserIDAlreadySet
+	}
+
+	r.UserID.Int64 = userID
+
+	return nil
+}
+
 func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	receipt := &Receipt{
 		Content: content,
@@ -29,12 +40,19 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	return *receipt, nil
 }
 
-func (r *Receipt) SetUserID(userID int64) error {
-	if !r.UserID.Valid {
-		return ErrUserIDAlreadySet
+func (a *Aumo) SetReceiptUserID(u User, r Receipt) error {
+	u.ClaimReceipt(r)
+	r.SetUserID(int64(u.ID))
+
+	err := a.updateX(u)
+	if err != nil {
+		return err
 	}
 
-	r.UserID.Value = userID
+	err = a.updateX(r)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
