@@ -37,11 +37,10 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	if err := a.DB.Create(receipt).Error; err != nil {
 		return Receipt{}, err
 	}
-
 	return *receipt, nil
 }
 
-// SetReceiptUserId claims the receipt by calling the ClaimReceipt(r) (adds receipt to the receipt list of the user)
+// SetReceiptUserID claims the receipt by calling the ClaimReceipt(r) (adds receipt to the receipt list of the user)
 // Sets the user id in the receipt (receipt is claimed by the user)
 func (a *Aumo) SetReceiptUserID(u User, r Receipt) error {
 	u.ClaimReceipt(r)
