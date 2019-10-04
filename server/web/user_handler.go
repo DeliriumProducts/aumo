@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/go-chi/chi"
 )
 
 var (
@@ -110,4 +112,32 @@ func (wb *Web) getUserFromRequest(r *http.Request) (aumo.User, error) {
 	}
 
 	return user, nil
+}
+
+func (wb *Web) ClaimReceipt(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+
+	id, err := strconv.ParseInt(param, 10, 32)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	user, err := wb.getUserFromRequest(r)
+	if err != nil {
+		http.Error(w, "User unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	receipt, err := wb.GetReceiptByID(uint(id))
+	if err != nil {
+		http.Error(w, "Receipt not found", http.StatusNotFound)
+		return
+	}
+
+	if err := wb.Aumo.SetReceiptUserID(user, receipt); err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
 }
