@@ -107,6 +107,8 @@ func (a *Aumo) DeleteUser(i User) error {
 	return a.deleteX(i)
 }
 
+// BuyUserShopItem calls BuytItem on the user struct, decrements
+// the stock of the shop item then it updates it
 func (a *Aumo) BuyUserShopItem(u User, si ShopItem, quantity uint) error {
 	err := u.BuyItem(si, quantity)
 	if err != nil {

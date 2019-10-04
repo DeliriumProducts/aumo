@@ -28,6 +28,7 @@ func (r *Receipt) SetUserID(userID int64) error {
 	return nil
 }
 
+// CreateReceipt creates a receipt
 func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	receipt := &Receipt{
 		Content: content,
@@ -40,6 +41,8 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	return *receipt, nil
 }
 
+// SetReceiptUserId claims the receipt by calling the ClaimReceipt(r) (adds receipt to the receipt list of the user)
+// Sets the user id in the receipt (receipt is claimed by the user)
 func (a *Aumo) SetReceiptUserID(u User, r Receipt) error {
 	u.ClaimReceipt(r)
 	r.SetUserID(int64(u.ID))
