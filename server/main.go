@@ -39,6 +39,7 @@ func main() {
 	u, _ := a.CreateUser("simo", "simo3003@me.com", "123")
 	r, _ := a.CreateReceipt("FoodPanda, 4,10,2019 19:22")
 	fmt.Printf("Receipt: %+v\n", r)
+	err = a.SetReceiptUserID(u, r)
 
 	fmt.Println(err)
 }
