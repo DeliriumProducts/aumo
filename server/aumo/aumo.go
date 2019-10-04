@@ -1,5 +1,4 @@
-// aumo is the internal library that contains all
-// business logic and necessary DB operations for the aumo project.
+// Package aumo provides business logic and necessary DB operations for the aumo project.
 // All (a *Aumo) methods handle DB operations
 // All (u *User) methods and any other struct methods are just
 // convenient wrappers that simply mutate the struct or do some checking

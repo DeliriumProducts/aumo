@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/fr3fou/aumo/server/web"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
@@ -21,6 +22,7 @@ func main() {
 	MYSQL_PASSWORD := os.Getenv("MYSQL_PASSWORD")
 	MYSQL_HOST := os.Getenv("MYSQL_HOST")
 	MYSQL_PORT := os.Getenv("MYSQL_PORT")
+	ADDRESS := os.Getenv("ADDRESS")
 
 	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE + "?parseTime=true"
 
@@ -36,12 +38,12 @@ func main() {
 		DB: db,
 	})
 
-	u, _ := a.CreateUser("simo", "simo3003@me.com", "123")
-	r, _ := a.CreateReceipt("FoodPanda, 4,10,2019 19:22")
-	fmt.Printf("Receipt: %+v\n", r)
-	err = a.SetReceiptUserID(u, r)
+	w := web.New(web.Config{
+		Aumo: a,
+	})
 
-	u2, _ := a.GetUserByID(1)
-
-	fmt.Println(u2)
+	log.Println("Aumo server running on port ", PORT)
+	if err := http.ListenAndServe("localhost:"+PORT, w.Router); err != nil {
+		panic(err)
+	}
 }

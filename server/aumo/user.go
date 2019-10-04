@@ -19,7 +19,7 @@ type User struct {
 	Password string     `json:"-" gorm:"not null"`
 	Points   float64    `json:"points" gorm:"not null"`
 	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
-	Receipts []Receipt
+	Receipts []Receipt  `json:"receipts"`
 }
 
 // ValidatePassword checks if the passed password is the correct one
