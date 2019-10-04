@@ -52,6 +52,8 @@ func New(c Config) *Web {
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", w.RegisterHandler)
+		r.Post("/login", w.LoginHandler)
+		r.Get("/secret", w.SecretHandler)
 	})
 
 	r.Route("/receipts", func(r chi.Router) {

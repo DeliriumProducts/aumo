@@ -3,22 +3,25 @@ package web
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/gorilla/sessions"
 )
 
-type UserRegisterForm struct {
+type UserForm struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 func (wb *Web) RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	var urm UserRegisterForm
-	if err := json.NewDecoder(r.Body).Decode(&urm); err != nil {
+	var um UserForm
+	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	user, err := wb.CreateUser(urm.Name, urm.Email, urm.Password)
+	user, err := wb.CreateUser(um.Name, um.Email, um.Password)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -30,6 +33,56 @@ func (wb *Web) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Response) {
+func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	var um UserForm
 
+	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	session, err := wb.store.Get(r, "cookie-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	user, err := wb.GetUserByEmail(um.Email)
+	if err != nil {
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
+	}
+
+	if !user.ValidatePassword(um.Password) {
+		http.Error(w, "Invalid password", http.StatusUnauthorized)
+	}
+
+	session.Values["user"] = user
+
+	err = sessions.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := wb.store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Retrieve our struct and type-assert it
+	val := session.Values["person"]
+	user := &aumo.User{}
+	if _, ok := val.(*aumo.User); !ok {
+		w.Write([]byte("ne si lognat"))
+		return
+	}
+	w.Write([]byte("gg, logged in si"))
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 }
