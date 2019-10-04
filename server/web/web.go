@@ -3,7 +3,6 @@ package web
 import (
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 )
 
 type Config struct {
@@ -16,7 +15,6 @@ type Web struct {
 }
 
 func New(c Config) *Web {
-
 	if c.Aumo == nil {
 		panic("web: aumo instance not passed to web.New()")
 	}
@@ -28,14 +26,14 @@ func New(c Config) *Web {
 		Router: r,
 	}
 
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
 	r.Use(ContentTypeJSON)
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", w.RegisterHandler)
+	})
+
+	r.Route("/receipts", func(r chi.Router) {
+		r.Post("/", w.NewReceiptHandler)
 	})
 
 	return w
