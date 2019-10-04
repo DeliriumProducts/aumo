@@ -114,7 +114,7 @@ func (wb *Web) getUserFromRequest(r *http.Request) (aumo.User, error) {
 	return user, nil
 }
 
-func (wb *Web) ClaimReceipt(w http.ResponseWriter, r *http.Request) {
+func (wb *Web) ClaimReceiptHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 
 	id, err := strconv.ParseInt(param, 10, 32)
@@ -136,6 +136,44 @@ func (wb *Web) ClaimReceipt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := wb.Aumo.SetReceiptUserID(user, receipt); err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+}
+
+type BuyForm struct {
+	Quantity uint `json:"quantity"`
+}
+
+func (wb *Web) BuyHandler(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+
+	id, err := strconv.ParseInt(param, 10, 32)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	var bf BuyForm
+	if err := json.NewDecoder(r.Body).Decode(&bf); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	user, err := wb.getUserFromRequest(r)
+	if err != nil {
+		http.Error(w, "User unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	si, err := wb.GetShopItemByID(uint(id))
+	if err != nil {
+		http.Error(w, "Receipt not found", http.StatusNotFound)
+		return
+	}
+
+	if err := wb.Aumo.BuyUserShopItem(user, si, bf.Quantity); err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
