@@ -32,6 +32,7 @@ func New(c Config) *Web {
 	store.Options = &sessions.Options{
 		MaxAge:   3600 * 24,
 		HttpOnly: true,
+		Path:     "/",
 	}
 
 	gob.Register(aumo.User{})
@@ -54,6 +55,8 @@ func New(c Config) *Web {
 		r.Post("/claim-receipt/{id}", w.ClaimReceiptHandler)
 		r.Post("/buy/{id}", w.BuyHandler)
 	})
+
+	r.Get("/me", w.MeHandler)
 
 	r.Route("/receipts", func(r chi.Router) {
 		r.Post("/", w.NewReceiptHandler)
