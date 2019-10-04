@@ -1,11 +1,20 @@
 package aumo
 
-import "github.com/jinzhu/gorm"
+import (
+	"database/sql"
+	"errors"
+
+	"github.com/jinzhu/gorm"
+)
+
+var (
+	ErrUserIDAlreadySet = errors.New("aumo: this receipt has already been claimed")
+)
 
 type Receipt struct {
 	gorm.Model
 	Content string
-	UserID  uint
+	UserID  sql.NullInt64
 }
 
 func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
@@ -18,4 +27,14 @@ func (a *Aumo) CreateReceipt(content string) (Receipt, error) {
 	}
 
 	return *receipt, nil
+}
+
+func (r *Receipt) SetUserID(userID int64) error {
+	if !r.UserID.Valid {
+		return ErrUserIDAlreadySet
+	}
+
+	r.UserID.Value = userID
+
+	return nil
 }
