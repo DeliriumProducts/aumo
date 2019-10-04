@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
@@ -42,8 +43,8 @@ func main() {
 		Aumo: a,
 	})
 
-	log.Println("Aumo server running on port ", PORT)
-	if err := http.ListenAndServe("localhost:"+PORT, w.Router); err != nil {
+	log.Println("Aumo server running on port ", ADDRESS)
+	if err := http.ListenAndServe("localhost:"+ADDRESS, w.Router); err != nil {
 		panic(err)
 	}
 }

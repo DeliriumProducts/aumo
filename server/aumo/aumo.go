@@ -24,7 +24,7 @@ func New(c Config) *Aumo {
 
 	c.DB.AutoMigrate(&User{}, &ShopItem{}, &Receipt{})
 
-	return Aumo{
+	return &Aumo{
 		Config: c,
 	}
 }
