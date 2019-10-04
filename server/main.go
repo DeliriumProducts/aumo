@@ -37,7 +37,7 @@ func main() {
 	})
 
 	u, _ := a.CreateUser("simo", "simo3003@me.com", "123")
-	si, _ := a.CreateShopItem("pesho", 5, "asdf", 10)
-	err = a.BuyUserShopItem(u, si, 5)
+	r, _ := a.CreateReceipt("FoodPanda, 4,10,2019 19:22")
+
 	fmt.Println(err)
 }
