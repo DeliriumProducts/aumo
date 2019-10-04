@@ -17,7 +17,7 @@ type Aumo struct {
 	Config
 }
 
-func New(c Config) Aumo {
+func New(c Config) *Aumo {
 	if c.DB == nil {
 		panic("aumo: no db instance provided")
 	}
