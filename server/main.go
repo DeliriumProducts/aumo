@@ -24,6 +24,7 @@ func main() {
 	MYSQL_HOST := os.Getenv("MYSQL_HOST")
 	MYSQL_PORT := os.Getenv("MYSQL_PORT")
 	ADDRESS := os.Getenv("ADDRESS")
+	COOKIE_SECRET := os.Getenv("COOKIE_SECRET")
 
 	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE + "?parseTime=true"
 
@@ -40,7 +41,8 @@ func main() {
 	})
 
 	w := web.New(web.Config{
-		Aumo: a,
+		Aumo:         a,
+		CookieSecret: []byte(COOKIE_SECRET),
 	})
 
 	log.Println("Aumo server running on port ", ADDRESS)

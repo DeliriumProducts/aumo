@@ -6,12 +6,12 @@ import (
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )
 
 type Config struct {
 	*aumo.Aumo
+	CookieSecret []byte
 }
 
 type Web struct {
@@ -27,13 +27,7 @@ func New(c Config) *Web {
 
 	r := chi.NewRouter()
 
-	authKeyOne := securecookie.GenerateRandomKey(64)
-	encryptionKeyOne := securecookie.GenerateRandomKey(32)
-
-	store := sessions.NewCookieStore(
-		authKeyOne,
-		encryptionKeyOne,
-	)
+	store := sessions.NewCookieStore(c.CookieSecret)
 
 	store.Options = &sessions.Options{
 		MaxAge:   3600 * 24,

@@ -75,14 +75,12 @@ func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Retrieve our struct and type-assert it
 	val := session.Values["user"]
-
-	user, ok := val.(*aumo.User)
+	user, ok := val.(aumo.User)
 	if !ok {
 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	w.Write([]byte("gg, logged in si"))
 	if err := json.NewEncoder(w).Encode(user); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
