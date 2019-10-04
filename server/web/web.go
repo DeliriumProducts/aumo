@@ -34,7 +34,7 @@ func New(c Config) *Web {
 	)
 
 	store.Options = &sessions.Options{
-		MaxAge:   60 * 15,
+		MaxAge:   3600 * 24,
 		HttpOnly: true,
 	}
 
