@@ -1,8 +1,15 @@
 package aumo
 
 import (
+	"errors"
+
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
+	ErrNotInStock          = errors.New("aumo: shop doesn't have enough stock of the item")
 )
 
 type User struct {
@@ -68,6 +75,24 @@ func (u *User) ValidatePassword(password string) bool {
 	}
 
 	return false
+}
+
+// BuyItem adds the passed ShopItem to the user's inventory
+// if they have enough money to buy the desired quantity
+func (u *User) BuyItem(si ShopItem, quantity uint) error {
+	// Check if the user has enough points
+	if u.Points-si.Price*float64(quantity) < 0 {
+		return ErrNotSufficientPoints
+	}
+
+	// Check if there is enough in stock
+	if si.Stock-quantity < 0 {
+		return ErrNotInStock
+	}
+
+	// Substract the points of the user
+	u.Points -= si.Price * float64(quantity)
+	return nil
 }
 
 // // BuyItem takes in a shopItem and purchases it if there are enough points
