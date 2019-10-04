@@ -41,7 +41,7 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := wb.store.Get(r, "cookie-name")
+	session, err := wb.store.Get(r, "session-name")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -57,7 +57,7 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusUnauthorized)
 	}
 
-	session.Values["user"] = user
+	session.Values["user"] = &user
 
 	err = sessions.Save(r, w)
 	if err != nil {
@@ -74,12 +74,14 @@ func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve our struct and type-assert it
-	val := session.Values["person"]
-	user := &aumo.User{}
-	if _, ok := val.(*aumo.User); !ok {
-		w.Write([]byte("ne si lognat"))
+	val := session.Values["user"]
+
+	user, ok := val.(*aumo.User)
+	if !ok {
+		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
 	}
+
 	w.Write([]byte("gg, logged in si"))
 	if err := json.NewEncoder(w).Encode(user); err != nil {
 		w.WriteHeader(http.StatusBadRequest)

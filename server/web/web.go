@@ -1,6 +1,8 @@
 package web
 
 import (
+	"encoding/gob"
+
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -37,6 +39,8 @@ func New(c Config) *Web {
 		MaxAge:   3600 * 24,
 		HttpOnly: true,
 	}
+
+	gob.Register(aumo.User{})
 
 	w := &Web{
 		Config: c,
