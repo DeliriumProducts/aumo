@@ -10,6 +10,16 @@ type ShopItem struct {
 	Stock       uint
 }
 
+// DecrementStock decreases the stock of an item
+func (si *ShopItem) DecrementStock(i uint) {
+	si.Stock = si.Stock - i
+}
+
+// IncrementStock increases the stock of an item
+func (si *ShopItem) IncrementStock(i uint) {
+	si.Stock = si.Stock + i
+}
+
 // CreateShopItem creates a shop item
 func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint) (ShopItem, error) {
 	shopItem := &ShopItem{
@@ -34,19 +44,11 @@ func (a *Aumo) GetShopItemByID(id uint) (ShopItem, error) {
 }
 
 // UpdateShopItem updates an item
-func (a *Aumo) UpdateShopItem(old, new ShopItem) (ShopItem, error) {
-	return old, a.updateX(&old, new)
+func (a *Aumo) UpdateShopItem(si ShopItem) (ShopItem, error) {
+	return si, a.updateX(&si)
 }
 
 // DeleteShopItem deletes an item
 func (a *Aumo) DeleteShopItem(i ShopItem) error {
 	return a.deleteX(i)
-}
-
-func (si *ShopItem) DecrementStock(i uint) {
-	si.Stock = si.Stock - i
-}
-
-func (si *ShopItem) IncrementStock(i uint) {
-	si.Stock = si.Stock + i
 }

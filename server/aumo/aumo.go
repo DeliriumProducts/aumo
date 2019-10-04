@@ -31,8 +31,8 @@ func New(c Config) Aumo {
 }
 
 // updateX is an internal helper function to update any struct
-func (a *Aumo) updateX(old, new interface{}) error {
-	return a.DB.Model(old).Updates(new).Error
+func (a *Aumo) updateX(i interface{}) error {
+	return a.DB.Model(i).Updates(i).Error
 }
 
 // deleteX is an internal helper function to update any struct
