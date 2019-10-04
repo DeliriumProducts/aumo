@@ -92,6 +92,9 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 
 	// Substract the points of the user
 	u.Points -= si.Price * float64(quantity)
+
+	// Add the item to the orders array
+	u.Orders = append(u.Orders, si)
 	return nil
 }
 
