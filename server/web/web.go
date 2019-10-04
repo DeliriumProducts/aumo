@@ -15,6 +15,7 @@ type Web struct {
 }
 
 func New(c Config) *Web {
+
 	if c.Aumo == nil {
 		panic("web: aumo instance not passed to web.New()")
 	}
