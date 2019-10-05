@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 	"os"
 
 	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/fr3fou/aumo/server/web"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
@@ -21,6 +23,8 @@ func main() {
 	MYSQL_PASSWORD := os.Getenv("MYSQL_PASSWORD")
 	MYSQL_HOST := os.Getenv("MYSQL_HOST")
 	MYSQL_PORT := os.Getenv("MYSQL_PORT")
+	ADDRESS := os.Getenv("ADDRESS")
+	COOKIE_SECRET := os.Getenv("COOKIE_SECRET")
 
 	MYSQL_STRING := MYSQL_USER + ":" + MYSQL_PASSWORD + "@(" + MYSQL_HOST + ":" + MYSQL_PORT + ")/" + MYSQL_DATABASE + "?parseTime=true"
 
@@ -36,8 +40,13 @@ func main() {
 		DB: db,
 	})
 
-	u, _ := a.CreateUser("simo", "simo3003@me.com", "123")
-	si, _ := a.CreateShopItem("pesho", 5, "asdf", 10)
-	err = a.BuyUserShopItem(u, si, 5)
-	fmt.Println(err)
+	w := web.New(web.Config{
+		Aumo:         a,
+		CookieSecret: []byte(COOKIE_SECRET),
+	})
+
+	log.Println("Aumo server running on port ", ADDRESS)
+	if err := http.ListenAndServe(ADDRESS, w.Router); err != nil {
+		panic(err)
+	}
 }

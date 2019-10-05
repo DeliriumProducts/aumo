@@ -19,7 +19,7 @@ type User struct {
 	Password string     `json:"-" gorm:"not null"`
 	Points   float64    `json:"points" gorm:"not null"`
 	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
-	Receipts []Receipt
+	Receipts []Receipt  `json:"receipts"`
 }
 
 // ValidatePassword checks if the passed password is the correct one
@@ -54,6 +54,11 @@ func (u *User) BuyItem(si ShopItem, quantity uint) error {
 	return nil
 }
 
+// ClaimReceipt claims a receipt and adds it to the receipts array
+func (u *User) ClaimReceipt(r Receipt) {
+	u.Receipts = append(u.Receipts, r)
+}
+
 // CreateUser creates a user
 func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
@@ -68,9 +73,10 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Password: string(pwd),
 		Points:   5000,
 		Orders:   []ShopItem{},
+		Receipts: []Receipt{},
 	}
 
-	if err := a.DB.Create(user).Error; err != nil {
+	if err := a.db.Create(user).Error; err != nil {
 		return User{}, err
 	}
 
@@ -101,6 +107,8 @@ func (a *Aumo) DeleteUser(i User) error {
 	return a.deleteX(i)
 }
 
+// BuyUserShopItem calls BuytItem on the user struct, decrements
+// the stock of the shop item then it updates it
 func (a *Aumo) BuyUserShopItem(u User, si ShopItem, quantity uint) error {
 	err := u.BuyItem(si, quantity)
 	if err != nil {

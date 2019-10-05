@@ -29,7 +29,7 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uin
 		Stock:       stock,
 	}
 
-	if err := a.DB.Create(shopItem).Error; err != nil {
+	if err := a.db.Create(shopItem).Error; err != nil {
 		return ShopItem{}, err
 	}
 
@@ -39,7 +39,14 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uin
 // GetShopItemByID returns a user that has a matching email
 func (a *Aumo) GetShopItemByID(id uint) (ShopItem, error) {
 	var si ShopItem
-	err := a.findX(&si, "id = ?", id)
+	err := a.firstX(&si, "id = ?", id)
+	return si, err
+}
+
+// GetShopItems returns a user that has a matching email
+func (a *Aumo) GetShopItems() ([]ShopItem, error) {
+	var si []ShopItem
+	err := a.findX(&si)
 	return si, err
 }
 
