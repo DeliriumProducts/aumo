@@ -29,11 +29,8 @@ export default function HomeScreen() {
             Approach phone to an aumo device
           </Text>
         </View>
-
         <View style={{ alignItems: "center" }}>
-          <Circle color={"#00000000"} size={450}>
-            <AntDesign name="scan1" size={130} color="#083AA4" />
-          </Circle>
+          <AntDesign name="scan1" size={130} color="#083AA4" />
         </View>
         <View style={styles.helpContainer}></View>
       </ScrollView>
@@ -57,6 +54,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   contentContainer: {
+    justifyContent: "space-between",
     height: "100%",
     paddingTop: 30
   },
