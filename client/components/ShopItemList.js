@@ -22,7 +22,7 @@ class ProductListComponent extends React.Component {
           name={item.name}
           price={`${item.price} points`}
           onAddPress={this.onProductAddPress}
-          onPress={this.onProductPress}
+          buyable={item.buyable}
         />
       )
     }
@@ -37,6 +37,7 @@ class ProductListComponent extends React.Component {
       contentContainerStyle,
       themedStyle,
       data,
+      numColumns = 2,
       ...restProps
     } = this.props
     return (
@@ -45,7 +46,7 @@ class ProductListComponent extends React.Component {
         contentContainerStyle={[contentContainerStyle, themedStyle.container]}
         data={data}
         renderItem={this.renderItem}
-        numColumns={2}
+        numColumns={numColumns}
       />
     )
   }

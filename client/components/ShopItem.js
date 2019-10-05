@@ -6,11 +6,6 @@ import { Button, Text } from "react-native-ui-kitten"
 class ProductListItemComponent extends React.Component {
   constructor() {
     super(...arguments)
-    this.onPress = () => {
-      if (this.props.buyable) {
-        this.props.onPress(this.props.index)
-      }
-    }
     this.onAddToBucket = () => {
       if (this.props.buyable) {
         this.props.onAddPress(this.props.index)
@@ -28,11 +23,7 @@ class ProductListItemComponent extends React.Component {
       ...restProps
     } = this.props
     return (
-      <TouchableOpacity
-        {...restProps}
-        style={[themedStyle.container, style]}
-        onPress={this.onPress}
-      >
+      <View {...restProps} style={[themedStyle.container, style]}>
         <Image style={themedStyle.image} source={image} />
         <View style={themedStyle.infoContainer}>
           <View>
@@ -53,7 +44,7 @@ class ProductListItemComponent extends React.Component {
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     )
   }
 }

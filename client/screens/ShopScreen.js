@@ -30,7 +30,13 @@ function ShopScreen(props) {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        {loading ? <ActivityIndicator /> : <ShopItemList data={items} />}
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <ShopItemList
+            data={items.map(i => ({ ...i, image: { uri: i.image } }))}
+          />
+        )}
       </ScrollView>
     </View>
   )

@@ -89,7 +89,12 @@ const UserScreen = props => {
             </View>
             {user.orders && user.orders.length > 0 && (
               <ShopItemList
-                data={user.orders.map(o => ({ ...o, buyable: false }))}
+                numColumns={1}
+                data={user.orders.map(o => ({
+                  ...o,
+                  buyable: false,
+                  image: { uri: o.image }
+                }))}
               />
             )}
           </>
@@ -112,15 +117,15 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "center",
     height: "100%",
-    paddingTop: 30,
-    alignItems: "center"
+    paddingTop: 30
   },
   userContainer: {
     backgroundColor: "#fff",
     borderRadius: 12,
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    padding: 50,
+    padding: 25,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -128,8 +133,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
-
-    elevation: 12
+    elevation: 12,
+    marginVertical: 30
   }
 })
 
