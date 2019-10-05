@@ -35,6 +35,10 @@ export default function LoginScreen(props) {
     }
   }
 
+  const goToRegister = () => {
+    props.navigation.navigate("Register")
+  }
+
   return (
     <ScrollView
       style={styles.container}
@@ -66,7 +70,7 @@ export default function LoginScreen(props) {
             style={{ borderRadius: 10 }}
             onChangeText={setPassword}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={goToRegister}>
             <Text
               style={[
                 styles.getStartedText,
@@ -94,7 +98,7 @@ export default function LoginScreen(props) {
         >
           LOGIN
         </Button>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goToRegister}>
           <Text style={styles.getStartedText}>Create an account</Text>
         </TouchableOpacity>
       </View>

@@ -1,19 +1,30 @@
 import React, { useState } from "react"
+import axios from "axios"
 import { Input, Icon, Button } from "react-native-ui-kitten"
 
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
-} from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
 
-export default function RegisterScreen() {
+import { BACKEND_URL } from "../config"
+
+export default function RegisterScreen(props) {
   const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
+
+  const register = async () => {
+    try {
+      const resp = await axios.post(BACKEND_URL + "/users/register", {
+        email,
+        name,
+        password,
+        avatar: "https://i.imgur.com/4Ws6pd9.png"
+      })
+
+      if (resp.status === 200) {
+        props.navigation.navigate("LogIn")
+      }
+    } catch (e) {}
+  }
 
   return (
     <ScrollView
@@ -29,6 +40,14 @@ export default function RegisterScreen() {
           <Text style={styles.getStartedText}>The future of receipts.</Text>
         </View>
         <View style={styles.inputform}>
+          <Input
+            placeholder="Name"
+            size="medium"
+            icon={style => <Icon {...style} name="person-outline" />}
+            value={name}
+            onChangeText={setName}
+            style={[styles.emailInput, { borderRadius: 10 }]}
+          />
           <Input
             placeholder="Email"
             size="medium"
@@ -46,21 +65,6 @@ export default function RegisterScreen() {
             style={{ borderRadius: 10 }}
             onChangeText={setPassword}
           />
-          <TouchableOpacity>
-            <Text
-              style={[
-                styles.getStartedText,
-                {
-                  fontSize: 14,
-                  textAlign: "right",
-                  marginTop: 8,
-                  color: "#AAA"
-                }
-              ]}
-            >
-              Forgot password?
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
       <View
@@ -70,18 +74,16 @@ export default function RegisterScreen() {
           style={{ width: "100%", marginBottom: 10, borderRadius: 10 }}
           size="large"
           state="outline"
+          onPress={register}
         >
-          LOGIN
+          REGISTER
         </Button>
-        <TouchableOpacity>
-          <Text style={styles.getStartedText}>Create an account</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   )
 }
 
-LoginScreen.navigationOptions = {
+RegisterScreen.navigationOptions = {
   header: null
 }
 
