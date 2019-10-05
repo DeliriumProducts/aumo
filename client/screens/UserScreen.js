@@ -10,15 +10,17 @@ import {
 } from "react-native"
 import { BACKEND_URL } from "../config"
 import { Avatar } from "react-native-ui-kitten"
+import { withNavigationFocus } from "react-navigation"
 
-export default function UserScreen(props) {
-  console.log(props)
+const UserScreen = props => {
   const [user, setUser] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    fetchUser()
-  }, [props.navigation.state.routeName])
+    if (props.isFocused) {
+      fetchUser()
+    }
+  }, [props.isFocused])
 
   const fetchUser = async () => {
     try {
@@ -67,3 +69,5 @@ const styles = StyleSheet.create({
     paddingTop: 30
   }
 })
+
+export default withNavigationFocus(UserScreen)
