@@ -26,13 +26,15 @@ export default function HomeScreen() {
             style={styles.welcomeImage}
           />
           <Text style={styles.getStartedText}>
-            Approach phone to an aumo device
+            Approach phone to an aumo device, to get your digital receipt
           </Text>
         </View>
-        <Circle size={200}>
-          <View style={{ alignItems: "center" }}>
-            <AntDesign name="wifi" size={60} color="#083AA4" />
-          </View>
+        <Circle size={240}>
+          <Circle size={200}>
+            <View style={{ alignItems: "center" }}>
+              <AntDesign name="wifi" size={60} color="#083AA4" />
+            </View>
+          </Circle>
         </Circle>
         <View style={styles.helpContainer}></View>
       </ScrollView>
