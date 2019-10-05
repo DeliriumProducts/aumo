@@ -12,10 +12,10 @@ var (
 )
 
 type User struct {
-	Model    `json:"-"`
+	Model
 	Name     string     `json:"name" gorm:"not null"`
 	Email    string     `json:"email" gorm:"unique;not null"`
-	Password string     `json:"-" gorm:"not null"`
+	Password string     `json:"-" gorm:"not null" gob:"-"`
 	Points   float64    `json:"points" gorm:"not null"`
 	Orders   []ShopItem `json:"orders" gorm:"many2many:user_shop_item;"`
 	Receipts []Receipt  `json:"receipts"`

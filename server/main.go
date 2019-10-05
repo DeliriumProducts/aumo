@@ -45,7 +45,7 @@ func main() {
 		CookieSecret: []byte(COOKIE_SECRET),
 	})
 
-	log.Println("Aumo server running on port ", ADDRESS)
+	log.Println("Aumo server running on port", ADDRESS)
 	if err := http.ListenAndServe(ADDRESS, w.Router); err != nil {
 		panic(err)
 	}
