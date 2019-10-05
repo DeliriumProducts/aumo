@@ -42,5 +42,10 @@ UesrScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  contentContainer: {
+    justifyContent: "space-between",
+    height: "100%",
+    paddingTop: 30
   }
 })
