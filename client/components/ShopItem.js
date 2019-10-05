@@ -7,14 +7,26 @@ class ProductListItemComponent extends React.Component {
   constructor() {
     super(...arguments)
     this.onPress = () => {
-      this.props.onPress(this.props.index)
+      if (this.props.buyable) {
+        this.props.onPress(this.props.index)
+      }
     }
     this.onAddToBucket = () => {
-      this.props.onAddPress(this.props.index)
+      if (this.props.buyable) {
+        this.props.onAddPress(this.props.index)
+      }
     }
   }
   render() {
-    const { style, themedStyle, image, name, price, ...restProps } = this.props
+    const {
+      style,
+      themedStyle,
+      image,
+      name,
+      price,
+      buyable = true,
+      ...restProps
+    } = this.props
     return (
       <TouchableOpacity
         {...restProps}
@@ -32,11 +44,13 @@ class ProductListItemComponent extends React.Component {
             <Text style={themedStyle.costLabel} category="s1">
               {price}
             </Text>
-            <Button
-              style={themedStyle.buyButton}
-              icon={style => <Icon {...style} name="shopping-cart-outline" />}
-              onPress={this.onAddToBucket}
-            />
+            {buyable && (
+              <Button
+                style={themedStyle.buyButton}
+                icon={style => <Icon {...style} name="shopping-cart-outline" />}
+                onPress={this.onAddToBucket}
+              />
+            )}
           </View>
         </View>
       </TouchableOpacity>

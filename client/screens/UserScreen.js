@@ -1,4 +1,5 @@
 import axios from "axios"
+import ShopItemList from "../components/ShopItemList"
 import * as SecureStore from "expo-secure-store"
 import React from "react"
 import {
@@ -60,11 +61,15 @@ const UserScreen = props => {
                 shape="rounded"
               />
               <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ fontSize: 20, marginTop: 10 }}>{user.name}</Text>
+                <Text
+                  style={{ fontSize: 20, fontWeight: "900", marginTop: 10 }}
+                >
+                  {user.name}
+                </Text>
                 <View style={{ justifyContent: "space-between" }}>
                   <Text
                     style={{
-                      fontSize: 20,
+                      fontSize: 15,
                       marginTop: 10
                     }}
                   >
@@ -73,15 +78,21 @@ const UserScreen = props => {
                   </Text>
                 </View>
               </View>
+              <Button
+                style={{ marginTop: 10, borderRadius: 10, textAlign: "right" }}
+                size="medium"
+                appearance="ghost"
+                state="outline"
+                onPress={logout}
+              >
+                LOGOUT
+              </Button>
             </View>
-            <Button
-              style={{ marginTop: 10, borderRadius: 10 }}
-              size="medium"
-              state="outline"
-              onPress={logout}
-            >
-              LOGOUT
-            </Button>
+            {user.orders && user.orders.length > 0 && (
+              <ShopItemList
+                data={user.orders.map(o => ({ ...o, buyable: false }))}
+              />
+            )}
           </>
         )}
       </ScrollView>
