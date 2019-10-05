@@ -1,18 +1,18 @@
-import * as WebBrowser from "expo-web-browser"
-import React from "react"
+import React, { useState } from "react"
+import { Input, Icon } from "react-native-ui-kitten"
+
 import {
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from "react-native"
 
-import { MonoText } from "../components/StyledText"
-
 export default function LoginScreen() {
+  const [email, setEmail] = useState("")
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -28,8 +28,34 @@ export default function LoginScreen() {
             }
             style={styles.welcomeImage}
           />
+          <Text style={styles.getStartedText}>The future of receipts.</Text>
         </View>
-        <Text style={styles.getStartedText}>Does it work</Text>
+        <View style={styles.inputform}>
+          <Input
+            placeholder="Email"
+            size="medium"
+            status="primary"
+            icon={style => <Icon {...style} name="email-outline" />}
+            value={email}
+            onChangeText={setEmail}
+            style={styles.emailInput}
+          />
+          <Input
+            placeholder="Password"
+            size="medium"
+            status="primary"
+            icon={style => <Icon {...style} name="lock-outline" />}
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View
+          style={[styles.codeHighlightContainer, styles.navigationFilename]}
+        >
+          <Text style={styles.codeHighlightText}>
+            navigation/MainTabNavigator.js
+          </Text>
+        </View>
       </ScrollView>
     </View>
   )
@@ -39,45 +65,9 @@ LoginScreen.navigationOptions = {
   header: null
 }
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    )
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    )
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    )
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/development-mode/"
-  )
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes"
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1
   },
   developmentModeText: {
     marginBottom: 20,
@@ -95,11 +85,10 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   welcomeImage: {
-    width: 180,
+    width: 220,
     // height: 80,
     resizeMode: "contain",
-    marginTop: 3,
-    marginLeft: -10
+    marginBottom: -20
   },
   getStartedContainer: {
     alignItems: "center",
@@ -118,8 +107,9 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
+    color: "#083AA4",
+    // lineHeight: 24,
+    marginBottom: 20,
     textAlign: "center"
   },
   tabBarInfoContainer: {
@@ -160,5 +150,12 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: "#2e78b7"
+  },
+  inputform: {
+    paddingRight: 32,
+    paddingLeft: 32
+  },
+  emailInput: {
+    marginBottom: 10
   }
 })

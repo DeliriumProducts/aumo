@@ -4,8 +4,10 @@ import * as Font from "expo-font"
 import React, { useState } from "react"
 import { Platform, StatusBar, StyleSheet, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-
+import { EvaIconsPack } from "@ui-kitten/eva-icons" // <-- Make sure it is installed. npm i @ui-kitten/eva-icons
 import AppNavigator from "./navigation/AppNavigator"
+import { mapping, light as lightTheme } from "@eva-design/eva"
+import { ApplicationProvider, IconRegistry } from "react-native-ui-kitten"
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false)
@@ -20,10 +22,15 @@ export default function App(props) {
     )
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider mapping={mapping} theme={lightTheme}>
+          <View style={styles.container}>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        </ApplicationProvider>
+      </>
     )
   }
 }
