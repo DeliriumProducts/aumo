@@ -81,8 +81,7 @@ const UserScreen = props => {
               <Button
                 style={{ marginTop: 10, borderRadius: 10, textAlign: "right" }}
                 size="medium"
-                appearance="ghost"
-                state="outline"
+                status="basic"
                 onPress={logout}
               >
                 LOGOUT
