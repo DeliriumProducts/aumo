@@ -9,14 +9,61 @@ export default function ShopScreen() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <Text>Epiiic</Text>
         <ShopItem
           image={{
             uri:
-              "https://www.pngtube.com/myfile/detail/153-1532616_amazon-discount-gift-card-amazon-gift-card-png.png"
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
           }}
-          name="Amazon Gift Card"
-          price="1000"
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
+        />
+        <ShopItem
+          image={{
+            uri:
+              "https://www.supermarketnews.com/sites/supermarketnews.com/files/styles/article_featured_retina/public/Lidl_US_store_exterior.png?itok=ygwb_d3h"
+          }}
+          name="Lidl 5% off your next purchase"
+          price="10000 points"
         />
       </ScrollView>
     </View>
@@ -35,7 +82,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "center",
     height: "100%",
-    alignItems: "center",
-    paddingTop: 30
+    paddingTop: 30,
+    paddingHorizontal: 60
   }
 })

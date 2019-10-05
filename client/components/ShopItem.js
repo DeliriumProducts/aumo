@@ -1,8 +1,7 @@
 import React from "react"
 import { View, Image, TouchableOpacity } from "react-native"
-import { withStyles } from "react-native-ui-kitten"
+import { withStyles, Icon } from "react-native-ui-kitten"
 import { Button, Text } from "react-native-ui-kitten"
-import { AntDesign } from "@expo/vector-icons"
 
 class ProductListItemComponent extends React.Component {
   constructor() {
@@ -35,7 +34,7 @@ class ProductListItemComponent extends React.Component {
             </Text>
             <Button
               style={themedStyle.buyButton}
-              //   icon={<AntDesign name="shoppingcart" />}
+              icon={style => <Icon {...style} name="shopping-cart-outline" />}
               onPress={this.onAddToBucket}
             />
           </View>
