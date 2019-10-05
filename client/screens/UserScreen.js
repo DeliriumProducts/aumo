@@ -1,14 +1,24 @@
 import axios from "axios"
 import * as SecureStore from "expo-secure-store"
 import React from "react"
-import { ScrollView, StyleSheet, Text, View } from "react-native"
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator
+} from "react-native"
 import { BACKEND_URL } from "../config"
+import { Avatar } from "react-native-ui-kitten"
 
-export default function UesrScreen() {
+export default function UserScreen(props) {
+  console.log(props)
   const [user, setUser] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+
   React.useEffect(() => {
     fetchUser()
-  }, [])
+  }, [props.navigation.state.routeName])
 
   const fetchUser = async () => {
     try {
@@ -21,6 +31,7 @@ export default function UesrScreen() {
       })
       setUser(res.data)
     } catch (e) {}
+    setLoading(false)
   }
 
   return (
@@ -29,13 +40,20 @@ export default function UesrScreen() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <Text>Epiiic</Text>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <View>
+            <Text>{user.name}</Text>
+            <Avatar source={{ uri: user.avatar }} />
+          </View>
+        )}
       </ScrollView>
     </View>
   )
 }
 
-UesrScreen.navigationOptions = {
+UserScreen.navigationOptions = {
   header: null
 }
 
