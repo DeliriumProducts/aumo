@@ -7,8 +7,8 @@ import {
 
 import TabBarIcon from "../components/TabBarIcon"
 import HomeScreen from "../screens/HomeScreen"
-import LinksScreen from "../screens/LinksScreen"
 import SettingsScreen from "../screens/SettingsScreen"
+import ShopScreen from "../screens/ShopScreen"
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -29,21 +29,21 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = ""
 
-const LinksStack = createStackNavigator(
+const ShopStack = createStackNavigator(
   {
-    Links: LinksScreen
+    Shop: ShopScreen
   },
   config
 )
 
-LinksStack.navigationOptions = {
-  tabBarLabel: "Links",
+ShopStack.navigationOptions = {
+  tabBarLabel: "Shop",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="shoppingcart" />
   )
 }
 
-LinksStack.path = ""
+ShopStack.path = ""
 
 const SettingsStack = createStackNavigator(
   {
@@ -61,7 +61,7 @@ SettingsStack.path = ""
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  ShopStack,
   SettingsStack
 })
 
