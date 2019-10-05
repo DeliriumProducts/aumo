@@ -1,4 +1,3 @@
-import * as WebBrowser from "expo-web-browser"
 import React from "react"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 

@@ -7,7 +7,7 @@ import {
 
 import TabBarIcon from "../components/TabBarIcon"
 import HomeScreen from "../screens/HomeScreen"
-import SettingsScreen from "../screens/SettingsScreen"
+import UserScreen from "../screens/UserScreen"
 import ShopScreen from "../screens/ShopScreen"
 
 const config = Platform.select({
@@ -41,7 +41,11 @@ const ShopStack = createStackNavigator(
 )
 
 ShopStack.navigationOptions = {
-  tabBarLabel: "Shop",
+  tabBarLabel: ({ focused }) => (
+    <Text style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}>
+      Shop
+    </Text>
+  ),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="shoppingcart" />
   )
@@ -49,24 +53,28 @@ ShopStack.navigationOptions = {
 
 ShopStack.path = ""
 
-const SettingsStack = createStackNavigator(
+const UserStack = createStackNavigator(
   {
-    Settings: SettingsScreen
+    User: UserScreen
   },
   config
 )
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: "Settings",
+UserStack.navigationOptions = {
+  tabBarLabel: ({ focused }) => (
+    <Text style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}>
+      User
+    </Text>
+  ),
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />
 }
 
-SettingsStack.path = ""
+UserStack.path = ""
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   ShopStack,
-  SettingsStack
+  UserStack
 })
 
 tabNavigator.path = ""
