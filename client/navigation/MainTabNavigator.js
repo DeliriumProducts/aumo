@@ -12,7 +12,9 @@ import ShopScreen from "../screens/ShopScreen"
 
 const config = Platform.select({
   web: { headerMode: "screen" },
-  default: {}
+  default: {},
+
+  cardStyle: { backgroundColor: "#AAA" }
 })
 
 const HomeStack = createStackNavigator(

@@ -8,6 +8,6 @@ export default AuthStack = createStackNavigator(
     Register: RegisterScreen
   },
   {
-    cardStyle: { backgroundColor: "#FBFBFB" }
+    cardStyle: { backgroundColor: "#AAA" }
   }
 )

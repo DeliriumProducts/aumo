@@ -6,6 +6,6 @@ export default AuthLoadingStack = createStackNavigator(
     AuthLoading: AuthLoadingScreen
   },
   {
-    cardStyle: { backgroundColor: "#FBFBFB" }
+    cardStyle: { backgroundColor: "#AAA" }
   }
 )
