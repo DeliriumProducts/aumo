@@ -10,7 +10,7 @@ var (
 )
 
 type Receipt struct {
-	Model
+	Model   `json:"-"`
 	Content string        `json:"content"`
 	UserID  sql.NullInt64 `json:"user_id"`
 }
