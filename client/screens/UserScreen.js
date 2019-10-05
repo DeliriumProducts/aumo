@@ -9,7 +9,7 @@ import {
   ActivityIndicator
 } from "react-native"
 import { BACKEND_URL } from "../config"
-import { Avatar } from "react-native-ui-kitten"
+import { Avatar, Button } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
 
 const UserScreen = props => {
@@ -36,6 +36,13 @@ const UserScreen = props => {
     setLoading(false)
   }
 
+  const logout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("aumo")
+    } catch (e) {}
+    props.navigation.navigate("LogIn")
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -45,10 +52,24 @@ const UserScreen = props => {
         {loading ? (
           <ActivityIndicator />
         ) : (
-          <View>
-            <Text>{user.name}</Text>
-            <Avatar source={{ uri: user.avatar }} />
-          </View>
+          <>
+            <View style={styles.userContainer}>
+              <Avatar
+                source={{ uri: user.avatar }}
+                size="large"
+                shape="rounded"
+              />
+              <Text style={{ fontSize: 20, marginTop: 10 }}>{user.name}</Text>
+            </View>
+            <Button
+              style={{ marginTop: 10, borderRadius: 10 }}
+              size="large"
+              state="outline"
+              onPress={logout}
+            >
+              LOGOUT
+            </Button>
+          </>
         )}
       </ScrollView>
     </View>
@@ -61,12 +82,30 @@ UserScreen.navigationOptions = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    height: "100%"
   },
   contentContainer: {
-    justifyContent: "space-between",
+    justifyContent: "center",
     height: "100%",
-    paddingTop: 30
+    paddingTop: 30,
+    alignItems: "center"
+  },
+  userContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5
   }
 })
 
