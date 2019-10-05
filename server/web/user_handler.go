@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
 )
 
@@ -16,6 +15,7 @@ var (
 
 const (
 	CookieStoreKey = "aumo"
+	UserContextKey = "user"
 	UserSessionKey = "user"
 )
 
@@ -33,7 +33,7 @@ func (wb *Web) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := wb.CreateUser(um.Name, um.Email, um.Password)
+	user, err := wb.CreateUser(um.Name, um.Email, um.Password, um.Avatar)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -78,43 +78,6 @@ func (wb *Web) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func (wb *Web) SecretHandler(w http.ResponseWriter, r *http.Request) {
-// 	session, err := wb.store.Get(r, CookieStoreKey)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	// Retrieve our struct and type-assert it
-// 	val := session.Values[UserSessionKey]
-// 	user, ok := val.(aumo.User)
-// 	if !ok {
-// 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
-// 		return
-// 	}
-
-// 	if err := json.NewEncoder(w).Encode(user); err != nil {
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		return
-// 	}
-// }
-
-func (wb *Web) getUserFromRequest(r *http.Request) (aumo.User, error) {
-	session, err := wb.store.Get(r, CookieStoreKey)
-	if err != nil {
-		return aumo.User{}, err
-	}
-
-	// Retrieve our struct and type-assert it
-	val := session.Values[UserSessionKey]
-	user, ok := val.(aumo.User)
-	if !ok {
-		return aumo.User{}, ErrBadTypeAssertion
-	}
-
-	return user, nil
-}
-
 func (wb *Web) ClaimReceiptHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 
@@ -124,7 +87,7 @@ func (wb *Web) ClaimReceiptHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := wb.getUserFromRequest(r)
+	user, err := GetUserFromContext(r.Context())
 	if err != nil {
 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
@@ -162,7 +125,7 @@ func (wb *Web) BuyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := wb.getUserFromRequest(r)
+	user, err := GetUserFromContext(r.Context())
 	if err != nil {
 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
@@ -182,7 +145,7 @@ func (wb *Web) BuyHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (wb *Web) MeHandler(w http.ResponseWriter, r *http.Request) {
-	u, err := wb.getUserFromRequest(r)
+	u, err := GetUserFromContext(r.Context())
 	if err != nil {
 		http.Error(w, "User unauthorized", http.StatusUnauthorized)
 		return
