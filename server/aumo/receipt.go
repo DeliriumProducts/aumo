@@ -12,7 +12,7 @@ var (
 type Receipt struct {
 	Model
 	Content string        `json:"content"`
-	UserID  sql.NullInt64 `json:"user_id"`
+	UserID  sql.NullInt64 `json:"-"`
 }
 
 // SetUserID claims a receipt with the provided ID
