@@ -11,6 +11,7 @@ import {
 } from "react-native"
 
 import { MonoText } from "../components/StyledText"
+import Circle from "../components/Circle"
 import { AntDesign } from "@expo/vector-icons"
 
 export default function HomeScreen() {
@@ -28,11 +29,12 @@ export default function HomeScreen() {
           <Text style={styles.getStartedText}>
             Approach phone to an aumo device
           </Text>
-
-          <View style={styles.getStartedContainer}></View>
         </View>
+
         <View style={{ alignItems: "center" }}>
-          <AntDesign name="scan1" size={130} color="#083AA4" />
+          <Circle color={"#00000000"} size={450}>
+            <AntDesign name="scan1" size={130} color="#083AA4" />
+          </Circle>
         </View>
         <View style={styles.helpContainer}></View>
       </ScrollView>
@@ -56,7 +58,6 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   contentContainer: {
-    justifyContent: "space-between",
     height: "100%",
     paddingTop: 30
   },
