@@ -54,7 +54,7 @@ func New(c Config) *Web {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
-	}),
+	}).Handler,
 	)
 	r.Use(ContentTypeJSON)
 
