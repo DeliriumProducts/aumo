@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Input, Icon, Button } from "react-native-ui-kitten"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
-import { SecureStore } from "expo"
+import * as SecureStore from "expo-secure-store"
 
 import {
   Image,
@@ -19,16 +19,18 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
-    const res = await axios.post(BACKEND_URL + "/users/login", {
-      email,
-      password
-    })
+    try {
+      const res = await axios.post(BACKEND_URL + "/users/login", {
+        email,
+        password
+      })
 
-    if (res.status == 200) {
-      const cookie = res.headers["set-cookie"][0]
-      SecureStore.setItemAsync("aumo", cookie)
-    } else {
-    }
+      if (res.status == 200) {
+        setSucc(true)
+        const cookie = res.headers["set-cookie"][0]
+        await SecureStore.setItemAsync("aumo", cookie)
+      }
+    } catch (error) {}
   }
 
   return (
