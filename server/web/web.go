@@ -50,13 +50,19 @@ func New(c Config) *Web {
 	r.Use(ContentTypeJSON)
 
 	r.Route("/users", func(r chi.Router) {
-		r.Post("/", w.RegisterHandler)
+		r.Post("/register", w.RegisterHandler)
 		r.Post("/login", w.LoginHandler)
-		r.Post("/claim-receipt/{id}", w.ClaimReceiptHandler)
-		r.Post("/buy/{id}", w.BuyHandler)
+		r.Group(func(r chi.Router) {
+			r.Use(w.WithAuth)
+			r.Post("/claim-receipt/{id}", w.ClaimReceiptHandler)
+			r.Post("/buy/{id}", w.BuyHandler)
+		})
 	})
 
-	r.Get("/me", w.MeHandler)
+	r.Group(func(r chi.Router) {
+		r.Use(w.WithAuth)
+		r.Get("/me", w.MeHandler)
+	})
 
 	r.Route("/receipts", func(r chi.Router) {
 		r.Post("/", w.NewReceiptHandler)
