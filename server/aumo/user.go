@@ -3,7 +3,6 @@ package aumo
 import (
 	"errors"
 
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,12 +12,12 @@ var (
 )
 
 type User struct {
-	gorm.Model
+	Model
 	Name     string     `json:"name" gorm:"not null"`
 	Email    string     `json:"email" gorm:"unique;not null"`
 	Password string     `json:"-" gorm:"not null"`
 	Points   float64    `json:"points" gorm:"not null"`
-	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
+	Orders   []ShopItem `json:"orders" gorm:"many2many:user_shop_item;"`
 	Receipts []Receipt  `json:"receipts"`
 }
 

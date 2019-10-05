@@ -1,9 +1,7 @@
 package aumo
 
-import "github.com/jinzhu/gorm"
-
 type ShopItem struct {
-	gorm.Model
+	Model
 	Name        string
 	Price       float64
 	Description string
