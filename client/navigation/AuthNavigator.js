@@ -6,6 +6,6 @@ export default AuthStack = createStackNavigator(
     LogIn: LoginScreen
   },
   {
-    cardStyle: { backgroundColor: "#F5F7FB" }
+    cardStyle: { backgroundColor: "#FBFBFB" }
   }
 )

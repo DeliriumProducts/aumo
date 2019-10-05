@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Input, Icon } from "react-native-ui-kitten"
+import { Input, Icon, Button } from "react-native-ui-kitten"
 
 import {
   Image,
@@ -9,24 +9,21 @@ import {
   Text,
   View
 } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <View>
         <View style={styles.welcomeContainer}>
           <Image
-            source={
-              __DEV__
-                ? require("../assets/images/AumoLogo.png")
-                : require("../assets/images/AumoLogo.png")
-            }
+            source={require("../assets/images/AumoLogo.png")}
             style={styles.welcomeImage}
           />
           <Text style={styles.getStartedText}>The future of receipts.</Text>
@@ -38,7 +35,7 @@ export default function LoginScreen() {
             icon={style => <Icon {...style} name="email-outline" />}
             value={email}
             onChangeText={setEmail}
-            style={styles.emailInput}
+            style={[styles.emailInput, { borderRadius: 10 }]}
           />
           <Input
             placeholder="Password"
@@ -46,11 +43,41 @@ export default function LoginScreen() {
             secureTextEntry={true}
             icon={style => <Icon {...style} name="lock-outline" />}
             value={password}
+            style={{ borderRadius: 10 }}
             onChangeText={setPassword}
           />
+          <TouchableOpacity>
+            <Text
+              style={[
+                styles.getStartedText,
+                {
+                  fontSize: 14,
+                  textAlign: "right",
+                  marginTop: 8,
+                  color: "#AAA"
+                }
+              ]}
+            >
+              Forgot password?
+            </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+      <View
+        style={[styles.welcomeContainer, { paddingRight: 32, paddingLeft: 32 }]}
+      >
+        <Button
+          style={{ width: "100%", marginBottom: 10, borderRadius: 10 }}
+          size="large"
+          state="outline"
+        >
+          LOGIN
+        </Button>
+        <TouchableOpacity>
+          <Text style={styles.getStartedText}>Create an account</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -70,6 +97,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   contentContainer: {
+    justifyContent: "space-between",
+    height: "100%",
     paddingTop: 30
   },
   welcomeContainer: {

@@ -6,7 +6,9 @@ import { Platform, StatusBar, StyleSheet, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { EvaIconsPack } from "@ui-kitten/eva-icons" // <-- Make sure it is installed. npm i @ui-kitten/eva-icons
 import AppNavigator from "./navigation/AppNavigator"
-import { mapping, light as lightTheme } from "@eva-design/eva"
+import { mapping } from "@eva-design/eva"
+import { theme } from "./theme/customThemeVariables" // <-- Import custom theme
+
 import { ApplicationProvider, IconRegistry } from "react-native-ui-kitten"
 
 export default function App(props) {
@@ -24,7 +26,7 @@ export default function App(props) {
     return (
       <>
         <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider mapping={mapping} theme={lightTheme}>
+        <ApplicationProvider mapping={mapping} theme={theme}>
           <View style={styles.container}>
             {Platform.OS === "ios" && <StatusBar barStyle="default" />}
             <AppNavigator />
