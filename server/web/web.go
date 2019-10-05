@@ -6,6 +6,7 @@ import (
 	"github.com/fr3fou/aumo/server/aumo"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/gorilla/sessions"
 )
 
@@ -47,6 +48,14 @@ func New(c Config) *Web {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+	}),
+	)
 	r.Use(ContentTypeJSON)
 
 	r.Route("/users", func(r chi.Router) {
