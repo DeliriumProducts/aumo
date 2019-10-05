@@ -1,11 +1,11 @@
 package aumo
 
 type ShopItem struct {
-	Model
-	Name        string
-	Price       float64
-	Description string
-	Stock       uint
+	Model       `json:"model"`
+	Name        string  `json:"name"`
+	Price       float64 `json:"price"`
+	Description string  `json:"description"`
+	Stock       uint    `json:"stock"`
 }
 
 // DecrementStock decreases the stock of an item
