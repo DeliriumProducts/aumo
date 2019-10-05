@@ -1,5 +1,5 @@
 import React from "react"
-import { Platform } from "react-native"
+import { Platform, Text } from "react-native"
 import {
   createStackNavigator,
   createBottomTabNavigator
@@ -23,8 +23,12 @@ const HomeStack = createStackNavigator(
 )
 
 HomeStack.navigationOptions = {
-  tabBarLabel: "Home",
-  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="home" />
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="home" />,
+  tabBarLabel: ({ focused }) => (
+    <Text style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}>
+      Home
+    </Text>
+  )
 }
 
 HomeStack.path = ""

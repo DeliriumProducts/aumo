@@ -11,6 +11,7 @@ import {
 } from "react-native"
 
 import { MonoText } from "../components/StyledText"
+import { AntDesign } from "@expo/vector-icons"
 
 export default function HomeScreen() {
   return (
@@ -27,23 +28,14 @@ export default function HomeScreen() {
           <Text style={styles.getStartedText}>
             Approach phone to an aumo device
           </Text>
+
           <View style={styles.getStartedContainer}></View>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <AntDesign name="scan1" size={130} color="#083AA4" />
         </View>
         <View style={styles.helpContainer}></View>
       </ScrollView>
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}
-        >
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
-      </View>
     </View>
   )
 }
