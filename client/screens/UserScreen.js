@@ -59,11 +59,24 @@ const UserScreen = props => {
                 size="large"
                 shape="rounded"
               />
-              <Text style={{ fontSize: 20, marginTop: 10 }}>{user.name}</Text>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ fontSize: 20, marginTop: 10 }}>{user.name}</Text>
+                <View style={{ justifyContent: "space-between" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginTop: 10
+                    }}
+                  >
+                    Points:
+                    {user.points}
+                  </Text>
+                </View>
+              </View>
             </View>
             <Button
               style={{ marginTop: 10, borderRadius: 10 }}
-              size="large"
+              size="medium"
               state="outline"
               onPress={logout}
             >
@@ -83,7 +96,8 @@ UserScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "100%"
+    height: "100%",
+    backgroundColor: "#F7F9FC"
   },
   contentContainer: {
     justifyContent: "center",
@@ -96,16 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    padding: 50,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5
+    padding: 50
   }
 })
 
