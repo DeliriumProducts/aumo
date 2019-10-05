@@ -118,10 +118,19 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
-    padding: 50
+    padding: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+
+    elevation: 12
   }
 })
 
