@@ -10,10 +10,11 @@ import {
   ActivityIndicator
 } from "react-native"
 import { BACKEND_URL } from "../config"
-import { Avatar, Button } from "react-native-ui-kitten"
+import { Avatar, Button, TabView, Tab } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
 
 const UserScreen = props => {
+  const [mode, setMode] = React.useState("rewards")
   const [user, setUser] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
 
@@ -87,15 +88,34 @@ const UserScreen = props => {
                 LOGOUT
               </Button>
             </View>
-            {user.orders && user.orders.length > 0 && (
-              <ShopItemList
-                numColumns={1}
-                data={user.orders.map(o => ({
-                  ...o,
-                  buyable: false,
-                  image: { uri: o.image }
-                }))}
-              />
+            <Button
+              appearance="ghost"
+              onPress={() => {
+                if (mode === "rewards") {
+                  setMode("receipts")
+                  return
+                }
+
+                setMode("rewards")
+              }}
+            >
+              Show {mode === "receipts" ? "rewards" : "receipts"}
+            </Button>
+
+            {mode === "rewards" ? (
+              user.orders &&
+              user.orders.length > 0 && (
+                <ShopItemList
+                  numColumns={1}
+                  data={user.orders.map(o => ({
+                    ...o,
+                    buyable: false,
+                    image: { uri: o.image }
+                  }))}
+                />
+              )
+            ) : (
+              <Text>Test</Text>
             )}
           </>
         )}
