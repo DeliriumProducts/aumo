@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 import { Input, Icon, Button } from "react-native-ui-kitten"
+import axios from "axios"
+import { BACKEND_URL } from "../config"
+import { SecureStore } from "expo"
 
 import {
   Image,
@@ -14,6 +17,19 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 export default function LoginScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const handleLogin = async () => {
+    const res = await axios.post(BACKEND_URL + "/users/login", {
+      email,
+      password
+    })
+
+    if (res.status == 200) {
+      const cookie = res.headers["set-cookie"][0]
+      SecureStore.setItemAsync("aumo", cookie)
+    } else {
+    }
+  }
 
   return (
     <ScrollView
@@ -70,6 +86,7 @@ export default function LoginScreen() {
           style={{ width: "100%", marginBottom: 10, borderRadius: 10 }}
           size="large"
           state="outline"
+          onPress={handleLogin}
         >
           LOGIN
         </Button>
