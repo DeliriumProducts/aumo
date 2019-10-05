@@ -12,6 +12,7 @@ import {
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   return (
     <View style={styles.container}>
@@ -34,7 +35,6 @@ export default function LoginScreen() {
           <Input
             placeholder="Email"
             size="medium"
-            status="primary"
             icon={style => <Icon {...style} name="email-outline" />}
             value={email}
             onChangeText={setEmail}
@@ -43,18 +43,11 @@ export default function LoginScreen() {
           <Input
             placeholder="Password"
             size="medium"
-            status="primary"
+            secureTextEntry={true}
             icon={style => <Icon {...style} name="lock-outline" />}
-            value={email}
-            onChangeText={setEmail}
+            value={password}
+            onChangeText={setPassword}
           />
-        </View>
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}
-        >
-          <Text style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </Text>
         </View>
       </ScrollView>
     </View>
