@@ -22,6 +22,7 @@ const (
 type UserForm struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
 	Password string `json:"password"`
 }
 
