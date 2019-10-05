@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   },
   welcomeImage: {
     width: 220,
-    // height: 80,
     resizeMode: "contain",
     marginBottom: -20
   },

@@ -21,35 +21,15 @@ export default function HomeScreen() {
       >
         <View style={styles.welcomeContainer}>
           <Image
-            source={
-              __DEV__
-                ? require("../assets/images/robot-dev.png")
-                : require("../assets/images/robot-prod.png")
-            }
+            source={require("../assets/images/AumoLogo.png")}
             style={styles.welcomeImage}
           />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-          >
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
           <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
+            Approach phone to an aumo device
           </Text>
+          <View style={styles.getStartedContainer}></View>
         </View>
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.helpContainer}></View>
       </ScrollView>
       <View style={styles.tabBarInfoContainer}>
         <Text style={styles.tabBarInfoText}>
@@ -72,45 +52,9 @@ HomeScreen.navigationOptions = {
   header: null
 }
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    )
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    )
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    )
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/development-mode/"
-  )
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes"
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1
   },
   developmentModeText: {
     marginBottom: 20,
@@ -120,6 +64,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   contentContainer: {
+    justifyContent: "space-between",
+    height: "100%",
     paddingTop: 30
   },
   welcomeContainer: {
@@ -128,11 +74,9 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    width: 220,
     resizeMode: "contain",
-    marginTop: 3,
-    marginLeft: -10
+    marginBottom: -20
   },
   getStartedContainer: {
     alignItems: "center",
@@ -150,9 +94,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   getStartedText: {
-    fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
+    paddingHorizontal: 18,
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#083AA4",
+    textTransform: "uppercase",
+    // lineHeight: 24,
+    marginTop: 50,
     textAlign: "center"
   },
   tabBarInfoContainer: {
@@ -193,5 +141,12 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: "#2e78b7"
+  },
+  inputform: {
+    paddingRight: 32,
+    paddingLeft: 32
+  },
+  emailInput: {
+    marginBottom: 10
   }
 })
