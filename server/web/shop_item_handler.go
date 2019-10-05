@@ -10,6 +10,7 @@ import (
 
 type NewShopItemForm struct {
 	Name        string  `json:"name"`
+	Image       string  `json:"image"`
 	Price       float64 `json:"price"`
 	Description string  `json:"description"`
 	Stock       uint    `json:"stock"`
@@ -22,7 +23,7 @@ func (wb *Web) NewShopItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	shopItem, err := wb.CreateShopItem(nsi.Name, nsi.Price, nsi.Description, nsi.Stock)
+	shopItem, err := wb.CreateShopItem(nsi.Name, nsi.Price, nsi.Description, nsi.Stock, nsi.Image)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return

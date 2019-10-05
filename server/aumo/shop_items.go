@@ -4,6 +4,7 @@ type ShopItem struct {
 	Model
 	Name        string  `json:"name"`
 	Price       float64 `json:"price"`
+	Image       string  `json:"image"`
 	Description string  `json:"description"`
 	Stock       uint    `json:"stock"`
 }
@@ -19,10 +20,11 @@ func (si *ShopItem) IncrementStock(i uint) {
 }
 
 // CreateShopItem creates a shop item
-func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint) (ShopItem, error) {
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (ShopItem, error) {
 	shopItem := &ShopItem{
 		Name:        name,
 		Price:       price,
+		Image:       image,
 		Description: desc,
 		Stock:       stock,
 	}
