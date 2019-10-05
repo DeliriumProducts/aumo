@@ -14,7 +14,7 @@ import {
 } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
-export default function LoginScreen() {
+export default function LoginScreen(props) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -26,11 +26,13 @@ export default function LoginScreen() {
       })
 
       if (res.status == 200) {
-        setSucc(true)
         const cookie = res.headers["set-cookie"][0]
         await SecureStore.setItemAsync("aumo", cookie)
+        props.navigation.navigate("Main")
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
