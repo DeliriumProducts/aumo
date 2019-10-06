@@ -1,4 +1,6 @@
 import React from "react"
+import { BACKEND_URL } from "../config"
+import axios from "axios"
 import {
   Image,
   Platform,
@@ -31,8 +33,13 @@ export default function HomeScreen() {
           </Text>
         </View>
         <TouchableWithoutFeedback
-          onPress={() => {
-            console.log("rere")
+          onPress={async () => {
+            // const receipt = await axios.post(BACKEND_URL + "/receipts", {
+            //   content: ""
+            // })
+            // const resp = await axios.post(
+            //   BACKEND_URL + "/users/claim-receipt/" + receipt.data.id
+            // )
           }}
         >
           <Circle size={240}>
