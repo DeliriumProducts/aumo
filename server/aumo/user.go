@@ -3,7 +3,6 @@ package aumo
 import (
 	"errors"
 
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,12 +12,13 @@ var (
 )
 
 type User struct {
-	gorm.Model
+	Model
 	Name     string     `json:"name" gorm:"not null"`
 	Email    string     `json:"email" gorm:"unique;not null"`
-	Password string     `json:"-" gorm:"not null"`
+	Password string     `json:"-" gorm:"not null" gob:"-"`
+	Avatar   string     `json:"avatar" `
 	Points   float64    `json:"points" gorm:"not null"`
-	Orders   []ShopItem `gorm:"many2many:user_shop_item;"`
+	Orders   []ShopItem `json:"orders" gorm:"many2many:user_shop_item;"`
 	Receipts []Receipt  `json:"receipts"`
 }
 
@@ -60,7 +60,7 @@ func (u *User) ClaimReceipt(r Receipt) {
 }
 
 // CreateUser creates a user
-func (a *Aumo) CreateUser(name, email, password string) (User, error) {
+func (a *Aumo) CreateUser(name, email, password, avatar string) (User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 
 	if err != nil {
@@ -71,6 +71,7 @@ func (a *Aumo) CreateUser(name, email, password string) (User, error) {
 		Name:     name,
 		Email:    email,
 		Password: string(pwd),
+		Avatar:   avatar,
 		Points:   5000,
 		Orders:   []ShopItem{},
 		Receipts: []Receipt{},

@@ -1,13 +1,12 @@
 package aumo
 
-import "github.com/jinzhu/gorm"
-
 type ShopItem struct {
-	gorm.Model
-	Name        string
-	Price       float64
-	Description string
-	Stock       uint
+	Model
+	Name        string  `json:"name"`
+	Price       float64 `json:"price"`
+	Image       string  `json:"image"`
+	Description string  `json:"description"`
+	Stock       uint    `json:"stock"`
 }
 
 // DecrementStock decreases the stock of an item
@@ -21,10 +20,11 @@ func (si *ShopItem) IncrementStock(i uint) {
 }
 
 // CreateShopItem creates a shop item
-func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint) (ShopItem, error) {
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (ShopItem, error) {
 	shopItem := &ShopItem{
 		Name:        name,
 		Price:       price,
+		Image:       image,
 		Description: desc,
 		Stock:       stock,
 	}

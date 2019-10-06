@@ -3,8 +3,6 @@ package aumo
 import (
 	"database/sql"
 	"errors"
-
-	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -12,9 +10,9 @@ var (
 )
 
 type Receipt struct {
-	gorm.Model
-	Content string
-	UserID  sql.NullInt64
+	Model
+	Content string        `json:"content"`
+	UserID  sql.NullInt64 `json:"-"`
 }
 
 // SetUserID claims a receipt with the provided ID
