@@ -6,11 +6,9 @@ import ProductListItem from "./ShopItem"
 class ProductListComponent extends React.Component {
   constructor() {
     super(...arguments)
+    console.log(this.onItemAddPress)
     this.onProductAddPress = index => {
       this.props.onItemAddPress(index)
-    }
-    this.onProductPress = index => {
-      this.props.onItemPress(index)
     }
     this.renderListItemElement = item => {
       const { themedStyle } = this.props

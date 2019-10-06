@@ -1,9 +1,10 @@
 import React from "react"
 import { View } from "react-native"
 
-export default Cirlce = ({ color, size, children }) => {
+export default Cirlce = ({ color, size, children, ...rest }) => {
   return (
     <View
+      {...rest}
       style={{
         borderRadius: Math.round(size) / 2,
         width: size,
