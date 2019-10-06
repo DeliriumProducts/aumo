@@ -15,7 +15,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		panic(".env file not found")
+		log.Println(".env file not found, reading directly from env variables")
 	}
 
 	MYSQL_DATABASE := os.Getenv("MYSQL_DATABASE")
