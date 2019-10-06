@@ -1,6 +1,7 @@
 import axios from "axios"
 import ShopItemList from "../components/ShopItemList"
 import * as SecureStore from "expo-secure-store"
+import Receipt from "../components/Receipt"
 import React from "react"
 import {
   ScrollView,
@@ -12,6 +13,12 @@ import {
 import { BACKEND_URL } from "../config"
 import { Avatar, Button, TabView, Tab } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
+
+const receiptContent = `Портокалов сок 1L x 1: 1,99лв.
+
+Сладолед ванилия 80гр x 4: 4,20лв.
+
+Спагети 700гр x 1 : 3,30лв.`
 
 const UserScreen = props => {
   const [mode, setMode] = React.useState("rewards")
@@ -115,7 +122,22 @@ const UserScreen = props => {
                 />
               )
             ) : (
-              <Text>Test</Text>
+              <View style={{ flex: 1 }}>
+                <ScrollView>
+                  <Receipt
+                    total="9,49"
+                    shopName="ПАЦОНИ ЕООД, РУСЕ"
+                    receiptContent={receiptContent}
+                    inCash={"10,00"}
+                  />
+                  <Receipt
+                    total="5,60"
+                    shopName="Billa"
+                    receiptContent={`Сол 1кг x 2: 2,80лв.`}
+                    inCash={"20,00"}
+                  />
+                </ScrollView>
+              </View>
             )}
           </>
         )}
