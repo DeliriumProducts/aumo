@@ -125,9 +125,15 @@ const UserScreen = props => {
                     inCash={"10,00"}
                   />
                   <Receipt
+                    total="4,60"
+                    shopName="Lidl"
+                    receiptContent={`Бира Пиринско 2л x : 4,60.`}
+                    inCash={`10,00`}
+                  />
+                  <Receipt
                     total="5,60"
                     shopName="Billa"
-                    receiptContent={`Сол 1кг x 2: 2,80лв.`}
+                    receiptContent={`Сол 1кг x 2: 5,60лв.`}
                     inCash={"20,00"}
                   />
                 </ScrollView>
