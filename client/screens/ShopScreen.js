@@ -6,6 +6,7 @@ import ShopItemList from "../components/ShopItemList"
 import {
   ScrollView,
   StyleSheet,
+  Alert,
   Text,
   View,
   ActivityIndicator
@@ -34,7 +35,51 @@ function ShopScreen(props) {
           <ActivityIndicator />
         ) : (
           <ShopItemList
-            data={items.map(i => ({ ...i, image: { uri: i.image } }))}
+            onItemAddPress={async idx => {
+              console.log("here")
+              const shopItem = items[idx]
+              Alert.alert(
+                "Purchase confirmation",
+                "Would you want to buy " + shopItem.name,
+                [
+                  {
+                    text: "Yes",
+                    onPress: async () => {
+                      try {
+                        const res = await axios.post(
+                          BACKEND_URL + "/users/buy/" + shopItem.id,
+                          {
+                            quantity: 1
+                          }
+                        )
+
+                        if (res.status === 200) {
+                          Alert.alert(
+                            "Successfull!",
+                            "You successfully purchased " + shopItem.name
+                          )
+                        }
+                      } catch (e) {
+                        if (e.response.status === 500) {
+                          Alert.alert("Error!", "Some error occured!")
+                        }
+                      }
+                    }
+                  },
+                  {
+                    text: "Cancel",
+                    onPress: () => {},
+                    style: "cancel"
+                  }
+                ],
+                { cancelable: true }
+              )
+            }}
+            data={items.map(i => ({
+              ...i,
+              image: { uri: i.image },
+              buyable: true
+            }))}
           />
         )}
       </ScrollView>

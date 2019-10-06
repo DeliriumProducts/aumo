@@ -26,13 +26,7 @@ const UserScreen = props => {
 
   const fetchUser = async () => {
     try {
-      const u = await SecureStore.getItemAsync("aumo")
-      const res = await axios.get(BACKEND_URL + "/me", {
-        headers: {
-          Cookie: u
-        },
-        withCredentials: true
-      })
+      const res = await axios.get(BACKEND_URL + "/me")
       setUser(res.data)
     } catch (e) {}
     setLoading(false)
