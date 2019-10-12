@@ -19,8 +19,8 @@ func (a *Aumo) CreateUser(name, email, password, avatar string) (models.User, er
 		Password: string(pwd),
 		Avatar:   avatar,
 		Points:   5000,
-		Orders:   []ShopItem{},
-		Receipts: []Receipt{},
+		Orders:   []models.ShopItem{},
+		Receipts: []models.Receipt{},
 	}
 
 	if err := a.db.Create(user).Error; err != nil {
@@ -56,7 +56,7 @@ func (a *Aumo) DeleteUser(i models.User) error {
 
 // BuyUserShopItem calls BuytItem on the user struct, decrements
 // the stock of the shop item then it updates it
-func (a *Aumo) BuyUserShopItem(u models.User, si ShopItem, quantity uint) error {
+func (a *Aumo) BuyUserShopItem(u models.User, si models.ShopItem, quantity uint) error {
 	err := u.BuyItem(si, quantity)
 	if err != nil {
 		return err
