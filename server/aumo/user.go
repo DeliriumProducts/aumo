@@ -38,25 +38,25 @@ func (a *Aumo) GetUserByEmail(email string) (models.User, error) {
 }
 
 // GetUserByID returns a user that has a matching id
-func (a *Aumo) GetUserByID(id uint) (User, error) {
-	var user User
+func (a *Aumo) GetUserByID(id uint) (models.User, error) {
+	var user models.User
 	err := a.firstX(&user, "id = ?", id)
 	return user, err
 }
 
 // UpdateUser updates a user
-func (a *Aumo) UpdateUser(u User) (User, error) {
+func (a *Aumo) UpdateUser(u models.User) (models.User, error) {
 	return u, a.updateX(&u)
 }
 
 // DeleteUser deletes a user
-func (a *Aumo) DeleteUser(i User) error {
+func (a *Aumo) DeleteUser(i models.User) error {
 	return a.deleteX(i)
 }
 
 // BuyUserShopItem calls BuytItem on the user struct, decrements
 // the stock of the shop item then it updates it
-func (a *Aumo) BuyUserShopItem(u User, si ShopItem, quantity uint) error {
+func (a *Aumo) BuyUserShopItem(u models.User, si ShopItem, quantity uint) error {
 	err := u.BuyItem(si, quantity)
 	if err != nil {
 		return err
