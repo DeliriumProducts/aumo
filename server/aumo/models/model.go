@@ -1,4 +1,4 @@
-package aumo
+package models
 
 import "time"
 

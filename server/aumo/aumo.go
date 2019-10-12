@@ -6,6 +6,7 @@
 package aumo
 
 import (
+	"github.com/fr3fou/aumo/server/aumo/models"
 	"github.com/jinzhu/gorm"
 )
 
@@ -23,7 +24,7 @@ func New(c Config) *Aumo {
 		panic("aumo: no db instance provided")
 	}
 
-	c.DB.AutoMigrate(&User{}, &ShopItem{}, &Receipt{})
+	c.DB.AutoMigrate(&models.User{}, &models.ShopItem{}, &models.Receipt{})
 
 	return &Aumo{
 		c:  c,

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/fr3fou/aumo/server/aumo/models"
 )
 
 // ContentTypeJSON is a middleware for setting the Content-Type header to application/json
@@ -26,7 +26,7 @@ func (wb *Web) WithAuth(next http.Handler) http.Handler {
 
 		// Retrieve our struct and type-assert it
 		val := session.Values[UserSessionKey]
-		user, ok := val.(aumo.User)
+		user, ok := val.(models.User)
 		if !ok {
 			http.Error(w, "Bad Request", http.StatusBadRequest)
 			return
@@ -54,10 +54,10 @@ func (wb *Web) WithAuth(next http.Handler) http.Handler {
 	})
 }
 
-func GetUserFromContext(ctx context.Context) (aumo.User, error) {
-	if user, ok := ctx.Value(UserContextKey).(aumo.User); ok {
+func GetUserFromContext(ctx context.Context) (models.User, error) {
+	if user, ok := ctx.Value(UserContextKey).(models.User); ok {
 		return user, nil
 	}
 
-	return aumo.User{}, ErrBadTypeAssertion
+	return models.User{}, ErrBadTypeAssertion
 }
