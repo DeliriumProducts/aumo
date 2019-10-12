@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 
-	"github.com/fr3fou/aumo/server/aumo"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,7 +12,7 @@ var (
 )
 
 type User struct {
-	aumo.Model
+	Model
 	Name     string     `json:"name" gorm:"not null"`
 	Email    string     `json:"email" gorm:"unique;not null"`
 	Password string     `json:"-" gorm:"not null" gob:"-"`
