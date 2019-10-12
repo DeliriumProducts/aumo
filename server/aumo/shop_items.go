@@ -3,7 +3,7 @@ package aumo
 import "github.com/fr3fou/aumo/server/aumo/models"
 
 // CreateShopItem creates a shop item
-func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (ShopItem, error) {
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (models.ShopItem, error) {
 	shopItem := &models.ShopItem{
 		Name:        name,
 		Price:       price,
