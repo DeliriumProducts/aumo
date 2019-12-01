@@ -9,6 +9,7 @@ export default class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
+    // TODO: repalce with request to /me and check for status code
     const userSession = await SecureStore.getItemAsync("aumo")
 
     this.props.navigation.navigate(userSession ? "Main" : "Auth")

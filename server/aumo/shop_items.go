@@ -1,27 +1,10 @@
 package aumo
 
-type ShopItem struct {
-	Model
-	Name        string  `json:"name"`
-	Price       float64 `json:"price"`
-	Image       string  `json:"image"`
-	Description string  `json:"description"`
-	Stock       uint    `json:"stock"`
-}
-
-// DecrementStock decreases the stock of an item
-func (si *ShopItem) DecrementStock(i uint) {
-	si.Stock = si.Stock - i
-}
-
-// IncrementStock increases the stock of an item
-func (si *ShopItem) IncrementStock(i uint) {
-	si.Stock = si.Stock + i
-}
+import "github.com/fr3fou/aumo/server/aumo/models"
 
 // CreateShopItem creates a shop item
-func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (ShopItem, error) {
-	shopItem := &ShopItem{
+func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uint, image string) (models.ShopItem, error) {
+	shopItem := &models.ShopItem{
 		Name:        name,
 		Price:       price,
 		Image:       image,
@@ -30,32 +13,32 @@ func (a *Aumo) CreateShopItem(name string, price float64, desc string, stock uin
 	}
 
 	if err := a.db.Create(shopItem).Error; err != nil {
-		return ShopItem{}, err
+		return models.ShopItem{}, err
 	}
 
 	return *shopItem, nil
 }
 
 // GetShopItemByID returns a user that has a matching email
-func (a *Aumo) GetShopItemByID(id uint) (ShopItem, error) {
-	var si ShopItem
+func (a *Aumo) GetShopItemByID(id uint) (models.ShopItem, error) {
+	var si models.ShopItem
 	err := a.firstX(&si, "id = ?", id)
 	return si, err
 }
 
 // GetShopItems returns a user that has a matching email
-func (a *Aumo) GetShopItems() ([]ShopItem, error) {
-	var si []ShopItem
+func (a *Aumo) GetShopItems() ([]models.ShopItem, error) {
+	var si []models.ShopItem
 	err := a.findX(&si)
 	return si, err
 }
 
 // UpdateShopItem updates an item
-func (a *Aumo) UpdateShopItem(si ShopItem) (ShopItem, error) {
+func (a *Aumo) UpdateShopItem(si models.ShopItem) (models.ShopItem, error) {
 	return si, a.updateX(&si)
 }
 
 // DeleteShopItem deletes an item
-func (a *Aumo) DeleteShopItem(i ShopItem) error {
+func (a *Aumo) DeleteShopItem(i models.ShopItem) error {
 	return a.deleteX(i)
 }

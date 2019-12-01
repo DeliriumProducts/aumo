@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 
 	"github.com/fr3fou/aumo/server/aumo"
+	"github.com/fr3fou/aumo/server/aumo/models"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -36,7 +37,7 @@ func New(c Config) *Web {
 		Path:     "/",
 	}
 
-	gob.Register(aumo.User{})
+	gob.Register(models.User{})
 
 	w := &Web{
 		Config: c,
