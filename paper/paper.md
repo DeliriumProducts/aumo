@@ -22,16 +22,20 @@ abstract: |
 ---
 
 Увод
---------------------------
+---------------------------
+ 
+* * * *
 
 За изработката на касови бележки се използват множество ресурси. Някой от които включват:
 
 - BPA (Bisphenol A / Бисфенол А)
 - Дърво
 
+
 Първите от които са токсични за човешката кожа, Бисфенол А, може да доведе до заболявания като рак, захарен диабет тип 2, наднормено тегло и други. 
 Тонове дървета биват отсичани за създаването на хартията на касовите бележки. Статистики показват че се отисчат 60 000+ декара гори годишно само от "Големите 5 държави".
 Премахването на тези ресурси ще се подпомогне така и на хората живущи на нашата планета, така и на самата планета.
+
 
 С тази разработка целим заменянето на хартиените касови бележки с дигитална алтернатива. За да постигнем тази цел трябва да бъдат решени следните задачи:
 
@@ -46,7 +50,61 @@ abstract: |
 Галерия
 ---------------------------
 
-...
+* * * *
+
+![](./images/scrot.jpg){ width=50% }
+
+![](./images/irl.jpg){ width=50% }
+
+Функции
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 Как работи
 ---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+
+Мотив (Геймификация)
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+Технологии
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+
+Етапи на развитие
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+
+Заключение
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+Бъдеще и развитие
+---------------------------
+
+* * * *
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
