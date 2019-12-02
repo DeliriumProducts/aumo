@@ -1,18 +1,18 @@
 import axios from "axios"
-import ShopItemList from "../components/ShopItemList"
 import * as SecureStore from "expo-secure-store"
-import Receipt from "../components/Receipt"
 import React from "react"
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
-  View,
-  ActivityIndicator
+  View
 } from "react-native"
-import { BACKEND_URL } from "../config"
-import { Avatar, Button, TabView, Tab } from "react-native-ui-kitten"
+import { Avatar, Button } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
+import Receipt from "../components/Receipt"
+import ShopItemList from "../components/ShopItemList"
+import { BACKEND_URL } from "../config"
 
 const receiptContent = `Портокалов сок 1L x 1: 1,99лв.
 

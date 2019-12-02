@@ -1,0 +1,109 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Aumo - дигиталните касови бележки от бъдещето},
+  pdfauthor={Симо Александров; Любо Любчев},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Aumo - дигиталните касови бележки от бъдещето}
+\author{Симо Александров \and Любо Любчев}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Тонове касови бележки биват създадени и веднага изхвърелни, като за
+изработката им се използва \texttt{BPA\ (Bisphenol\ A)}, химикал вреден
+за човека. Заедно за изработката на тази хартия е също нужна дървесна
+маса, което означава, че хиляди декари гори биват отсичани годишно.
+
+\texttt{Aumo} е мобилно приложение, придружено с хардуерно устройство и
+уеб съврър, което цели да премахне хартиените касови бележки, като ги
+замести с дигитални. Касовите апарати на магазини и заведения ще бъдат
+оборудвани с \texttt{Aumo}. Клиентите ще да получат техните дигитални
+касови бележки при допира на тяхното мобилно устройство (през мобилното
+ни приложение) с \texttt{Aumo} чрез NFC (Near-Field Communication)
+технология.
+
+За мотив да се използва дигиталната касова бележека пред хартиения
+еквавилент, потребителите ще бъдат възнаграждавани с точки, всеки път
+когато клиентът предпочете \texttt{Aumo} пред традиционнтата касова
+бележка. Тези точки могат да бъдат използвани за бонуси под формата на
+намаления или материални награди осигурени от търговския обект.
+
+Проектът е с приложен характер, все още е в процес на разработка и е от
+сферата по информатика и информационни технологии. Идеята е измислена от
+Симо Александров, а е реализирана от двамата автори.
+
+Tons of paper receipts are produced and then immediately thrown, for the
+creation of which is used \texttt{BPA\ (Bisphenol\ A)}, a human toxic
+chemical. Thousands of forest decares need to be cut down, as wood is
+another main component, required for the creation of paper receipts.
+
+\texttt{Aumo} is a mobile application, accompanied by a hardware device
+and a web server, which aims at removing paper receipts by replacing
+them with a digital equivalent. Receipt printers of shops and
+restaurants will be equiped with \texttt{Aumo}. Clients will take their
+digital receipts by approaching their phone (through our mobile
+application) to \texttt{Aumo}, by establishing a connection via NFC
+(Near-Field Communication) technology.
+
+Incentive for using the digital receipt, as opposed to the paper
+alternative, will be points which users receive when choosing
+\texttt{Aumo} over the traditional receipt. Points can be exchanged for
+bonuses, which can either be discounts or physical items, provided by
+the shop or restaurant.
+
+The project has applicational nature, it is still under development and
+belongs to the IT ﬁeld. The idea was conceived by Simo Aleksandrov and
+was realised by both of the authors.
+\end{abstract}
+
+\setdefaultlanguage{russian}
+\setmainfont[Ligatures=TeX]{Times New Roman}
+\newfontfamily\cyrillicfont{Times New Roman}[Script=Cyrillic]
+
+
+
+\end{document}

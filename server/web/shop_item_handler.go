@@ -33,7 +33,6 @@ func (wb *Web) NewShopItemHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
 }
 
 func (wb *Web) ShopItemHandler(w http.ResponseWriter, r *http.Request) {
