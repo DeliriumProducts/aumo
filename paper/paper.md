@@ -4,6 +4,7 @@ author:
 - Симо Александров
 - Любо Любчев
 lang: bg
+papersize: a4
 keywords: [gamification, eco, internet of things]
 abstract: |
     Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва **BPA (Bisphenol A)**, химикал вреден за човека. Заедно за изработката на тази хартия е също нужна дървесна маса, което означава, че хиляди декари гори биват отсичани годишно.
@@ -21,11 +22,8 @@ abstract: |
     The project has applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
 ---
 
-Увод
----------------------------
+# Увод
  
-* * * *
-
 За изработката на касови бележки се използват множество ресурси. Някой от които включват:
 
 - BPA (Bisphenol A / Бисфенол А)
@@ -47,64 +45,39 @@ abstract: |
 - Мотив за потребителите (система за награди и точки - Gamification)
 - Административен панел за добавяне на награди
 
-Галерия
----------------------------
-
-* * * *
+# Галерия
 
 ![](./images/scrot.jpg){ width=50% }
-
 ![](./images/irl.jpg){ width=50% }
 
-Функции
----------------------------
-
-* * * *
+# Функции
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-Как работи
----------------------------
-
-* * * *
+# Как работи
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 
-Мотив (Геймификация)
----------------------------
-
-* * * *
+# Мотив (Геймификация)
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-Технологии
----------------------------
-
-* * * *
+# Технологии
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 
-Етапи на развитие
----------------------------
-
-* * * *
+# Етапи на развитие
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 
-Заключение
----------------------------
-
-* * * *
+# Заключение
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-Бъдеще и развитие
----------------------------
-
-* * * *
+# Бъдеще и развитие
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
