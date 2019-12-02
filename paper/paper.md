@@ -21,3 +21,27 @@ Tons of paper receipts are produced and then immediately thrown, for the creatio
 Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing `Aumo` over the traditional receipt. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
 
 The project has applicational nature, it is still under development and belongs to the IT ﬁeld. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
+
+## Увод
+
+За изработката на касови бележки се използват множество ресурси. Някой от които включват:
+
+- BPA (Bisphenol A / Бисфенол А)
+- Дърво
+
+Първите от които са токсични за човешката кожа, Бисфенол А, може да доведе до заболявания като рак, захарен диабет тип 2, наднормено тегло и други. 
+<-- TODO: quote your references -->
+Тонове дървета биват отсичани за създаването на хартията на касовите бележки. Статистики показват че се отисчат 60 000+ декара гори годишно само от "Големите 5 държави".
+<-- TODO: quote your references -->
+Премахването на тези ресурси ще се подпомогне така и на хората живущи на нашата планета, така и на самата планета.
+
+С тази разработка целим заменянето на хартиените касови бележки с дигитална алтернатива. За да постигнем тази цел трябва да бъдат решени следните задачи:
+
+- Планиране на архитектура и подбор на правилните технологии
+- Създаване на устройство, което ще играе ролята на посредник между касови апарти и мобилното приложение
+- Разработка на backend съврър
+- Оформяне на красив и лесен за използване графичен интерфейс
+- Мобилно приложение за клиентите на заведения или магазини
+- Мотив за потребителите (система за награди и точки - Gamification)
+- Административен панел за добавяне на награди
+
