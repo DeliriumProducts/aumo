@@ -1,4 +1,5 @@
 ---
+documentclass: article
 title: Aumo - дигиталните касови бележки на бъдещтето
 author:
   - Симо Александров
