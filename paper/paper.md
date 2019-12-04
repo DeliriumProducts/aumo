@@ -2,6 +2,8 @@
 documentclass: article
 title: Aumo - дигиталните касови бележки на бъдещтето
 fontfamily: utopia
+geometry:
+  - a4paper
 author:
   - Симо Александров
   - Любо Любчев
@@ -12,7 +14,7 @@ abstract: |
   Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва химикал вреден за човека, заедно с дървесна маса, което означава, че хиляди декари гори биват отсичани годишно и заболявания да бъдат прихванати.
 
   **Aumo** е мобилно приложение, придружено с хардуерно устройство и уеб съврър, което цели да премахне хартиените касови бележки, като ги замести с дигитални. Касовите апарати на магазини и заведения ще бъдат оборудвани с **Aumo**. Клиентите ще да получат техните дигитални касови бележки при допира на тяхното мобилно устройство (през мобилното ни приложение) с **Aumo** чрез NFC (Near-Field Communication) технология.
-  За мотив да се използва дигиталната касова бележека пред хартиения еквавилент, потребителите ще бъдат възнаграждавани с точки, всеки път когато клиентът предпочете **Aumo** пред традиционнтата касова бележка. Тези точки могат да бъдат използвани за бонуси под формата на намаления или материални награди осигурени от търговския обект.
+  За мотив да се използва дигиталната касова бележека пред хартиения еквавилент, потребителите ще бъдат възнаграждавани с точки, всеки път когато клиентът предпочете **Aumo** пред традиционнтата касова бележка. Тези точки могат да бъдат използвани за бонуси под формата на намаления или материални награди, осигурени от търговския обект.
 
   Проектът е с приложен характер, все още е в процес на разработка и е от сферата по информатика и информационни технологии. Идеята е измислена от Симо Александров, а е реализирана от двамата автори.
 
@@ -20,16 +22,17 @@ abstract: |
     \noindent\rule{8cm}{0.4pt}
     \end{center}
 
-  Tons of paper receipts are produced and then immediately thrown, for the creation of which is used a human toxic chemical and wood, requiring thousands of forest decares to be cut down and diseases to be spread.
+  Tons of paper receipts are produced and then immediately thrown, for the creation of which are used a human toxic chemical and wood, requiring thousands of forest decares to be cut down and diseases to be spread.
 
-  **Aumo** is a mobile application, accompanied by a hardware device and a web server, which aims at removing paper receipts by replacing them with a digital equivalent. Receipt printers of shops and restaurants will be equiped with **Aumo**. Clients will take their digital receipts by approaching their phone (through our mobile application) to **Aumo**, by establishing a connection via NFC (Near-Field Communication) technology.
+  **Aumo** is a mobile application, accompanied by a hardware device and a web server, which aims at removing paper receipts by replacing them with a digital equivalent. Receipt printers of shops and restaurants will be equiped with **Aumo**. Clients will take their digital receipts by approaching their phone (through our mobile application) to **Aumo**, establishing a connection via NFC (Near-Field Communication) technology.
   Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing **Aumo** over the traditional receipt. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
 
   The project has applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
   \newpage
+header-includes: |
+    \usepackage{sectsty}
+    \sectionfont{\LARGE\underline\clearpage}
 ---
-
-\newpage
 
 # Увод
 
@@ -52,14 +55,10 @@ abstract: |
 - Мотив за потребителите (система за награди и точки - Gamification)
 - Административен панел за добавяне на награди
 
-\newpage
-
 # Галерия
 
 ![Снимка на приложението](./images/scrot.jpg "Снимка на приложението"){ width=50% }
 ![Снимка на устройството](./images/irl.jpg "Снимка на устройството"){ width=50% }
-
-\newpage
 
 # Функции
 
@@ -73,8 +72,6 @@ abstract: |
 - История от всички касови бележки
 - Създаване на списък с разходите извършени за деня/седмицата/месеца съответно
 
-\newpage
-
 # Как работи
 
 Между всеки касов апарат и компютъра, свързан с него, ще бъде поставено по едно устройство - **Aumo**.
@@ -84,31 +81,21 @@ abstract: |
 Към този компютър е също свързан NFC модул, чрез който мобилно приложение ще получава касовата бележка.
 Потребителите ще могат да допрат тяхното мобилно устройство до **Aumo**, изполвайки мобилното ни приложение и касовия бон ще бъде добавен в техния профил.
 
-\newpage
-
 # Мотив (Геймификация)
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-
-\newpage
 
 # Технологии
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-\newpage
-
 # Етапи на развитие
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-\newpage
-
 # Заключение
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-
-\newpage
 
 # Бъдеще и развитие
 

@@ -1,4 +1,4 @@
-.PHONY: latex pdf
+.PHONY: latex pdf html
 
 pdf:
 	pandoc -s -o paper.pdf paper.md --toc -N
