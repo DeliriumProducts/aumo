@@ -2,13 +2,13 @@
 documentclass: article
 title: Aumo - дигиталните касови бележки на бъдещтето
 fontfamily: utopia
-geometry:
-  - a4paper
-author:
-  - Симо Александров
-  - Любо Любчев
-lang: bg
 papersize: a4
+geometry:
+    - a4paper
+author:
+  - 'Симо Александров'
+  - 'Любо Любчев'
+lang: bg
 keywords: [gamification, eco, internet of things]
 abstract: |
   Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва химикал вреден за човека, заедно с дървесна маса, което означава, че хиляди декари гори биват отсичани годишно и заболявания да бъдат прихванати.
@@ -31,7 +31,10 @@ abstract: |
   \newpage
 header-includes: |
     \usepackage{sectsty}
-    \sectionfont{\LARGE\underline\clearpage}
+    \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
+figPrefix:
+  - "Фигура."
+  - "Фигури."
 ---
 
 # Увод
