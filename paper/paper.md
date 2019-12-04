@@ -63,7 +63,11 @@ abstract: |
 
 # Как работи
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Между всеки касов апарат и компютъра, свързан с него, ще бъде поставено по едно устройство - **Aumo**.
+**Aumo** представлява малък компютър (например Raspberry Pi), поставен в кутийка (изработена например от 3D принтер).
+Устройството ще играе роля на посредник и ще приема нужната информация от компютъра и в зависимост от избора на клиента,
+касовия бон ще бъде изпратен към принтера или към NFC модул.
+Към този компютър е също свързан NFC модул, чрез който мобилно приложение ще получава касовата бележка.
 
 # Мотив (Геймификация)
 
