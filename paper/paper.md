@@ -23,6 +23,8 @@ abstract: |
   The project has applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
 ---
 
+\newpage
+
 # Увод
 
 За изработката на касови бележки се използват множество ресурси. Някой от които включват:
@@ -44,10 +46,14 @@ abstract: |
 - Мотив за потребителите (система за награди и точки - Gamification)
 - Административен панел за добавяне на награди
 
+\newpage
+
 # Галерия
 
-![](./images/scrot.jpg){ width=50% }
-![](./images/irl.jpg){ width=50% }
+![Снимка на приложението](./images/scrot.jpg "Снимка на приложението"){ width=50% }
+![Снимка на устройството](./images/irl.jpg "Снимка на устройството"){ width=50% }
+
+\newpage
 
 # Функции
 
@@ -61,6 +67,8 @@ abstract: |
 - История от всички касови бележки
 - Създаване на списък с разходите извършени за деня/седмицата/месеца съответно
 
+\newpage
+
 # Как работи
 
 Между всеки касов апарат и компютъра, свързан с него, ще бъде поставено по едно устройство - **Aumo**.
@@ -70,21 +78,31 @@ abstract: |
 Към този компютър е също свързан NFC модул, чрез който мобилно приложение ще получава касовата бележка.
 Потребителите ще могат да допрат тяхното мобилно устройство до **Aumo**, изполвайки мобилното ни приложение и касовия бон ще бъде добавен в техния профил.
 
+\newpage
+
 # Мотив (Геймификация)
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+\newpage
 
 # Технологии
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
+\newpage
+
 # Етапи на развитие
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
+\newpage
+
 # Заключение
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+\newpage
 
 # Бъдеще и развитие
 
