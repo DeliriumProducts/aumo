@@ -32,6 +32,8 @@ abstract: |
 header-includes: |
     \usepackage{sectsty}
     \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
+    \subsectionfont{\large\bfseries\centering}
+    \subsubsectionfont{\normalsize\bfseries\centering}
 figPrefix:
   - "Фигура."
   - "Фигури."
@@ -90,7 +92,32 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 # Технологии
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+## Backend
+
+### go
+
+Като език за програмиране използвахме **Go**, тъй като е бърз, гъвкав, лесен за писане и разбиране и може да се компилира към всички операционни системи - macOS, Linux, Windows.
+
+### go-chi
+
+Като библиотека за HTTP сървър ползвахме **go-chi**, поради факта че е малък слой (wrapper) над стандартната библиотека на **go** - **net/http**. Предоставя лесна абстракция за създаване на REST API. Малък пример за сървър:
+
+```go
+package main
+
+import (
+	"net/http"
+	"github.com/go-chi/chi"
+)
+
+func main() {
+	r := chi.NewRouter()
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("welcome"))
+	})
+	http.ListenAndServe(":3000", r)
+}
+```
 
 # Етапи на развитие
 
