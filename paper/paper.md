@@ -31,7 +31,7 @@ abstract: |
   \newpage
 header-includes: |
   \usepackage{sectsty}
-  \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
+  \sectionfont{\LARGE\underline\bfseries\centering}
   \subsectionfont{\large\bfseries\centering}
   \subsubsectionfont{\normalsize\bfseries\centering}
   \usepackage{wrapfig}
@@ -40,6 +40,8 @@ figPrefix:
   - 'Фигура.'
   - 'Фигури.'
 ---
+
+\newpage
 
 # Увод
 
@@ -235,6 +237,25 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 - Изградихме базова концепция за нашия графичен интерфейс - **Figma**
 - Създадохме нашето мобилно приложение с **React Native**
 - Свързахме мобилното приложение със сървъра ни
+
+# Описание на приложението
+
+Сорс кода на проекта може да бъде намерен в GitHub. След като е изтеглен проекта, той може да бъде конфигуриран много лесно, благодарение на **Docker**.
+
+```sh
+docker bulid -t aumo .
+docker run aumo
+```
+
+Мобилното приложение може да бъде стартирано чрез **npm** или **yarn**
+
+```sh
+npm run start
+# or
+yarn start
+```
+
+След като са стартирани, ще може да бъде намерено в **Expo** на вашето мобилно устройство, а сървъра на порт 3000.
 
 # Заключение
 
