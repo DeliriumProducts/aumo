@@ -271,4 +271,11 @@ yarn start
 
 # Бъдеще и развитие
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Както вече споменахме, проектът е все още в процес на разработка и доразвитие, съответно това означава, че има много потенциал за нови реализации. Някой от
+тях, които трябва да осъществим са:
+
+- Осъществяване на връзка между POS компютъра и **Aumo**
+- Интегриране на NFC модула
+- Достигане до потенциални клиенти.
+
+С две думи можем да кажем, че според нас проектът има огромен потенциал да се развие.
