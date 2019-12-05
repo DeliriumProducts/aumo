@@ -99,7 +99,7 @@ figPrefix:
 
 ### go
 
-Като език за програмиране използвахме **Go**, тъй като е бърз, гъвкав, лесен за писане и разбиране и може да се компилира към всички операционни системи - macOS, Linux, Windows.
+Като език за програмиране използвахме **go**, тъй като е бърз, гъвкав, лесен за писане и разбиране и може да се компилира към всички операционни системи - macOS, Linux, Windows.
 
 ### go-chi
 
@@ -121,6 +121,57 @@ func main() {
 	http.ListenAndServe(":3000", r)
 }
 ```
+
+### MariaDB (MySQL)
+
+Използвахме **MySQL** (или по-конкретно **MariaDB**) като база от данни, поради широкото ѝ разпространение в индустрията. Лесна е за използване и конфигуриране.
+
+### GORM
+
+Като библиотека за свързване и абстракция от **go** към **MySQL**, се спряхме на **GORM**. Много бързо и лесно успяхме да създадем нашите модели. Само с няколко реда код, ние можем да имаме потребители в нашата база от данни.
+
+\newpage
+
+```go
+type User struct {
+	gorm.Model
+	Name     string     `json:"name" gorm:"not null"`
+	Email    string     `json:"email" gorm:"unique;not null"`
+	Password string     `json:"-" gorm:"not null" gob:"-"`
+	Avatar   string     `json:"avatar" `
+	Points   float64    `json:"points" gorm:"not null"`
+	Orders   []ShopItem `json:"orders" gorm:"many2many:user_shop_item;"`
+	Receipts []Receipt  `json:"receipts"`
+}
+
+func (a *Aumo) CreateUser(u User) (User, error) {
+	if err := a.db.Create(u).Error; err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+```
+
+### Redis
+
+За сесии, кеширане за MySQL заявки използвахме **Redis** заедно с **go-redis**.
+
+### Raspberry Pi
+
+За устройството използахме **Raspberry Pi**, поставено в 3D принтиранa кутиика, направена в CAD системата **Solidworks**. Кутията беше принтирана в Русенския Университет, тъй като те разполагат с 3D принтер.
+
+![](images/render.png){ height=8.5cm }
+
+### Docker
+
+За deployment (публикуване) на нашото приложение, използвахме технологията за контейнери, по-конкретно - **Docker**. Той ни предоставя еднакъв environment, независимо от операционната система, дистробуция или други. Също така ни улеснява живота относно scaling (скалиране) на много иснтанции.
+
+## Frontend
+
+### React и React-Native
+
+За да създадем хубав и гъвкав интерфейс, заедно с reusable компоненти използвахме **React** - библиотека създадена от Facebook. За мобилното приложение използвахме по-конкретно **React-Native**, тъй като можем да пишем един код за всички платформи - iOS и Android.
 
 # Етапи на развитие
 
