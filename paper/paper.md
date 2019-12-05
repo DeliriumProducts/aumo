@@ -11,23 +11,23 @@ author:
 lang: bg
 keywords: [gamification, eco, internet of things]
 abstract: |
-  Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва химикал вреден за човека, заедно с дървесна маса, което означава, че хиляди декари гори биват отсичани годишно и заболявания да бъдат прихванати.
+  Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва химикал вреден за човека, заедно с дървесна маса, което означава, че хиляди декари гори биват отсичани годишно и мнозина се разболяват.
 
-  **Aumo** е мобилно приложение, придружено с хардуерно устройство и уеб съврър, което цели да премахне хартиените касови бележки, като ги замести с дигитални. Касовите апарати на магазини и заведения ще бъдат оборудвани с **Aumo**. Клиентите ще да получат техните дигитални касови бележки при допира на тяхното мобилно устройство (през мобилното ни приложение) с **Aumo** чрез NFC (Near-Field Communication) технология.
-  За мотив да се използва дигиталната касова бележека пред хартиения еквавилент, потребителите ще бъдат възнаграждавани с точки, всеки път когато клиентът предпочете **Aumo** пред традиционнтата касова бележка. Тези точки могат да бъдат използвани за бонуси под формата на намаления или материални награди, осигурени от търговския обект.
+  **Aumo** е мобилно приложение, придружено с хардуерно устройство и уеб съврър, което цели да премахне хартиените касови бележки, като ги замести с дигитални. Касовите апарати на магазини и заведения ще бъдат оборудвани с **Aumo**. Клиентите ще получат техните дигитални касови бележки при допира на тяхното мобилно устройство (през мобилното ни приложение) с **Aumo** чрез NFC (Near-Field Communication) технология.
+  За мотив да се използва дигиталната касова бележека пред хартиения еквавилент, потребителите ще бъдат възнаграждавани с точки, всеки път когато клиентът предпочете **Aumo** пред традиционната касова бележка. Тези точки могат да бъдат използвани за бонуси под формата на намаления или материални награди, осигурени от търговския обект.
 
-  Проектът е с приложен характер, все още е в процес на разработка и е от сферата по информатика и информационни технологии. Идеята е измислена от Симо Александров, а е реализирана от двамата автори.
+  Проектът е с приложен характер, все още е в процес на разработка и е от сферата на информатика и информационни технологии. Идеята е измислена от Симо Александров, а е реализирана от двамата автори.
 
     \begin{center}
     \noindent\rule{8cm}{0.4pt}
     \end{center}
 
-  Tons of paper receipts are produced and then immediately thrown, for the creation of which are used a human toxic chemical and wood, requiring thousands of forest decares to be cut down and diseases to be spread.
+  Tons of paper receipts are produced and then immediately thrown away, for the creation of which are used trees and a human toxic chemical, requiring thousands of decares of forests to be cut down and resulting in spreading of diseases.
 
-  **Aumo** is a mobile application, accompanied by a hardware device and a web server, which aims at removing paper receipts by replacing them with a digital equivalent. Receipt printers of shops and restaurants will be equiped with **Aumo**. Clients will take their digital receipts by approaching their phone (through our mobile application) to **Aumo**, establishing a connection via NFC (Near-Field Communication) technology.
-  Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing **Aumo** over the traditional receipt. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
+  **Aumo** is a mobile application, accompanied by a hardware device and a web server, which aims at removing paper receipts by replacing them with a digital equivalent. Receipt printers of shops and restaurants will be equipped with **Aumo**. Clients will take their digital receipts by approaching their phone (through our mobile application) to **Aumo**, establishing a connection via NFC (Near-Field Communication) technology.
+  Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing **Aumo** over the traditional option. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
 
-  The project has applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
+  The project is of applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
   \newpage
 header-includes: |
     \usepackage{sectsty}
@@ -39,14 +39,14 @@ figPrefix:
 
 # Увод
 
-За изработката на касови бележки се използват множество ресурси. Някой от които включват:
+За изработката на касови бележки се използват множество ресурси. Някои от които включват:
 
 - BPA (Bisphenol A / Бисфенол А)
 - Дърво
 
 Първите от които са токсични за човешката кожа, Бисфенол А, може да доведе до заболявания като рак, захарен диабет тип 2, наднормено тегло и други.
-Тонове дървета биват отсичани за създаването на хартията на касовите бележки. Статистики показват че се отисчат 60 000+ декара гори годишно само от "Големите 5 държави".
-Премахването на тези ресурси ще се подпомогне така и на хората живущи на нашата планета, така и на самата планета.
+Тонове дървета биват отсичани за създаването на хартията на касовите бележки. Статистики показват, че се отисчат 60 000+ декара гори годишно само от "Големите 5 държави".
+Премахването на тези ресурси ще се подпомогне както и на хората живущи на нашата планета, така и на самата планета.
 
 С тази разработка целим заменянето на хартиените касови бележки с дигитална алтернатива. За да постигнем тази цел трябва да бъдат решени следните задачи:
 
@@ -67,7 +67,7 @@ figPrefix:
 
 Приложението ни предоставя следните функции:
 
-- Светкавично бързо
+- Светкавична бързина
 - Изпращане на информация (дигитална касова бележка) чрез NFC (Near-Field Communication)
 - Виртуален магазин за промоции/награди предоставени от търговсия обект
 - Потребителски панел (Мобилно приложение)
@@ -81,7 +81,7 @@ figPrefix:
 **Aumo** представлява малък компютър (например Raspberry Pi), поставен в кутийка (изработена например от 3D принтер).
 Устройството ще играе роля на посредник и ще приема нужната информация от компютъра и в зависимост от избора на клиента,
 касовия бон ще бъде изпратен към принтера или към NFC модул.
-Към този компютър е също свързан NFC модул, чрез който мобилно приложение ще получава касовата бележка.
+Към този компютър е също свързан NFC модул, чрез който мобилното приложение ще получава касовата бележка.
 Потребителите ще могат да допрат тяхното мобилно устройство до **Aumo**, изполвайки мобилното ни приложение и касовия бон ще бъде добавен в техния профил.
 
 # Мотив (Геймификация)
