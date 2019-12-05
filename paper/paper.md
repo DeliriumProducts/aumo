@@ -6,6 +6,9 @@ author:
   - 'Симо Александров'
   - 'Любо Любчев'
 lang: bg
+papersize: a4
+graphics:
+    - a4paper
 keywords: [gamification, eco, internet of things]
 abstract: |
   Тонове касови бележки биват създадени и веднага изхвърелни, като за изработката им се използва химикал вреден за човека, заедно с дървесна маса, което означава, че хиляди декари гори биват отсичани годишно и мнозина се разболяват.
@@ -62,8 +65,23 @@ figPrefix:
 
 # Галерия
 
-![Снимка на приложението](./images/scrot.jpg 'Снимка на приложението'){ width=50% }
-![Снимка на устройството](./images/irl.jpg 'Снимка на устройството'){ width=50% }
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth, height=7cm]{images/iphone.png}
+\centering
+\caption{Мобилното приложение на iPhone X}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth, height=7cm]{images/render.png}
+\centering
+\caption{Устройството}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.3\textwidth, height=7cm]{images/AumoLogo.png}
+\centering
+\caption{Логото на Aumo}
+\end{figure}
 
 # Функции
 
@@ -163,19 +181,19 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/rpi.jpg}
 \centering
-\caption{Снимка на Raspberry Pi\label{fig:rpi}}
+\caption{Raspberry Pi\label{fig:rpi}}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/render.png}
 \includegraphics[width=0.5\textwidth]{images/irl.jpg}
 \centering
-\caption{Снимка на устройството\label{fig:aumo-pics}}
+\caption{Устройството\label{fig:aumo-pics}}
 \end{figure}
 
 ### Docker
 
-За deployment (публикуване) на нашото приложение, използвахме технологията за контейнери, по-конкретно - **Docker**. Той ни предоставя еднакъв environment, независимо от операционната система, дистробуция или други. Също така ни улеснява живота относно scaling (скалиране) на много иснтанции.
+За deployment (публикуване) на нашото приложение, използвахме технологията за контейнери, по-конкретно - **Docker**. Той ни предоставя еднакъв environment, независимо от операционната система, дистробуция или други фактори. Също така ни улеснява scaling (скалиране) на много иснтанции.
 
 ## Frontend
 
@@ -187,22 +205,21 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 \includegraphics[width=0.5\textwidth, height=6cm]{images/main_s9.jpg}
 \includegraphics[width=0.5\textwidth, height=6cm]{images/shop_s9.jpg}
 \centering
-\caption{Снимка на мобилното приложение на Android\label{fig:aumo-android}}
+\caption{Мобилното приложение на Android\label{fig:aumo-android}}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth, height=6cm]{images/main_ios.png}
 \includegraphics[width=0.5\textwidth, height=6cm]{images/shop_ios.png}
 \centering
-\caption{Снимка на мобилното приложение на iOS\label{fig:aumo-ios}}
+\caption{Мобилното приложение на iOS\label{fig:aumo-ios}}
 \end{figure}
 
 # Етапи на развитие
 
 ## Избор на тема
 
-Двамата автори бяхме в Стара Загора (участвахме на състезание), седнахме да обядваме
-по 1 бургер. Докато Симо беше на опашката, забеляза, че зад касите стояха кофи за боклук преливащи от касови бележки, които така и не влизат в употреба а само се изхвърля на вятъра един природен ресурс. Така решихме да измислим решение, с което можем да сложим край на този проблем възмно най-скоро - роди се идеята за **Aumo**.
+Двамата автори бяхме в Стара Загора (участвахме на състезание), седнахме да обядваме. Докато Симо беше на опашката, забеляза, че зад касите стояха кофи за боклук преливащи от касови бележки, които така и не влизат в употреба а само се изхвърля на вятъра един природен ресурс. Така решихме да измислим решение, с което можем да сложим край на този проблем възможно най-скоро - роди се идеята за **Aumo**.
 
 ## Проучване
 
