@@ -2,9 +2,6 @@
 documentclass: article
 title: Aumo - дигиталните касови бележки на бъдещето
 fontfamily: utopia
-papersize: a4
-geometry:
-  - a4paper
 author:
   - 'Симо Александров'
   - 'Любо Любчев'
@@ -34,6 +31,8 @@ header-includes: |
   \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
   \subsectionfont{\large\bfseries\centering}
   \subsubsectionfont{\normalsize\bfseries\centering}
+  \usepackage{wrapfig}
+  \usepackage{float}
 figPrefix:
   - 'Фигура.'
   - 'Фигури.'
@@ -159,9 +158,20 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 
 ### Raspberry Pi
 
-За устройството използахме **Raspberry Pi**, поставено в 3D принтиранa кутиика, направена в CAD системата **Solidworks**. Кутията беше принтирана в Русенския Университет, тъй като те разполагат с 3D принтер.
+За устройството използахме **Raspberry Pi**, поставено в 3D принтиранa кутиика, направена в CAD системата **Solidworks**. Кутията беше принтирана в Русенския Университет, тъй като те разполагат с 3D принтер. (виж фиг. \ref{fig:rpi} и \ref{fig:aumo-pics})
 
-![](images/render.png){ height=8.5cm }
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/rpi.jpg}
+\centering
+\caption{Снимка на Raspberry Pi\label{fig:rpi}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/render.png}
+\includegraphics[width=0.5\textwidth]{images/irl.jpg}
+\centering
+\caption{Снимка на устройството\label{fig:aumo-pics}}
+\end{figure}
 
 ### Docker
 
@@ -171,7 +181,21 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 
 ### React и React-Native
 
-За да създадем хубав и гъвкав интерфейс, заедно с reusable компоненти използвахме **React** - библиотека създадена от Facebook. За мобилното приложение използвахме по-конкретно **React-Native**, тъй като можем да пишем един код за всички платформи - iOS и Android.
+За да създадем хубав и гъвкав интерфейс, заедно с reusable компоненти използвахме **React** - библиотека създадена от Facebook. За мобилното приложение използвахме по-конкретно **React-Native**, тъй като можем да пишем един код за всички платформи - iOS и Android. (виж фиг. \ref{fig:aumo-android} и фиг. \ref{fig:aumo-ios})
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth, height=6cm]{images/main_s9.jpg}
+\includegraphics[width=0.5\textwidth, height=6cm]{images/shop_s9.jpg}
+\centering
+\caption{Снимка на мобилното приложение на Android\label{fig:aumo-android}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth, height=6cm]{images/main_ios.png}
+\includegraphics[width=0.5\textwidth, height=6cm]{images/shop_ios.png}
+\centering
+\caption{Снимка на мобилното приложение на iOS\label{fig:aumo-ios}}
+\end{figure}
 
 # Етапи на развитие
 
