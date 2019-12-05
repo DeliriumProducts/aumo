@@ -4,7 +4,7 @@ title: Aumo - дигиталните касови бележки на бъдещ
 fontfamily: utopia
 papersize: a4
 geometry:
-    - a4paper
+  - a4paper
 author:
   - 'Симо Александров'
   - 'Любо Любчев'
@@ -30,13 +30,13 @@ abstract: |
   The project is of applicational nature, it is still under development and belongs to the IT field. The idea was conceived by Simo Aleksandrov and was realised by both of the authors.
   \newpage
 header-includes: |
-    \usepackage{sectsty}
-    \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
-    \subsectionfont{\large\bfseries\centering}
-    \subsubsectionfont{\normalsize\bfseries\centering}
+  \usepackage{sectsty}
+  \sectionfont{\LARGE\underline\clearpage\bfseries\centering}
+  \subsectionfont{\large\bfseries\centering}
+  \subsubsectionfont{\normalsize\bfseries\centering}
 figPrefix:
-  - "Фигура."
-  - "Фигури."
+  - 'Фигура.'
+  - 'Фигури.'
 ---
 
 # Увод
@@ -62,8 +62,8 @@ figPrefix:
 
 # Галерия
 
-![Снимка на приложението](./images/scrot.jpg "Снимка на приложението"){ width=50% }
-![Снимка на устройството](./images/irl.jpg "Снимка на устройството"){ width=50% }
+![Снимка на приложението](./images/scrot.jpg 'Снимка на приложението'){ width=50% }
+![Снимка на устройството](./images/irl.jpg 'Снимка на устройството'){ width=50% }
 
 # Функции
 
@@ -80,15 +80,17 @@ figPrefix:
 # Как работи
 
 Между всеки касов апарат и компютъра, свързан с него, ще бъде поставено по едно устройство - **Aumo**.
-**Aumo** представлява малък компютър (например Raspberry Pi), поставен в кутийка (изработена например от 3D принтер).
+**Aumo** представлява малък компютър (в случая Raspberry Pi), поставен в кутийка (изработена в случая от 3D принтер).
 Устройството ще играе роля на посредник и ще приема нужната информация от компютъра и в зависимост от избора на клиента,
-касовия бон ще бъде изпратен към принтера или към NFC модул.
-Към този компютър е също свързан NFC модул, чрез който мобилното приложение ще получава касовата бележка.
+касовия бон ще бъде изпратен към принтера или към NFC модул (в случаите, когато клиента няма телефон, той може по да изисква своя касов бон по традиционния начин).
+Към този компютър - **Aumo** е свързан с NFC модул, чрез който той получава информация за касовия бон от компютъра (POS системата), а мобилното приложение ще получава касовата бележка чрез допир до устройството по NFC.
 Потребителите ще могат да допрат тяхното мобилно устройство до **Aumo**, изполвайки мобилното ни приложение и касовия бон ще бъде добавен в техния профил.
 
 # Мотив (Геймификация)
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+При всяко използване на **Aumo** клиента получава точки, те могат да бъдат обменени за бонуси, промоции или предметни награди предоставени от търговския обект, като по този начин клиентите биват мотивирани да използват **Aumo**.
+
+Досега всичко е било "на хартия". Този подход с дигитализация на нещо толкова битово ще изисква много усилия, тъй като ние хората обичаме да стоим в комфортната си зона и често не обичаме промяна. Затова ние решихме да вкараме геймификация в **Aumo**, като по този начин клиентите ще бъдат мотивирани да използват дигитална касова бележка пред традиционната - хартиена, както и да посещават по често съответния търговски обект предлагащ услугата **Aumo**. Така усилията, които трябва да бъдат положени, както от страна на клиенти, така и от страна на собствениците на търговските обекти ще бъдат усетени доста по-леко.
 
 # Технологии
 
