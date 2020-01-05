@@ -15,21 +15,23 @@ func NewProductService(db *DB) aumo.ProductService {
 }
 
 func (p *productService) Product(id uint) (*aumo.Product, error) {
-	panic("not implemented") // TODO: Implement
+	pd := &aumo.Product{}
+	return pd, p.db.First(pd, id).Error
 }
 
 func (p *productService) Products() ([]aumo.Product, error) {
-	panic("not implemented") // TODO: Implement
+	pds := []aumo.Product{}
+	return pds, p.db.Find(&pds).Error
 }
 
-func (p *productService) Create(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Create(pd *aumo.Product) error {
+	return p.db.Create(pd).Error
 }
 
-func (p *productService) Update(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Update(pd *aumo.Product) error {
+	return p.db.Model(pd).Updates(pd).Error
 }
 
-func (p *productService) Delete(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Delete(pd *aumo.Product) error {
+	return p.db.Unscoped().Delete(pd).Error
 }
