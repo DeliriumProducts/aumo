@@ -14,6 +14,7 @@ type User struct {
 	Receipts []Receipt `json:"receipts"`
 }
 
+// NewUser is a constructor for `User`
 func NewUser(name string, email string, password string, avatar string) (*User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 
