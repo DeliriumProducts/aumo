@@ -10,6 +10,16 @@ type Product struct {
 	Stock       uint    `json:"stock"`
 }
 
+// DecrementStock decreases the stock of a `Product`
+func (p *Product) DecrementStock(n uint) {
+	p.Stock = p.Stock - n
+}
+
+// IncrementStock increases the stock of a `Product`
+func (p *Product) IncrementStock(n uint) {
+	p.Stock = p.Stock + n
+}
+
 // NewProduct is a constructor for `Product`
 func NewProduct(name string, price float64, image string, description string, stock uint) *Product {
 	return &Product{
@@ -21,28 +31,12 @@ func NewProduct(name string, price float64, image string, description string, st
 	}
 }
 
-// Order is an order of a `User`
-type Order struct {
-	User    *User    `json:"-"`
-	Product *Product `json:"product"`
-	Amount  uint     `json:"amount"`
-}
-
-// NewOrder is a constructor for `Order`
-func NewOrder(u *User, p *Product, n uint) *Order {
-	return &Order{
-		User:    u,
-		Product: p,
-		Amount:  n,
-	}
-}
-
-// DecrementStock decreases the stock of a `Product`
-func (p *Product) DecrementStock(n uint) {
-	p.Stock = p.Stock - n
-}
-
-// IncrementStock increases the stock of a `Product`
-func (p *Product) IncrementStock(n uint) {
-	p.Stock = p.Stock + n
+// ProductService contains all `Product`
+// related business logic
+type ProductService interface {
+	Product(id uint) *Product
+	Products() ([]Product, error)
+	Save(*Product) error
+	Update(*Product) error
+	Delete(*Product) error
 }

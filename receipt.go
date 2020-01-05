@@ -26,9 +26,9 @@ func (r *Receipt) SetUser(u *User) error {
 // ReceiptService contains all `Receipt`
 // related business logic
 type ReceiptService interface {
-	Receipt(id uint) *Receipt
-	Receipts() []Receipt
-	Save(*Receipt)
-	Update(*Receipt)
-	Delete(*Receipt)
+	Receipt(id uint) (*Receipt, error)
+	Receipts() ([]Receipt, error)
+	Save(*Receipt) error
+	Update(*Receipt) error
+	Delete(*Receipt) error
 }

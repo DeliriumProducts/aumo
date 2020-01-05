@@ -15,9 +15,9 @@ type User struct {
 // UserService contains all `User`
 // related business logic
 type UserService interface {
-	User(id uint) *User
-	Users() []User
-	Save(*User)
-	Update(*User)
-	Delete(*User)
+	User(id uint) (*User, error)
+	Users() ([]User, error)
+	Save(*User) error
+	Update(*User) error
+	Delete(*User) error
 }
