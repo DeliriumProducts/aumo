@@ -1,5 +1,7 @@
 package main
 
+// go:generate sqlboiler mysql -p "dbx" -o "dbx" --wipe
+
 import (
 	"context"
 	"database/sql"
