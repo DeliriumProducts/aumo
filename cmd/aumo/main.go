@@ -1,19 +1,27 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/deliriumproducts/aumo/db"
-	"github.com/deliriumproducts/aumo/mysql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/volatiletech/sqlboiler/boil"
 )
 
 func main() {
 	PORT := 3000
 	fmt.Printf("🧾 aumo server running on port %d\n", PORT)
 	MYSQL_STRING := "root" + ":" + "fr3fou123/" + "@(" + "localhost" + ":" + "3306" + ")/" + "aumo" + "?parseTime=true"
-	_, err := mysql.New("mysql", MYSQL_STRING)
+	d, err := sql.Open("mysql", MYSQL_STRING)
 	if err != nil {
 		panic(err)
 	}
-	db.Users()
+
+	user := db.User{Name: "pesho"}
+	user.Insert(context.Background(), d, boil.Infer())
+	fmt.Println(user.ID)
+
+	user.AddOrders(context.Background(), d, true, &db.Order{UserID: user.ID, ProductID: 2})
 }
