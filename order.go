@@ -15,3 +15,13 @@ func NewOrder(u *User, p *Product, n uint) *Order {
 		Amount:  n,
 	}
 }
+
+// OrderService contains all `Order`
+// related business logic
+type OrderService interface {
+	Order(id uint) (*Order, error)
+	Orders() ([]Order, error)
+	Create(*Order) error
+	Update(*Order) error
+	Delete(*Order) error
+}
