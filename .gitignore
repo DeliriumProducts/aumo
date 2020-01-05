@@ -3,3 +3,4 @@ node_modules/
 *.db
 client/config/index.js
 .DS_Store
+sqlboiler.toml

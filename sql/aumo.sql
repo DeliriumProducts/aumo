@@ -34,10 +34,10 @@ CREATE TABLE receipts (
 );
 
 CREATE TABLE orders (
-    userId int (10) unsigned NOT NULL,
-    productId int (10) unsigned NOT NULL,
+    user_id int (10) unsigned NOT NULL,
+    product_id int (10) unsigned NOT NULL,
     quantity int (11) NOT NULL,
-    PRIMARY KEY (userId, productId),
-    FOREIGN KEY (productId) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    PRIMARY KEY (user_id, product_id),
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 );

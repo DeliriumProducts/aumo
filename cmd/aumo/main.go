@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/deliriumproducts/aumo/db"
 	"github.com/deliriumproducts/aumo/mysql"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
@@ -15,4 +15,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	db.Users()
 }
