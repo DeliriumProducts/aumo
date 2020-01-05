@@ -3,6 +3,7 @@ package aumo
 import "errors"
 
 var (
+	// ErrUserAlreadySet is an error for when a user has already claimed a receipt
 	ErrUserAlreadySet = errors.New("aumo: this receipt has already been claimed")
 )
 
