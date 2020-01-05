@@ -34,7 +34,7 @@ func NewProduct(name string, price float64, image string, description string, st
 // ProductService contains all `Product`
 // related business logic
 type ProductService interface {
-	Product(id uint) *Product
+	Product(id uint) (*Product, error)
 	Products() ([]Product, error)
 	Create(*Product) error
 	Update(*Product) error
