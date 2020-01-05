@@ -10,8 +10,8 @@ type User struct {
 	Password string    `json:"-" gorm:"not null"`
 	Avatar   string    `json:"avatar" gorm:"not null"`
 	Points   float64   `json:"points" gorm:"not null"`
-	Orders   []Product `json:"orders"`
-	Receipts []Receipt `json:"receipts"`
+	Orders   []Product `json:"orders" gorm:"many2many:user_orders`
+	Receipts []Receipt `json:"receipts" gorm:"foreignkey:UserID"`
 }
 
 // NewUser is a constructor for `User`

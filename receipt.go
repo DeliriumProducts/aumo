@@ -11,16 +11,16 @@ var (
 type Receipt struct {
 	Model   `json:"model"`
 	Content string `json:"content"`
-	User    *User  `json:"-"`
+	UserID  uint   `json:"-"`
 }
 
 // SetUser sets the user field of a receipt
-func (r *Receipt) SetUser(u *User) error {
-	if r.User != nil {
+func (r *Receipt) SetUser(userID uint) error {
+	if r.UserID != 0 {
 		return ErrUserAlreadySet
 	}
 
-	r.User = u
+	r.UserID = userID
 	return nil
 }
 

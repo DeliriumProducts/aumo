@@ -8,6 +8,7 @@ type productService struct {
 	db *DB
 }
 
+// NewProductService returns a mysql instance of `aumo.ProductService`
 func NewProductService(db *DB) aumo.ProductService {
 	return &productService{
 		db: db,

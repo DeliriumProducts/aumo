@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// DB is a wrapper around gorm.DB
 type DB struct {
 	*gorm.DB
 }
