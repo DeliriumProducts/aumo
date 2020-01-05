@@ -2,20 +2,19 @@ package mysql
 
 import (
 	"github.com/deliriumproducts/aumo"
-	"github.com/jinzhu/gorm"
 )
 
 type productService struct {
-	db *gorm.DB
+	db *DB
 }
 
-func NewProductService(db *gorm.DB) aumo.ProductService {
+func NewProductService(db *DB) aumo.ProductService {
 	return &productService{
 		db: db,
 	}
 }
 
-func (p *productService) Product(id uint) *aumo.Product {
+func (p *productService) Product(id uint) (*aumo.Product, error) {
 	panic("not implemented") // TODO: Implement
 }
 
@@ -23,7 +22,7 @@ func (p *productService) Products() ([]aumo.Product, error) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (p *productService) Save(_ *aumo.Product) error {
+func (p *productService) Create(_ *aumo.Product) error {
 	panic("not implemented") // TODO: Implement
 }
 

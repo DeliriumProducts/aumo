@@ -10,5 +10,9 @@ type DB struct {
 }
 
 func NewDB(db *gorm.DB) *DB {
-	db.AutoMigrate(&aumo.Product{}, &aumo.User{}, &aumo.Order{}, &aumo.Receipt{})
+	db.AutoMigrate(&aumo.Product{}, &aumo.User{}, &aumo.Receipt{})
+
+	return &DB{
+		DB: db,
+	}
 }
