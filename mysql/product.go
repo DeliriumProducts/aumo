@@ -1,38 +1,38 @@
 package mysql
 
 import (
+	"database/sql"
+
 	"github.com/deliriumproducts/aumo"
 )
 
 type productService struct {
-	db *DB
+	db *sql.DB
 }
 
 // NewProductService returns a mysql instance of `aumo.ProductService`
-func NewProductService(db *DB) aumo.ProductService {
+func NewProductService(db *sql.DB) aumo.ProductService {
 	return &productService{
 		db: db,
 	}
 }
 
 func (p *productService) Product(id uint) (*aumo.Product, error) {
-	pd := &aumo.Product{}
-	return pd, p.db.First(pd, id).Error
+	panic("not implemented") // TODO: Implement
 }
 
 func (p *productService) Products() ([]aumo.Product, error) {
-	pds := []aumo.Product{}
-	return pds, p.db.Find(&pds).Error
+	panic("not implemented") // TODO: Implement
 }
 
-func (p *productService) Create(pd *aumo.Product) error {
-	return p.db.Create(pd).Error
+func (p *productService) Create(_ *aumo.Product) error {
+	panic("not implemented") // TODO: Implement
 }
 
-func (p *productService) Update(pd *aumo.Product) error {
-	return p.db.Model(pd).Updates(pd).Error
+func (p *productService) Update(_ *aumo.Product) error {
+	panic("not implemented") // TODO: Implement
 }
 
-func (p *productService) Delete(pd *aumo.Product) error {
-	return p.db.Unscoped().Delete(pd).Error
+func (p *productService) Delete(_ *aumo.Product) error {
+	panic("not implemented") // TODO: Implement
 }
