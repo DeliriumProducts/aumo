@@ -3,12 +3,10 @@ package main
 // go:generate sqlboiler mysql -p "dbx" -o "dbx" --wipe
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/volatiletech/sqlboiler/boil"
 )
 
 func main() {
@@ -20,9 +18,4 @@ func main() {
 		panic(err)
 	}
 
-	user := db.User{Name: "pesho"}
-	user.Insert(context.Background(), d, boil.Infer())
-	fmt.Println(user.ID)
-
-	user.AddOrders(context.Background(), d, true, &db.Order{UserID: user.ID, ProductID: 2})
 }
