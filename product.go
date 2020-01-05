@@ -36,7 +36,7 @@ func NewProduct(name string, price float64, image string, description string, st
 type ProductService interface {
 	Product(id uint) *Product
 	Products() ([]Product, error)
-	Save(*Product) error
+	Create(*Product) error
 	Update(*Product) error
 	Delete(*Product) error
 }

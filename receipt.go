@@ -28,7 +28,7 @@ func (r *Receipt) SetUser(u *User) error {
 type ReceiptService interface {
 	Receipt(id uint) (*Receipt, error)
 	Receipts() ([]Receipt, error)
-	Save(*Receipt) error
+	Create(*Receipt) error
 	Update(*Receipt) error
 	Delete(*Receipt) error
 }
