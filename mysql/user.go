@@ -72,10 +72,18 @@ func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
 	if err != nil {
 		return err
 	}
+
 	p.DecrementStock()
 
-	u.os.Create(o)
-	u.ps.Update(pid, p)
+	err = u.os.Create(o)
+	if err != nil {
+		return err
+	}
+
+	err = u.ps.Update(pid, p)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
