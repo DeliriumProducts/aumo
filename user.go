@@ -5,13 +5,13 @@ import "golang.org/x/crypto/bcrypt"
 // User represents a user of aumo
 type User struct {
 	Model
-	Name     string    `json:"name" gorm:"not null"`
-	Email    string    `json:"email" gorm:"unique;not null"`
-	Password string    `json:"-" gorm:"not null"`
-	Avatar   string    `json:"avatar" gorm:"not null"`
-	Points   float64   `json:"points" gorm:"not null"`
-	Orders   []Product `json:"orders" gorm:"many2many:user_orders`
-	Receipts []Receipt `json:"receipts" gorm:"foreignkey:UserID"`
+	Name     string    `json:"name"`
+	Email    string    `json:"email"`
+	Password string    `json:"-"`
+	Avatar   string    `json:"avatar"`
+	Points   float64   `json:"points"`
+	Orders   []Product `json:"orders"`
+	Receipts []Receipt `json:"receipts"`
 }
 
 // NewUser is a constructor for `User`

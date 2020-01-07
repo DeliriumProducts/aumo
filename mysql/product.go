@@ -1,38 +1,39 @@
 package mysql
 
 import (
-	"database/sql"
-
 	"github.com/deliriumproducts/aumo"
+	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 type productService struct {
-	db *sql.DB
+	db sqlbuilder.Database
 }
 
 // NewProductService returns a mysql instance of `aumo.ProductService`
-func NewProductService(db *sql.DB) aumo.ProductService {
+func NewProductService(db sqlbuilder.Database) aumo.ProductService {
 	return &productService{
 		db: db,
 	}
 }
 
 func (p *productService) Product(id uint) (*aumo.Product, error) {
-	panic("not implemented") // TODO: Implement
+	var pd *aumo.Product
+	return pd, p.db.Collection("products").Find("id", id).One(pd)
 }
 
 func (p *productService) Products() ([]aumo.Product, error) {
-	panic("not implemented") // TODO: Implement
+	var pds []aumo.Product
+	return pds, p.db.Collection("products").Find().All(&pds)
 }
 
-func (p *productService) Create(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Create(pd *aumo.Product) error {
+	return p.db.Collection("products").InsertReturning(pd)
 }
 
-func (p *productService) Update(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Update(id uint, pd *aumo.Product) error {
+	return p.db.Collection("products").Find("id", id).Update(pd)
 }
 
-func (p *productService) Delete(_ *aumo.Product) error {
-	panic("not implemented") // TODO: Implement
+func (p *productService) Delete(id uint, pd *aumo.Product) error {
+	return p.db.Collection("products").Find("id", id).Delete()
 }

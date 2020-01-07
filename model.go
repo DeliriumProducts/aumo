@@ -2,7 +2,7 @@ package aumo
 
 import "time"
 
-// Model is a convenience struct that contains some fields for GORM
+// Model is a convenience struct that contains some fields for mysql
 type Model struct {
 	ID        uint       `gorm:"primary_key" json:"id"`
 	CreatedAt time.Time  `json:"created_at"`

@@ -1,21 +1,28 @@
 package main
 
-// go:generate sqlboiler mysql -p "dbx" -o "dbx" --wipe
-
 import (
-	"database/sql"
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/deliriumproducts/aumo/mysql"
+	upper "upper.io/db.v3/mysql"
 )
 
 func main() {
 	PORT := 3000
+
 	fmt.Printf("🧾 aumo server running on port %d\n", PORT)
-	MYSQL_STRING := "root" + ":" + "fr3fou123/" + "@(" + "localhost" + ":" + "3306" + ")/" + "aumo" + "?parseTime=true"
-	db, err := sql.Open("mysql", MYSQL_STRING)
+
+	db, err := upper.Open(upper.ConnectionURL{
+		User:     "root",
+		Password: "fr3fou123/",
+		Host:     "localhost",
+		Database: "aumo",
+	})
+
+	defer db.Close()
 	if err != nil {
 		panic(err)
 	}
 
+	mysql.NewProductService(db)
 }
