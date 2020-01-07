@@ -24,5 +24,6 @@ func main() {
 		panic(err)
 	}
 
+	mysql.ExecSchema(db)
 	mysql.NewProductService(db)
 }

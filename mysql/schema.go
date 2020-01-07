@@ -1,7 +1,7 @@
 package mysql
 
 const Schema = `
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   created_at timestamp NULL DEFAULT NULL,
   updated_at timestamp NULL DEFAULT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE users (
   UNIQUE KEY email (email)
 );
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   created_at timestamp NULL DEFAULT NULL,
   updated_at timestamp NULL DEFAULT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE products (
   stock int (10) unsigned DEFAULT NULL
 );
 
-CREATE TABLE receipts (
+CREATE TABLE IF NOT EXISTS receipts (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   created_at timestamp NULL DEFAULT NULL,
   updated_at timestamp NULL DEFAULT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE receipts (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     user_id int (10) unsigned NOT NULL,
     product_id int (10) unsigned NOT NULL,
     quantity int (11) NOT NULL,
