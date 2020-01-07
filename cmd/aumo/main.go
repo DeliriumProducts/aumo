@@ -18,7 +18,7 @@ func main() {
 
 	ADDRESS := os.Getenv("ADDRESS")
 
-	fmt.Printf("🧾 aumo server running on localhost%s\n", ADDRESS)
+	fmt.Printf("🧾 aumo server running on %s\n", ADDRESS)
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     os.Getenv("MYSQL_USER"),
