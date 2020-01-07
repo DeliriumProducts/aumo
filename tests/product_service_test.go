@@ -84,4 +84,8 @@ func TestProductService(t *testing.T) {
 		err = sess.Collection("products").Find("id", pd.ID).One(&pm)
 		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
+
+	t.Run("update_product", func(t *testing.T) {
+		t.Fatal("TODO: IMPLEMENT ME")
+	})
 }
