@@ -6,37 +6,59 @@ import (
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/stretchr/testify/assert"
+	"upper.io/db.v3"
 )
 
 func TestProductService(t *testing.T) {
-	db, err := SetupDB()
+	sess, err := SetupDB()
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Cleanup
 	defer func() {
-		TidyDB(db)
-		db.Close()
+		TidyDB(sess)
+		sess.Close()
 	}()
 
-	ps := mysql.NewProductService(db)
+	ps := mysql.NewProductService(sess)
 
 	t.Run("create_product", func(t *testing.T) {
-		defer TidyDB(db)
+		defer TidyDB(sess)
+
 		pd := aumo.NewProduct("TV", 500, "image.com", "ok", 5)
 		err := ps.Create(pd)
 		assert.Nil(t, err, "didn't return an error")
-		var pm aumo.Product
-		db.Collection("products").Find("id", pd.ID).One(&pm)
+
+		pm := aumo.Product{}
+		sess.Collection("products").Find("id", pd.ID).One(&pm)
 		assert.Equal(t, pm, *pd)
 	})
 
 	t.Run("get_product", func(t *testing.T) {
-		defer TidyDB(db)
+		defer TidyDB(sess)
+
 		pd := aumo.NewProduct("Laptop", 100, "image.com", "it's a good laptop", 5)
-		ps.Create(pd)
-		_, err := ps.Product(pd.ID)
+		err := ps.Create(pd)
 		assert.Nil(t, err, "didn't return an error")
+
+		pm, err := ps.Product(pd.ID)
+		assert.Nil(t, err, "didn't return an error")
+		assert.Equal(t, *pd, *pm)
+	})
+
+	t.Run("delete_product", func(t *testing.T) {
+		defer TidyDB(sess)
+
+		pd := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
+		err := ps.Create(pd)
+		assert.Nil(t, err, "didn't return an error")
+
+		err = ps.Delete(pd.ID)
+		assert.Nil(t, err, "didn't return an error")
+
+		pm := aumo.Product{}
+		err = sess.Collection("products").Find("id", pd.ID).One(&pm)
+		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
 }

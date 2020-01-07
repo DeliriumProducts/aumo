@@ -38,5 +38,5 @@ type ProductService interface {
 	Products() ([]Product, error)
 	Create(*Product) error
 	Update(id uint, p *Product) error
-	Delete(id uint, p *Product) error
+	Delete(id uint) error
 }

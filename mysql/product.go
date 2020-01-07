@@ -17,7 +17,7 @@ func NewProductService(db sqlbuilder.Database) aumo.ProductService {
 }
 
 func (p *productService) Product(id uint) (*aumo.Product, error) {
-	var pd *aumo.Product
+	pd := &aumo.Product{}
 	return pd, p.db.Collection("products").Find("id", id).One(pd)
 }
 
@@ -34,6 +34,6 @@ func (p *productService) Update(id uint, pd *aumo.Product) error {
 	return p.db.Collection("products").Find("id", id).Update(pd)
 }
 
-func (p *productService) Delete(id uint, pd *aumo.Product) error {
+func (p *productService) Delete(id uint) error {
 	return p.db.Collection("products").Find("id", id).Delete()
 }
