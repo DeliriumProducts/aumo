@@ -23,7 +23,7 @@ func (o *orderService) Order(id uint) (*aumo.Order, error) {
 
 func (o *orderService) Orders() ([]aumo.Order, error) {
 	oss := []aumo.Order{}
-	return oss, o.db.Collection("orders").Find().All(&rss)
+	return oss, o.db.Collection("orders").Find().All(&oss)
 }
 
 func (o *orderService) Create(os *aumo.Order) error {
