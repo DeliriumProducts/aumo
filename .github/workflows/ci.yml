@@ -32,7 +32,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
     - name: Create MySQL database
-      run: mysqladmin -u root -p create aumo_test
+      run: mysqladmin --user=root --password=root create aumo_test
     - name: Run tests
       env:
           MYSQL_USER: root
