@@ -31,6 +31,8 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
       uses: actions/checkout@v1
+    - name: Create MySQL database
+      run: echo 'CREATE DATABASE aumo_test;' | mysql -u root -p root
     - name: Run tests
       env:
           MYSQL_USER: root
