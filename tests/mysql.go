@@ -12,7 +12,7 @@ import (
 
 // SetupDB creates a new in memory sqlite database
 func SetupDB() (sqlbuilder.Database, error) {
-	err := godotenv.Load()
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Println(".env file not found, reading directly from env variables")
 	}
