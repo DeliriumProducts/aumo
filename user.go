@@ -19,6 +19,15 @@ func (u *User) ClaimReceipt(r Receipt) {
 	u.Receipts = append(u.Receipts, r)
 }
 
+// ValidatePassword checks if the passed password is the correct one
+func (u *User) ValidatePassword(password string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err == nil {
+		return true
+	}
+
+	return false
+}
+
 // BuyItem adds the passed Product to the user's inventory
 // if they have enough money to buy the desired quantity;
 // substracts points from the user
