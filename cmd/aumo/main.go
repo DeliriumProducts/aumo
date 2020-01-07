@@ -33,5 +33,4 @@ func main() {
 	}
 
 	mysql.ExecSchema(db)
-	mysql.NewProductService(db)
 }

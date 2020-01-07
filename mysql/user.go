@@ -50,6 +50,7 @@ func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
 		return err
 	}
 
+	// NOTE: is there a race condition here???
 	err = r.SetUser(us.ID)
 	if err != nil {
 		return err
@@ -66,6 +67,7 @@ func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
 	}
 
 	o := aumo.NewOrder(us.ID, pid, p)
+	// NOTE: is there a race condition here???
 	err = us.PlaceOrder(*o)
 	if err != nil {
 		return err
