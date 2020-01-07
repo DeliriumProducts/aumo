@@ -16,9 +16,9 @@ func main() {
 		log.Println(".env file not found, reading directly from env variables")
 	}
 
-	PORT := os.Getenv("PORT")
+	ADDRESS := os.Getenv("ADDRESS")
 
-	fmt.Printf("🧾 aumo server running on port %d\n", PORT)
+	fmt.Printf("🧾 aumo server running on localhost%s\n", ADDRESS)
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     os.Getenv("MYSQL_USER"),
