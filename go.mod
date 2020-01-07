@@ -8,6 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/jinzhu/gorm v1.9.11
+	github.com/joho/godotenv v1.3.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
 	github.com/mattn/go-runewidth v0.0.7 // indirect
 	github.com/motemen/go-quickfix v0.0.0-20200103095207-27e35cdee537 // indirect
