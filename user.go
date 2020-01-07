@@ -44,7 +44,7 @@ func (u *User) ValidatePassword(password string) bool {
 
 // PlaceOrder adds the passed Product to the user's inventory
 // if they have enough money to buy the desired quantity;
-// substracts points from the user
+// subtracts points from the user
 func (u *User) PlaceOrder(o Order) error {
 	p := o.Product
 	total := float64(p.Price)
@@ -59,7 +59,7 @@ func (u *User) PlaceOrder(o Order) error {
 		return ErrNotInStock
 	}
 
-	// Substract the points of the user
+	// Subtract the points of the user
 	u.Points -= total
 
 	// Add the item to the orders array
