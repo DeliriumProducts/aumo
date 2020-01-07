@@ -4,13 +4,14 @@ import "golang.org/x/crypto/bcrypt"
 
 // User represents a user of aumo
 type User struct {
-	Name     string    `json:"name"`
-	Email    string    `json:"email"`
-	Password string    `json:"-"`
-	Avatar   string    `json:"avatar"`
-	Points   float64   `json:"points"`
-	Orders   []Product `json:"orders"`
-	Receipts []Receipt `json:"receipts"`
+	ID       uint      `json:"id" db:"id,omitempty"`
+	Name     string    `json:"name" db:"name"`
+	Email    string    `json:"email" db:"email"`
+	Password string    `json:"-" db:"password"`
+	Avatar   string    `json:"avatar" db:"avatar"`
+	Points   float64   `json:"points" db:"points"`
+	Orders   []Product `json:"orders" db:"-"`
+	Receipts []Receipt `json:"receipts" db:"-"`
 }
 
 // NewUser is a constructor for `User`
