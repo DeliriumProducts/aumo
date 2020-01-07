@@ -5,12 +5,18 @@ import (
 	"os"
 
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/joho/godotenv"
 	"upper.io/db.v3/lib/sqlbuilder"
 	upper "upper.io/db.v3/mysql"
 )
 
 // SetupDB creates a new in memory sqlite database
 func SetupDB() (sqlbuilder.Database, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(".env file not found, reading directly from env variables")
+	}
+
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     os.Getenv("MYSQL_USER"),
 		Password: os.Getenv("MYSQL_PASSWORD"),
