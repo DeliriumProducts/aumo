@@ -47,10 +47,9 @@ func (u *User) ValidatePassword(password string) bool {
 // subtracts points from the user
 func (u *User) PlaceOrder(o Order) error {
 	p := o.Product
-	total := float64(p.Price)
 
 	// Check if the user has enough points
-	if u.Points-total < 0 {
+	if u.Points-p.Price < 0 {
 		return ErrNotSufficientPoints
 	}
 
@@ -60,7 +59,7 @@ func (u *User) PlaceOrder(o Order) error {
 	}
 
 	// Subtract the points of the user
-	u.Points -= total
+	u.Points -= p.Price
 
 	// Add the item to the orders array
 	u.Orders = append(u.Orders, o)
