@@ -1,6 +1,17 @@
 package aumo
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"errors"
+
+	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	// ErrNotSufficientPoints is an error for when the user doens't have enough points
+	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
+	// ErrNotSufficientPoints is an error for when an item isn't in stock
+	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
+)
 
 // User represents a user of aumo
 type User struct {
