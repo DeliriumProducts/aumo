@@ -80,12 +80,23 @@ func TestProductService(t *testing.T) {
 		err = ps.Delete(pd.ID)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		pm := aumo.Product{}
-		err = sess.Collection("products").Find("id", pd.ID).One(&pm)
+		_, err = ps.Product(pd.ID)
 		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
 
 	t.Run("update_product", func(t *testing.T) {
-		t.Fatal("TODO: IMPLEMENT ME")
+		defer TidyDB(sess)
+
+		pd := aumo.NewProduct("Computer", 400, "computer.com", "it's powerful", 10)
+		err := ps.Create(pd)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		pd.Name = "not a computer"
+		err = ps.Update(pd.ID, pd)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		pm, err := ps.Product(pd.ID)
+		assert.Nil(t, err, "shouldn't return an error")
+		assert.Equal(t, *pd, *pm)
 	})
 }
