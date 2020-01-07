@@ -19,6 +19,32 @@ func (u *User) ClaimReceipt(r Receipt) {
 	u.Receipts = append(u.Receipts, r)
 }
 
+// BuyItem adds the passed Product to the user's inventory
+// if they have enough money to buy the desired quantity;
+// substracts points from the user
+func (u *User) BuyItem(p Product, quantity uint) error {
+	total := p.Price * float64(quantity)
+
+	// Check if the user has enough points
+	if u.Points-total < 0 {
+		return ErrNotSufficientPoints
+	}
+
+	// Check if there is enough in stock
+	if p.Stock-quantity < 0 {
+		return ErrNotInStock
+	}
+
+	// Substract the points of the user
+	u.Points -= total
+
+	o := NewOrder(u.ID, p.ID, &p)
+
+	// Add the item to the orders array
+	u.Orders = append(u.Orders, *o)
+	return nil
+}
+
 // NewUser is a constructor for `User`
 func NewUser(name string, email string, password string, avatar string) (*User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
