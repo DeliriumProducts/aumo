@@ -3,9 +3,6 @@ package mysql
 const Schema = `
 CREATE TABLE IF NOT EXISTS users (
   id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
-  deleted_at timestamp NULL DEFAULT NULL,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
@@ -16,9 +13,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS products (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
-  deleted_at timestamp NULL DEFAULT NULL,
   name varchar (255) DEFAULT NULL,
   price double DEFAULT NULL,
   image varchar (255) DEFAULT NULL,
@@ -28,16 +22,13 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS receipts (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
-  deleted_at timestamp NULL DEFAULT NULL,
-  content varchar(255) NOT NULL,
+  content TEXT NOT NULL,
   user_id int(10) unsigned NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-	id int (10) unsigned NOT NULL, 
+	id int (10) unsigned NOT NULL,
     user_id int (10) unsigned NOT NULL,
     product_id int (10) unsigned NOT NULL,
     PRIMARY KEY (user_id, product_id, id),

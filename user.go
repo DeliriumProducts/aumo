@@ -10,7 +10,7 @@ type User struct {
 	Password string    `json:"-" db:"password"`
 	Avatar   string    `json:"avatar" db:"avatar"`
 	Points   float64   `json:"points" db:"points"`
-	Orders   []Product `json:"orders" db:"-"`
+	Orders   []Order   `json:"orders" db:"-"`
 	Receipts []Receipt `json:"receipts" db:"-"`
 }
 

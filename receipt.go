@@ -9,8 +9,9 @@ var (
 
 // Receipt is a digital receipt
 type Receipt struct {
-	Content string `json:"content"`
-	UserID  uint   `json:"-"`
+	ID      uint   `json:"id" db:"id"`
+	Content string `json:"content" db:"content"`
+	UserID  uint   `json:"-" db:"user_id"`
 }
 
 // SetUser sets the user field of a receipt
