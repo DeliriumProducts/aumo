@@ -15,12 +15,12 @@ type Receipt struct {
 }
 
 // SetUser sets the user field of a receipt
-func (r *Receipt) SetUser(userID uint) error {
+func (r *Receipt) SetUser(uid uint) error {
 	if r.UserID != 0 {
 		return ErrUserAlreadySet
 	}
 
-	r.UserID = userID
+	r.UserID = uid
 	return nil
 }
 

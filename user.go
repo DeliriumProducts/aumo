@@ -14,6 +14,11 @@ type User struct {
 	Receipts []Receipt `json:"receipts" db:"-"`
 }
 
+// ClaimReceipt claims a receipt and adds it to the receipts array
+func (u *User) ClaimReceipt(r Receipt) {
+	u.Receipts = append(u.Receipts, r)
+}
+
 // NewUser is a constructor for `User`
 func NewUser(name string, email string, password string, avatar string) (*User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
@@ -38,4 +43,5 @@ type UserService interface {
 	Create(*User) error
 	Update(id uint, u *User) error
 	Delete(id uint) error
+	ClaimReceipt(u *User, r *Receipt) error
 }
