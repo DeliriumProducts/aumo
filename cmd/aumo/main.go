@@ -26,11 +26,14 @@ func main() {
 		Host:     os.Getenv("MYSQL_HOST"),
 		Database: os.Getenv("MYSQL_DATABASE"),
 	})
-
-	defer db.Close()
 	if err != nil {
 		panic(err)
 	}
 
-	mysql.ExecSchema(db)
+	defer db.Close()
+
+	err = mysql.ExecSchema(db)
+	if err != nil {
+		panic(err)
+	}
 }
