@@ -32,6 +32,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
     - name: Run tests
+      env:
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+          MYSQL_HOST: localhost
+          MYSQL_DATABASE: aumo
       run: go test -v -covermode=count  ./...
 
   coverage:
