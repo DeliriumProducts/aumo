@@ -2,6 +2,7 @@ package tests
 
 import (
 	"log"
+	"os"
 
 	"github.com/deliriumproducts/aumo/mysql"
 	"upper.io/db.v3/lib/sqlbuilder"
@@ -11,9 +12,9 @@ import (
 // SetupDB creates a new in memory sqlite database
 func SetupDB() (sqlbuilder.Database, error) {
 	db, err := upper.Open(upper.ConnectionURL{
-		User:     "root",
-		Password: "fr3fou123/",
-		Host:     "localhost",
+		User:     os.Getenv("MYSQL_USER"),
+		Password: os.Getenv("MYSQL_PASSWORD"),
+		Host:     os.Getenv("MYSQL_HOST"),
 		Database: "aumo_test",
 	})
 	if err != nil {
