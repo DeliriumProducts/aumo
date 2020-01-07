@@ -1,3 +1,6 @@
+package mysql
+
+const Schema = `
 CREATE TABLE users (
   id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   created_at timestamp NULL DEFAULT NULL,
@@ -41,3 +44,4 @@ CREATE TABLE orders (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
+`

@@ -4,7 +4,6 @@ import "golang.org/x/crypto/bcrypt"
 
 // User represents a user of aumo
 type User struct {
-	Model
 	Name     string    `json:"name"`
 	Email    string    `json:"email"`
 	Password string    `json:"-"`
@@ -36,6 +35,6 @@ type UserService interface {
 	User(id uint) (*User, error)
 	Users() ([]User, error)
 	Create(*User) error
-	Update(*User) error
-	Delete(*User) error
+	Update(id uint, u *User) error
+	Delete(id uint) error
 }

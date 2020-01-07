@@ -9,7 +9,6 @@ var (
 
 // Receipt is a digital receipt
 type Receipt struct {
-	Model   `json:"model"`
 	Content string `json:"content"`
 	UserID  uint   `json:"-"`
 }
@@ -30,6 +29,6 @@ type ReceiptService interface {
 	Receipt(id uint) (*Receipt, error)
 	Receipts() ([]Receipt, error)
 	Create(*Receipt) error
-	Update(*Receipt) error
-	Delete(*Receipt) error
+	Update(id uint, r *Receipt) error
+	Delete(id uint) error
 }

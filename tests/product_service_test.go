@@ -14,14 +14,20 @@ func TestProductService(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer db.Close()
+	// Cleanup
+	defer func() {
+		TidyDB(db)
+		db.Close()
+	}()
 
 	ps := mysql.NewProductService(db)
 
 	t.Run("create_product", func(t *testing.T) {
-		pd := &aumo.Product{}
+		pd := aumo.NewProduct("TV", 500, "image.com", "ok", 5)
 		err := ps.Create(pd)
 		assert.Nil(t, err, "didn't return an error")
+		var pm aumo.Product
+		db.Collection("products").Find("id", pd.ID).One(&pm)
+		assert.Equal(t, pm, *pd)
 	})
-
 }
