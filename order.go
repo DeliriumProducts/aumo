@@ -5,3 +5,13 @@ type Order struct {
 	UserID    uint `json:"userID" db:"user_id"`
 	ProductID uint `json:"productID" db:"product_id"`
 }
+
+// OrderService contains all `Order`
+// related business logic
+type OrderService interface {
+	Order(id uint) (*Order, error)
+	Orders() ([]Order, error)
+	Create(*Order) error
+	Update(id uint, o *Order) error
+	Delete(id uint) error
+}
