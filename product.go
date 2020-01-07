@@ -2,7 +2,7 @@ package aumo
 
 // Product is a product in the shop of aumo
 type Product struct {
-	ID          uint    `json:"id" db:"id"`
+	ID          uint    `json:"id" db:"id,omitempty"`
 	Name        string  `json:"name" db:"name"`
 	Price       float64 `json:"price" db:"price"`
 	Image       string  `json:"image" db:"image"`
