@@ -16,7 +16,7 @@ func main() {
 		log.Println(".env file not found, reading directly from env variables")
 	}
 
-	PORT := os.Getenv("MYSQL_PORT")
+	PORT := os.Getenv("PORT")
 
 	fmt.Printf("🧾 aumo server running on port %d\n", PORT)
 
