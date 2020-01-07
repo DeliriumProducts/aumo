@@ -36,7 +36,7 @@ jobs:
           MYSQL_USER: root
           MYSQL_PASSWORD: root
           MYSQL_HOST: localhost
-          MYSQL_DATABASE: aumo
+          MYSQL_DATABASE: aumo_test
       run: go test -v -covermode=count  ./...
 
   coverage:
