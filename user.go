@@ -6,6 +6,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// UserStartingPoints is the starting points of a user
+const UserStartingPoints = 5000
+
 var (
 	// ErrNotSufficientPoints is an error for when the user doens't have enough points
 	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
@@ -39,11 +42,12 @@ func (u *User) ValidatePassword(password string) bool {
 	return false
 }
 
-// BuyItem adds the passed Product to the user's inventory
+// PlaceOrder adds the passed Product to the user's inventory
 // if they have enough money to buy the desired quantity;
 // substracts points from the user
-func (u *User) BuyItem(p Product, quantity uint) error {
-	total := p.Price * float64(quantity)
+func (u *User) PlaceOrder(o Order) error {
+	p := o.Product
+	total := float64(p.Price)
 
 	// Check if the user has enough points
 	if u.Points-total < 0 {
@@ -51,17 +55,15 @@ func (u *User) BuyItem(p Product, quantity uint) error {
 	}
 
 	// Check if there is enough in stock
-	if p.Stock-quantity < 0 {
+	if p.Stock < 1 {
 		return ErrNotInStock
 	}
 
 	// Substract the points of the user
 	u.Points -= total
 
-	o := NewOrder(u.ID, p.ID, &p)
-
 	// Add the item to the orders array
-	u.Orders = append(u.Orders, *o)
+	u.Orders = append(u.Orders, o)
 	return nil
 }
 
@@ -78,6 +80,9 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 		Email:    email,
 		Password: string(pwd),
 		Avatar:   avatar,
+		Points:   UserStartingPoints,
+		Orders:   []Order{},
+		Receipts: []Receipt{},
 	}, nil
 }
 
@@ -89,5 +94,6 @@ type UserService interface {
 	Create(*User) error
 	Update(id uint, u *User) error
 	Delete(id uint) error
-	ClaimReceipt(u *User, r *Receipt) error
+	ClaimReceipt(u *User, rid uint) error
+	PlaceOrder(u *User, pid uint) error
 }

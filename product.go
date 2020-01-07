@@ -11,13 +11,13 @@ type Product struct {
 }
 
 // DecrementStock decreases the stock of a `Product`
-func (p *Product) DecrementStock(n uint) {
-	p.Stock = p.Stock - n
+func (p *Product) DecrementStock() {
+	p.Stock = p.Stock - 1
 }
 
 // IncrementStock increases the stock of a `Product`
-func (p *Product) IncrementStock(n uint) {
-	p.Stock = p.Stock + n
+func (p *Product) IncrementStock() {
+	p.Stock = p.Stock + 1
 }
 
 // NewProduct is a constructor for `Product`

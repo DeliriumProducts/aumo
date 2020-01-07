@@ -8,13 +8,17 @@ import (
 type userService struct {
 	db sqlbuilder.Database
 	rs aumo.ReceiptService
+	ps aumo.ProductService
+	os aumo.OrderService
 }
 
 // NewUserService returns a mysql instance of `aumo.ProductService`
-func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService) aumo.UserService {
+func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.ProductService, os aumo.OrderService) aumo.UserService {
 	return &userService{
 		db: db,
 		rs: rs,
+		ps: ps,
+		os: os,
 	}
 }
 
@@ -40,8 +44,36 @@ func (u *userService) Delete(id uint) error {
 	return u.db.Collection("users").Find("id", id).Delete()
 }
 
-func (u *userService) ClaimReceipt(us *aumo.User, r *aumo.Receipt) error {
-	r.SetUser(us.ID)
+func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
+	r, err := u.rs.Receipt(rid)
+	if err != nil {
+		return err
+	}
+
+	err = r.SetUser(us.ID)
+	if err != nil {
+		return err
+	}
+
 	us.ClaimReceipt(*r)
 	return u.rs.Update(r.ID, r)
+}
+
+func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
+	p, err := u.ps.Product(pid)
+	if err != nil {
+		return err
+	}
+
+	o := aumo.NewOrder(us.ID, pid, p)
+	err = us.PlaceOrder(*o)
+	if err != nil {
+		return err
+	}
+	p.DecrementStock()
+
+	u.os.Create(o)
+	u.ps.Update(pid, p)
+
+	return nil
 }
