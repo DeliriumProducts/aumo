@@ -17,21 +17,23 @@ func NewUserService(db sqlbuilder.Database) aumo.UserService {
 }
 
 func (u *userService) User(id uint) (*aumo.User, error) {
-	panic("not implemented") // TODO: Implement
+	us := &aumo.User{}
+	return us, u.db.Collection("users").Find("id", id).One(us)
 }
 
 func (u *userService) Users() ([]aumo.User, error) {
-	panic("not implemented") // TODO: Implement
+	uss := []aumo.User{}
+	return uss, u.db.Collection("users").Find().All(&uss)
 }
 
-func (u *userService) Create(_ *aumo.User) error {
-	panic("not implemented") // TODO: Implement
+func (u *userService) Create(us *aumo.User) error {
+	return u.db.Collection("users").InsertReturning(us)
 }
 
 func (u *userService) Update(id uint, ur *aumo.User) error {
-	panic("not implemented") // TODO: Implement
+	return u.db.Collection("users").Find("id", id).Update(ur)
 }
 
 func (u *userService) Delete(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return u.db.Collection("users").Find("id", id).Delete()
 }
