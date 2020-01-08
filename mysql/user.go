@@ -22,7 +22,7 @@ func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.Prod
 	}
 }
 
-func (u *userService) User(id uint) (*aumo.User, error) {
+func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	us := &aumo.User{}
 	return us, u.db.Collection("users").Find("id", id).One(us)
 }
