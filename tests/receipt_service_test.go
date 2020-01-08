@@ -107,4 +107,26 @@ func TestReceiptService(t *testing.T) {
 		_, err = rs.Receipt(rp.ID)
 		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
+
+	t.Run("update_receipt", func(t *testing.T) {
+		defer TidyDB(sess)
+
+		u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
+		assert.Nil(t, err, "shouldn't return an error")
+		err = us.Create(u)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		rp := aumo.NewReceipt(u.ID, "Paconi: 230")
+		err = rs.Create(rp)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		rp.Content = "Kaufland 23233232323"
+
+		err = rs.Update(rp.ID, rp)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		rm, err := rs.Receipt(rp.ID)
+		assert.Nil(t, err, "shouldn't return an error")
+		assert.Equal(t, *rp, *rm)
+	})
 }
