@@ -53,4 +53,20 @@ func TestUserPlaceOrder(t *testing.T) {
 
 		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
 	})
+
+	t.Run("both_not_in_stock_and_not_enough_points", func(t *testing.T) {
+		u, err := aumo.NewUser("Gosho", "gosho@abv.bg", "123456", "pesho.com/gosho.png")
+		assert.Nil(t, err, "shouldn't return an err")
+		u.ID = 1
+		u.Points = 0
+
+		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0)
+		p.ID = 1
+
+		o := aumo.NewOrder(u.ID, p.ID, p)
+		err = u.PlaceOrder(*o)
+		assert.NotNil(t, err, "should return an err")
+
+		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
+	})
 }
