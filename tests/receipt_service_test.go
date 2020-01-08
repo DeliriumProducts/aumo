@@ -6,6 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/stretchr/testify/assert"
+	"upper.io/db.v3"
 )
 
 func TestReceiptService(t *testing.T) {
@@ -86,5 +87,24 @@ func TestReceiptService(t *testing.T) {
 		for i := 0; i < len(rms); i++ {
 			assert.Equal(t, *rds[i], rms[i], "it should be equal")
 		}
+	})
+
+	t.Run("delete_receipt", func(t *testing.T) {
+		defer TidyDB(sess)
+
+		u, err := aumo.NewUser("Ognyan", "ogny@sho.com", "ogiEMNOGOLUD", "asdf")
+		assert.Nil(t, err, "shouldn't return an error")
+		err = us.Create(u)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		rp := aumo.NewReceipt(u.ID, "Paconi: 230")
+		err = rs.Create(rp)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		err = rs.Delete(rp.ID)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		_, err = rs.Receipt(rp.ID)
+		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
 }
