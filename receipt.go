@@ -14,6 +14,14 @@ type Receipt struct {
 	UserID  uint   `json:"-" db:"user_id"`
 }
 
+// NewReceipt is a contrsuctor for `Receipt`
+func NewReceipt(uid uint, content string) *Receipt {
+	return &Receipt{
+		Content: content,
+		UserID:  uid,
+	}
+}
+
 // SetUser sets the user field of a receipt
 func (r *Receipt) SetUser(uid uint) error {
 	if r.UserID != 0 {
