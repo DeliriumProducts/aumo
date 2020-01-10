@@ -1,5 +1,6 @@
 package mysql
 
+// Schema contains all the MySQL tables in Aumo
 const Schema = `
 CREATE TABLE IF NOT EXISTS users (
   id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
