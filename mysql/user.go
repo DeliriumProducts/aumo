@@ -101,7 +101,7 @@ func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
 		return err
 	}
 
-	us.ClaimReceipt(*r)
+	us.ClaimReceipt(r)
 	return u.rs.Update(r.ReceiptID, r)
 }
 
@@ -111,9 +111,9 @@ func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
 		return err
 	}
 
-	o := aumo.NewOrder(us.ID, pid, p)
+	o := aumo.NewOrder(us, p)
 	// NOTE: is there a race condition here???
-	err = us.PlaceOrder(*o)
+	err = us.PlaceOrder(o)
 	if err != nil {
 		return err
 	}

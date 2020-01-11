@@ -9,10 +9,10 @@ type Order struct {
 }
 
 // NewOrder is a constructor for `Order`
-func NewOrder(uid uint, pid uint, p *Product) *Order {
+func NewOrder(u *User, p *Product) *Order {
 	return &Order{
-		UserID:    uid,
-		ProductID: pid,
+		UserID:    u.ID,
+		ProductID: p.ID,
 		Product:   p,
 	}
 }

@@ -16,8 +16,8 @@ func TestUserPlaceOrder(t *testing.T) {
 		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
 		p.ID = 1
 
-		o := aumo.NewOrder(u.ID, p.ID, p)
-		err = u.PlaceOrder(*o)
+		o := aumo.NewOrder(u, p)
+		err = u.PlaceOrder(o)
 		assert.Nil(t, err, "shouldn't return an err")
 
 		assert.Contains(t, u.Orders, *o, "the order should be appeneded to the array")
@@ -32,8 +32,8 @@ func TestUserPlaceOrder(t *testing.T) {
 		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
 		p.ID = 1
 
-		o := aumo.NewOrder(u.ID, p.ID, p)
-		err = u.PlaceOrder(*o)
+		o := aumo.NewOrder(u, p)
+		err = u.PlaceOrder(o)
 		assert.Equal(t, err, aumo.ErrNotSufficientPoints)
 
 		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
@@ -47,8 +47,8 @@ func TestUserPlaceOrder(t *testing.T) {
 		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0)
 		p.ID = 1
 
-		o := aumo.NewOrder(u.ID, p.ID, p)
-		err = u.PlaceOrder(*o)
+		o := aumo.NewOrder(u, p)
+		err = u.PlaceOrder(o)
 		assert.Equal(t, err, aumo.ErrNotInStock)
 
 		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
@@ -63,8 +63,8 @@ func TestUserPlaceOrder(t *testing.T) {
 		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0)
 		p.ID = 1
 
-		o := aumo.NewOrder(u.ID, p.ID, p)
-		err = u.PlaceOrder(*o)
+		o := aumo.NewOrder(u, p)
+		err = u.PlaceOrder(o)
 		assert.NotNil(t, err, "should return an err")
 
 		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")

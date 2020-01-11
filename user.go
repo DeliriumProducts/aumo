@@ -29,8 +29,8 @@ type User struct {
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array
-func (u *User) ClaimReceipt(r Receipt) {
-	u.Receipts = append(u.Receipts, r)
+func (u *User) ClaimReceipt(r *Receipt) {
+	u.Receipts = append(u.Receipts, *r)
 }
 
 // ValidatePassword checks if the passed password is the correct one
@@ -45,7 +45,7 @@ func (u *User) ValidatePassword(password string) bool {
 // PlaceOrder adds the passed Product to the user's inventory
 // if they have enough money to buy the desired quantity;
 // subtracts points from the user
-func (u *User) PlaceOrder(o Order) error {
+func (u *User) PlaceOrder(o *Order) error {
 	p := o.Product
 
 	// Check if the user has enough points
@@ -62,7 +62,7 @@ func (u *User) PlaceOrder(o Order) error {
 	u.Points -= p.Price
 
 	// Add the item to the orders array
-	u.Orders = append(u.Orders, o)
+	u.Orders = append(u.Orders, *o)
 	return nil
 }
 
