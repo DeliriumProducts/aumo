@@ -96,7 +96,7 @@ func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
 	}
 
 	// NOTE: is there a race condition here???
-	err = r.SetUser(us.ID)
+	err = r.Claim(us.ID)
 	if err != nil {
 		return err
 	}

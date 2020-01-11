@@ -21,14 +21,18 @@ func NewReceipt(content string) *Receipt {
 	}
 }
 
-// SetUser sets the user field of a receipt
-func (r *Receipt) SetUser(uid uint) error {
-	if r.UserID != nil {
+// Claim sets the user field of a receipt
+func (r *Receipt) Claim(uid uint) error {
+	if r.IsClaimed() {
 		return ErrUserAlreadySet
 	}
 
 	r.UserID = &uid
 	return nil
+}
+
+func (r *Receipt) IsClaimed() bool {
+	return r.UserID != nil
 }
 
 // ReceiptService contains all `Receipt`

@@ -70,6 +70,24 @@ func TestUserService(t *testing.T) {
 		})
 	})
 
+	// t.Run("place_order", func(t *testing.T) {
+	// 	defer TidyDB(sess)
+
+	// 	u, err := aumo.NewUser("Jordan", "jord@an.com", "asdfjkl", "imgur.com")
+	// 	assert.Nil(t, err, "shouldn't return an error")z
+	// 	err = us.Create(u)
+	// 	assert.Nil(t, err, "shouldn't return an error")
+
+	// 	p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
+	// 	err = ps.Create(p)
+	// 	assert.Nil(t, err, "shouldn't return an error")
+
+	// 	t.Run("valid", func(t *testing.T) {
+	// 		err = us.PlaceOrder(u, p.ID)
+	// 		assert.Nil(t, err, "shouldn't return an error")
+	// 	})
+	// })
+
 	t.Run("claim_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
@@ -85,6 +103,7 @@ func TestUserService(t *testing.T) {
 
 			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
+
 		})
 
 		// t.Run("race_condition", func(t *testing.T) {
@@ -93,6 +112,5 @@ func TestUserService(t *testing.T) {
 		// 	assert.Nil(t, err, "shouldn't return an error")
 
 		// })
-
 	})
 }
