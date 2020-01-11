@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/stretchr/testify/assert"
@@ -63,6 +64,23 @@ func TestUserService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
+
+		t.Run("valid", func(t *testing.T) {
+			r := aumo.NewReceipt("Paconi: 250LV")
+			err := rs.Create(r)
+			spew.Dump(r)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			err = us.ClaimReceipt(u, r.ID)
+			assert.Nil(t, err, "shouldn't return an error")
+		})
+
+		// t.Run("race_condition", func(t *testing.T) {
+		// 	r := aumo.NewReceipt(u.ID, "Paconi: 250LV")
+		// 	err := rs.Create(r)
+		// 	assert.Nil(t, err, "shouldn't return an error")
+
+		// })
 
 	})
 }

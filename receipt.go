@@ -15,10 +15,9 @@ type Receipt struct {
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
-func NewReceipt(uid uint, content string) *Receipt {
+func NewReceipt(content string) *Receipt {
 	return &Receipt{
 		Content: content,
-		UserID:  uid,
 	}
 }
 

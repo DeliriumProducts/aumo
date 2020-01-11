@@ -34,7 +34,7 @@ func TestReceiptService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		rp := aumo.NewReceipt(u.ID, "Paconi: 230")
+		rp := aumo.NewReceipt("Paconi: 230")
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
@@ -52,7 +52,7 @@ func TestReceiptService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		rp := aumo.NewReceipt(u.ID, "CBA: 30 Leva")
+		rp := aumo.NewReceipt("CBA: 30 Leva")
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
@@ -70,9 +70,9 @@ func TestReceiptService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		rds := []*aumo.Receipt{
-			aumo.NewReceipt(u.ID, "CBA: 30 Leva"),
-			aumo.NewReceipt(u.ID, "Pesho: 60 Leva"),
-			aumo.NewReceipt(u.ID, "Pesho: 100 Leva"),
+			aumo.NewReceipt("CBA: 30 Leva"),
+			aumo.NewReceipt("Pesho: 60 Leva"),
+			aumo.NewReceipt("Pesho: 100 Leva"),
 		}
 
 		for _, rd := range rds {
@@ -97,7 +97,7 @@ func TestReceiptService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		rp := aumo.NewReceipt(u.ID, "Paconi: 230")
+		rp := aumo.NewReceipt("Paconi: 230")
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
@@ -116,7 +116,7 @@ func TestReceiptService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		rp := aumo.NewReceipt(u.ID, "Paconi: 230")
+		rp := aumo.NewReceipt("Paconi: 230")
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
