@@ -104,6 +104,9 @@ func TestUserService(t *testing.T) {
 			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
 
+			err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", r.ReceiptID).One(r)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, true, r.IsClaimed())
 		})
 
 		// t.Run("race_condition", func(t *testing.T) {
