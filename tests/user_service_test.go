@@ -62,6 +62,7 @@ func TestUserService(t *testing.T) {
 
 			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
+			// TODO: add orders after testing place_order
 
 			um, err := us.User(u.ID, true)
 			assert.Nil(t, err, "shouldn't return an error")
@@ -84,7 +85,6 @@ func TestUserService(t *testing.T) {
 
 			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
-
 		})
 
 		// t.Run("race_condition", func(t *testing.T) {
