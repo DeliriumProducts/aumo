@@ -36,6 +36,7 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 		}
 
 		urs := []UserReceipt{}
+		orders := []aumo.Order{}
 		err = u.db.
 			Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
 			From("users as u").
@@ -46,13 +47,22 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 			return nil, err
 		}
 
+		err = u.db.
+			Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "o.order_id").
+			From("users as u").
+			Join("orders as o").On("u.id = o.user_id").
+			Join("products as p").On("o.product_id = p.id").
+			Where("u.id = ?", id).
+			All(&orders)
+		if err != nil {
+			return nil, err
+		}
+
 		us = &urs[0].User
+		us.Orders = orders
 		for _, r := range urs {
 			us.Receipts = append(us.Receipts, r.Receipt)
 		}
-
-		// TOOD: replace with join query for orders
-		us.Orders = []aumo.Order{}
 	} else {
 		err = u.db.Collection(UserTable).Find("id", id).One(us)
 		us.Receipts = []aumo.Receipt{}

@@ -2,10 +2,10 @@ package aumo
 
 // Order is an order in aumo
 type Order struct {
-	OrderID   uint     `json:"id" db:"order_id,omitempty"`
-	UserID    uint     `json:"userID" db:"user_id"`
-	ProductID uint     `json:"productID" db:"product_id"`
-	Product   *Product `json:"product" db:"-"`
+	OrderID   uint `json:"orderID" db:"order_id,omitempty"`
+	UserID    uint `json:"userID" db:"user_id"`
+	ProductID uint `json:"productID" db:"product_id"`
+	*Product  `json:"product" db:",inline"`
 }
 
 // NewOrder is a constructor for `Order`
