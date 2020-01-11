@@ -11,7 +11,7 @@ var (
 type Receipt struct {
 	ID      uint   `json:"id" db:"id"`
 	Content string `json:"content" db:"content"`
-	UserID  uint   `json:"-" db:"user_id"`
+	UserID  *uint  `json:"-" db:"user_id,omitempty"`
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
@@ -23,11 +23,11 @@ func NewReceipt(content string) *Receipt {
 
 // SetUser sets the user field of a receipt
 func (r *Receipt) SetUser(uid uint) error {
-	if r.UserID != 0 {
+	if r.UserID != nil {
 		return ErrUserAlreadySet
 	}
 
-	r.UserID = uid
+	r.UserID = &uid
 	return nil
 }
 

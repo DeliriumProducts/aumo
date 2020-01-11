@@ -24,13 +24,13 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS receipts (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   content TEXT NOT NULL,
-  user_id int(10) unsigned NOT NULL,
+  user_id int(10) unsigned NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS orders (
 	id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id int (10) unsigned NULL,
+    user_id int (10) unsigned NOT NULL,
     product_id int (10) unsigned NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
