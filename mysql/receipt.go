@@ -5,6 +5,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+const ReceiptTable = "receipts"
+
 type receiptService struct {
 	db sqlbuilder.Database
 }
@@ -18,22 +20,22 @@ func NewReceiptService(db sqlbuilder.Database) aumo.ReceiptService {
 
 func (r *receiptService) Receipt(id uint) (*aumo.Receipt, error) {
 	rs := &aumo.Receipt{}
-	return rs, r.db.Collection("receipts").Find("id", id).One(rs)
+	return rs, r.db.Collection(ReceiptTable).Find("id", id).One(rs)
 }
 
 func (r *receiptService) Receipts() ([]aumo.Receipt, error) {
 	rss := []aumo.Receipt{}
-	return rss, r.db.Collection("receipts").Find().All(&rss)
+	return rss, r.db.Collection(ReceiptTable).Find().All(&rss)
 }
 
 func (r *receiptService) Create(rs *aumo.Receipt) error {
-	return r.db.Collection("receipts").InsertReturning(rs)
+	return r.db.Collection(ReceiptTable).InsertReturning(rs)
 }
 
 func (r *receiptService) Update(id uint, rr *aumo.Receipt) error {
-	return r.db.Collection("receipts").Find("id", id).Update(rr)
+	return r.db.Collection(ReceiptTable).Find("id", id).Update(rr)
 }
 
 func (r *receiptService) Delete(id uint) error {
-	return r.db.Collection("receipts").Find("id", id).Delete()
+	return r.db.Collection(ReceiptTable).Find("id", id).Delete()
 }

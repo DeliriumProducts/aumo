@@ -5,6 +5,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+const OrderTable = "orders"
+
 type orderService struct {
 	db sqlbuilder.Database
 }
@@ -18,22 +20,22 @@ func NewOrderService(db sqlbuilder.Database) aumo.OrderService {
 
 func (o *orderService) Order(id uint) (*aumo.Order, error) {
 	os := &aumo.Order{}
-	return os, o.db.Collection("orders").Find("id", id).One(os)
+	return os, o.db.Collection(OrderTable).Find("id", id).One(os)
 }
 
 func (o *orderService) Orders() ([]aumo.Order, error) {
 	oss := []aumo.Order{}
-	return oss, o.db.Collection("orders").Find().All(&oss)
+	return oss, o.db.Collection(OrderTable).Find().All(&oss)
 }
 
 func (o *orderService) Create(os *aumo.Order) error {
-	return o.db.Collection("orders").InsertReturning(os)
+	return o.db.Collection(OrderTable).InsertReturning(os)
 }
 
 func (o *orderService) Update(id uint, or *aumo.Order) error {
-	return o.db.Collection("orders").Find("id", id).Update(or)
+	return o.db.Collection(OrderTable).Find("id", id).Update(or)
 }
 
 func (o *orderService) Delete(id uint) error {
-	return o.db.Collection("orders").Find("id", id).Delete()
+	return o.db.Collection(OrderTable).Find("id", id).Delete()
 }

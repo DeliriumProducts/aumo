@@ -31,7 +31,7 @@ func TestProductService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		pm := aumo.Product{}
-		err = sess.Collection("products").Find("id", pd.ID).One(&pm)
+		err = sess.Collection(mysql.ProductTable).Find("id", pd.ID).One(&pm)
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, pm, *pd)
 	})

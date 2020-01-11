@@ -5,6 +5,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+const ProductTable = "products"
+
 type productService struct {
 	db sqlbuilder.Database
 }
@@ -18,22 +20,22 @@ func NewProductService(db sqlbuilder.Database) aumo.ProductService {
 
 func (p *productService) Product(id uint) (*aumo.Product, error) {
 	pd := &aumo.Product{}
-	return pd, p.db.Collection("products").Find("id", id).One(pd)
+	return pd, p.db.Collection(ProductTable).Find("id", id).One(pd)
 }
 
 func (p *productService) Products() ([]aumo.Product, error) {
 	var pds []aumo.Product
-	return pds, p.db.Collection("products").Find().All(&pds)
+	return pds, p.db.Collection(ProductTable).Find().All(&pds)
 }
 
 func (p *productService) Create(pd *aumo.Product) error {
-	return p.db.Collection("products").InsertReturning(pd)
+	return p.db.Collection(ProductTable).InsertReturning(pd)
 }
 
 func (p *productService) Update(id uint, pd *aumo.Product) error {
-	return p.db.Collection("products").Find("id", id).Update(pd)
+	return p.db.Collection(ProductTable).Find("id", id).Update(pd)
 }
 
 func (p *productService) Delete(id uint) error {
-	return p.db.Collection("products").Find("id", id).Delete()
+	return p.db.Collection(ProductTable).Find("id", id).Delete()
 }

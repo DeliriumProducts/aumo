@@ -39,7 +39,7 @@ func TestReceiptService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		r := aumo.Receipt{}
-		err = sess.Collection("receipts").Find("id", rp.ID).One(&r)
+		err = sess.Collection(mysql.ReceiptTable).Find("id", rp.ID).One(&r)
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, r, *rp)
 	})
