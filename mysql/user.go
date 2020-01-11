@@ -5,6 +5,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+const UserTable = "users"
+
 type userService struct {
 	db sqlbuilder.Database
 	rs aumo.ReceiptService
@@ -24,24 +26,24 @@ func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.Prod
 
 func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	us := &aumo.User{}
-	return us, u.db.Collection("users").Find("id", id).One(us)
+	return us, u.db.Collection(UserTable).Find("id", id).One(us)
 }
 
 func (u *userService) Users() ([]aumo.User, error) {
 	uss := []aumo.User{}
-	return uss, u.db.Collection("users").Find().All(&uss)
+	return uss, u.db.Collection(UserTable).Find().All(&uss)
 }
 
 func (u *userService) Create(us *aumo.User) error {
-	return u.db.Collection("users").InsertReturning(us)
+	return u.db.Collection(UserTable).InsertReturning(us)
 }
 
 func (u *userService) Update(id uint, ur *aumo.User) error {
-	return u.db.Collection("users").Find("id", id).Update(ur)
+	return u.db.Collection(UserTable).Find("id", id).Update(ur)
 }
 
 func (u *userService) Delete(id uint) error {
-	return u.db.Collection("users").Find("id", id).Delete()
+	return u.db.Collection(UserTable).Find("id", id).Delete()
 }
 
 func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {

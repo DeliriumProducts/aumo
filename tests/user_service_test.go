@@ -34,7 +34,7 @@ func TestUserService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		um := &aumo.User{}
-		err = sess.Collection("users").Find("id", u.ID).One(um)
+		err = sess.Collection(mysql.UserTable).Find("id", u.ID).One(um)
 		assert.Nil(t, err, "shouldn't return an error")
 		um.Receipts = []aumo.Receipt{}
 		um.Orders = []aumo.Order{}
