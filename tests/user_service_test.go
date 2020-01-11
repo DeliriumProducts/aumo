@@ -3,7 +3,6 @@ package tests
 import (
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/stretchr/testify/assert"
@@ -50,11 +49,24 @@ func TestUserService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		us, err := us.User(u.ID, false)
-		assert.Nil(t, err, "shouldn't return an error")
-		us.Receipts = []aumo.Receipt{}
-		us.Orders = []aumo.Order{}
-		assert.Equal(t, *u, *us, "should be equal")
+		t.Run("no_relations", func(t *testing.T) {
+			us, err := us.User(u.ID, false)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, *u, *us, "should be equal")
+		})
+
+		t.Run("with_relations", func(t *testing.T) {
+			r := aumo.NewReceipt("Paconi: 250LV")
+			err := rs.Create(r)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			err = us.ClaimReceipt(u, r.ReceiptID)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			um, err := us.User(u.ID, true)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, *u, *um, "should be equal")
+		})
 	})
 
 	t.Run("claim_receipt", func(t *testing.T) {
@@ -68,11 +80,11 @@ func TestUserService(t *testing.T) {
 		t.Run("valid", func(t *testing.T) {
 			r := aumo.NewReceipt("Paconi: 250LV")
 			err := rs.Create(r)
-			spew.Dump(r)
 			assert.Nil(t, err, "shouldn't return an error")
 
-			err = us.ClaimReceipt(u, r.ID)
+			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
+
 		})
 
 		// t.Run("race_condition", func(t *testing.T) {

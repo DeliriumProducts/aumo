@@ -26,7 +26,40 @@ func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.Prod
 
 func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	us := &aumo.User{}
-	return us, u.db.Collection(UserTable).Find("id", id).One(us)
+
+	var err error
+
+	if relations {
+		type UserReceipt struct {
+			aumo.User    `db:",inline"`
+			aumo.Receipt `db:",inline"`
+		}
+
+		urs := []UserReceipt{}
+		err = u.db.
+			Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
+			From("users as u").
+			Join("receipts as r").On("u.id = r.user_id").
+			Where("u.id = ?", id).
+			All(&urs)
+		if err != nil {
+			return nil, err
+		}
+
+		us = &urs[0].User
+		for _, r := range urs {
+			us.Receipts = append(us.Receipts, r.Receipt)
+		}
+
+		// TOOD: replace with join query for orders
+		us.Orders = []aumo.Order{}
+	} else {
+		err = u.db.Collection(UserTable).Find("id", id).One(us)
+		us.Receipts = []aumo.Receipt{}
+		us.Orders = []aumo.Order{}
+	}
+
+	return us, err
 }
 
 func (u *userService) Users() ([]aumo.User, error) {
@@ -59,7 +92,7 @@ func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
 	}
 
 	us.ClaimReceipt(*r)
-	return u.rs.Update(r.ID, r)
+	return u.rs.Update(r.ReceiptID, r)
 }
 
 func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {

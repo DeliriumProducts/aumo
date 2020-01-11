@@ -20,7 +20,7 @@ func NewReceiptService(db sqlbuilder.Database) aumo.ReceiptService {
 
 func (r *receiptService) Receipt(id uint) (*aumo.Receipt, error) {
 	rs := &aumo.Receipt{}
-	return rs, r.db.Collection(ReceiptTable).Find("id", id).One(rs)
+	return rs, r.db.Collection(ReceiptTable).Find("receipt_id", id).One(rs)
 }
 
 func (r *receiptService) Receipts() ([]aumo.Receipt, error) {
@@ -33,9 +33,9 @@ func (r *receiptService) Create(rs *aumo.Receipt) error {
 }
 
 func (r *receiptService) Update(id uint, rr *aumo.Receipt) error {
-	return r.db.Collection(ReceiptTable).Find("id", id).Update(rr)
+	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
 }
 
 func (r *receiptService) Delete(id uint) error {
-	return r.db.Collection(ReceiptTable).Find("id", id).Delete()
+	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Delete()
 }

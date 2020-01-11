@@ -39,7 +39,7 @@ func TestReceiptService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		r := aumo.Receipt{}
-		err = sess.Collection(mysql.ReceiptTable).Find("id", rp.ID).One(&r)
+		err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", rp.ReceiptID).One(&r)
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, r, *rp)
 	})
@@ -56,7 +56,7 @@ func TestReceiptService(t *testing.T) {
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		r, err := rs.Receipt(rp.ID)
+		r, err := rs.Receipt(rp.ReceiptID)
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, *r, *rp)
 	})
@@ -101,10 +101,10 @@ func TestReceiptService(t *testing.T) {
 		err = rs.Create(rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		err = rs.Delete(rp.ID)
+		err = rs.Delete(rp.ReceiptID)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		_, err = rs.Receipt(rp.ID)
+		_, err = rs.Receipt(rp.ReceiptID)
 		assert.Equal(t, err, db.ErrNoMoreRows)
 	})
 
@@ -122,10 +122,10 @@ func TestReceiptService(t *testing.T) {
 
 		rp.Content = "Kaufland 23233232323"
 
-		err = rs.Update(rp.ID, rp)
+		err = rs.Update(rp.ReceiptID, rp)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		rm, err := rs.Receipt(rp.ID)
+		rm, err := rs.Receipt(rp.ReceiptID)
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, *rp, *rm)
 	})
