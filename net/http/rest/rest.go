@@ -82,9 +82,11 @@ func New(c Config) *Rest {
 		AllowCredentials: true,
 	}).Handler,
 	)
+	r.Use(Security)
 	r.Mount(c.MountRoute, r)
 
 	r.Route("/users", func(r chi.Router) {
+		r.Use(ParseForm)
 		r.Post("/register", rest.RegisterHandler)
 		// 	r.Post("/login", rest.LoginHandler)
 		// 	r.Group(func(r chi.Router) {

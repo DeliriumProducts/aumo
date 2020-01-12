@@ -3,9 +3,9 @@ package rest
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 )
 
@@ -14,10 +14,10 @@ var (
 )
 
 type UserForm struct {
-	Name     string
-	Email    string
-	Avatar   string
-	Password string
+	Username string `form:"username"`
+	Email    string `form:"email"`
+	Avatar   string `form:"avatar"`
+	Password string `form:"password"`
 }
 
 func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,14 +27,14 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
-	log.Println(user)
+	user, err := aumo.NewUser(um.Username, um.Email, um.Password, um.Avatar)
 	if err != nil {
 		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
-
 	if err := rest.validator.Struct(user); err != nil {
+		spew.Dump(err)
+
 		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
