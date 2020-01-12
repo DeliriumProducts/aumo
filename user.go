@@ -89,6 +89,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 // related business logic
 type UserService interface {
 	User(id uint, relations bool) (*User, error)
+	UserByEmail(email string, relations bool) (*User, error)
 	Users() ([]User, error)
 	Create(*User) error
 	Update(id uint, u *User) error

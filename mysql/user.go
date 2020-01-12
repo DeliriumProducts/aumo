@@ -26,59 +26,10 @@ func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.Prod
 
 func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	user := &aumo.User{}
-
 	var err error
 
 	if relations {
-		type (
-			UserReceipt struct {
-				aumo.User    `db:",inline"`
-				aumo.Receipt `db:",inline"`
-			}
-			OrderProduct struct {
-				aumo.Order   `db:",inline"`
-				aumo.Product `db:",inline"`
-			}
-		)
-		var (
-			userReceipts = []UserReceipt{}
-			orders       = []OrderProduct{}
-		)
-
-		err = u.db.
-			Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
-			From("users as u").
-			Join("receipts as r").On("u.id = r.user_id").
-			Where("u.id = ?", id).
-			All(&userReceipts)
-		if err != nil {
-			return nil, err
-		}
-
-		err = u.db.
-			Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
-			From("users as u").
-			Join("orders as o").On("u.id = o.user_id").
-			Join("products as p").On("o.product_id = p.id").
-			Where("u.id = ?", id).
-			All(&orders)
-		if err != nil {
-			return nil, err
-		}
-
-		user = &userReceipts[0].User
-		user.Orders = []aumo.Order{}
-		user.Receipts = []aumo.Receipt{}
-
-		for _, o := range orders {
-			ord := o.Order
-			ord.Product = &o.Product
-
-			user.Orders = append(user.Orders, ord)
-		}
-		for _, r := range userReceipts {
-			user.Receipts = append(user.Receipts, r.Receipt)
-		}
+		user, err = u.userRelations("u.id = ?", id)
 	} else {
 		err = u.db.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
@@ -86,6 +37,78 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	}
 
 	return user, err
+}
+
+func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, error) {
+	user := &aumo.User{}
+	var err error
+
+	if relations {
+		user, err = u.userRelations("u.email = ?", email)
+	} else {
+		err = u.db.Collection(UserTable).Find("email", email).One(user)
+		user.Receipts = []aumo.Receipt{}
+		user.Orders = []aumo.Order{}
+	}
+
+	return user, err
+}
+
+func (u *userService) userRelations(where string, args ...interface{}) (*aumo.User, error) {
+	user := &aumo.User{}
+	var err error
+
+	type (
+		UserReceipt struct {
+			aumo.User    `db:",inline"`
+			aumo.Receipt `db:",inline"`
+		}
+		OrderProduct struct {
+			aumo.Order   `db:",inline"`
+			aumo.Product `db:",inline"`
+		}
+	)
+	var (
+		userReceipts = []UserReceipt{}
+		orders       = []OrderProduct{}
+	)
+
+	err = u.db.
+		Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
+		From("users as u").
+		Join("receipts as r").On("u.id = r.user_id").
+		Where(where, args).
+		All(&userReceipts)
+	if err != nil {
+		return nil, err
+	}
+
+	err = u.db.
+		Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
+		From("users as u").
+		Join("orders as o").On("u.id = o.user_id").
+		Join("products as p").On("o.product_id = p.id").
+		Where(where, args).
+		All(&orders)
+	if err != nil {
+		return nil, err
+	}
+
+	user = &userReceipts[0].User
+	user.Orders = []aumo.Order{}
+	user.Receipts = []aumo.Receipt{}
+
+	for _, o := range orders {
+		ord := o.Order
+		ord.Product = &o.Product
+
+		user.Orders = append(user.Orders, ord)
+	}
+	for _, r := range userReceipts {
+		user.Receipts = append(user.Receipts, r.Receipt)
+	}
+
+	return user, nil
 }
 
 func (u *userService) Users() ([]aumo.User, error) {
