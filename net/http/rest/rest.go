@@ -1,8 +1,6 @@
 package rest
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
@@ -133,73 +131,4 @@ func New(c Config) *Rest {
 
 func (rest *Rest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rest.router.ServeHTTP(w, r)
-}
-
-// Error is a json type for error handling
-type Error struct {
-	Error string `json:"error"`
-}
-
-var errMarshaling, _ = json.Marshal(Error{
-	Error: "Failed to Marshal Error",
-})
-
-// JSONError is a convenience function for handling errors
-func JSONError(w http.ResponseWriter, err error, statusCode int) {
-	json, err := json.Marshal(Error{
-		Error: err.Error(),
-	})
-
-	// We fallback to a default error if we encountered one
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write(errMarshaling)
-	}
-
-	w.WriteHeader(statusCode)
-	_, _ = w.Write(json)
-}
-
-// JSON is a convenience function for writing to JSON
-func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
-	buf := &bytes.Buffer{}
-	enc := json.NewEncoder(buf)
-	enc.SetEscapeHTML(true)
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	if err := enc.Encode(v); err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	_, _ = w.Write(buf.Bytes())
-}
-
-type ValidationError struct {
-	Errors []string `json:"errors"`
-}
-
-// Form parses, validates, writes any errors that may have occured during the process
-// and returns if it succeeded or not
-func (rest *Rest) Form(w http.ResponseWriter, r *http.Request, form interface{}) bool {
-	r.ParseForm()
-	if err := rest.decoder.Decode(form, r.Form); err != nil {
-		JSONError(w, err, http.StatusBadRequest)
-		return false
-	}
-
-	if err := rest.validator.Struct(form); err != nil {
-		jsonErrs := ValidationError{
-			Errors: []string{},
-		}
-
-		for _, e := range err.(validator.ValidationErrors) {
-			jsonErrs.Errors = append(jsonErrs.Errors, e.Translate(rest.translator))
-		}
-
-		JSON(w, jsonErrs, http.StatusBadRequest)
-		return false
-	}
-
-	return true
 }

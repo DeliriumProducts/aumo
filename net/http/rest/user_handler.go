@@ -26,6 +26,10 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
+	if err != nil {
+		JSONError(w, err, http.StatusInternalServerError)
+	}
+
 	err = rest.userService.Create(user)
 	if err != nil {
 		JSONError(w, err, http.StatusInternalServerError)
