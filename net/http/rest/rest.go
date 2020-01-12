@@ -22,6 +22,7 @@ type Config struct {
 	ProductService aumo.ProductService
 	Auth           *auth.Authenticator
 	CookieSecret   []byte
+	MountRoute     string
 }
 
 // Rest is a REST API for Aumo
@@ -81,7 +82,7 @@ func New(c Config) *Rest {
 		AllowCredentials: true,
 	}).Handler,
 	)
-	r.Use(rest.ContentTypeJSON)
+	r.Mount(c.MountRoute, r)
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/register", rest.RegisterHandler)

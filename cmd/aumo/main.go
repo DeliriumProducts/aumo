@@ -64,6 +64,7 @@ func main() {
 		OrderService:   os,
 		ProductService: ps,
 		Auth:           auth,
+		MountRoute:     "/api/v1",
 		CookieSecret:   []byte(CookieSecret),
 	})
 
