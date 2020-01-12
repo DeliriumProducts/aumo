@@ -135,11 +135,11 @@ func JSONError(w http.ResponseWriter, err error, statusCode int) {
 	// We fallback to a default error if we encountered one
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errMarshaling)
+		_, _ = w.Write(errMarshaling)
 	}
 
 	w.WriteHeader(statusCode)
-	w.Write(json)
+	_, _ = w.Write(json)
 }
 
 func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
@@ -152,5 +152,5 @@ func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(buf.Bytes())
+	_, _ = w.Write(buf.Bytes())
 }

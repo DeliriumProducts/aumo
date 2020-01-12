@@ -3,6 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
@@ -27,12 +28,13 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
+	log.Println(user)
 	if err != nil {
 		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
-	if err := rest.validator.Struct(&user); err != nil {
+	if err := rest.validator.Struct(user); err != nil {
 		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
