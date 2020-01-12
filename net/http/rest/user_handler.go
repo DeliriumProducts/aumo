@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	ErrBadTypeAssertion = errors.New("http: failed to assert type")
+	ErrBadTypeAssertion = errors.New("aumo: failed to assert type")
 )
 
 type UserForm struct {

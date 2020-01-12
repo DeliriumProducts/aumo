@@ -22,18 +22,30 @@ func main() {
 
 	Address := os.Getenv("ADDRESS")
 	CookieSecret := os.Getenv("COOKIE_SECRET")
+	RedisURL := os.Getenv("REDIS_URL")
+	MySQLUser := os.Getenv("MYSQL_USER")
+	MySQLPassword := os.Getenv("MYSQL_PASSWORD")
+	MySQLHost := os.Getenv("MYSQL_HOST")
+	MySQLDatabase := os.Getenv("MYSQL_DATABASE")
 
 	db, err := upper.Open(upper.ConnectionURL{
-		User:     os.Getenv("MYSQL_USER"),
-		Password: os.Getenv("MYSQL_PASSWORD"),
-		Host:     os.Getenv("MYSQL_HOST"),
-		Database: os.Getenv("MYSQL_DATABASE"),
+		User:     MySQLUser,
+		Password: MySQLPassword,
+		Host:     MySQLHost,
+		Database: MySQLDatabase,
 	})
 	if err != nil {
 		panic(err)
 	}
 
 	defer db.Close()
+
+	conn, err := redis.DialURL(RedisURL)
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close()
 
 	err = mysql.ExecSchema(db)
 	if err != nil {
@@ -45,15 +57,7 @@ func main() {
 	rs := mysql.NewReceiptService(db)
 	us := mysql.NewUserService(db, rs, ps, os)
 
-	conn, err := redis.DialURL("redis://localhost")
-	if err != nil {
-		panic(err)
-	}
-
-	auth := auth.New(auth.Config{
-		Redis:      conn,
-		ExpiryTime: "86400",
-	})
+	auth := auth.New(conn, us, "86400")
 
 	r := rest.New(rest.Config{
 		UserService:    us,
@@ -65,7 +69,7 @@ func main() {
 	})
 
 	fmt.Printf("🧾 aumo server running on %s\n", Address)
-	if err := http.ListenAndServe(Address, r.Router); err != nil {
+	if err := http.ListenAndServe(Address, r); err != nil {
 		panic(err)
 	}
 }

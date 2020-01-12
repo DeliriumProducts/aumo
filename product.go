@@ -2,12 +2,12 @@ package aumo
 
 // Product is a product in the shop of aumo
 type Product struct {
-	ID          uint    `json:"id" db:"id,omitempty"`
-	Name        string  `json:"name" db:"name"`
-	Price       float64 `json:"price" db:"price"`
-	Image       string  `json:"image" db:"image"`
-	Description string  `json:"description" db:"description"`
-	Stock       uint    `json:"stock" db:"stock"`
+	ID          uint    `json:"id" db:"id,omitempty" validate:"-"`
+	Name        string  `json:"name" db:"name" validate:"required"`
+	Price       float64 `json:"price" db:"price" validate:"required"`
+	Image       string  `json:"image" db:"image" validate:"required,url"`
+	Description string  `json:"description" db:"description" validate:"required"`
+	Stock       uint    `json:"stock" db:"stock" validate:"required,gte=1"`
 }
 
 // DecrementStock decreases the stock of a `Product`

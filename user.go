@@ -18,14 +18,14 @@ var (
 
 // User represents a user of aumo
 type User struct {
-	ID       uint      `json:"id" db:"id,omitempty"`
-	Name     string    `json:"name" db:"name"`
-	Email    string    `json:"email" db:"email"`
-	Password string    `json:"-" db:"password"`
-	Avatar   string    `json:"avatar" db:"avatar"`
-	Points   float64   `json:"points" db:"points"`
-	Orders   []Order   `json:"orders" db:"-"`
-	Receipts []Receipt `json:"receipts" db:"-"`
+	ID       uint      `json:"id" db:"id,omitempty" validate:"-"`
+	Name     string    `json:"name" db:"name" validate:"required"`
+	Email    string    `json:"email" db:"email" validate:"required,email"`
+	Password string    `json:"-" db:"password" validate:"required,gte=6,lte=24"`
+	Avatar   string    `json:"avatar" db:"avatar" validate:"required,url"`
+	Points   float64   `json:"points" db:"points" validate:"-"`
+	Orders   []Order   `json:"orders" db:"-" validate:"-"`
+	Receipts []Receipt `json:"receipts" db:"-" validate:"-"`
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array

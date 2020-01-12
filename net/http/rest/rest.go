@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"net/http"
+
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/net/http/rest/auth"
 	"github.com/go-chi/chi"
@@ -14,30 +16,42 @@ const (
 	UserSessionKey = "user"
 )
 
+// Config is the configuration for the REST API
 type Config struct {
 	UserService    aumo.UserService
 	ReceiptService aumo.ReceiptService
 	OrderService   aumo.OrderService
 	ProductService aumo.ProductService
-	Auth           *auth.Auth
+	Auth           *auth.Authenticator
 	CookieSecret   []byte
 }
 
+// Rest is a REST API for Aumo
 type Rest struct {
-	Config
-	Router *chi.Mux
+	router         *chi.Mux
+	userService    aumo.UserService
+	receiptService aumo.ReceiptService
+	orderService   aumo.OrderService
+	productService aumo.ProductService
+	auth           *auth.Authenticator
+	cookieSecret   []byte
 }
 
 func New(c Config) *Rest {
 	if c.CookieSecret == nil {
-		panic("http: CookieSecret not passed to rest.New()")
+		panic("rest : CookieSecret not passed to rest.New()")
 	}
 
 	r := chi.NewRouter()
 
 	rest := &Rest{
-		Config: c,
-		Router: r,
+		router:         r,
+		userService:    c.UserService,
+		receiptService: c.ReceiptService,
+		orderService:   c.OrderService,
+		productService: c.ProductService,
+		auth:           c.Auth,
+		cookieSecret:   c.CookieSecret,
 	}
 
 	r.Use(middleware.RequestID)
@@ -81,4 +95,8 @@ func New(c Config) *Rest {
 	// })
 
 	return rest
+}
+
+func (rest *Rest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	rest.router.ServeHTTP(w, r)
 }

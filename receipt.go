@@ -10,7 +10,7 @@ var (
 // Receipt is a digital receipt
 type Receipt struct {
 	ReceiptID uint   `json:"receiptID" db:"receipt_id"`
-	Content   string `json:"content" db:"content"`
+	Content   string `json:"content" db:"content" validate:"required"`
 	UserID    *uint  `json:"-" db:"user_id,omitempty"`
 }
 
