@@ -12,7 +12,7 @@ type Product struct {
 
 // DecrementStock decreases the stock of a `Product`
 func (p *Product) DecrementStock() {
-	p.Stock = p.Stock - 1
+	p.Stock--
 }
 
 // IncrementStock increases the stock of a `Product`

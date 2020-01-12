@@ -25,7 +25,7 @@ func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.Prod
 }
 
 func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
-	us := &aumo.User{}
+	user := &aumo.User{}
 
 	var err error
 
@@ -41,8 +41,8 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 			}
 		)
 		var (
-			urs    = []UserReceipt{}
-			orders = []OrderProduct{}
+			userReceipts = []UserReceipt{}
+			orders       = []OrderProduct{}
 		)
 
 		err = u.db.
@@ -50,13 +50,13 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 			From("users as u").
 			Join("receipts as r").On("u.id = r.user_id").
 			Where("u.id = ?", id).
-			All(&urs)
+			All(&userReceipts)
 		if err != nil {
 			return nil, err
 		}
 
 		err = u.db.
-			Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "o.order_id").
+			Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
 			From("users as u").
 			Join("orders as o").On("u.id = o.user_id").
 			Join("products as p").On("o.product_id = p.id").
@@ -66,26 +66,26 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 			return nil, err
 		}
 
-		us = &urs[0].User
-		us.Orders = []aumo.Order{}
-		us.Receipts = []aumo.Receipt{}
+		user = &userReceipts[0].User
+		user.Orders = []aumo.Order{}
+		user.Receipts = []aumo.Receipt{}
 
 		for _, o := range orders {
 			ord := o.Order
 			ord.Product = &o.Product
 
-			us.Orders = append(us.Orders, ord)
+			user.Orders = append(user.Orders, ord)
 		}
-		for _, r := range urs {
-			us.Receipts = append(us.Receipts, r.Receipt)
+		for _, r := range userReceipts {
+			user.Receipts = append(user.Receipts, r.Receipt)
 		}
 	} else {
-		err = u.db.Collection(UserTable).Find("id", id).One(us)
-		us.Receipts = []aumo.Receipt{}
-		us.Orders = []aumo.Order{}
+		err = u.db.Collection(UserTable).Find("id", id).One(user)
+		user.Receipts = []aumo.Receipt{}
+		user.Orders = []aumo.Order{}
 	}
 
-	return us, err
+	return user, err
 }
 
 func (u *userService) Users() ([]aumo.User, error) {
@@ -105,48 +105,47 @@ func (u *userService) Delete(id uint) error {
 	return u.db.Collection(UserTable).Find("id", id).Delete()
 }
 
-func (u *userService) ClaimReceipt(us *aumo.User, rID uint) error {
-	r, err := u.rs.Receipt(rID)
+func (u *userService) ClaimReceipt(user *aumo.User, rID uint) error {
+	receipt, err := u.rs.Receipt(rID)
 	if err != nil {
 		return err
 	}
 
 	// NOTE: is there a race condition here???
-	err = r.Claim(us.ID)
+	err = receipt.Claim(user.ID)
 	if err != nil {
 		return err
 	}
 
-	us.ClaimReceipt(r)
-	return u.rs.Update(rID, r)
+	user.ClaimReceipt(receipt)
+	return u.rs.Update(rID, receipt)
 }
 
-func (u *userService) PlaceOrder(us *aumo.User, pID uint) error {
-	p, err := u.ps.Product(pID)
+func (u *userService) PlaceOrder(user *aumo.User, pID uint) error {
+	product, err := u.ps.Product(pID)
 	if err != nil {
 		return err
 	}
 
-	o := aumo.NewOrder(us, p)
-	// NOTE: is there a race condition here???
-	err = us.PlaceOrder(o)
-	if err != nil {
-		return err
-	}
-
-	p.DecrementStock()
-
+	product.DecrementStock()
+	o := aumo.NewOrder(user, product)
 	err = u.os.Create(o)
 	if err != nil {
 		return err
 	}
 
-	err = u.ps.Update(pID, p)
+	// NOTE: is there a race condition here???
+	err = user.PlaceOrder(o)
 	if err != nil {
 		return err
 	}
 
-	err = u.Update(us.ID, us)
+	err = u.ps.Update(pID, product)
+	if err != nil {
+		return err
+	}
+
+	err = u.Update(user.ID, user)
 	if err != nil {
 		return err
 	}

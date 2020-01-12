@@ -84,13 +84,8 @@ func TestUserService(t *testing.T) {
 		err = us.Create(u)
 		assert.Nil(t, err, "shouldn't return an error")
 
-		var price1 float64 = 500
-		p := aumo.NewProduct("TV", price1, "image.com", "it's good", 5)
-		err = ps.Create(p)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		var price2 float64 = 6000
-		p := aumo.NewProduct("TV", price2, "image.com", "it's good", 5)
+		var price float64 = 500
+		p := aumo.NewProduct("TV", price, "image.com", "it's good", 5)
 		err = ps.Create(p)
 		assert.Nil(t, err, "shouldn't return an error")
 
@@ -102,7 +97,7 @@ func TestUserService(t *testing.T) {
 			assert.Nil(t, err, "shouldn't return an error")
 			assert.Equal(t, p.Stock-1, pm.Stock)
 
-			assert.Equal(t, aumo.UserStartingPoints-price1, u.Points)
+			assert.Equal(t, aumo.UserStartingPoints-price, u.Points)
 		})
 	})
 
