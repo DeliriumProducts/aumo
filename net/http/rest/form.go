@@ -3,7 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 // ValidationError represents any error that may have occurred during validation
