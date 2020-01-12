@@ -56,7 +56,6 @@ func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, err
 }
 
 func (u *userService) userRelations(where string, args ...interface{}) (*aumo.User, error) {
-	user := &aumo.User{}
 	var err error
 
 	type (
@@ -95,7 +94,7 @@ func (u *userService) userRelations(where string, args ...interface{}) (*aumo.Us
 		return nil, err
 	}
 
-	user = &userReceipts[0].User
+	user := &userReceipts[0].User
 	user.Orders = []aumo.Order{}
 	user.Receipts = []aumo.Receipt{}
 
