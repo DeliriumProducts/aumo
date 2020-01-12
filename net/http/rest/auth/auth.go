@@ -11,11 +11,13 @@ import (
 	uuid "github.com/google/uuid"
 )
 
+type authKey string
+
 const (
 	// CookieKey is the key used for cookies
 	CookieKey = "aumo"
 	// UserContextKey is the key used for contexts
-	UserContextKey = "aumo_user"
+	UserContextKey authKey = "aumo_user"
 )
 
 var (
@@ -66,7 +68,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 	return a.us.User(uID, false)
 }
 
-// Get gets a session from Redis based on the Cookie value from the request
+// GetFromRequest gets a session from Redis based on the Cookie value from the request
 func (a *Authenticator) GetFromRequest(r *http.Request) (*aumo.User, error) {
 	cookie, err := r.Cookie(CookieKey)
 	if err != nil {
@@ -87,7 +89,7 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 	})
 }
 
-// SetUserFromContext sets a user to a context
+// SetUserToContext sets a user to a context
 func SetUserToContext(ctx context.Context, user aumo.User) context.Context {
 	return context.WithValue(ctx, UserContextKey, user)
 }
