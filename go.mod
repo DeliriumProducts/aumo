@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/cors v1.0.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/sessions v1.2.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
@@ -18,6 +19,7 @@ require (
 	github.com/motemen/gore v0.4.1 // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/peterh/liner v1.1.0 // indirect
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v0.0.5 // indirect

@@ -1,13 +1,11 @@
 package rest
 
 import (
-	"encoding/gob"
-
 	"github.com/deliriumproducts/aumo"
+	"github.com/deliriumproducts/aumo/net/http/rest/auth"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"github.com/gorilla/sessions"
 )
 
 const (
@@ -21,13 +19,13 @@ type Config struct {
 	ReceiptService aumo.ReceiptService
 	OrderService   aumo.OrderService
 	ProductService aumo.ProductService
+	Auth           *auth.Auth
 	CookieSecret   []byte
 }
 
 type Rest struct {
 	Config
 	Router *chi.Mux
-	store  *sessions.CookieStore
 }
 
 func New(c Config) *Rest {
@@ -37,20 +35,9 @@ func New(c Config) *Rest {
 
 	r := chi.NewRouter()
 
-	store := sessions.NewCookieStore(c.CookieSecret)
-
-	store.Options = &sessions.Options{
-		MaxAge:   3600 * 24,
-		HttpOnly: true,
-		Path:     "/",
-	}
-
-	gob.Register(aumo.User{})
-
 	rest := &Rest{
 		Config: c,
 		Router: r,
-		store:  store,
 	}
 
 	r.Use(middleware.RequestID)

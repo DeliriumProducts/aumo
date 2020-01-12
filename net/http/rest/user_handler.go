@@ -42,3 +42,16 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	var um UserForm
+
+	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// if !user.ValidatePassword(um.Password) {
+	// 	http.Error(w, "Invalid password", http.StatusUnauthorized)
+	// }
+}

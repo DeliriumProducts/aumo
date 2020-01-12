@@ -8,6 +8,8 @@ import (
 
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/net/http/rest"
+	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
 )
@@ -43,11 +45,22 @@ func main() {
 	rs := mysql.NewReceiptService(db)
 	us := mysql.NewUserService(db, rs, ps, os)
 
+	conn, err := redis.DialURL("redis://localhost")
+	if err != nil {
+		panic(err)
+	}
+
+	auth := auth.New(auth.Config{
+		Redis:      conn,
+		ExpiryTime: "86400",
+	})
+
 	r := rest.New(rest.Config{
 		UserService:    us,
 		ReceiptService: rs,
 		OrderService:   os,
 		ProductService: ps,
+		Auth:           auth,
 		CookieSecret:   []byte(COOKIE_SECRET),
 	})
 
