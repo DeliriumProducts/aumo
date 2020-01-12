@@ -8,12 +8,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-)
-
-const (
-	CookieStoreKey = "aumo"
-	UserContextKey = "user"
-	UserSessionKey = "user"
+	"github.com/go-playground/validator/v10"
 )
 
 // Config is the configuration for the REST API
@@ -34,15 +29,28 @@ type Rest struct {
 	orderService   aumo.OrderService
 	productService aumo.ProductService
 	auth           *auth.Authenticator
+	validator      *validator.Validate
 	cookieSecret   []byte
 }
 
 func New(c Config) *Rest {
-	if c.CookieSecret == nil {
-		panic("rest : CookieSecret not passed to rest.New()")
+	switch {
+	case c.UserService == nil:
+		panic("rest: UserService not provided")
+	case c.ReceiptService == nil:
+		panic("rest: ReceiptService not provided")
+	case c.OrderService == nil:
+		panic("rest: OrderService not provided")
+	case c.ProductService == nil:
+		panic("rest: ProductService not provided")
+	case c.Auth == nil:
+		panic("rest: Authenticator not provided")
+	case c.CookieSecret == nil:
+		panic("rest: CookieSecret not provided")
 	}
 
 	r := chi.NewRouter()
+	validator := validator.New()
 
 	rest := &Rest{
 		router:         r,
@@ -51,6 +59,7 @@ func New(c Config) *Rest {
 		orderService:   c.OrderService,
 		productService: c.ProductService,
 		auth:           c.Auth,
+		validator:      validator,
 		cookieSecret:   c.CookieSecret,
 	}
 
@@ -66,7 +75,7 @@ func New(c Config) *Rest {
 		AllowCredentials: true,
 	}).Handler,
 	)
-	r.Use(ContentTypeJSON)
+	r.Use(rest.ContentTypeJSON)
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/register", rest.RegisterHandler)

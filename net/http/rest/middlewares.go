@@ -1,14 +1,11 @@
 package rest
 
 import (
-	"context"
 	"net/http"
-
-	"github.com/deliriumproducts/aumo"
 )
 
 // ContentTypeJSON is a middleware for setting the Content-Type header to application/json
-func ContentTypeJSON(h http.Handler) http.Handler {
+func (r *Rest) ContentTypeJSON(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		h.ServeHTTP(w, r)
@@ -53,11 +50,3 @@ func ContentTypeJSON(h http.Handler) http.Handler {
 
 // 	})
 // }
-
-func GetUserFromContext(ctx context.Context) (aumo.User, error) {
-	if user, ok := ctx.Value(UserContextKey).(aumo.User); ok {
-		return user, nil
-	}
-
-	return aumo.User{}, ErrBadTypeAssertion
-}

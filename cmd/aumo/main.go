@@ -56,7 +56,6 @@ func main() {
 	os := mysql.NewOrderService(db)
 	rs := mysql.NewReceiptService(db)
 	us := mysql.NewUserService(db, rs, ps, os)
-
 	auth := auth.New(conn, us, 60*60*24)
 
 	r := rest.New(rest.Config{

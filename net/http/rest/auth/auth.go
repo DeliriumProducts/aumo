@@ -33,7 +33,7 @@ type Authenticator struct {
 // New returns new Auth instance
 func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
 	return &Authenticator{
-		redis,
+		r,
 		us,
 		expiryTime,
 	}
