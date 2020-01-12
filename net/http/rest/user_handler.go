@@ -22,25 +22,27 @@ type UserForm struct {
 func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var um UserForm
 	if err := rest.decoder.Decode(&um, r.Form); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
 	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if err := rest.validator.Struct(&user); err != nil {
+		JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
 	err = rest.userService.Create(user)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		JSONError(w, err, http.StatusInternalServerError)
 	}
 
-	if err := json.NewEncoder(w).Encode(user); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	JSON(w, user, 200)
 }
 
 func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {

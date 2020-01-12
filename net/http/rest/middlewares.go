@@ -4,18 +4,11 @@ import (
 	"net/http"
 )
 
-// ContentTypeJSON is a middleware for setting the Content-Type header to application/json
-func (rest *Rest) ContentTypeJSON(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		h.ServeHTTP(w, r)
-	})
-}
-
-func (rest *Rest) ParseForm(next http.Handler) http.Handler {
+// ParseForm is a middleware which calls r.ParseForm
+func ParseForm(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
-			w.Write()
+			JSONError(w, err, http.StatusBadRequest)
 			return
 		}
 

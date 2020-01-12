@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 
@@ -125,7 +126,7 @@ var errMarshaling, _ = json.Marshal(Error{
 })
 
 // JSONError is a convenience function for handling errors
-func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
+func JSONError(w http.ResponseWriter, err error, statusCode int) {
 	json, err := json.Marshal(Error{
 		Error: err.Error(),
 	})
@@ -138,4 +139,17 @@ func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
 
 	w.WriteHeader(statusCode)
 	w.Write(json)
+}
+
+func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
+	buf := &bytes.Buffer{}
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(true)
+	if err := enc.Encode(v); err != nil {
+		JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(buf.Bytes())
 }
