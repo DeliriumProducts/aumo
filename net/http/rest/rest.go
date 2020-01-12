@@ -69,7 +69,10 @@ func New(c Config) *Rest {
 		panic("rest: translator couldn't be found")
 	}
 
-	enTrans.RegisterDefaultTranslations(validator, trans)
+	err := enTrans.RegisterDefaultTranslations(validator, trans)
+	if err != nil {
+		panic(err)
+	}
 
 	rest := &Rest{
 		router:         r,
