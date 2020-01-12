@@ -14,7 +14,7 @@ type userService struct {
 	os aumo.OrderService
 }
 
-// NewUserService returns a mysql instance of `aumo.ProductService`
+// NewUserService returns a mysql instance of `aumo.UserService`
 func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.ProductService, os aumo.OrderService) aumo.UserService {
 	return &userService{
 		db: db,
