@@ -38,6 +38,7 @@ type Rest struct {
 	auth           *auth.Authenticator
 	validator      *validator.Validate
 	decoder        *form.Decoder
+	translator     ut.Translator
 	cookieSecret   []byte
 }
 
