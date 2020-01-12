@@ -3,11 +3,16 @@ package auth
 import (
 	"errors"
 	"net/http"
-	"strings"
+	"time"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/gomodule/redigo/redis"
 	uuid "github.com/google/uuid"
+)
+
+const (
+	CookieKey      = "aumo"
+	UserContextKey = "aumo_user"
 )
 
 var (
@@ -19,11 +24,11 @@ var (
 type Authenticator struct {
 	redis      redis.Conn
 	us         aumo.UserService
-	expiryTime string
+	expiryTime int
 }
 
 // New returns new Auth instance
-func New(r redis.Conn, us aumo.UserService, expiryTime string) *Authenticator {
+func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
 	return &Authenticator{
 		redis:      r,
 		us:         us,
@@ -33,18 +38,19 @@ func New(r redis.Conn, us aumo.UserService, expiryTime string) *Authenticator {
 
 // NewSession creates a session and returns the session ID
 func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
-	sess := uuid.New().String()
+	sID := uuid.New().String()
 
-	_, err := a.redis.Do("SETEX", sess, a.expiryTime, u.ID)
+	_, err := a.redis.Do("SETEX", sID, string(a.expiryTime), u.ID)
 	if err != nil {
 		return "", err
 	}
 
-	return sess, err
+	return sID, err
 }
 
-func (a *Authenticator) Get(sess string) (*aumo.User, error) {
-	val, err := a.redis.Do("GET", sess)
+// Get gets a session from Redis based on the session ID
+func (a *Authenticator) Get(sID string) (*aumo.User, error) {
+	val, err := a.redis.Do("GET", sID)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +63,23 @@ func (a *Authenticator) Get(sess string) (*aumo.User, error) {
 	return a.us.User(uID, false)
 }
 
-func (a *Authenticator) GetFromReq(r *http.Request) (*aumo.User, error) {
-	at := r.Header.Get("Authorization")
-	tok := strings.Split(at, " ")[1]
+// Get gets a session from Redis based on the Cookie value from the request
+func (a *Authenticator) GetFromRequest(r *http.Request) (*aumo.User, error) {
+	cookie, err := r.Cookie(CookieKey)
+	if err != nil {
+		return nil, err
+	}
 
-	return a.Get(tok)
+	return a.Get(cookie.Value)
+}
+
+// SetCookieHeader sets the cookie to the response
+func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
+	http.SetCookie(w, &http.Cookie{
+		Name:  CookieKey,
+		Value: sID,
+		Expires: time.Now().Add(
+			time.Duration(a.expiryTime) * time.Second,
+		),
+	})
 }
