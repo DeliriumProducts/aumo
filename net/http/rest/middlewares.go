@@ -16,19 +16,6 @@ const (
 	// also look at Content-Security-Policy in the future.
 )
 
-// ParseForm is a middleware which calls r.ParseForm
-
-func ParseForm(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			JSONError(w, err, http.StatusBadRequest)
-			return
-		}
-
-		next.ServeHTTP(w, r)
-	})
-}
-
 // Security Adds HTTP headers for XSS Protection and alike.
 func Security(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 )
 
@@ -14,31 +13,19 @@ var (
 )
 
 type UserForm struct {
-	Username string `form:"username"`
-	Email    string `form:"email"`
-	Avatar   string `form:"avatar"`
-	Password string `form:"password"`
+	Name     string `form:"name" validate:"required"`
+	Email    string `form:"email" validate:"required,email"`
+	Password string `form:"password" validate:"required,min=6,max=24"`
+	Avatar   string `form:"avatar" validate:"required,url"`
 }
 
 func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var um UserForm
-	if err := rest.decoder.Decode(&um, r.Form); err != nil {
-		JSONError(w, err, http.StatusBadRequest)
+	if ok := rest.Form(w, r, &um); !ok {
 		return
 	}
 
-	user, err := aumo.NewUser(um.Username, um.Email, um.Password, um.Avatar)
-	if err != nil {
-		JSONError(w, err, http.StatusBadRequest)
-		return
-	}
-	if err := rest.validator.Struct(user); err != nil {
-		spew.Dump(err)
-
-		JSONError(w, err, http.StatusBadRequest)
-		return
-	}
-
+	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
 	err = rest.userService.Create(user)
 	if err != nil {
 		JSONError(w, err, http.StatusInternalServerError)
@@ -49,6 +36,9 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var um UserForm
+	if ok := rest.Form(w, r, &um); !ok {
+		return
+	}
 
 	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
 		w.WriteHeader(http.StatusBadRequest)

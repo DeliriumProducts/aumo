@@ -103,7 +103,6 @@ func New(c Config) *Rest {
 	r.Mount(c.MountRoute, r)
 
 	r.Route("/users", func(r chi.Router) {
-		r.Use(ParseForm)
 		r.Post("/register", rest.RegisterHandler)
 		// 	r.Post("/login", rest.LoginHandler)
 		// 	r.Group(func(r chi.Router) {
@@ -152,6 +151,7 @@ func JSONError(w http.ResponseWriter, err error, statusCode int) {
 	})
 
 	// We fallback to a default error if we encountered one
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write(errMarshaling)
@@ -161,15 +161,45 @@ func JSONError(w http.ResponseWriter, err error, statusCode int) {
 	_, _ = w.Write(json)
 }
 
+// JSON is a convenience function for writing to JSON
 func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
 	buf := &bytes.Buffer{}
 	enc := json.NewEncoder(buf)
 	enc.SetEscapeHTML(true)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if err := enc.Encode(v); err != nil {
 		JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	_, _ = w.Write(buf.Bytes())
+}
+
+type ValidationError struct {
+	Errors []string `json:"errors"`
+}
+
+// Form parses, validates, writes any errors that may have occured during the process
+// and returns if it succeeded or not
+func (rest *Rest) Form(w http.ResponseWriter, r *http.Request, form interface{}) bool {
+	r.ParseForm()
+	if err := rest.decoder.Decode(form, r.Form); err != nil {
+		JSONError(w, err, http.StatusBadRequest)
+		return false
+	}
+
+	if err := rest.validator.Struct(form); err != nil {
+		jsonErrs := ValidationError{
+			Errors: []string{},
+		}
+
+		for _, e := range err.(validator.ValidationErrors) {
+			jsonErrs.Errors = append(jsonErrs.Errors, e.Translate(rest.translator))
+		}
+
+		JSON(w, jsonErrs, http.StatusBadRequest)
+		return false
+	}
+
+	return true
 }
