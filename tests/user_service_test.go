@@ -60,7 +60,7 @@ func TestUserService(t *testing.T) {
 			err := rs.Create(r)
 			assert.Nil(t, err, "shouldn't return an error")
 
-			err = us.ClaimReceipt(u, r.ReceiptID)
+			_, err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
 
 			p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
@@ -115,16 +115,16 @@ func TestUserService(t *testing.T) {
 			assert.Nil(t, err, "shouldn't return an error")
 			assert.Equal(t, false, r.IsClaimed())
 
-			err = us.ClaimReceipt(u, r.ReceiptID)
+			rc, err := us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
 
 			err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", r.ReceiptID).One(r)
 			assert.Nil(t, err, "shouldn't return an error")
 			assert.Equal(t, true, r.IsClaimed())
 
-			// TODO: fetch user, check if orders.Contains(order)
-			// um, err := us.User(u.ID, true)
-			// assert.Nil(t, err, "shouldn't return an error")
+			um, err := us.User(u.ID, true)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Contains(t, um.Receipts, *rc)
 		})
 
 		// t.Run("race_condition", func(t *testing.T) {
