@@ -58,6 +58,15 @@ func New(c Config) *Rest {
 	validator := validator.New()
 	decoder := form.NewDecoder()
 
+	en := en.New()
+	uni := ut.New(en, en)
+	trans, found := uni.GetTranslator("en")
+	if !found {
+		panic("rest: translator couldn't be found")
+	}
+
+	enTrans.RegisterDefaultTranslations(validator, trans)
+
 	rest := &Rest{
 		router:         r,
 		userService:    c.UserService,
@@ -66,6 +75,7 @@ func New(c Config) *Rest {
 		productService: c.ProductService,
 		auth:           c.Auth,
 		validator:      validator,
+		translator:     trans,
 		decoder:        decoder,
 		cookieSecret:   c.CookieSecret,
 	}
