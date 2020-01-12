@@ -20,8 +20,8 @@ func main() {
 		log.Println(".env file not found, reading directly from env variables")
 	}
 
-	ADDRESS := os.Getenv("ADDRESS")
-	COOKIE_SECRET := os.Getenv("COOKIE_SECRET")
+	Address := os.Getenv("ADDRESS")
+	CookieSecret := os.Getenv("COOKIE_SECRET")
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     os.Getenv("MYSQL_USER"),
@@ -61,11 +61,11 @@ func main() {
 		OrderService:   os,
 		ProductService: ps,
 		Auth:           auth,
-		CookieSecret:   []byte(COOKIE_SECRET),
+		CookieSecret:   []byte(CookieSecret),
 	})
 
-	fmt.Printf("🧾 aumo server running on %s\n", ADDRESS)
-	if err := http.ListenAndServe(ADDRESS, r.Router); err != nil {
+	fmt.Printf("🧾 aumo server running on %s\n", Address)
+	if err := http.ListenAndServe(Address, r.Router); err != nil {
 		panic(err)
 	}
 }
