@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"time"
@@ -11,7 +12,9 @@ import (
 )
 
 const (
-	CookieKey      = "aumo"
+	// CookieKey is the key used for cookies
+	CookieKey = "aumo"
+	// UserContextKey is the key used for contexts
 	UserContextKey = "aumo_user"
 )
 
@@ -30,9 +33,9 @@ type Authenticator struct {
 // New returns new Auth instance
 func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
 	return &Authenticator{
-		redis:      r,
-		us:         us,
-		expiryTime: expiryTime,
+		redis,
+		us,
+		expiryTime,
 	}
 }
 
@@ -82,4 +85,18 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 			time.Duration(a.expiryTime) * time.Second,
 		),
 	})
+}
+
+// SetUserFromContext sets a user to a context
+func SetUserToContext(ctx context.Context, user aumo.User) context.Context {
+	return context.WithValue(ctx, UserContextKey, user)
+}
+
+// GetUserFromContext gets a user from a context
+func GetUserFromContext(ctx context.Context) (aumo.User, error) {
+	if user, ok := ctx.Value(UserContextKey).(aumo.User); ok {
+		return user, nil
+	}
+
+	return aumo.User{}, ErrBadTypeAssertion
 }
