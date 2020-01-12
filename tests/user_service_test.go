@@ -62,7 +62,13 @@ func TestUserService(t *testing.T) {
 
 			err = us.ClaimReceipt(u, r.ReceiptID)
 			assert.Nil(t, err, "shouldn't return an error")
-			// TODO: add orders after testing place_order
+
+			p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
+			err = ps.Create(p)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			err = us.PlaceOrder(u, p.ID)
+			assert.Nil(t, err, "shouldn't return an error")
 
 			um, err := us.User(u.ID, true)
 			assert.Nil(t, err, "shouldn't return an error")
@@ -70,23 +76,35 @@ func TestUserService(t *testing.T) {
 		})
 	})
 
-	// t.Run("place_order", func(t *testing.T) {
-	// 	defer TidyDB(sess)
+	t.Run("place_order", func(t *testing.T) {
+		defer TidyDB(sess)
 
-	// 	u, err := aumo.NewUser("Jordan", "jord@an.com", "asdfjkl", "imgur.com")
-	// 	assert.Nil(t, err, "shouldn't return an error")z
-	// 	err = us.Create(u)
-	// 	assert.Nil(t, err, "shouldn't return an error")
+		u, err := aumo.NewUser("Jordan", "jord@an.com", "asdfjkl", "imgur.com")
+		assert.Nil(t, err, "shouldn't return an error")
+		err = us.Create(u)
+		assert.Nil(t, err, "shouldn't return an error")
 
-	// 	p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
-	// 	err = ps.Create(p)
-	// 	assert.Nil(t, err, "shouldn't return an error")
+		var price1 float64 = 500
+		p := aumo.NewProduct("TV", price1, "image.com", "it's good", 5)
+		err = ps.Create(p)
+		assert.Nil(t, err, "shouldn't return an error")
 
-	// 	t.Run("valid", func(t *testing.T) {
-	// 		err = us.PlaceOrder(u, p.ID)
-	// 		assert.Nil(t, err, "shouldn't return an error")
-	// 	})
-	// })
+		var price2 float64 = 6000
+		p := aumo.NewProduct("TV", price2, "image.com", "it's good", 5)
+		err = ps.Create(p)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		t.Run("valid", func(t *testing.T) {
+			err = us.PlaceOrder(u, p.ID)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			pm, err := ps.Product(p.ID)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, p.Stock-1, pm.Stock)
+
+			assert.Equal(t, aumo.UserStartingPoints-price1, u.Points)
+		})
+	})
 
 	t.Run("claim_receipt", func(t *testing.T) {
 		defer TidyDB(sess)

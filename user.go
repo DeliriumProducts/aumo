@@ -7,7 +7,7 @@ import (
 )
 
 // UserStartingPoints is the starting points of a user
-const UserStartingPoints = 5000
+const UserStartingPoints = float64(5000)
 
 var (
 	// ErrNotSufficientPoints is an error for when the user doens't have enough points

@@ -30,13 +30,21 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	var err error
 
 	if relations {
-		type UserReceipt struct {
-			aumo.User    `db:",inline"`
-			aumo.Receipt `db:",inline"`
-		}
+		type (
+			UserReceipt struct {
+				aumo.User    `db:",inline"`
+				aumo.Receipt `db:",inline"`
+			}
+			OrderProduct struct {
+				aumo.Order   `db:",inline"`
+				aumo.Product `db:",inline"`
+			}
+		)
+		var (
+			urs    = []UserReceipt{}
+			orders = []OrderProduct{}
+		)
 
-		urs := []UserReceipt{}
-		orders := []aumo.Order{}
 		err = u.db.
 			Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
 			From("users as u").
@@ -59,7 +67,15 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 		}
 
 		us = &urs[0].User
-		us.Orders = orders
+		us.Orders = []aumo.Order{}
+		us.Receipts = []aumo.Receipt{}
+
+		for _, o := range orders {
+			ord := o.Order
+			ord.Product = &o.Product
+
+			us.Orders = append(us.Orders, ord)
+		}
 		for _, r := range urs {
 			us.Receipts = append(us.Receipts, r.Receipt)
 		}
@@ -89,8 +105,8 @@ func (u *userService) Delete(id uint) error {
 	return u.db.Collection(UserTable).Find("id", id).Delete()
 }
 
-func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
-	r, err := u.rs.Receipt(rid)
+func (u *userService) ClaimReceipt(us *aumo.User, rID uint) error {
+	r, err := u.rs.Receipt(rID)
 	if err != nil {
 		return err
 	}
@@ -102,11 +118,11 @@ func (u *userService) ClaimReceipt(us *aumo.User, rid uint) error {
 	}
 
 	us.ClaimReceipt(r)
-	return u.rs.Update(r.ReceiptID, r)
+	return u.rs.Update(rID, r)
 }
 
-func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
-	p, err := u.ps.Product(pid)
+func (u *userService) PlaceOrder(us *aumo.User, pID uint) error {
+	p, err := u.ps.Product(pID)
 	if err != nil {
 		return err
 	}
@@ -125,7 +141,12 @@ func (u *userService) PlaceOrder(us *aumo.User, pid uint) error {
 		return err
 	}
 
-	err = u.ps.Update(pid, p)
+	err = u.ps.Update(pID, p)
+	if err != nil {
+		return err
+	}
+
+	err = u.Update(us.ID, us)
 	if err != nil {
 		return err
 	}
