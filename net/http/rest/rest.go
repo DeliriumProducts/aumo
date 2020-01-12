@@ -11,7 +11,10 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-playground/form/v4"
+	"github.com/go-playground/locales/en"
+	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	enTrans "github.com/go-playground/validator/v10/translations/en"
 )
 
 // Config is the configuration for the REST API
