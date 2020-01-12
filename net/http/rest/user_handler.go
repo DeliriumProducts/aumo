@@ -32,7 +32,7 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = rest.UserService.Create(user)
+	err = rest.us.Create(user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
