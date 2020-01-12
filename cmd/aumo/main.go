@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/deliriumproducts/aumo/net/http/rest"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
 )
@@ -17,8 +19,7 @@ func main() {
 	}
 
 	ADDRESS := os.Getenv("ADDRESS")
-
-	fmt.Printf("🧾 aumo server running on %s\n", ADDRESS)
+	COOKIE_SECRET := os.Getenv("COOKIE_SECRET")
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     os.Getenv("MYSQL_USER"),
@@ -34,6 +35,24 @@ func main() {
 
 	err = mysql.ExecSchema(db)
 	if err != nil {
+		panic(err)
+	}
+
+	ps := mysql.NewProductService(db)
+	os := mysql.NewOrderService(db)
+	rs := mysql.NewReceiptService(db)
+	us := mysql.NewUserService(db, rs, ps, os)
+
+	r := rest.New(rest.Config{
+		UserService:    us,
+		ReceiptService: rs,
+		OrderService:   os,
+		ProductService: ps,
+		CookieSecret:   []byte(COOKIE_SECRET),
+	})
+
+	fmt.Printf("🧾 aumo server running on %s\n", ADDRESS)
+	if err := http.ListenAndServe(ADDRESS, r.Router); err != nil {
 		panic(err)
 	}
 }
