@@ -42,37 +42,71 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("get_user", func(t *testing.T) {
-		defer TidyDB(sess)
-
-		u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		t.Run("no_relations", func(t *testing.T) {
-			us, err := us.User(u.ID, false)
+		t.Run("by_id", func(t *testing.T) {
+			defer TidyDB(sess)
+			u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
 			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, *u, *us, "should be equal")
+			err = us.Create(u)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			t.Run("no_relations", func(t *testing.T) {
+				us, err := us.User(u.ID, false)
+				assert.Nil(t, err, "shouldn't return an error")
+				assert.Equal(t, *u, *us, "should be equal")
+			})
+
+			t.Run("with_relations", func(t *testing.T) {
+				r := aumo.NewReceipt("Paconi: 250LV")
+				err = rs.Create(r)
+				assert.Nil(t, err, "shouldn't return an error")
+				_, err = us.ClaimReceipt(u, r.ReceiptID)
+				assert.Nil(t, err, "shouldn't return an error")
+
+				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
+				err = ps.Create(p)
+				assert.Nil(t, err, "shouldn't return an error")
+
+				err = us.PlaceOrder(u, p.ID)
+				assert.Nil(t, err, "shouldn't return an error")
+
+				um, err := us.User(u.ID, true)
+
+				assert.Nil(t, err, "shouldn't return an error")
+				assert.Equal(t, *u, *um, "should be equal")
+			})
 		})
 
-		t.Run("with_relations", func(t *testing.T) {
-			r := aumo.NewReceipt("Paconi: 250LV")
-			err := rs.Create(r)
+		t.Run("by_email", func(t *testing.T) {
+			defer TidyDB(sess)
+			u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
+			assert.Nil(t, err, "shouldn't return an error")
+			err = us.Create(u)
 			assert.Nil(t, err, "shouldn't return an error")
 
-			_, err = us.ClaimReceipt(u, r.ReceiptID)
-			assert.Nil(t, err, "shouldn't return an error")
+			t.Run("no_relations", func(t *testing.T) {
+				us, err := us.User(u.ID, false)
+				assert.Nil(t, err, "shouldn't return an error")
+				assert.Equal(t, *u, *us, "should be equal")
+			})
 
-			p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
-			err = ps.Create(p)
-			assert.Nil(t, err, "shouldn't return an error")
+			t.Run("with_relations", func(t *testing.T) {
+				r := aumo.NewReceipt("Paconi: 250LV")
+				err = rs.Create(r)
+				assert.Nil(t, err, "shouldn't return an error")
+				_, err = us.ClaimReceipt(u, r.ReceiptID)
+				assert.Nil(t, err, "shouldn't return an error")
 
-			err = us.PlaceOrder(u, p.ID)
-			assert.Nil(t, err, "shouldn't return an error")
+				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
+				err = ps.Create(p)
+				assert.Nil(t, err, "shouldn't return an error")
 
-			um, err := us.User(u.ID, true)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, *u, *um, "should be equal")
+				err = us.PlaceOrder(u, p.ID)
+				assert.Nil(t, err, "shouldn't return an error")
+
+				um, err := us.UserByEmail(u.Email, true)
+				assert.Nil(t, err, "shouldn't return an error")
+				assert.Equal(t, *u, *um, "should be equal")
+			})
 		})
 	})
 

@@ -5,6 +5,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// ProductTable is the MySQL table for holding products
 const ProductTable = "products"
 
 type productService struct {

@@ -5,6 +5,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// UserTable is the MySQL table for holding users
 const UserTable = "users"
 
 type userService struct {

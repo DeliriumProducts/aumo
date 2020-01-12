@@ -5,6 +5,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// ReceiptTable is the MySQL table for holding receipts
 const ReceiptTable = "receipts"
 
 type receiptService struct {

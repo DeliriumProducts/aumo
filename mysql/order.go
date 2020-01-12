@@ -5,6 +5,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// OrderTable is the MySQL table for holding orders
 const OrderTable = "orders"
 
 type orderService struct {
