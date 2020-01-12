@@ -5,10 +5,21 @@ import (
 )
 
 // ContentTypeJSON is a middleware for setting the Content-Type header to application/json
-func (r *Rest) ContentTypeJSON(h http.Handler) http.Handler {
+func (rest *Rest) ContentTypeJSON(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		h.ServeHTTP(w, r)
+	})
+}
+
+func (rest *Rest) ParseForm(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			w.Write()
+			return
+		}
+
+		next.ServeHTTP(w, r)
 	})
 }
 

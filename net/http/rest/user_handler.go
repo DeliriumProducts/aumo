@@ -13,15 +13,15 @@ var (
 )
 
 type UserForm struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Avatar   string `json:"avatar"`
-	Password string `json:"password"`
+	Name     string
+	Email    string
+	Avatar   string
+	Password string
 }
 
 func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var um UserForm
-	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
+	if err := rest.decoder.Decode(&um, r.Form); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

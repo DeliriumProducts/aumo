@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
@@ -8,6 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-playground/form/v4"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -30,6 +32,7 @@ type Rest struct {
 	productService aumo.ProductService
 	auth           *auth.Authenticator
 	validator      *validator.Validate
+	decoder        *form.Decoder
 	cookieSecret   []byte
 }
 
@@ -51,6 +54,7 @@ func New(c Config) *Rest {
 
 	r := chi.NewRouter()
 	validator := validator.New()
+	decoder := form.NewDecoder()
 
 	rest := &Rest{
 		router:         r,
@@ -60,6 +64,7 @@ func New(c Config) *Rest {
 		productService: c.ProductService,
 		auth:           c.Auth,
 		validator:      validator,
+		decoder:        decoder,
 		cookieSecret:   c.CookieSecret,
 	}
 
@@ -108,4 +113,29 @@ func New(c Config) *Rest {
 
 func (rest *Rest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rest.router.ServeHTTP(w, r)
+}
+
+// Error is a json type for error handling
+type Error struct {
+	Error string `json:"error"`
+}
+
+var errMarshaling, _ = json.Marshal(Error{
+	Error: "Failed to Marshal Error",
+})
+
+// JSONError is a convenience function for handling errors
+func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
+	json, err := json.Marshal(Error{
+		Error: err.Error(),
+	})
+
+	// We fallback to a default error if we encountered one
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(errMarshaling)
+	}
+
+	w.WriteHeader(statusCode)
+	w.Write(json)
 }
