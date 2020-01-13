@@ -18,7 +18,7 @@ var (
 
 // User represents a user of aumo
 type User struct {
-	ID       uint      `json:"id" db:"id,omitempty"`
+	ID       uint      `json:"-" db:"id,omitempty"`
 	Name     string    `json:"name" db:"name"`
 	Email    string    `json:"email" db:"email"`
 	Password string    `json:"-" db:"password"`
