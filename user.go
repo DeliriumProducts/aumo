@@ -96,6 +96,5 @@ type UserService interface {
 	Create(*User) error
 	Update(id uint, u *User) error
 	Delete(id uint) error
-	ClaimReceipt(u *User, rID uint) (*Receipt, error)
 	PlaceOrder(u *User, pid uint) error
 }

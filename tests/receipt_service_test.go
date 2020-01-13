@@ -129,4 +129,38 @@ func TestReceiptService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 		assert.Equal(t, *rp, *rm)
 	})
+
+	t.Run("claim_receipt", func(t *testing.T) {
+		defer TidyDB(sess)
+
+		u, err := aumo.NewUser("Adrian", "adrian@pesho.com", "123456", "ok")
+		assert.Nil(t, err, "shouldn't return an error")
+		err = us.Create(u)
+		assert.Nil(t, err, "shouldn't return an error")
+
+		t.Run("valid", func(t *testing.T) {
+			r := aumo.NewReceipt("Paconi: 250LV")
+			err := rs.Create(r)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, false, r.IsClaimed())
+
+			rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", r.ReceiptID).One(r)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, true, r.IsClaimed())
+
+			um, err := us.User(u.ID, true)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Contains(t, um.Receipts, *rc)
+		})
+
+		// t.Run("race_condition", func(t *testing.T) {
+		// 	r := aumo.NewReceipt(u.ID, "Paconi: 250LV")
+		// 	err := rs.Create(r)
+		// 	assert.Nil(t, err, "shouldn't return an error")
+
+		// })
+	})
 }

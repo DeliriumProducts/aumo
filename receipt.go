@@ -43,4 +43,5 @@ type ReceiptService interface {
 	Create(*Receipt) error
 	Update(id uint, r *Receipt) error
 	Delete(id uint) error
+	ClaimReceipt(uID uint, rID uint) (*Receipt, error)
 }
