@@ -55,17 +55,12 @@ func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 
 // Get gets a session from Redis based on the session ID
 func (a *Authenticator) Get(sID string) (*aumo.User, error) {
-	val, err := a.redis.Do("GET", sID)
+	uID, err := redis.Uint64(a.redis.Do("GET", sID))
 	if err != nil {
 		return nil, err
 	}
 
-	uID, ok := val.(uint)
-	if !ok {
-		return nil, ErrBadTypeAssertion
-	}
-
-	return a.us.User(uID, false)
+	return a.us.User(uint(uID), false)
 }
 
 // GetFromRequest gets a session from Redis based on the Cookie value from the request

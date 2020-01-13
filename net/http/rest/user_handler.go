@@ -2,6 +2,7 @@ package rest
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
@@ -69,4 +70,8 @@ func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	rest.auth.SetCookieHeader(w, sID)
 	JSON(w, user, 200)
+}
+
+func (rest *Rest) Secret(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "hello")
 }
