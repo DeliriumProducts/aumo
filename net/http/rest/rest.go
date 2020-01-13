@@ -102,7 +102,7 @@ func New(c Config) *Rest {
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/register", rest.RegisterHandler)
-		// 	r.Post("/login", rest.LoginHandler)
+		r.Post("/login", rest.LoginHandler)
 		// 	r.Group(func(r chi.Router) {
 		// 		r.Use(rest.WithAuth)
 		// 		r.Post("/claim-receipt/{id}", rest.ClaimReceiptHandler)

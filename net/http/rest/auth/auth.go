@@ -45,7 +45,7 @@ func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
 func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 	sID := uuid.New().String()
 
-	_, err := a.redis.Do("SETEX", sID, string(a.expiryTime), u.ID)
+	_, err := a.redis.Do("SETEX", sID, a.expiryTime, u.ID)
 	if err != nil {
 		return "", err
 	}

@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -12,7 +11,7 @@ var (
 	ErrBadTypeAssertion = errors.New("aumo: failed to assert type")
 )
 
-type UserForm struct {
+type RegisterForm struct {
 	Name     string `form:"name" validate:"required"`
 	Email    string `form:"email" validate:"required,email"`
 	Password string `form:"password" validate:"required,min=6,max=24"`
@@ -20,7 +19,7 @@ type UserForm struct {
 }
 
 func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	var um UserForm
+	var um RegisterForm
 	if ok := rest.Form(w, r, &um); !ok {
 		return
 	}
@@ -28,28 +27,46 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
 	if err != nil {
 		JSONError(w, err, http.StatusInternalServerError)
+		return
 	}
 
 	err = rest.userService.Create(user)
 	if err != nil {
 		JSONError(w, err, http.StatusInternalServerError)
+		return
 	}
 
 	JSON(w, user, 200)
 }
 
+type LoginForm struct {
+	Email    string `form:"email" validate:"required,email"`
+	Password string `form:"password" validate:"required"`
+}
+
 func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {
-	var um UserForm
+	var um LoginForm
 	if ok := rest.Form(w, r, &um); !ok {
 		return
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&um); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+	user, err := rest.userService.UserByEmail(um.Email, false)
+	if err != nil {
+		JSONError(w, err, http.StatusNotFound)
 		return
 	}
 
-	// if !user.ValidatePassword(um.Password) {
-	// 	http.Error(w, "Invalid password", http.StatusUnauthorized)
-	// }
+	if !user.ValidatePassword(um.Password) {
+		JSONError(w, aumo.ErrInvalidPassword, http.StatusUnauthorized)
+		return
+	}
+
+	sID, err := rest.auth.NewSession(user)
+	if err != nil {
+		JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.auth.SetCookieHeader(w, sID)
+	JSON(w, user, 200)
 }
