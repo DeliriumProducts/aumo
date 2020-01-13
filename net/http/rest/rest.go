@@ -100,13 +100,11 @@ func New(c Config) *Rest {
 	r.Use(Security)
 	r.Mount(c.MountRoute, r)
 
-	r.Route("/users", func(r chi.Router) {
-		r.Post("/register", rest.RegisterHandler)
-		r.Post("/login", rest.LoginHandler)
-		r.Group(func(r chi.Router) {
-			r.Use(rest.WithAuth)
-			r.Post("/hello", rest.Secret)
-		})
+	r.Post("/register", rest.RegisterHandler)
+	r.Post("/login", rest.LoginHandler)
+	r.Route("/me", func(r chi.Router) {
+		r.Use(rest.WithAuth)
+		r.Get("/", rest.MeHandler)
 	})
 
 	// r.Group(func(r chi.Router) {

@@ -2,10 +2,10 @@ package rest
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/deliriumproducts/aumo/net/http/rest/auth"
 )
 
 var (
@@ -37,7 +37,7 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	JSON(w, user, 200)
+	JSON(w, user, http.StatusOK)
 }
 
 type LoginForm struct {
@@ -69,9 +69,15 @@ func (rest *Rest) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.auth.SetCookieHeader(w, sID)
-	JSON(w, user, 200)
+	JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) Secret(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello")
+func (rest *Rest) MeHandler(w http.ResponseWriter, r *http.Request) {
+	user, err := auth.GetUserFromContext(r.Context())
+	if err != nil {
+		JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	JSON(w, user, http.StatusOK)
 }

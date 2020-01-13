@@ -8,17 +8,21 @@ import (
 
 // Error is a json type for error handling
 type Error struct {
-	Error string `json:"error"`
+	Err string `json:"error"`
+}
+
+func (e Error) Error() string {
+	return e.Err
 }
 
 var errMarshaling, _ = json.Marshal(Error{
-	Error: "Failed to Marshal Error",
+	Err: "Failed to Marshal Error",
 })
 
 // JSONError is a convenience function for handling errors
 func JSONError(w http.ResponseWriter, err error, statusCode int) {
 	json, err := json.Marshal(Error{
-		Error: err.Error(),
+		Err: err.Error(),
 	})
 
 	// We fallback to a default error if we encountered one

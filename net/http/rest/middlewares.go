@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo/net/http/rest/auth"
@@ -35,8 +34,7 @@ func (rest *Rest) WithAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, err := rest.auth.GetFromRequest(r)
 		if err != nil {
-			log.Println(err)
-			http.Error(w, "User unauthorized", http.StatusUnauthorized)
+			JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
 			return
 		}
 
