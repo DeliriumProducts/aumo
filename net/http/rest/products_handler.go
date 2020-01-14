@@ -22,7 +22,6 @@ func (rest *Rest) ProductsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSON(w, products, http.StatusOK)
-	return
 }
 
 func (rest *Rest) NewProductHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,5 +39,4 @@ func (rest *Rest) NewProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSON(w, product, http.StatusOK)
-	return
 }
