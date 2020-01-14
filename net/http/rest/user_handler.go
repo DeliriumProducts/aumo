@@ -1,15 +1,10 @@
 package rest
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/net/http/rest/auth"
-)
-
-var (
-	ErrBadTypeAssertion = errors.New("aumo: failed to assert type")
 )
 
 type RegisterForm struct {
