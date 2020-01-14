@@ -26,6 +26,7 @@ type User struct {
 	Password string    `json:"-" db:"password"`
 	Avatar   string    `json:"avatar" db:"avatar"`
 	Points   float64   `json:"points" db:"points"`
+	Role     Role      `json:"role" db:"role"`
 	Orders   []Order   `json:"orders" db:"-"`
 	Receipts []Receipt `json:"receipts" db:"-"`
 }
@@ -82,6 +83,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 		Password: string(pwd),
 		Avatar:   avatar,
 		Points:   UserStartingPoints,
+		Role:     Customer,
 		Orders:   []Order{},
 		Receipts: []Receipt{},
 	}, nil

@@ -3,6 +3,7 @@ package rest
 import (
 	"net/http"
 
+	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/net/http/rest/auth"
 )
 
@@ -30,16 +31,33 @@ func Security(next http.Handler) http.Handler {
 	})
 }
 
-func (rest *Rest) WithAuth(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, err := rest.auth.GetFromRequest(r)
-		if err != nil {
-			JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
-			return
-		}
+func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			user, err := rest.auth.GetFromRequest(r)
+			if err != nil {
+				JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+				return
+			}
 
-		next.ServeHTTP(w, r.WithContext(
-			auth.SetUserToContext(r.Context(), *user),
-		))
-	})
+			if len(roles) > 0 {
+				isAuthorized := false
+				for _, role := range roles {
+					if user.Role == role {
+						isAuthorized = true
+						break
+					}
+				}
+
+				if !isAuthorized {
+					JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+					return
+				}
+			}
+
+			next.ServeHTTP(w, r.WithContext(
+				auth.SetUserToContext(r.Context(), *user),
+			))
+		})
+	}
 }
