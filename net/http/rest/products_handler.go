@@ -2,6 +2,8 @@ package rest
 
 import (
 	"net/http"
+
+	"github.com/deliriumproducts/aumo"
 )
 
 type ProductForm struct {
@@ -20,5 +22,23 @@ func (rest *Rest) ProductsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSON(w, products, http.StatusOK)
+	return
+}
+
+func (rest *Rest) NewProductHandler(w http.ResponseWriter, r *http.Request) {
+	var npf ProductForm
+	if ok := rest.Form(w, r, &npf); !ok {
+		return
+	}
+
+	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock)
+
+	err := rest.productService.Create(product)
+	if err != nil {
+		JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	JSON(w, product, http.StatusOK)
 	return
 }

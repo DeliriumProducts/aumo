@@ -33,6 +33,7 @@ func (rest *Rest) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSON(w, user, http.StatusOK)
+	return
 }
 
 type LoginForm struct {
