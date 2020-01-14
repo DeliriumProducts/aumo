@@ -74,7 +74,7 @@ func (u *userService) userRelations(where string, args ...interface{}) (*aumo.Us
 	)
 
 	err = u.db.
-		Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "r.receipt_id", "r.content", "r.user_id").
+		Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "u.role", "r.receipt_id", "r.content", "r.user_id").
 		From("users as u").
 		Join("receipts as r").On("u.id = r.user_id").
 		Where(where, args).
