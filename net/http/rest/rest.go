@@ -113,8 +113,8 @@ func New(c Config) *Rest {
 	// })
 
 	r.Route("/shop", func(r chi.Router) {
+		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.NewProductHandler)
 		r.Get("/", rest.ProductsHandler)
-		r.Post("/", rest.WithAuth(aumo.Admin)(rest.NewProductHandler))
 		// 	r.Get("/{id}", w.ShopItemHandler)
 	})
 
