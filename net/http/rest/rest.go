@@ -103,7 +103,7 @@ func New(c Config) *Rest {
 	r.Post("/register", rest.RegisterHandler)
 	r.Post("/login", rest.LoginHandler)
 	r.Route("/me", func(r chi.Router) {
-		r.Use(rest.WithAuth)
+		r.Use(rest.WithAuth())
 		r.Get("/", rest.MeHandler)
 	})
 
@@ -118,7 +118,7 @@ func New(c Config) *Rest {
 	// })
 
 	r.Route("/shop", func(r chi.Router) {
-		r.Use(rest.WithAuth)
+		r.Use(rest.WithAuth())
 		r.Post("/", rest.NewProductHandler)
 		r.Get("/", rest.ProductsHandler)
 		// 	r.Get("/{id}", w.ShopItemHandler)
