@@ -40,7 +40,7 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 				return
 			}
 
-			if len(roles) > 0 {
+			if len(roles) > 0 || user.Role != aumo.Admin {
 				isAuthorized := false
 				for _, role := range roles {
 					if user.Role == role {
