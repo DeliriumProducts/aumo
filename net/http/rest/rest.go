@@ -107,20 +107,14 @@ func New(c Config) *Rest {
 		r.Get("/", rest.MeHandler)
 	})
 
-	// r.Group(func(r chi.Router) {
-	// 	r.Use(rest.WithAuth)
-	// 	r.Get("/me", rest.MeHandler)
-	// })
-
 	// r.Route("/receipts", func(r chi.Router) {
 	// 	r.Post("/", rest.NewReceiptHandler)
 	// 	r.Get("/{id}", w.ReceiptHandler)
 	// })
 
 	r.Route("/shop", func(r chi.Router) {
-		r.Use(rest.WithAuth())
-		r.Post("/", rest.NewProductHandler)
 		r.Get("/", rest.ProductsHandler)
+		r.Post("/", rest.WithAuth(aumo.Admin)(rest.NewProductHandler))
 		// 	r.Get("/{id}", w.ShopItemHandler)
 	})
 
