@@ -128,22 +128,6 @@ func (u *userService) Delete(id uint) error {
 	return u.db.Collection(UserTable).Find("id", id).Delete()
 }
 
-func (u *userService) ClaimReceipt(user *aumo.User, rID uint) (*aumo.Receipt, error) {
-	receipt, err := u.rs.Receipt(rID)
-	if err != nil {
-		return nil, err
-	}
-
-	// NOTE: is there a race condition here???
-	err = receipt.Claim(user.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	user.ClaimReceipt(receipt)
-	return receipt, u.rs.Update(rID, receipt)
-}
-
 func (u *userService) PlaceOrder(user *aumo.User, pID uint) error {
 	product, err := u.ps.Product(pID)
 	if err != nil {
