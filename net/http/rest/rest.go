@@ -98,6 +98,8 @@ func New(c Config) *Rest {
 	}).Handler,
 	)
 	r.Use(Security)
+	r.Use(middleware.RedirectSlashes)
+	r.Use(middleware.Heartbeat("/ping"))
 	r.Mount(c.MountRoute, r)
 
 	r.Post("/register", rest.RegisterHandler)
