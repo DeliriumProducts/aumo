@@ -38,6 +38,7 @@ type Rest struct {
 	translator     ut.Translator
 }
 
+// New returns a new instance of aumo's REST API
 func New(c Config) *Rest {
 	switch {
 	case c.UserService == nil:

@@ -31,6 +31,7 @@ func (r *Receipt) Claim(uid uint) error {
 	return nil
 }
 
+// IsClaimed checks if the Receipt has been claimed
 func (r *Receipt) IsClaimed() bool {
 	return r.UserID != nil
 }

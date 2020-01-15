@@ -31,6 +31,8 @@ func Security(next http.Handler) http.Handler {
 	})
 }
 
+// WithAuth is a middleware that only allows authenticated users in
+// while also checking the role of the user
 func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

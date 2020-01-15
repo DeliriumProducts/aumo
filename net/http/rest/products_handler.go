@@ -6,15 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo"
 )
 
-type ProductForm struct {
-	Name        string  `form:"name" validate:"required"`
-	Image       string  `form:"image" validate:"required,url"`
-	Price       float64 `form:"price" validate:"required,numeric"`
-	Description string  `form:"description" validate:"required"`
-	Stock       uint    `form:"stock" validate:"required,numeric"`
-}
-
-func (rest *Rest) ProductsHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productsHandler(w http.ResponseWriter, r *http.Request) {
 	products, err := rest.productService.Products()
 	if err != nil {
 		JSONError(w, err, http.StatusNotFound)
@@ -24,8 +16,15 @@ func (rest *Rest) ProductsHandler(w http.ResponseWriter, r *http.Request) {
 	JSON(w, products, http.StatusOK)
 }
 
-func (rest *Rest) NewProductHandler(w http.ResponseWriter, r *http.Request) {
-	var npf ProductForm
+func (rest *Rest) productCreateHandler(w http.ResponseWriter, r *http.Request) {
+	type request struct {
+		Name        string  `form:"name" validate:"required"`
+		Image       string  `form:"image" validate:"required,url"`
+		Price       float64 `form:"price" validate:"required,numeric"`
+		Description string  `form:"description" validate:"required"`
+		Stock       uint    `form:"stock" validate:"required,numeric"`
+	}
+	var npf request
 	if ok := rest.Form(w, r, &npf); !ok {
 		return
 	}
