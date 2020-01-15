@@ -97,23 +97,7 @@ func New(c Config) *Rest {
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Mount(c.MountRoute, r)
 
-	r.Post("/register", rest.RegisterHandler)
-	r.Post("/login", rest.LoginHandler)
-	r.Route("/me", func(r chi.Router) {
-		r.Use(rest.WithAuth())
-		r.Get("/", rest.MeHandler)
-	})
-
-	// r.Route("/receipts", func(r chi.Router) {
-	// 	r.Post("/", rest.NewReceiptHandler)
-	// 	r.Get("/{id}", w.ReceiptHandler)
-	// })
-
-	r.Route("/shop", func(r chi.Router) {
-		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.NewProductHandler)
-		r.Get("/", rest.ProductsHandler)
-		// 	r.Get("/{id}", w.ShopItemHandler)
-	})
+	rest.routes()
 
 	return rest
 }
