@@ -22,7 +22,6 @@ type Config struct {
 	OrderService   aumo.OrderService
 	ProductService aumo.ProductService
 	Auth           *auth.Authenticator
-	CookieSecret   []byte
 	MountRoute     string
 }
 
@@ -37,7 +36,6 @@ type Rest struct {
 	validator      *validator.Validate
 	decoder        *form.Decoder
 	translator     ut.Translator
-	cookieSecret   []byte
 }
 
 func New(c Config) *Rest {
@@ -52,8 +50,6 @@ func New(c Config) *Rest {
 		panic("rest: ProductService not provided")
 	case c.Auth == nil:
 		panic("rest: Authenticator not provided")
-	case c.CookieSecret == nil:
-		panic("rest: CookieSecret not provided")
 	}
 
 	r := chi.NewRouter()
@@ -82,7 +78,6 @@ func New(c Config) *Rest {
 		validator:      validator,
 		translator:     trans,
 		decoder:        decoder,
-		cookieSecret:   c.CookieSecret,
 	}
 
 	r.Use(middleware.RequestID)

@@ -21,7 +21,6 @@ func main() {
 	}
 
 	Address := os.Getenv("ADDRESS")
-	CookieSecret := os.Getenv("COOKIE_SECRET")
 	RedisURL := os.Getenv("REDIS_URL")
 	MySQLUser := os.Getenv("MYSQL_USER")
 	MySQLPassword := os.Getenv("MYSQL_PASSWORD")
@@ -65,7 +64,6 @@ func main() {
 		ProductService: ps,
 		Auth:           auth,
 		MountRoute:     "/api/v1",
-		CookieSecret:   []byte(CookieSecret),
 	})
 
 	fmt.Printf("🧾 aumo server running on %s\n", Address)
