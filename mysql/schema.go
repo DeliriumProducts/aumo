@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS products (
   id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name varchar (255) DEFAULT NULL,
+  name varchar(255) DEFAULT NULL,
   price double DEFAULT NULL,
-  image varchar (255) DEFAULT NULL,
+  image varchar(255) DEFAULT NULL,
   description varchar (255) DEFAULT NULL,
   stock int (10) unsigned DEFAULT NULL
 );
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS receipts (
 
 CREATE TABLE IF NOT EXISTS orders (
 	order_id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id int (10) unsigned NOT NULL,
-    product_id int (10) unsigned NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+  user_id int (10) unsigned NOT NULL,
+  product_id int (10) unsigned NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 `
