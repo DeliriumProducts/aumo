@@ -15,12 +15,12 @@ type ValidationError struct {
 // and returns if it succeeded or not
 func (rest *Rest) Form(w http.ResponseWriter, r *http.Request, form interface{}) bool {
 	if err := r.ParseForm(); err != nil {
-		JSONError(w, err, http.StatusBadRequest)
+		rest.JSONError(w, err, http.StatusBadRequest)
 		return false
 	}
 
 	if err := rest.decoder.Decode(form, r.Form); err != nil {
-		JSONError(w, err, http.StatusBadRequest)
+		rest.JSONError(w, err, http.StatusBadRequest)
 		return false
 	}
 
@@ -33,7 +33,7 @@ func (rest *Rest) Form(w http.ResponseWriter, r *http.Request, form interface{})
 			jsonErrs.Errors = append(jsonErrs.Errors, e.Translate(rest.translator))
 		}
 
-		JSON(w, jsonErrs, http.StatusBadRequest)
+		rest.JSON(w, jsonErrs, http.StatusBadRequest)
 		return false
 	}
 

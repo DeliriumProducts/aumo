@@ -22,17 +22,17 @@ func (rest *Rest) registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := aumo.NewUser(um.Name, um.Email, um.Password, um.Avatar)
 	if err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = rest.userService.Create(user)
 	if err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	JSON(w, user, http.StatusOK)
+	rest.JSON(w, user, http.StatusOK)
 }
 
 func (rest *Rest) loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,31 +48,31 @@ func (rest *Rest) loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := rest.userService.UserByEmail(um.Email, false)
 	if err != nil {
-		JSONError(w, err, http.StatusNotFound)
+		rest.JSONError(w, err, http.StatusNotFound)
 		return
 	}
 
 	if !user.ValidatePassword(um.Password) {
-		JSONError(w, aumo.ErrInvalidPassword, http.StatusUnauthorized)
+		rest.JSONError(w, aumo.ErrInvalidPassword, http.StatusUnauthorized)
 		return
 	}
 
 	sID, err := rest.auth.NewSession(user)
 	if err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	rest.auth.SetCookieHeader(w, sID)
-	JSON(w, user, http.StatusOK)
+	rest.JSON(w, user, http.StatusOK)
 }
 
 func (rest *Rest) meHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := auth.GetUserFromContext(r.Context())
 	if err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	JSON(w, user, http.StatusOK)
+	rest.JSON(w, user, http.StatusOK)
 }

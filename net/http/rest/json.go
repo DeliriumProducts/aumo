@@ -20,7 +20,7 @@ var errMarshaling, _ = json.Marshal(Error{
 })
 
 // JSONError is a convenience function for handling errors
-func JSONError(w http.ResponseWriter, err error, statusCode int) {
+func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
 	json, err := json.Marshal(Error{
 		Err: err.Error(),
 	})
@@ -37,13 +37,13 @@ func JSONError(w http.ResponseWriter, err error, statusCode int) {
 }
 
 // JSON is a convenience function for writing to JSON
-func JSON(w http.ResponseWriter, v interface{}, statusCode int) {
+func (rest *Rest) JSON(w http.ResponseWriter, v interface{}, statusCode int) {
 	buf := &bytes.Buffer{}
 	enc := json.NewEncoder(buf)
 	enc.SetEscapeHTML(true)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if err := enc.Encode(v); err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 

@@ -38,7 +38,7 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			user, err := rest.auth.GetFromRequest(r)
 			if err != nil {
-				JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+				rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
 				return
 			}
 
@@ -52,7 +52,7 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 				}
 
 				if !isAuthorized {
-					JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+					rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
 					return
 				}
 			}

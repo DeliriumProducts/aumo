@@ -9,11 +9,11 @@ import (
 func (rest *Rest) productsHandler(w http.ResponseWriter, r *http.Request) {
 	products, err := rest.productService.Products()
 	if err != nil {
-		JSONError(w, err, http.StatusNotFound)
+		rest.JSONError(w, err, http.StatusNotFound)
 		return
 	}
 
-	JSON(w, products, http.StatusOK)
+	rest.JSON(w, products, http.StatusOK)
 }
 
 func (rest *Rest) productCreateHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,9 +33,9 @@ func (rest *Rest) productCreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := rest.productService.Create(product)
 	if err != nil {
-		JSONError(w, err, http.StatusInternalServerError)
+		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	JSON(w, product, http.StatusOK)
+	rest.JSON(w, product, http.StatusOK)
 }
