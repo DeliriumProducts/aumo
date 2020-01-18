@@ -2,37 +2,37 @@ package user
 
 import "github.com/deliriumproducts/aumo"
 
-type userService struct {
+type service struct {
 	store aumo.UserStore
 }
 
 // New returns an instance of `aumo.UserService`
 func New(store aumo.UserStore) aumo.UserService {
-	return &userService{
+	return &service{
 		store: store,
 	}
 }
 
-func (us *userService) User(id uint, relations bool) (*aumo.User, error) {
+func (us *service) User(id uint, relations bool) (*aumo.User, error) {
 	return us.store.FindByID(id, relations)
 }
 
-func (us *userService) UserByEmail(email string, relations bool) (*aumo.User, error) {
+func (us *service) UserByEmail(email string, relations bool) (*aumo.User, error) {
 	return us.store.FindByEmail(email, relations)
 }
 
-func (us *userService) Users() ([]aumo.User, error) {
+func (us *service) Users() ([]aumo.User, error) {
 	return us.store.FindAll()
 }
 
-func (us *userService) Create(u *aumo.User) error {
+func (us *service) Create(u *aumo.User) error {
 	return us.store.Save(u)
 }
 
-func (us *userService) Update(id uint, u *aumo.User) error {
+func (us *service) Update(id uint, u *aumo.User) error {
 	return us.store.Update(id, u)
 }
 
-func (us *userService) Delete(id uint) error {
+func (us *service) Delete(id uint) error {
 	return us.store.Delete(id)
 }
