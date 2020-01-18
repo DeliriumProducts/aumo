@@ -3,7 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/deliriumproducts/aumo/auth"
 )
 
 func (rest *Rest) orderCreateHandler(w http.ResponseWriter, r *http.Request) {

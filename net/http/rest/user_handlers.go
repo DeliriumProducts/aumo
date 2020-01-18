@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/deliriumproducts/aumo/auth"
 )
 
 func (rest *Rest) registerHandler(w http.ResponseWriter, r *http.Request) {

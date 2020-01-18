@@ -28,12 +28,12 @@ var (
 // Authenticator holds the methods and config used for authentication
 type Authenticator struct {
 	redis      redis.Conn
-	us         aumo.UserService
+	us         aumo.UserStore
 	expiryTime int
 }
 
 // New returns new Auth instance
-func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
+func New(r redis.Conn, us aumo.UserStore, expiryTime int) *Authenticator {
 	return &Authenticator{
 		r,
 		us,
@@ -60,7 +60,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 		return nil, err
 	}
 
-	return a.us.User(uint(uID), false)
+	return a.us.FindByID(uint(uID), false)
 }
 
 // GetFromRequest gets a session from Redis based on the Cookie value from the request

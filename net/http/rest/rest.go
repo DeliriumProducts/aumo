@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/deliriumproducts/aumo/auth"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
