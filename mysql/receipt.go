@@ -40,17 +40,3 @@ func (r *receiptStore) Update(id uint, rr *aumo.Receipt) error {
 func (r *receiptStore) Delete(id uint) error {
 	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Delete()
 }
-
-// func (r *receiptStore) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
-// 	receipt, err := r.Receipt(rID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	err = receipt.Claim(uID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return receipt, r.Update(rID, receipt)
-// }
