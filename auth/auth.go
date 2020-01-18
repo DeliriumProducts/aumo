@@ -84,13 +84,13 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 	})
 }
 
-// SetUserToContext sets a user to a context
-func SetUserToContext(ctx context.Context, user aumo.User) context.Context {
+// WithUser sets a user to a context
+func WithUser(ctx context.Context, user aumo.User) context.Context {
 	return context.WithValue(ctx, UserContextKey, user)
 }
 
-// GetUserFromContext gets a user from a context
-func GetUserFromContext(ctx context.Context) (aumo.User, error) {
+// CurrentUser gets a user from a context
+func CurrentUser(ctx context.Context) (aumo.User, error) {
 	if user, ok := ctx.Value(UserContextKey).(aumo.User); ok {
 		return user, nil
 	}

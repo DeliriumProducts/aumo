@@ -16,7 +16,7 @@ func (rest *Rest) orderCreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := auth.GetUserFromContext(r.Context())
+	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return

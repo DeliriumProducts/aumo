@@ -68,7 +68,7 @@ func (rest *Rest) loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) meHandler(w http.ResponseWriter, r *http.Request) {
-	user, err := auth.GetUserFromContext(r.Context())
+	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
