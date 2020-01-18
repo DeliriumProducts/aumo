@@ -10,14 +10,12 @@ const OrderTable = "orders"
 
 type orderStore struct {
 	db sqlbuilder.Database
-	ps aumo.ProductStore
 }
 
 // NewOrderStore returns a mysql instance of `aumo.OrderStore`
-func NewOrderStore(db sqlbuilder.Database, ps aumo.ProductStore) aumo.OrderStore {
+func NewOrderStore(db sqlbuilder.Database) aumo.OrderStore {
 	return &orderStore{
 		db: db,
-		ps: ps,
 	}
 }
 
