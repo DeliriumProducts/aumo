@@ -1,4 +1,4 @@
-package product
+package products
 
 import "github.com/deliriumproducts/aumo"
 
