@@ -3,12 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/deliriumproducts/aumo/mysql"
-	"github.com/deliriumproducts/aumo/net/http/rest"
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
@@ -51,23 +48,23 @@ func main() {
 		panic(err)
 	}
 
-	ps := mysql.NewProductService(db)
-	os := mysql.NewOrderService(db)
-	rs := mysql.NewReceiptService(db)
-	us := mysql.NewUserService(db, rs, ps, os)
-	auth := auth.New(conn, us, 60*60*24)
+	// ps := mysql.NewProductService(db)
+	// os := mysql.NewOrderService(db)
+	// rs := mysql.NewReceiptService(db)
+	// us := mysql.NewUserService(db, rs, ps, os)
+	// auth := auth.New(conn, us, 60*60*24)
 
-	r := rest.New(rest.Config{
-		UserService:    us,
-		ReceiptService: rs,
-		OrderService:   os,
-		ProductService: ps,
-		Auth:           auth,
-		MountRoute:     "/api/v1",
-	})
+	// r := rest.New(rest.Config{
+	// 	UserService:    us,
+	// 	ReceiptService: rs,
+	// 	OrderService:   os,
+	// 	ProductService: ps,
+	// 	Auth:           auth,
+	// 	MountRoute:     "/api/v1",
+	// })
 
 	fmt.Printf("🧾 aumo server running on %s\n", Address)
-	if err := http.ListenAndServe(Address, r); err != nil {
-		panic(err)
-	}
+	// if err := http.ListenAndServe(Address, r); err != nil {
+	// 	panic(err)
+	// }
 }

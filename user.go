@@ -16,6 +16,8 @@ var (
 	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
 	// ErrInvalidPassword is an error for when the user provided an invalid password
 	ErrInvalidPassword = errors.New("aumo: invalid password")
+	// ErrOrderProductNotFound is an error for when a user places an order on a product that doesn't exist
+	ErrOrderProductNotFound = errors.New("aumo: can't place an order for a non existing product")
 )
 
 // User represents a user of aumo
@@ -98,5 +100,15 @@ type UserService interface {
 	Create(*User) error
 	Update(id uint, u *User) error
 	Delete(id uint) error
-	PlaceOrder(u *User, pid uint) error
+}
+
+// UserStore contains all `User`
+// related persistance logic
+type UserStore interface {
+	FindByID(id uint, relations bool) (*User, error)
+	FindByEmail(email string, relations bool) (*User, error)
+	FindAll() ([]User, error)
+	Save(*User) error
+	Update(id uint, u *User) error
+	Delete(id uint) error
 }

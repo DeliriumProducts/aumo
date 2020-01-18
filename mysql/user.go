@@ -8,24 +8,18 @@ import (
 // UserTable is the MySQL table for holding users
 const UserTable = "users"
 
-type userService struct {
+type userStore struct {
 	db sqlbuilder.Database
-	rs aumo.ReceiptService
-	ps aumo.ProductService
-	os aumo.OrderService
 }
 
-// NewUserService returns a mysql instance of `aumo.UserService`
-func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.ProductService, os aumo.OrderService) aumo.UserService {
-	return &userService{
+// NewUserStore returns a mysql instance of `aumo.UserStore`
+func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
+	return &userStore{
 		db: db,
-		rs: rs,
-		ps: ps,
-		os: os,
 	}
 }
 
-func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByID(id uint, relations bool) (*aumo.User, error) {
 	user := &aumo.User{}
 	var err error
 
@@ -40,7 +34,7 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	return user, err
 }
 
-func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByEmail(email string, relations bool) (*aumo.User, error) {
 	user := &aumo.User{}
 	var err error
 
@@ -55,7 +49,7 @@ func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, err
 	return user, err
 }
 
-func (u *userService) userRelations(where string, args ...interface{}) (*aumo.User, error) {
+func (u *userStore) userRelations(where string, args ...interface{}) (*aumo.User, error) {
 	var err error
 
 	type (
@@ -111,51 +105,19 @@ func (u *userService) userRelations(where string, args ...interface{}) (*aumo.Us
 	return user, nil
 }
 
-func (u *userService) Users() ([]aumo.User, error) {
+func (u *userStore) FindAll() ([]aumo.User, error) {
 	uss := []aumo.User{}
 	return uss, u.db.Collection(UserTable).Find().All(&uss)
 }
 
-func (u *userService) Create(us *aumo.User) error {
+func (u *userStore) Save(us *aumo.User) error {
 	return u.db.Collection(UserTable).InsertReturning(us)
 }
 
-func (u *userService) Update(id uint, ur *aumo.User) error {
+func (u *userStore) Update(id uint, ur *aumo.User) error {
 	return u.db.Collection(UserTable).Find("id", id).Update(ur)
 }
 
-func (u *userService) Delete(id uint) error {
+func (u *userStore) Delete(id uint) error {
 	return u.db.Collection(UserTable).Find("id", id).Delete()
-}
-
-func (u *userService) PlaceOrder(user *aumo.User, pID uint) error {
-	product, err := u.ps.Product(pID)
-	if err != nil {
-		return err
-	}
-
-	product.DecrementStock()
-	o := aumo.NewOrder(user, product)
-	err = u.os.Create(o)
-	if err != nil {
-		return err
-	}
-
-	// NOTE: is there a race condition here???
-	err = user.PlaceOrder(o)
-	if err != nil {
-		return err
-	}
-
-	err = u.ps.Update(pID, product)
-	if err != nil {
-		return err
-	}
-
-	err = u.Update(user.ID, user)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

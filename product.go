@@ -40,3 +40,13 @@ type ProductService interface {
 	Update(id uint, p *Product) error
 	Delete(id uint) error
 }
+
+// ProductStore contains all `Product`
+// related persistance logic
+type ProductStore interface {
+	FindByID(id uint) (*Product, error)
+	FindAll() ([]Product, error)
+	Save(*Product) error
+	Update(id uint, p *Product) error
+	Delete(id uint) error
+}

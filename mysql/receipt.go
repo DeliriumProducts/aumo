@@ -8,49 +8,49 @@ import (
 // ReceiptTable is the MySQL table for holding receipts
 const ReceiptTable = "receipts"
 
-type receiptService struct {
+type receiptStore struct {
 	db sqlbuilder.Database
 }
 
-// NewReceiptService returns a mysql instance of `aumo.ReceiptService`
-func NewReceiptService(db sqlbuilder.Database) aumo.ReceiptService {
-	return &receiptService{
+// NewReceiptStore returns a mysql instance of `aumo.ReceiptStore`
+func NewReceiptStore(db sqlbuilder.Database) aumo.ReceiptStore {
+	return &receiptStore{
 		db: db,
 	}
 }
 
-func (r *receiptService) Receipt(id uint) (*aumo.Receipt, error) {
-	rs := &aumo.Receipt{}
-	return rs, r.db.Collection(ReceiptTable).Find("receipt_id", id).One(rs)
+func (r *receiptStore) FindByID(id uint) (*aumo.Receipt, error) {
+	receipt := &aumo.Receipt{}
+	return receipt, r.db.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
 }
 
-func (r *receiptService) Receipts() ([]aumo.Receipt, error) {
-	rss := []aumo.Receipt{}
-	return rss, r.db.Collection(ReceiptTable).Find().All(&rss)
+func (r *receiptStore) FindAll() ([]aumo.Receipt, error) {
+	receipts := []aumo.Receipt{}
+	return receipts, r.db.Collection(ReceiptTable).Find().All(&receipts)
 }
 
-func (r *receiptService) Create(rs *aumo.Receipt) error {
+func (r *receiptStore) Save(rs *aumo.Receipt) error {
 	return r.db.Collection(ReceiptTable).InsertReturning(rs)
 }
 
-func (r *receiptService) Update(id uint, rr *aumo.Receipt) error {
+func (r *receiptStore) Update(id uint, rr *aumo.Receipt) error {
 	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
 }
 
-func (r *receiptService) Delete(id uint) error {
+func (r *receiptStore) Delete(id uint) error {
 	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Delete()
 }
 
-func (r *receiptService) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
-	receipt, err := r.Receipt(rID)
-	if err != nil {
-		return nil, err
-	}
+// func (r *receiptStore) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
+// 	receipt, err := r.Receipt(rID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	err = receipt.Claim(uID)
-	if err != nil {
-		return nil, err
-	}
+// 	err = receipt.Claim(uID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return receipt, r.Update(rID, receipt)
-}
+// 	return receipt, r.Update(rID, receipt)
+// }

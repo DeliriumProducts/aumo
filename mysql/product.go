@@ -8,35 +8,35 @@ import (
 // ProductTable is the MySQL table for holding products
 const ProductTable = "products"
 
-type productService struct {
+type productStore struct {
 	db sqlbuilder.Database
 }
 
-// NewProductService returns a mysql instance of `aumo.ProductService`
-func NewProductService(db sqlbuilder.Database) aumo.ProductService {
-	return &productService{
+// NewProductStore returns a mysql instance of `aumo.ProductStore`
+func NewProductStore(db sqlbuilder.Database) aumo.ProductStore {
+	return &productStore{
 		db: db,
 	}
 }
 
-func (p *productService) Product(id uint) (*aumo.Product, error) {
-	pd := &aumo.Product{}
-	return pd, p.db.Collection(ProductTable).Find("id", id).One(pd)
+func (p *productStore) FindByID(id uint) (*aumo.Product, error) {
+	product := &aumo.Product{}
+	return product, p.db.Collection(ProductTable).Find("id", id).One(product)
 }
 
-func (p *productService) Products() ([]aumo.Product, error) {
-	var pds []aumo.Product
-	return pds, p.db.Collection(ProductTable).Find().All(&pds)
+func (p *productStore) FindAll() ([]aumo.Product, error) {
+	products := []aumo.Product{}
+	return products, p.db.Collection(ProductTable).Find().All(&products)
 }
 
-func (p *productService) Create(pd *aumo.Product) error {
+func (p *productStore) Save(pd *aumo.Product) error {
 	return p.db.Collection(ProductTable).InsertReturning(pd)
 }
 
-func (p *productService) Update(id uint, pd *aumo.Product) error {
+func (p *productStore) Update(id uint, pd *aumo.Product) error {
 	return p.db.Collection(ProductTable).Find("id", id).Update(pd)
 }
 
-func (p *productService) Delete(id uint) error {
+func (p *productStore) Delete(id uint) error {
 	return p.db.Collection(ProductTable).Find("id", id).Delete()
 }

@@ -9,7 +9,7 @@ var (
 
 // Receipt is a digital receipt
 type Receipt struct {
-	ReceiptID uint   `json:"receiptID" db:"receipt_id"`
+	ReceiptID uint   `json:"receipt_id" db:"receipt_id"`
 	Content   string `json:"content" db:"content" validate:"required"`
 	UserID    *uint  `json:"-" db:"user_id,omitempty"`
 }
@@ -45,4 +45,14 @@ type ReceiptService interface {
 	Update(id uint, r *Receipt) error
 	Delete(id uint) error
 	ClaimReceipt(uID uint, rID uint) (*Receipt, error)
+}
+
+// ReceiptStore contains all `Receipt`
+// related persistance logic
+type ReceiptStore interface {
+	FindByID(id uint) (*Receipt, error)
+	FindAll() ([]Receipt, error)
+	Save(*Receipt) error
+	Update(id uint, r *Receipt) error
+	Delete(id uint) error
 }
