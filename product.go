@@ -44,9 +44,9 @@ type ProductService interface {
 // ProductStore contains all `Product`
 // related persistance logic
 type ProductStore interface {
-	FindByID(id uint) (*Product, error)
-	FindAll() ([]Product, error)
-	Save(*Product) error
-	Update(id uint, p *Product) error
-	Delete(id uint) error
+	FindByID(tx Tx, id uint) (*Product, error)
+	FindAll(tx Tx) ([]Product, error)
+	Save(tx Tx, p *Product) error
+	Update(tx Tx, id uint, p *Product) error
+	Delete(tx Tx, id uint) error
 }

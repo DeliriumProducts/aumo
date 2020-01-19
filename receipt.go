@@ -52,9 +52,9 @@ type ReceiptService interface {
 // ReceiptStore contains all `Receipt`
 // related persistance logic
 type ReceiptStore interface {
-	FindByID(id uint) (*Receipt, error)
-	FindAll() ([]Receipt, error)
-	Save(*Receipt) error
-	Update(id uint, r *Receipt) error
-	Delete(id uint) error
+	FindByID(tx Tx, id uint) (*Receipt, error)
+	FindAll(tx Tx) ([]Receipt, error)
+	Save(tx Tx, r *Receipt) error
+	Update(tx Tx, id uint, r *Receipt) error
+	Delete(tx Tx, id uint) error
 }

@@ -105,10 +105,10 @@ type UserService interface {
 // UserStore contains all `User`
 // related persistance logic
 type UserStore interface {
-	FindByID(id uint, relations bool) (*User, error)
-	FindByEmail(email string, relations bool) (*User, error)
-	FindAll() ([]User, error)
-	Save(*User) error
-	Update(id uint, u *User) error
-	Delete(id uint) error
+	FindByID(tx Tx, id uint, relations bool) (*User, error)
+	FindByEmail(tx Tx, email string, relations bool) (*User, error)
+	FindAll(tx Tx) ([]User, error)
+	Save(tx Tx, u *User) error
+	Update(tx Tx, id uint, u *User) error
+	Delete(tx Tx, id uint) error
 }

@@ -31,9 +31,9 @@ type OrderService interface {
 // OrderStore contains all `Order`
 // related persistance logic
 type OrderStore interface {
-	FindByID(id uint) (*Order, error)
-	FindAll() ([]Order, error)
-	Save(*Order) error
-	Update(id uint, o *Order) error
-	Delete(id uint) error
+	FindByID(tx Tx, id uint) (*Order, error)
+	FindAll(tx Tx) ([]Order, error)
+	Save(tx Tx, o *Order) error
+	Update(tx Tx, id uint, o *Order) error
+	Delete(tx Tx, id uint) error
 }
