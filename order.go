@@ -24,7 +24,6 @@ func NewOrder(u *User, p *Product) *Order {
 type OrderService interface {
 	Order(id uint) (*Order, error)
 	Orders() ([]Order, error)
-	Create(*Order) error
 	Update(id uint, o *Order) error
 	Delete(id uint) error
 	PlaceOrder(uID, pID uint) (*Order, error)

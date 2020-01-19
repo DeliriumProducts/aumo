@@ -1,6 +1,17 @@
 package aumo
 
-import "upper.io/db.v3/lib/sqlbuilder"
+import (
+	"errors"
+
+	"upper.io/db.v3/lib/sqlbuilder"
+)
+
+var (
+	// ErrOrderProductNotFound is an error for when a user places an order on a product that doesn't exist
+	ErrOrderProductNotFound = errors.New("aumo: can't place an order for a non existing product")
+	// ErrOrderUserNotFound is an error for when a user doesn't exist when placing an order
+	ErrOrderUserNotFound = errors.New("aumo: can't place an order for a user that doesn't exist")
+)
 
 // Product is a product in the shop of aumo
 type Product struct {
