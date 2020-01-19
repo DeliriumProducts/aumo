@@ -1,6 +1,8 @@
 package receipt
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -40,7 +42,7 @@ func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 	var receipt *aumo.Receipt
 	db := rs.store.DB()
 
-	err := aumo.TxDo(nil, db, func(tx sqlbuilder.Tx) error {
+	err := aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
 		var err error
 		receipt, err = rs.store.FindByID(tx, rID)
 		if err != nil {

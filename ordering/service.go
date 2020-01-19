@@ -1,6 +1,7 @@
 package ordering
 
 import (
+	"context"
 	"errors"
 
 	"github.com/deliriumproducts/aumo"
@@ -41,7 +42,7 @@ func (o *orderService) Delete(id uint) error {
 
 func (o *orderService) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
 	order := &aumo.Order{}
-	err := aumo.TxDo(nil, o.store.DB(), func(tx sqlbuilder.Tx) error {
+	err := aumo.TxDo(context.Background(), o.store.DB(), func(tx sqlbuilder.Tx) error {
 		// Get Product
 		product, err := o.ps.FindByID(tx, pID)
 		if err != nil {
