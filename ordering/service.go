@@ -81,11 +81,13 @@ func (o *orderService) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
 			return err
 		}
 
+		// Update product
 		err = o.ps.Update(tx, pID, product)
 		if err != nil {
 			return err
 		}
 
+		// Update user
 		err = o.us.Update(tx, uID, user)
 		if err != nil {
 			return err
