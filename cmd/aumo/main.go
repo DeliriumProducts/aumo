@@ -61,10 +61,10 @@ func main() {
 	auth := auth.New(conn, us, 60*60*24)
 
 	r := rest.New(rest.Config{
-		UserService:    user.New(us),
+		UserService:    users.New(us),
 		ReceiptService: receipt.New(rs),
 		OrderService:   nil,
-		ProductService: product.New(ps),
+		ProductService: products.New(ps),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
 	})
