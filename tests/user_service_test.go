@@ -5,6 +5,10 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/deliriumproducts/aumo/ordering"
+	"github.com/deliriumproducts/aumo/products"
+	"github.com/deliriumproducts/aumo/receipt"
+	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,10 +24,13 @@ func TestUserService(t *testing.T) {
 		sess.Close()
 	}()
 
-	rs := mysql.NewReceiptService(sess)
-	ps := mysql.NewProductService(sess)
-	os := mysql.NewOrderService(sess)
-	us := mysql.NewUserService(sess, rs, ps, os)
+	pstore := mysql.NewProductStore(sess)
+	ustore := mysql.NewUserStore(sess)
+
+	os := ordering.New(mysql.NewOrderStore(sess), pstore, ustore)
+	ps := products.New(pstore)
+	us := users.New(ustore)
+	rs := receipt.New(mysql.NewReceiptStore(sess))
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
@@ -68,8 +75,10 @@ func TestUserService(t *testing.T) {
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
-				err = us.PlaceOrder(u, p.ID)
+				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				u.Orders = append(u.Orders, *order)
 
 				um, err := us.User(u.ID, true)
 
@@ -104,8 +113,10 @@ func TestUserService(t *testing.T) {
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
-				err = us.PlaceOrder(u, p.ID)
+				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				u.Orders = append(u.Orders, *order)
 
 				um, err := us.UserByEmail(u.Email, true)
 				assert.Nil(t, err, "shouldn't return an error")
@@ -128,14 +139,17 @@ func TestUserService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		t.Run("valid", func(t *testing.T) {
-			err = us.PlaceOrder(u, p.ID)
+			_, err := os.PlaceOrder(u.ID, p.ID)
 			assert.Nil(t, err, "shouldn't return an error")
 
 			pm, err := ps.Product(p.ID)
 			assert.Nil(t, err, "shouldn't return an error")
 			assert.Equal(t, p.Stock-1, pm.Stock)
 
-			assert.Equal(t, aumo.UserStartingPoints-price, u.Points)
+			us, err := us.User(u.ID, false)
+			assert.Nil(t, err, "shouldn't return an error")
+
+			assert.Equal(t, aumo.UserStartingPoints-price, us.Points)
 		})
 	})
 }

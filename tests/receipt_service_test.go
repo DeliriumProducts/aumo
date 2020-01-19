@@ -5,6 +5,8 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/deliriumproducts/aumo/receipt"
+	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
 	"upper.io/db.v3"
 )
@@ -21,10 +23,11 @@ func TestReceiptService(t *testing.T) {
 		sess.Close()
 	}()
 
-	rs := mysql.NewReceiptService(sess)
-	ps := mysql.NewProductService(sess)
-	os := mysql.NewOrderService(sess)
-	us := mysql.NewUserService(sess, rs, ps, os)
+	// ps := mysql.NewProductStore(sess)
+	// os := mysql.NewOrderStore(sess)
+
+	us := users.New(mysql.NewUserStore(sess))
+	rs := receipt.New(mysql.NewReceiptStore(sess))
 
 	t.Run("create_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
