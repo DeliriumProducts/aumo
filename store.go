@@ -22,12 +22,12 @@ func TxDo(ctx context.Context, db sqlbuilder.Database, f func(sqlbuilder.Tx) err
 
 	defer func() {
 		if p := recover(); p != nil {
-			tx.Rollback()
+			err = tx.Rollback()
 			panic(p)
 		}
 
 		if err != nil {
-			tx.Rollback()
+			err = tx.Rollback()
 			return
 		}
 

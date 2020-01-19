@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -28,7 +30,7 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 	user := &aumo.User{}
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return nil, err
@@ -65,7 +67,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 	user := &aumo.User{}
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return nil, err
@@ -158,7 +160,7 @@ func (u *userStore) FindAll(tx aumo.Tx) ([]aumo.User, error) {
 	users := []aumo.User{}
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return nil, err
@@ -186,7 +188,7 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 	var err error
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err
@@ -214,7 +216,7 @@ func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
 	var err error
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err
@@ -242,7 +244,7 @@ func (u *userStore) Delete(tx aumo.Tx, id uint) error {
 	var err error
 
 	if tx == nil {
-		tx, err = u.db.NewTx(nil)
+		tx, err = u.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err

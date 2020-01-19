@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -28,7 +30,7 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
 	receipt := &aumo.Receipt{}
 
 	if tx == nil {
-		tx, err = r.db.NewTx(nil)
+		tx, err = r.db.NewTx(context.TODO())
 
 		if err != nil {
 			return nil, err
@@ -57,7 +59,7 @@ func (r *receiptStore) FindAll(tx aumo.Tx) ([]aumo.Receipt, error) {
 	receipts := []aumo.Receipt{}
 
 	if tx == nil {
-		tx, err = r.db.NewTx(nil)
+		tx, err = r.db.NewTx(context.TODO())
 
 		if err != nil {
 			return nil, err
@@ -85,7 +87,7 @@ func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
 	var err error
 
 	if tx == nil {
-		tx, err = r.db.NewTx(nil)
+		tx, err = r.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err
@@ -113,7 +115,7 @@ func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
 	var err error
 
 	if tx == nil {
-		tx, err = r.db.NewTx(nil)
+		tx, err = r.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err
@@ -141,7 +143,7 @@ func (r *receiptStore) Delete(tx aumo.Tx, id uint) error {
 	var err error
 
 	if tx == nil {
-		tx, err = r.db.NewTx(nil)
+		tx, err = r.db.NewTx(context.TODO())
 
 		if err != nil {
 			return err
