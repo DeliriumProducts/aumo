@@ -36,13 +36,16 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -70,13 +73,16 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -160,13 +166,16 @@ func (u *userStore) FindAll(tx aumo.Tx) ([]aumo.User, error) {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -185,13 +194,16 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -210,13 +222,16 @@ func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -235,13 +250,16 @@ func (u *userStore) Delete(tx aumo.Tx, id uint) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 

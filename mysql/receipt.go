@@ -36,13 +36,16 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -62,13 +65,16 @@ func (r *receiptStore) FindAll(tx aumo.Tx) ([]aumo.Receipt, error) {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -87,13 +93,16 @@ func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -112,13 +121,16 @@ func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -137,13 +149,16 @@ func (r *receiptStore) Delete(tx aumo.Tx, id uint) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 

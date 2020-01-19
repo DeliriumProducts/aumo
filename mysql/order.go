@@ -36,12 +36,12 @@ func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
 			}
 
 			if err != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				return
 			}
 
@@ -65,12 +65,12 @@ func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
 			}
 
 			if err != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				return
 			}
 
@@ -93,12 +93,12 @@ func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
 			}
 
 			if err != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				return
 			}
 
@@ -121,12 +121,12 @@ func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
 			}
 
 			if err != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				return
 			}
 
@@ -149,12 +149,12 @@ func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
 
 		defer func() {
 			if p := recover(); p != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				panic(p)
 			}
 
 			if err != nil {
-				tx.Rollback()
+				err = tx.Rollback()
 				return
 			}
 
