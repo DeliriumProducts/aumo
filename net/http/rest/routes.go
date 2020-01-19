@@ -21,10 +21,13 @@ func (rest *Rest) routes() {
 	rest.router.Route("/products", func(r chi.Router) {
 		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productHandlerCreate)
 		r.Get("/", rest.productHandlerGetAll)
+		r.Get("/{id}", rest.productHandlerGet)
 		// 	r.Get("/{id}", w.ShopItemHandler)
 	})
 
 	rest.router.Route("/orders", func(r chi.Router) {
 		r.With(rest.WithAuth(aumo.Customer)).Post("/", rest.orderHandlerCreate)
+		r.With(rest.WithAuth(aumo.Admin)).Get("/", rest.orderHandlerGetAll)
+		r.With(rest.WithAuth(aumo.Admin)).Get("/{id}", rest.orderHandlerGet)
 	})
 }
