@@ -30,3 +30,23 @@ func (rest *Rest) orderHandlerCreate(w http.ResponseWriter, r *http.Request) {
 
 	rest.JSON(w, order, http.StatusOK)
 }
+
+func (rest *Rest) orderHandlerGetAll(w http.ResponseWriter, r *http.Request) {
+	orders, err := rest.orderService.Orders()
+	if err != nil {
+		rest.JSONError(w, err, http.StatusNotFound)
+	}
+
+	rest.JSON(w, orders, http.StatusOK)
+}
+
+func (rest *Rest) orderHandlerGet(w http.ResponseWriter, r *http.Request) {
+	orderID := rest.ParamNumber(w, r, "id")
+
+	order, err := rest.orderService.Order(orderID)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusNotFound)
+	}
+
+	rest.JSON(w, order, http.StatusOK)
+}
