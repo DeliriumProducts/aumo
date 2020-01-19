@@ -53,7 +53,7 @@ func (rest *Rest) productHandlerGet(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, order, http.StatusOK)
 }
 
-func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *htpp.Request) {
+func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
 	productID := rest.ParamNumber(w, r, "id")
 
 	type request struct {
