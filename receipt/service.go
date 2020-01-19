@@ -60,5 +60,9 @@ func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 		return nil
 	})
 
+	if err != nil {
+		return nil, err
+	}
+
 	return receipt, err
 }
