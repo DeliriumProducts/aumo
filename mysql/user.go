@@ -24,11 +24,27 @@ func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 }
 
 func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
-	if tx == nil {
-		tx = u.db
-	}
-	user := &aumo.User{}
 	var err error
+	user := &aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
+	}
 
 	if relations {
 		user, err = u.userRelations(tx, "u.id = ?", id)
@@ -42,11 +58,27 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 }
 
 func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo.User, error) {
-	if tx == nil {
-		tx = u.db
-	}
-	user := &aumo.User{}
 	var err error
+	user := &aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
+	}
 
 	if relations {
 		user, err = u.userRelations(tx, "u.email = ?", email)
@@ -116,30 +148,102 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 }
 
 func (u *userStore) FindAll(tx aumo.Tx) ([]aumo.User, error) {
-	if tx == nil {
-		tx = u.db
-	}
+	var err error
 	users := []aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
+	}
+
 	return users, tx.Collection(UserTable).Find().All(&users)
 }
 
 func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
+	var err error
+
 	if tx == nil {
-		tx = u.db
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(UserTable).InsertReturning(us)
 }
 
 func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
+	var err error
+
 	if tx == nil {
-		tx = u.db
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(UserTable).Find("id", id).Update(ur)
 }
 
 func (u *userStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
+
 	if tx == nil {
-		tx = u.db
+		tx, err = u.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(UserTable).Find("id", id).Delete()
 }
