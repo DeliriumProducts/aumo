@@ -10,7 +10,7 @@ import (
 // NOTE: this is an implementation detail (sql)
 // How can this be solved?
 type Tx interface {
-	sqlbuilder.Database
+	sqlbuilder.Tx
 }
 
 // TxDo represents a helper function for making transactions

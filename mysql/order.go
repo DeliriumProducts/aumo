@@ -24,39 +24,129 @@ func (o *orderStore) DB() sqlbuilder.Database {
 }
 
 func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
-	if tx == nil {
-		tx = o.db
-	}
+	var err error
 	order := &aumo.Order{}
+
+	if tx == nil {
+		tx, err = o.db.NewTx(nil)
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
+	}
+
 	return order, tx.Collection(OrderTable).Find("id", id).One(order)
 }
 
 func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
-	if tx == nil {
-		tx = o.db
-	}
+	var err error
 	orders := []aumo.Order{}
+
+	if tx == nil {
+		tx, err = o.db.NewTx(nil)
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
+	}
+
 	return orders, tx.Collection(OrderTable).Find().All(&orders)
 }
 
 func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
+	var err error
+
 	if tx == nil {
-		tx = o.db
+		tx, err = o.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(OrderTable).InsertReturning(os)
 }
 
 func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
+	var err error
+
 	if tx == nil {
-		tx = o.db
+		tx, err = o.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(OrderTable).Find("id", id).Update(or)
 }
 
 func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
+
 	if tx == nil {
-		tx = o.db
+		tx, err = o.db.NewTx(nil)
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				tx.Rollback()
+				panic(p)
+			} else if err != nil {
+				tx.Rollback()
+			} else {
+				err = tx.Commit()
+			}
+		}()
 	}
+
 	return tx.Collection(OrderTable).Find("id", id).Delete()
 }
 
