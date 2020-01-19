@@ -63,25 +63,33 @@ func TestUserService(t *testing.T) {
 			})
 
 			t.Run("with_relations", func(t *testing.T) {
+				// Create a receipt
 				r := aumo.NewReceipt("Paconi: 250LV")
 				err = rs.Create(r)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				// Claim the receipt
 				rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the receipt
 				u.Receipts = append(u.Receipts, *rc)
 
+				// Create a product
 				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Buy the product
 				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the order
 				u.Orders = append(u.Orders, *order)
+				u.Points -= p.Price
 
+				// Get the user
 				um, err := us.User(u.ID, true)
-
 				assert.Nil(t, err, "shouldn't return an error")
 				assert.Equal(t, *u, *um, "should be equal")
 			})
@@ -101,23 +109,32 @@ func TestUserService(t *testing.T) {
 			})
 
 			t.Run("with_relations", func(t *testing.T) {
+				// Create a receipt
 				r := aumo.NewReceipt("Paconi: 250LV")
 				err = rs.Create(r)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				// Claim the receipt
 				rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the receipt
 				u.Receipts = append(u.Receipts, *rc)
 
+				// Create a product
 				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Buy the product
 				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the order
 				u.Orders = append(u.Orders, *order)
+				u.Points -= p.Price
 
+				// Get the user
 				um, err := us.UserByEmail(u.Email, true)
 				assert.Nil(t, err, "shouldn't return an error")
 				assert.Equal(t, *u, *um, "should be equal")
