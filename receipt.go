@@ -1,6 +1,10 @@
 package aumo
 
-import "errors"
+import (
+	"errors"
+
+	"upper.io/db.v3/lib/sqlbuilder"
+)
 
 var (
 	// ErrUserAlreadySet is an error for when a user has already claimed a receipt
@@ -52,6 +56,7 @@ type ReceiptService interface {
 // ReceiptStore contains all `Receipt`
 // related persistance logic
 type ReceiptStore interface {
+	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Receipt, error)
 	FindAll(tx Tx) ([]Receipt, error)
 	Save(tx Tx, r *Receipt) error

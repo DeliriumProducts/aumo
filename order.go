@@ -1,5 +1,7 @@
 package aumo
 
+import "upper.io/db.v3/lib/sqlbuilder"
+
 // Order is an order in aumo
 type Order struct {
 	OrderID   uint     `json:"order_id" db:"order_id,omitempty"`
@@ -31,6 +33,7 @@ type OrderService interface {
 // OrderStore contains all `Order`
 // related persistance logic
 type OrderStore interface {
+	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Order, error)
 	FindAll(tx Tx) ([]Order, error)
 	Save(tx Tx, o *Order) error

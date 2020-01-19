@@ -12,6 +12,10 @@ type userStore struct {
 	db sqlbuilder.Database
 }
 
+func (u *userStore) DB() sqlbuilder.Database {
+	return u.db
+}
+
 // NewUserStore returns a mysql instance of `aumo.UserStore`
 func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 	return &userStore{

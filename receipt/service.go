@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/deliriumproducts/aumo"
+	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 type service struct {
@@ -19,44 +20,56 @@ func New(store aumo.ReceiptStore) aumo.ReceiptService {
 }
 
 func (rs *service) Receipt(id uint) (*aumo.Receipt, error) {
-	return rs.store.FindByID(id)
+	return rs.store.FindByID(nil, id)
 }
 
 func (rs *service) Receipts() ([]aumo.Receipt, error) {
-	return rs.store.FindAll()
+	return rs.store.FindAll(nil)
 }
 
 func (rs *service) Create(r *aumo.Receipt) error {
-	return rs.store.Save(r)
+	return rs.store.Save(nil, r)
 }
 
 func (rs *service) Update(id uint, r *aumo.Receipt) error {
-	return rs.store.Update(id, r)
+	return rs.store.Update(nil, id, r)
 }
 
 func (rs *service) Delete(id uint) error {
-	return rs.store.Delete(id)
+	return rs.store.Delete(nil, id)
 }
 
 func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
-	receipt, err := rs.store.FindByID(rID)
-	if err != nil {
-		return nil, err
-	}
+	var receipt *aumo.Receipt
 
-	_, err = rs.userStore.FindByID(uID, false)
-	if err != nil {
-		if errors.Is(err, aumo.ErrReceiptUserNotExist) {
-			return nil, aumo.ErrReceiptUserNotExist
+	db := rs.store.DB()
+	err := aumo.TxDo(nil, db, func(tx sqlbuilder.Tx) error {
+		var err error
+		receipt, err = rs.store.FindByID(tx, rID)
+		if err != nil {
+			return err
 		}
 
-		return nil, err
-	}
+		_, err = rs.userStore.FindByID(tx, uID, false)
+		if err != nil {
+			if errors.Is(err, aumo.ErrReceiptUserNotExist) {
+				return aumo.ErrReceiptUserNotExist
+			}
 
-	err = receipt.Claim(uID)
-	if err != nil {
-		return nil, err
-	}
+			return err
+		}
 
-	return receipt, rs.store.Update(rID, receipt)
+		err = receipt.Claim(uID)
+		if err != nil {
+			return err
+		}
+		err = rs.store.Update(tx, rID, receipt)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return receipt, err
 }

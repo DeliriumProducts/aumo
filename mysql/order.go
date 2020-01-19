@@ -19,6 +19,10 @@ func NewOrderStore(db sqlbuilder.Database) aumo.OrderStore {
 	}
 }
 
+func (o *orderStore) DB() sqlbuilder.Database {
+	return o.db
+}
+
 func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 	if tx == nil {
 		tx = o.db

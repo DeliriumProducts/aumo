@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
+	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 // UserStartingPoints is the starting points of a user
@@ -105,6 +106,7 @@ type UserService interface {
 // UserStore contains all `User`
 // related persistance logic
 type UserStore interface {
+	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint, relations bool) (*User, error)
 	FindByEmail(tx Tx, email string, relations bool) (*User, error)
 	FindAll(tx Tx) ([]User, error)

@@ -19,6 +19,10 @@ func NewReceiptStore(db sqlbuilder.Database) aumo.ReceiptStore {
 	}
 }
 
+func (r *receiptStore) DB() sqlbuilder.Database {
+	return r.db
+}
+
 func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
 	if tx == nil {
 		tx = r.db

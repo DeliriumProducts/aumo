@@ -1,5 +1,7 @@
 package aumo
 
+import "upper.io/db.v3/lib/sqlbuilder"
+
 // Product is a product in the shop of aumo
 type Product struct {
 	ID          uint    `json:"id" db:"id,omitempty" validate:"-"`
@@ -44,6 +46,7 @@ type ProductService interface {
 // ProductStore contains all `Product`
 // related persistance logic
 type ProductStore interface {
+	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Product, error)
 	FindAll(tx Tx) ([]Product, error)
 	Save(tx Tx, p *Product) error
