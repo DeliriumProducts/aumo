@@ -19,24 +19,39 @@ func NewReceiptStore(db sqlbuilder.Database) aumo.ReceiptStore {
 	}
 }
 
-func (r *receiptStore) FindByID(id uint) (*aumo.Receipt, error) {
+func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
+	if tx == nil {
+		tx = r.db
+	}
 	receipt := &aumo.Receipt{}
-	return receipt, r.db.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
+	return receipt, tx.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
 }
 
-func (r *receiptStore) FindAll() ([]aumo.Receipt, error) {
+func (r *receiptStore) FindAll(tx aumo.Tx) ([]aumo.Receipt, error) {
+	if tx == nil {
+		tx = r.db
+	}
 	receipts := []aumo.Receipt{}
-	return receipts, r.db.Collection(ReceiptTable).Find().All(&receipts)
+	return receipts, tx.Collection(ReceiptTable).Find().All(&receipts)
 }
 
-func (r *receiptStore) Save(rs *aumo.Receipt) error {
-	return r.db.Collection(ReceiptTable).InsertReturning(rs)
+func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
+	if tx == nil {
+		tx = r.db
+	}
+	return tx.Collection(ReceiptTable).InsertReturning(rs)
 }
 
-func (r *receiptStore) Update(id uint, rr *aumo.Receipt) error {
-	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
+func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
+	if tx == nil {
+		tx = r.db
+	}
+	return tx.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
 }
 
-func (r *receiptStore) Delete(id uint) error {
+func (r *receiptStore) Delete(tx aumo.Tx, id uint) error {
+	if tx == nil {
+		tx = r.db
+	}
 	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Delete()
 }
