@@ -42,9 +42,9 @@ func (rest *Rest) productHandlerCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) productHandlerGet(w http.ResponseWriter, r *http.Request) {
-	productID := rest.ParamNumber(w, r, "id")
+	pID := rest.ParamNumber(w, r, "id")
 
-	order, err := rest.productService.Product(productID)
+	order, err := rest.productService.Product(pID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
@@ -54,8 +54,6 @@ func (rest *Rest) productHandlerGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
-	productID := rest.ParamNumber(w, r, "id")
-
 	type request struct {
 		Name        string  `form:"name" validate:"required"`
 		Image       string  `form:"image" validate:"required,url"`
@@ -63,6 +61,8 @@ func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
 		Description string  `form:"description" validate:"required"`
 		Stock       uint    `form:"stock" validate:"required,numeric"`
 	}
+	
+	pID := rest.ParamNumber(w, r, "id")
 
 	var npf request
 	if ok := rest.Form(w, r, &npf); !ok {
@@ -71,7 +71,7 @@ func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
 
 	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock)
 
-	err := rest.productService.Update(productID, product)
+	err := rest.productService.Update(pID, product)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
