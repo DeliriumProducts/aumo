@@ -6,7 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo/auth"
 )
 
-func (rest *Rest) orderCreateHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) orderHandlerCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		ProductID uint `form:"product_id" validate:"required,numeric"`
 	}

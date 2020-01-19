@@ -7,7 +7,7 @@ import (
 	"github.com/deliriumproducts/aumo/auth"
 )
 
-func (rest *Rest) registerHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userHandlerRegister(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Name     string `form:"name" validate:"required"`
 		Email    string `form:"email" validate:"required,email"`
@@ -35,7 +35,7 @@ func (rest *Rest) registerHandler(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) loginHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userHandlerLogin(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Email    string `form:"email" validate:"required,email"`
 		Password string `form:"password" validate:"required"`
@@ -67,7 +67,7 @@ func (rest *Rest) loginHandler(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) meHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userHandlerGet(w http.ResponseWriter, r *http.Request) {
 	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)

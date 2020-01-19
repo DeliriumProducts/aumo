@@ -6,7 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo"
 )
 
-func (rest *Rest) productsHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productHandlerGetAll(w http.ResponseWriter, r *http.Request) {
 	products, err := rest.productService.Products()
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
@@ -16,7 +16,7 @@ func (rest *Rest) productsHandler(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, products, http.StatusOK)
 }
 
-func (rest *Rest) productCreateHandler(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productHandlerCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Name        string  `form:"name" validate:"required"`
 		Image       string  `form:"image" validate:"required,url"`
