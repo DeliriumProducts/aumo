@@ -38,11 +38,14 @@ func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -64,11 +67,14 @@ func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
 			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -89,11 +95,14 @@ func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
 			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -114,11 +123,14 @@ func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
 			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
@@ -139,11 +151,14 @@ func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
 			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
-			} else if err != nil {
-				tx.Rollback()
-			} else {
-				err = tx.Commit()
 			}
+
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
 		}()
 	}
 
