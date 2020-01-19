@@ -30,7 +30,7 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 	product := &aumo.Product{}
 
 	if tx == nil {
-		tx, err = p.db.NewTx(context.TODO())
+		tx, err = p.db.NewTx(context.Background())
 
 		if err != nil {
 			return nil, err
@@ -59,7 +59,7 @@ func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {
 	products := []aumo.Product{}
 
 	if tx == nil {
-		tx, err = p.db.NewTx(context.TODO())
+		tx, err = p.db.NewTx(context.Background())
 
 		if err != nil {
 			return nil, err
@@ -87,7 +87,7 @@ func (p *productStore) Save(tx aumo.Tx, pd *aumo.Product) error {
 	var err error
 
 	if tx == nil {
-		tx, err = p.db.NewTx(context.TODO())
+		tx, err = p.db.NewTx(context.Background())
 
 		if err != nil {
 			return err
@@ -115,7 +115,7 @@ func (p *productStore) Update(tx aumo.Tx, id uint, pd *aumo.Product) error {
 	var err error
 
 	if tx == nil {
-		tx, err = p.db.NewTx(context.TODO())
+		tx, err = p.db.NewTx(context.Background())
 
 		if err != nil {
 			return err
@@ -143,7 +143,7 @@ func (p *productStore) Delete(tx aumo.Tx, id uint) error {
 	var err error
 
 	if tx == nil {
-		tx, err = p.db.NewTx(context.TODO())
+		tx, err = p.db.NewTx(context.Background())
 
 		if err != nil {
 			return err

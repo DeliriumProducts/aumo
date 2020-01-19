@@ -30,7 +30,7 @@ func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 	order := &aumo.Order{}
 
 	if tx == nil {
-		tx, err = o.db.NewTx(context.TODO())
+		tx, err = o.db.NewTx(context.Background())
 
 		if err != nil {
 			return nil, err
@@ -59,7 +59,7 @@ func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
 	orders := []aumo.Order{}
 
 	if tx == nil {
-		tx, err = o.db.NewTx(context.TODO())
+		tx, err = o.db.NewTx(context.Background())
 
 		if err != nil {
 			return nil, err
@@ -87,7 +87,7 @@ func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
 	var err error
 
 	if tx == nil {
-		tx, err = o.db.NewTx(context.TODO())
+		tx, err = o.db.NewTx(context.Background())
 
 		if err != nil {
 			return err
@@ -115,7 +115,7 @@ func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
 	var err error
 
 	if tx == nil {
-		tx, err = o.db.NewTx(context.TODO())
+		tx, err = o.db.NewTx(context.Background())
 
 		if err != nil {
 			return err
@@ -143,7 +143,7 @@ func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
 	var err error
 
 	if tx == nil {
-		tx, err = o.db.NewTx(context.TODO())
+		tx, err = o.db.NewTx(context.Background())
 
 		if err != nil {
 			return err
