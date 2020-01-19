@@ -1,15 +1,12 @@
 package receipt
 
 import (
-	"errors"
-
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 type service struct {
-	store     aumo.ReceiptStore
-	userStore aumo.UserStore
+	store aumo.ReceiptStore
 }
 
 // New returns an instance of `aumo.ReceiptService`
@@ -47,15 +44,6 @@ func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 		var err error
 		receipt, err = rs.store.FindByID(tx, rID)
 		if err != nil {
-			return err
-		}
-
-		_, err = rs.userStore.FindByID(tx, uID, false)
-		if err != nil {
-			if errors.Is(err, aumo.ErrReceiptUserNotExist) {
-				return aumo.ErrReceiptUserNotExist
-			}
-
 			return err
 		}
 
