@@ -19,24 +19,39 @@ func NewProductStore(db sqlbuilder.Database) aumo.ProductStore {
 	}
 }
 
-func (p *productStore) FindByID(id uint) (*aumo.Product, error) {
+func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
+	if tx == nil {
+		tx = p.db
+	}
 	product := &aumo.Product{}
-	return product, p.db.Collection(ProductTable).Find("id", id).One(product)
+	return product, tx.Collection(ProductTable).Find("id", id).One(product)
 }
 
-func (p *productStore) FindAll() ([]aumo.Product, error) {
+func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {
+	if tx == nil {
+		tx = p.db
+	}
 	products := []aumo.Product{}
-	return products, p.db.Collection(ProductTable).Find().All(&products)
+	return products, tx.Collection(ProductTable).Find().All(&products)
 }
 
-func (p *productStore) Save(pd *aumo.Product) error {
-	return p.db.Collection(ProductTable).InsertReturning(pd)
+func (p *productStore) Save(tx aumo.Tx, pd *aumo.Product) error {
+	if tx == nil {
+		tx = p.db
+	}
+	return tx.Collection(ProductTable).InsertReturning(pd)
 }
 
-func (p *productStore) Update(id uint, pd *aumo.Product) error {
-	return p.db.Collection(ProductTable).Find("id", id).Update(pd)
+func (p *productStore) Update(tx aumo.Tx, id uint, pd *aumo.Product) error {
+	if tx == nil {
+		tx = p.db
+	}
+	return tx.Collection(ProductTable).Find("id", id).Update(pd)
 }
 
-func (p *productStore) Delete(id uint) error {
-	return p.db.Collection(ProductTable).Find("id", id).Delete()
+func (p *productStore) Delete(tx aumo.Tx, id uint) error {
+	if tx == nil {
+		tx = p.db
+	}
+	return tx.Collection(ProductTable).Find("id", id).Delete()
 }
