@@ -35,6 +35,7 @@ func (rest *Rest) orderHandlerGetAll(w http.ResponseWriter, r *http.Request) {
 	orders, err := rest.orderService.Orders()
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
+		return
 	}
 
 	rest.JSON(w, orders, http.StatusOK)
@@ -46,6 +47,7 @@ func (rest *Rest) orderHandlerGet(w http.ResponseWriter, r *http.Request) {
 	order, err := rest.orderService.Order(orderID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
+		return
 	}
 
 	rest.JSON(w, order, http.StatusOK)
