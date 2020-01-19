@@ -19,26 +19,41 @@ func NewOrderStore(db sqlbuilder.Database) aumo.OrderStore {
 	}
 }
 
-func (o *orderStore) FindByID(id uint) (*aumo.Order, error) {
+func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
+	if tx == nil {
+		tx = o.db
+	}
 	order := &aumo.Order{}
-	return order, o.db.Collection(OrderTable).Find("id", id).One(order)
+	return order, tx.Collection(OrderTable).Find("id", id).One(order)
 }
 
-func (o *orderStore) FindAll() ([]aumo.Order, error) {
+func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
+	if tx == nil {
+		tx = o.db
+	}
 	orders := []aumo.Order{}
-	return orders, o.db.Collection(OrderTable).Find().All(&orders)
+	return orders, tx.Collection(OrderTable).Find().All(&orders)
 }
 
-func (o *orderStore) Save(os *aumo.Order) error {
-	return o.db.Collection(OrderTable).InsertReturning(os)
+func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
+	if tx == nil {
+		tx = o.db
+	}
+	return tx.Collection(OrderTable).InsertReturning(os)
 }
 
-func (o *orderStore) Update(id uint, or *aumo.Order) error {
-	return o.db.Collection(OrderTable).Find("id", id).Update(or)
+func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
+	if tx == nil {
+		tx = o.db
+	}
+	return tx.Collection(OrderTable).Find("id", id).Update(or)
 }
 
-func (o *orderStore) Delete(id uint) error {
-	return o.db.Collection(OrderTable).Find("id", id).Delete()
+func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
+	if tx == nil {
+		tx = o.db
+	}
+	return tx.Collection(OrderTable).Find("id", id).Delete()
 }
 
 // func (o *orderStore) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
