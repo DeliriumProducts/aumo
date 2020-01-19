@@ -67,7 +67,7 @@ func (rest *Rest) userHandlerLogin(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) userHandlerGet(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userHandlerGetCurrent(w http.ResponseWriter, r *http.Request) {
 	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)

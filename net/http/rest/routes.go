@@ -10,7 +10,7 @@ func (rest *Rest) routes() {
 	rest.router.Post("/login", rest.userHandlerLogin)
 	rest.router.Route("/me", func(r chi.Router) {
 		r.Use(rest.WithAuth())
-		r.Get("/", rest.userHandlerGet)
+		r.Get("/", rest.userHandlerGetCurrent)
 	})
 
 	// r.Route("/receipts", func(r chi.Router) {
