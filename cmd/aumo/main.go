@@ -9,6 +9,7 @@ import (
 	"github.com/deliriumproducts/aumo/auth"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/net/http/rest"
+	"github.com/deliriumproducts/aumo/ordering"
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
@@ -55,7 +56,7 @@ func main() {
 	}
 
 	ps := mysql.NewProductStore(db)
-	_ = mysql.NewOrderStore(db)
+	os := mysql.NewOrderStore(db)
 	rs := mysql.NewReceiptStore(db)
 	us := mysql.NewUserStore(db)
 	auth := auth.New(conn, us, 60*60*24)
@@ -63,7 +64,7 @@ func main() {
 	r := rest.New(rest.Config{
 		UserService:    users.New(us),
 		ReceiptService: receipt.New(rs),
-		OrderService:   nil,
+		OrderService:   ordering.New(os, ps, us),
 		ProductService: products.New(ps),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
