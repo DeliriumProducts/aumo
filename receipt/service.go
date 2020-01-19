@@ -41,8 +41,8 @@ func (rs *service) Delete(id uint) error {
 
 func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 	var receipt *aumo.Receipt
-
 	db := rs.store.DB()
+
 	err := aumo.TxDo(nil, db, func(tx sqlbuilder.Tx) error {
 		var err error
 		receipt, err = rs.store.FindByID(tx, rID)
@@ -63,6 +63,7 @@ func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 		if err != nil {
 			return err
 		}
+
 		err = rs.store.Update(tx, rID, receipt)
 		if err != nil {
 			return err

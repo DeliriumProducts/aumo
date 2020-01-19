@@ -60,7 +60,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 		return nil, err
 	}
 
-	return a.us.FindByID(uint(uID), false)
+	return a.us.FindByID(nil, uint(uID), false)
 }
 
 // GetFromRequest gets a session from Redis based on the Cookie value from the request
