@@ -158,12 +158,5 @@ func TestReceiptService(t *testing.T) {
 			assert.Nil(t, err, "shouldn't return an error")
 			assert.Contains(t, um.Receipts, *rc)
 		})
-
-		// t.Run("race_condition", func(t *testing.T) {
-		// 	r := aumo.NewReceipt(u.ID, "Paconi: 250LV")
-		// 	err := rs.Create(r)
-		// 	assert.Nil(t, err, "shouldn't return an error")
-
-		// })
 	})
 }
