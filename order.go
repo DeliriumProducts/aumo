@@ -30,7 +30,7 @@ type OrderService interface {
 }
 
 // OrderStore contains all `Order`
-// related persistance logic
+// related persistence logic
 type OrderStore interface {
 	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Order, error)

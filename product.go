@@ -55,7 +55,7 @@ type ProductService interface {
 }
 
 // ProductStore contains all `Product`
-// related persistance logic
+// related persistence logic
 type ProductStore interface {
 	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Product, error)

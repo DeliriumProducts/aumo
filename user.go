@@ -102,7 +102,7 @@ type UserService interface {
 }
 
 // UserStore contains all `User`
-// related persistance logic
+// related persistence logic
 type UserStore interface {
 	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint, relations bool) (*User, error)

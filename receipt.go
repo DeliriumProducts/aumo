@@ -54,7 +54,7 @@ type ReceiptService interface {
 }
 
 // ReceiptStore contains all `Receipt`
-// related persistance logic
+// related persistence logic
 type ReceiptStore interface {
 	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Receipt, error)
