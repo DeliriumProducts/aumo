@@ -5,6 +5,10 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/deliriumproducts/aumo/ordering"
+	"github.com/deliriumproducts/aumo/products"
+	"github.com/deliriumproducts/aumo/receipt"
+	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,10 +24,13 @@ func TestUserService(t *testing.T) {
 		sess.Close()
 	}()
 
-	rs := mysql.NewReceiptService(sess)
-	ps := mysql.NewProductService(sess)
-	os := mysql.NewOrderService(sess)
-	us := mysql.NewUserService(sess, rs, ps, os)
+	pstore := mysql.NewProductStore(sess)
+	ustore := mysql.NewUserStore(sess)
+
+	os := ordering.New(mysql.NewOrderStore(sess), pstore, ustore)
+	ps := products.New(pstore)
+	us := users.New(ustore)
+	rs := receipt.New(mysql.NewReceiptStore(sess))
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
@@ -56,23 +63,33 @@ func TestUserService(t *testing.T) {
 			})
 
 			t.Run("with_relations", func(t *testing.T) {
+				// Create a receipt
 				r := aumo.NewReceipt("Paconi: 250LV")
 				err = rs.Create(r)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				// Claim the receipt
 				rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the receipt
 				u.Receipts = append(u.Receipts, *rc)
 
+				// Create a product
 				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
-				err = us.PlaceOrder(u, p.ID)
+				// Buy the product
+				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
 
-				um, err := us.User(u.ID, true)
+				// Add the order
+				u.Orders = append(u.Orders, *order)
+				u.Points -= p.Price
 
+				// Get the user
+				um, err := us.User(u.ID, true)
 				assert.Nil(t, err, "shouldn't return an error")
 				assert.Equal(t, *u, *um, "should be equal")
 			})
@@ -92,50 +109,36 @@ func TestUserService(t *testing.T) {
 			})
 
 			t.Run("with_relations", func(t *testing.T) {
+				// Create a receipt
 				r := aumo.NewReceipt("Paconi: 250LV")
 				err = rs.Create(r)
 				assert.Nil(t, err, "shouldn't return an error")
+
+				// Claim the receipt
 				rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the receipt
 				u.Receipts = append(u.Receipts, *rc)
 
+				// Create a product
 				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
 				err = ps.Create(p)
 				assert.Nil(t, err, "shouldn't return an error")
 
-				err = us.PlaceOrder(u, p.ID)
+				// Buy the product
+				order, err := os.PlaceOrder(u.ID, p.ID)
 				assert.Nil(t, err, "shouldn't return an error")
 
+				// Add the order
+				u.Orders = append(u.Orders, *order)
+				u.Points -= p.Price
+
+				// Get the user
 				um, err := us.UserByEmail(u.Email, true)
 				assert.Nil(t, err, "shouldn't return an error")
 				assert.Equal(t, *u, *um, "should be equal")
 			})
-		})
-	})
-
-	t.Run("place_order", func(t *testing.T) {
-		defer TidyDB(sess)
-
-		u, err := aumo.NewUser("Jordan", "jord@an.com", "asdfjkl", "imgur.com")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		var price float64 = 500
-		p := aumo.NewProduct("TV", price, "image.com", "it's good", 5)
-		err = ps.Create(p)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		t.Run("valid", func(t *testing.T) {
-			err = us.PlaceOrder(u, p.ID)
-			assert.Nil(t, err, "shouldn't return an error")
-
-			pm, err := ps.Product(p.ID)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, p.Stock-1, pm.Stock)
-
-			assert.Equal(t, aumo.UserStartingPoints-price, u.Points)
 		})
 	})
 }

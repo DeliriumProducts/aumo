@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -8,31 +10,51 @@ import (
 // UserTable is the MySQL table for holding users
 const UserTable = "users"
 
-type userService struct {
+type userStore struct {
 	db sqlbuilder.Database
-	rs aumo.ReceiptService
-	ps aumo.ProductService
-	os aumo.OrderService
 }
 
-// NewUserService returns a mysql instance of `aumo.UserService`
-func NewUserService(db sqlbuilder.Database, rs aumo.ReceiptService, ps aumo.ProductService, os aumo.OrderService) aumo.UserService {
-	return &userService{
+func (u *userStore) DB() sqlbuilder.Database {
+	return u.db
+}
+
+// NewUserStore returns a mysql instance of `aumo.UserStore`
+func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
+	return &userStore{
 		db: db,
-		rs: rs,
-		ps: ps,
-		os: os,
 	}
 }
 
-func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
-	user := &aumo.User{}
+func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
 	var err error
+	user := &aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
 
 	if relations {
-		user, err = u.userRelations("u.id = ?", id)
+		user, err = u.userRelations(tx, "u.id = ?", id)
 	} else {
-		err = u.db.Collection(UserTable).Find("id", id).One(user)
+		err = tx.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
 	}
@@ -40,14 +62,36 @@ func (u *userService) User(id uint, relations bool) (*aumo.User, error) {
 	return user, err
 }
 
-func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, error) {
-	user := &aumo.User{}
+func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo.User, error) {
 	var err error
+	user := &aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
 
 	if relations {
-		user, err = u.userRelations("u.email = ?", email)
+		user, err = u.userRelations(tx, "u.email = ?", email)
 	} else {
-		err = u.db.Collection(UserTable).Find("email", email).One(user)
+		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
 	}
@@ -55,7 +99,7 @@ func (u *userService) UserByEmail(email string, relations bool) (*aumo.User, err
 	return user, err
 }
 
-func (u *userService) userRelations(where string, args ...interface{}) (*aumo.User, error) {
+func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
 	var err error
 
 	type (
@@ -111,51 +155,115 @@ func (u *userService) userRelations(where string, args ...interface{}) (*aumo.Us
 	return user, nil
 }
 
-func (u *userService) Users() ([]aumo.User, error) {
-	uss := []aumo.User{}
-	return uss, u.db.Collection(UserTable).Find().All(&uss)
+func (u *userStore) FindAll(tx aumo.Tx) ([]aumo.User, error) {
+	var err error
+	users := []aumo.User{}
+
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return users, tx.Collection(UserTable).Find().All(&users)
 }
 
-func (u *userService) Create(us *aumo.User) error {
-	return u.db.Collection(UserTable).InsertReturning(us)
+func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
+	var err error
+
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(UserTable).InsertReturning(us)
 }
 
-func (u *userService) Update(id uint, ur *aumo.User) error {
-	return u.db.Collection(UserTable).Find("id", id).Update(ur)
+func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
+	var err error
+
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(UserTable).Find("id", id).Update(ur)
 }
 
-func (u *userService) Delete(id uint) error {
-	return u.db.Collection(UserTable).Find("id", id).Delete()
-}
+func (u *userStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
 
-func (u *userService) PlaceOrder(user *aumo.User, pID uint) error {
-	product, err := u.ps.Product(pID)
-	if err != nil {
-		return err
+	if tx == nil {
+		tx, err = u.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
 	}
 
-	product.DecrementStock()
-	o := aumo.NewOrder(user, product)
-	err = u.os.Create(o)
-	if err != nil {
-		return err
-	}
-
-	// NOTE: is there a race condition here???
-	err = user.PlaceOrder(o)
-	if err != nil {
-		return err
-	}
-
-	err = u.ps.Update(pID, product)
-	if err != nil {
-		return err
-	}
-
-	err = u.Update(user.ID, user)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return tx.Collection(UserTable).Find("id", id).Delete()
 }

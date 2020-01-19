@@ -1,5 +1,18 @@
 package aumo
 
+import (
+	"errors"
+
+	"upper.io/db.v3/lib/sqlbuilder"
+)
+
+var (
+	// ErrOrderProductNotFound is an error for when a user places an order on a product that doesn't exist
+	ErrOrderProductNotFound = errors.New("aumo: can't place an order for a non existing product")
+	// ErrOrderUserNotFound is an error for when a user doesn't exist when placing an order
+	ErrOrderUserNotFound = errors.New("aumo: can't place an order for a user that doesn't exist")
+)
+
 // Product is a product in the shop of aumo
 type Product struct {
 	ID          uint    `json:"id" db:"id,omitempty" validate:"-"`
@@ -39,4 +52,15 @@ type ProductService interface {
 	Create(*Product) error
 	Update(id uint, p *Product) error
 	Delete(id uint) error
+}
+
+// ProductStore contains all `Product`
+// related persistence logic
+type ProductStore interface {
+	DB() sqlbuilder.Database
+	FindByID(tx Tx, id uint) (*Product, error)
+	FindAll(tx Tx) ([]Product, error)
+	Save(tx Tx, p *Product) error
+	Update(tx Tx, id uint, p *Product) error
+	Delete(tx Tx, id uint) error
 }

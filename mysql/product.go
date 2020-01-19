@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -8,35 +10,159 @@ import (
 // ProductTable is the MySQL table for holding products
 const ProductTable = "products"
 
-type productService struct {
+type productStore struct {
 	db sqlbuilder.Database
 }
 
-// NewProductService returns a mysql instance of `aumo.ProductService`
-func NewProductService(db sqlbuilder.Database) aumo.ProductService {
-	return &productService{
+// NewProductStore returns a mysql instance of `aumo.ProductStore`
+func NewProductStore(db sqlbuilder.Database) aumo.ProductStore {
+	return &productStore{
 		db: db,
 	}
 }
 
-func (p *productService) Product(id uint) (*aumo.Product, error) {
-	pd := &aumo.Product{}
-	return pd, p.db.Collection(ProductTable).Find("id", id).One(pd)
+func (p *productStore) DB() sqlbuilder.Database {
+	return p.db
 }
 
-func (p *productService) Products() ([]aumo.Product, error) {
-	var pds []aumo.Product
-	return pds, p.db.Collection(ProductTable).Find().All(&pds)
+func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
+	var err error
+	product := &aumo.Product{}
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return product, tx.Collection(ProductTable).Find("id", id).One(product)
 }
 
-func (p *productService) Create(pd *aumo.Product) error {
-	return p.db.Collection(ProductTable).InsertReturning(pd)
+func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {
+	var err error
+	products := []aumo.Product{}
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return products, tx.Collection(ProductTable).Find().All(&products)
 }
 
-func (p *productService) Update(id uint, pd *aumo.Product) error {
-	return p.db.Collection(ProductTable).Find("id", id).Update(pd)
+func (p *productStore) Save(tx aumo.Tx, pd *aumo.Product) error {
+	var err error
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(ProductTable).InsertReturning(pd)
 }
 
-func (p *productService) Delete(id uint) error {
-	return p.db.Collection(ProductTable).Find("id", id).Delete()
+func (p *productStore) Update(tx aumo.Tx, id uint, pd *aumo.Product) error {
+	var err error
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(ProductTable).Find("id", id).Update(pd)
+}
+
+func (p *productStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(ProductTable).Find("id", id).Delete()
 }

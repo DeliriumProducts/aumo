@@ -6,9 +6,12 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/deliriumproducts/aumo/auth"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/net/http/rest"
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/deliriumproducts/aumo/products"
+	"github.com/deliriumproducts/aumo/receipt"
+	"github.com/deliriumproducts/aumo/users"
 	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
@@ -51,17 +54,17 @@ func main() {
 		panic(err)
 	}
 
-	ps := mysql.NewProductService(db)
-	os := mysql.NewOrderService(db)
-	rs := mysql.NewReceiptService(db)
-	us := mysql.NewUserService(db, rs, ps, os)
+	ps := mysql.NewProductStore(db)
+	_ = mysql.NewOrderStore(db)
+	rs := mysql.NewReceiptStore(db)
+	us := mysql.NewUserStore(db)
 	auth := auth.New(conn, us, 60*60*24)
 
 	r := rest.New(rest.Config{
-		UserService:    us,
-		ReceiptService: rs,
-		OrderService:   os,
-		ProductService: ps,
+		UserService:    users.New(us),
+		ReceiptService: receipt.New(rs),
+		OrderService:   nil,
+		ProductService: products.New(ps),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
 	})

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
-	"github.com/deliriumproducts/aumo/net/http/rest/auth"
+	"github.com/deliriumproducts/aumo/auth"
 )
 
 const (
@@ -58,7 +58,7 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 			}
 
 			next.ServeHTTP(w, r.WithContext(
-				auth.SetUserToContext(r.Context(), *user),
+				auth.WithUser(r.Context(), user),
 			))
 		})
 	}

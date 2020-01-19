@@ -28,12 +28,12 @@ var (
 // Authenticator holds the methods and config used for authentication
 type Authenticator struct {
 	redis      redis.Conn
-	us         aumo.UserService
+	us         aumo.UserStore
 	expiryTime int
 }
 
 // New returns new Auth instance
-func New(r redis.Conn, us aumo.UserService, expiryTime int) *Authenticator {
+func New(r redis.Conn, us aumo.UserStore, expiryTime int) *Authenticator {
 	return &Authenticator{
 		r,
 		us,
@@ -60,7 +60,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 		return nil, err
 	}
 
-	return a.us.User(uint(uID), false)
+	return a.us.FindByID(nil, uint(uID), false)
 }
 
 // GetFromRequest gets a session from Redis based on the Cookie value from the request
@@ -84,13 +84,13 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 	})
 }
 
-// SetUserToContext sets a user to a context
-func SetUserToContext(ctx context.Context, user aumo.User) context.Context {
-	return context.WithValue(ctx, UserContextKey, user)
+// WithUser sets a user to a context
+func WithUser(ctx context.Context, user *aumo.User) context.Context {
+	return context.WithValue(ctx, UserContextKey, *user)
 }
 
-// GetUserFromContext gets a user from a context
-func GetUserFromContext(ctx context.Context) (aumo.User, error) {
+// CurrentUser gets a user from a context
+func CurrentUser(ctx context.Context) (aumo.User, error) {
 	if user, ok := ctx.Value(UserContextKey).(aumo.User); ok {
 		return user, nil
 	}

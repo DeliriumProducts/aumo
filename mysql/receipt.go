@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -8,49 +10,159 @@ import (
 // ReceiptTable is the MySQL table for holding receipts
 const ReceiptTable = "receipts"
 
-type receiptService struct {
+type receiptStore struct {
 	db sqlbuilder.Database
 }
 
-// NewReceiptService returns a mysql instance of `aumo.ReceiptService`
-func NewReceiptService(db sqlbuilder.Database) aumo.ReceiptService {
-	return &receiptService{
+// NewReceiptStore returns a mysql instance of `aumo.ReceiptStore`
+func NewReceiptStore(db sqlbuilder.Database) aumo.ReceiptStore {
+	return &receiptStore{
 		db: db,
 	}
 }
 
-func (r *receiptService) Receipt(id uint) (*aumo.Receipt, error) {
-	rs := &aumo.Receipt{}
-	return rs, r.db.Collection(ReceiptTable).Find("receipt_id", id).One(rs)
+func (r *receiptStore) DB() sqlbuilder.Database {
+	return r.db
 }
 
-func (r *receiptService) Receipts() ([]aumo.Receipt, error) {
-	rss := []aumo.Receipt{}
-	return rss, r.db.Collection(ReceiptTable).Find().All(&rss)
+func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
+	var err error
+	receipt := &aumo.Receipt{}
+
+	if tx == nil {
+		tx, err = r.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return receipt, tx.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
 }
 
-func (r *receiptService) Create(rs *aumo.Receipt) error {
-	return r.db.Collection(ReceiptTable).InsertReturning(rs)
+func (r *receiptStore) FindAll(tx aumo.Tx) ([]aumo.Receipt, error) {
+	var err error
+	receipts := []aumo.Receipt{}
+
+	if tx == nil {
+		tx, err = r.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return receipts, tx.Collection(ReceiptTable).Find().All(&receipts)
 }
 
-func (r *receiptService) Update(id uint, rr *aumo.Receipt) error {
-	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
+func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
+	var err error
+
+	if tx == nil {
+		tx, err = r.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(ReceiptTable).InsertReturning(rs)
 }
 
-func (r *receiptService) Delete(id uint) error {
+func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
+	var err error
+
+	if tx == nil {
+		tx, err = r.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
+}
+
+func (r *receiptStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
+
+	if tx == nil {
+		tx, err = r.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
 	return r.db.Collection(ReceiptTable).Find("receipt_id", id).Delete()
-}
-
-func (r *receiptService) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
-	receipt, err := r.Receipt(rID)
-	if err != nil {
-		return nil, err
-	}
-
-	err = receipt.Claim(uID)
-	if err != nil {
-		return nil, err
-	}
-
-	return receipt, r.Update(rID, receipt)
 }

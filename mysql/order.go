@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -8,35 +10,159 @@ import (
 // OrderTable is the MySQL table for holding orders
 const OrderTable = "orders"
 
-type orderService struct {
+type orderStore struct {
 	db sqlbuilder.Database
 }
 
-// NewOrderService returns a mysql instance of `aumo.OrderService`
-func NewOrderService(db sqlbuilder.Database) aumo.OrderService {
-	return &orderService{
+// NewOrderStore returns a mysql instance of `aumo.OrderStore`
+func NewOrderStore(db sqlbuilder.Database) aumo.OrderStore {
+	return &orderStore{
 		db: db,
 	}
 }
 
-func (o *orderService) Order(id uint) (*aumo.Order, error) {
-	os := &aumo.Order{}
-	return os, o.db.Collection(OrderTable).Find("id", id).One(os)
+func (o *orderStore) DB() sqlbuilder.Database {
+	return o.db
 }
 
-func (o *orderService) Orders() ([]aumo.Order, error) {
-	oss := []aumo.Order{}
-	return oss, o.db.Collection(OrderTable).Find().All(&oss)
+func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
+	var err error
+	order := &aumo.Order{}
+
+	if tx == nil {
+		tx, err = o.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return order, tx.Collection(OrderTable).Find("id", id).One(order)
 }
 
-func (o *orderService) Create(os *aumo.Order) error {
-	return o.db.Collection(OrderTable).InsertReturning(os)
+func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
+	var err error
+	orders := []aumo.Order{}
+
+	if tx == nil {
+		tx, err = o.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return orders, tx.Collection(OrderTable).Find().All(&orders)
 }
 
-func (o *orderService) Update(id uint, or *aumo.Order) error {
-	return o.db.Collection(OrderTable).Find("id", id).Update(or)
+func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
+	var err error
+
+	if tx == nil {
+		tx, err = o.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(OrderTable).InsertReturning(os)
 }
 
-func (o *orderService) Delete(id uint) error {
-	return o.db.Collection(OrderTable).Find("id", id).Delete()
+func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
+	var err error
+
+	if tx == nil {
+		tx, err = o.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(OrderTable).Find("id", id).Update(or)
+}
+
+func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
+	var err error
+
+	if tx == nil {
+		tx, err = o.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return tx.Collection(OrderTable).Find("id", id).Delete()
 }

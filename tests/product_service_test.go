@@ -5,6 +5,7 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
+	"github.com/deliriumproducts/aumo/products"
 	"github.com/stretchr/testify/assert"
 	"upper.io/db.v3"
 )
@@ -21,7 +22,7 @@ func TestProductService(t *testing.T) {
 		sess.Close()
 	}()
 
-	ps := mysql.NewProductService(sess)
+	ps := products.New(mysql.NewProductStore(sess))
 
 	t.Run("create_product", func(t *testing.T) {
 		defer TidyDB(sess)
