@@ -19,14 +19,17 @@ func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 	}
 }
 
-func (u *userStore) FindByID(id uint, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
+	if tx == nil {
+		tx = u.db
+	}
 	user := &aumo.User{}
 	var err error
 
 	if relations {
-		user, err = u.userRelations("u.id = ?", id)
+		user, err = u.userRelations(tx, "u.id = ?", id)
 	} else {
-		err = u.db.Collection(UserTable).Find("id", id).One(user)
+		err = tx.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
 	}
@@ -34,14 +37,17 @@ func (u *userStore) FindByID(id uint, relations bool) (*aumo.User, error) {
 	return user, err
 }
 
-func (u *userStore) FindByEmail(email string, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo.User, error) {
+	if tx == nil {
+		tx = u.db
+	}
 	user := &aumo.User{}
 	var err error
 
 	if relations {
-		user, err = u.userRelations("u.email = ?", email)
+		user, err = u.userRelations(tx, "u.email = ?", email)
 	} else {
-		err = u.db.Collection(UserTable).Find("email", email).One(user)
+		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
 	}
@@ -49,7 +55,7 @@ func (u *userStore) FindByEmail(email string, relations bool) (*aumo.User, error
 	return user, err
 }
 
-func (u *userStore) userRelations(where string, args ...interface{}) (*aumo.User, error) {
+func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
 	var err error
 
 	type (
@@ -105,19 +111,31 @@ func (u *userStore) userRelations(where string, args ...interface{}) (*aumo.User
 	return user, nil
 }
 
-func (u *userStore) FindAll() ([]aumo.User, error) {
-	uss := []aumo.User{}
-	return uss, u.db.Collection(UserTable).Find().All(&uss)
+func (u *userStore) FindAll(tx aumo.Tx) ([]aumo.User, error) {
+	if tx == nil {
+		tx = u.db
+	}
+	users := []aumo.User{}
+	return users, tx.Collection(UserTable).Find().All(&users)
 }
 
-func (u *userStore) Save(us *aumo.User) error {
-	return u.db.Collection(UserTable).InsertReturning(us)
+func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
+	if tx == nil {
+		tx = u.db
+	}
+	return tx.Collection(UserTable).InsertReturning(us)
 }
 
-func (u *userStore) Update(id uint, ur *aumo.User) error {
-	return u.db.Collection(UserTable).Find("id", id).Update(ur)
+func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
+	if tx == nil {
+		tx = u.db
+	}
+	return tx.Collection(UserTable).Find("id", id).Update(ur)
 }
 
-func (u *userStore) Delete(id uint) error {
-	return u.db.Collection(UserTable).Find("id", id).Delete()
+func (u *userStore) Delete(tx aumo.Tx, id uint) error {
+	if tx == nil {
+		tx = u.db
+	}
+	return tx.Collection(UserTable).Find("id", id).Delete()
 }
