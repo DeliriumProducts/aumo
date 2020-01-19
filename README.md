@@ -1,4 +1,4 @@
-<h3 align="center"><img src="https://i.imgur.com/78eLI7f.png" alt="logo"></h3>
+<h3 align="center"><img src="https://i.imgur.com/78eLI7f.png" alt="logo" height="400px"></h3>
 <p align="center">📜 The digital receipts of the future.</p>
 
 [![Github Actions Widget]][Github Actions] [![GoReport Widget]][GoReport] [![GoDoc Widget]][GoDoc]
