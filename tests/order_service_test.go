@@ -39,7 +39,7 @@ func TestOrderService(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an error")
 
 		var price float64 = 500
-		p := aumo.NewProduct("TV", price, "image.com", "it's good", 5)
+		p := aumo.NewProduct("TV", price, "image.com", "it's good", 1)
 		err = ps.Create(p)
 		assert.Nil(t, err, "shouldn't return an error")
 
@@ -47,14 +47,30 @@ func TestOrderService(t *testing.T) {
 			_, err := os.PlaceOrder(u.ID, p.ID)
 			assert.Nil(t, err, "shouldn't return an error")
 
+			p.Stock--
+			u.Points -= p.Price
+
 			pm, err := ps.Product(p.ID)
 			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, p.Stock-1, pm.Stock)
+			assert.Equal(t, p.Stock, pm.Stock)
 
 			us, err := us.User(u.ID, false)
 			assert.Nil(t, err, "shouldn't return an error")
 
 			assert.Equal(t, aumo.UserStartingPoints-price, us.Points)
+		})
+
+		t.Run("not_valid", func(t *testing.T) {
+			_, err := os.PlaceOrder(u.ID, p.ID)
+			assert.Equal(t, aumo.ErrNotInStock, err)
+
+			pm, err := ps.Product(p.ID)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, p.Stock, pm.Stock, "shouldn't have been decremented")
+
+			us, err := us.User(u.ID, false)
+			assert.Nil(t, err, "shouldn't return an error")
+			assert.Equal(t, u.Points, us.Points, "user shouldn't have been taxed")
 		})
 	})
 

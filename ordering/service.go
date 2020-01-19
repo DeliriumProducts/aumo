@@ -62,8 +62,6 @@ func (o *orderService) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
 			return err
 		}
 
-		product.DecrementStock()
-
 		// Create order
 		order = aumo.NewOrder(user, product)
 
@@ -72,6 +70,9 @@ func (o *orderService) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
 		if err != nil {
 			return err
 		}
+
+		// Decrement stock
+		product.DecrementStock()
 
 		// Save order
 		err = o.store.Save(tx, order)
