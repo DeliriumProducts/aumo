@@ -9,7 +9,7 @@ import (
 
 func (rest *Rest) receiptCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Content string `form:"content" validate:"required"`
+		Content string `form:"content" validate:"required" json:"content"`
 	}
 
 	var re request

@@ -18,11 +18,11 @@ func (rest *Rest) productGetAll(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Name        string  `form:"name" validate:"required"`
-		Image       string  `form:"image" validate:"required,url"`
-		Price       float64 `form:"price" validate:"required,numeric"`
-		Description string  `form:"description" validate:"required"`
-		Stock       uint    `form:"stock" validate:"required,numeric"`
+		Name        string  `form:"name" validate:"required" json:"name"`
+		Image       string  `form:"image" validate:"required,url" json:"image"`
+		Price       float64 `form:"price" validate:"required,numeric" json:"price"`
+		Description string  `form:"description" validate:"required" json:"description"`
+		Stock       uint    `form:"stock" validate:"required,numeric" json:"stock"`
 	}
 
 	var npf request
@@ -55,11 +55,11 @@ func (rest *Rest) productGet(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Name        string  `form:"name" validate:"required"`
-		Image       string  `form:"image" validate:"required,url"`
-		Price       float64 `form:"price" validate:"required,numeric"`
-		Description string  `form:"description" validate:"required"`
-		Stock       uint    `form:"stock" validate:"required,numeric"`
+		Name        string  `form:"name" validate:"required" json:"name"`
+		Image       string  `form:"image" validate:"required,url" json:"image"`
+		Price       float64 `form:"price" validate:"required,numeric" json:"price"`
+		Description string  `form:"description" validate:"required" json:"description"`
+		Stock       uint    `form:"stock" validate:"required,numeric" json:"stock"`
 	}
 
 	pID := rest.ParamNumber(w, r, "id")

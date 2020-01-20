@@ -9,10 +9,10 @@ import (
 
 func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Name     string `form:"name" validate:"required"`
-		Email    string `form:"email" validate:"required,email"`
-		Password string `form:"password" validate:"required,min=6,max=24"`
-		Avatar   string `form:"avatar" validate:"required,url"`
+		Name     string `form:"name" validate:"required" json:"name"`
+		Email    string `form:"email" validate:"required,email" json:"email"`
+		Password string `form:"password" validate:"required,min=6,max=24" json:"password"`
+		Avatar   string `form:"avatar" validate:"required,url" json:"avatar"`
 	}
 
 	var um request

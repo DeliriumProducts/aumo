@@ -8,7 +8,7 @@ import (
 
 func (rest *Rest) orderCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		ProductID uint `form:"product_id" validate:"required,numeric"`
+		ProductID uint `form:"product_id" validate:"required,numeric" json:"product_id"`
 	}
 
 	var of request
