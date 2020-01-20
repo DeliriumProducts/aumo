@@ -27,8 +27,6 @@ func SetupDB() (sqlbuilder.Database, error) {
 		log.Fatalln("Couldn't establish a connection: ", err)
 	}
 
-	defer db.Close()
-
 	TidyDB(db)
 
 	return db, err
