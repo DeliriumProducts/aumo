@@ -39,7 +39,7 @@ jobs:
           MYSQL_PASSWORD: root
           MYSQL_HOST: localhost
           MYSQL_DATABASE: aumo_test
-          REDIS_URL=redis://localhost
+          REDIS_URL: redis://localhost
         run: go test -v -covermode=atomic -race  ./...
   build:
     runs-on: ubuntu-latest
