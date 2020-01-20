@@ -22,6 +22,7 @@ func (rest *Rest) routes() {
 		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productHandlerCreate)
 		r.Get("/", rest.productHandlerGetAll)
 		r.Get("/{id}", rest.productHandlerGet)
+		r.Put("/{id}", rest.productHandlerEdit)
 		// 	r.Get("/{id}", w.ShopItemHandler)
 	})
 
