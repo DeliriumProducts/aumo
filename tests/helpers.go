@@ -5,6 +5,7 @@ import (
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
+	"github.com/gomodule/redigo/redis"
 	"github.com/stretchr/testify/require"
 )
 
@@ -34,4 +35,14 @@ func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint
 	require.Nil(t, err, "shouldn't return an error")
 
 	return p
+}
+
+func createSession(t *testing.T, r redis.Conn, user *aumo.User, expiryTime int) string {
+	sID := faker.UUIDDigit()
+
+	_, err := r.Do("SETEX", sID, expiryTime, user.ID)
+	require.Nil(t, err, "shouldn't return an error")
+	require.NotEmpty(t, sID, "should return a session ID")
+
+	return sID
 }

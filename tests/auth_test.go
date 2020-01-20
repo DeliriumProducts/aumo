@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAuthorizer(t *testing.T) {
+func TestAuthenticator(t *testing.T) {
 	sess, err := SetupDB()
 	if err != nil {
 		t.Error(err)
@@ -44,5 +44,16 @@ func TestAuthorizer(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 
 		require.Equal(t, user.ID, uint(uID))
+	})
+
+	t.Run("get_user_from_session", func(t *testing.T) {
+		defer TidyRedis(r)
+
+		user := createUser(t, ustore)
+		sID := createSession(t, r, user, 60*60*24)
+
+		gotUser, err := a.Get(sID)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, user.ID, gotUser.ID)
 	})
 }
