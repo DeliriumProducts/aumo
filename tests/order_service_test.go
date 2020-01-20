@@ -53,12 +53,12 @@ func TestOrderService(t *testing.T) {
 			// Get product
 			gotProduct, err := pstore.FindByID(nil, product.ID)
 			require.Nil(t, err, "shouldn't return an error")
-			require.Equal(t, product.Stock, gotProduct.Stock)
+			require.Equal(t, product.Stock, gotProduct.Stock, "should've decremented stock")
 
 			// Get User
 			gotUser, err := ustore.FindByID(nil, user.ID, true)
 			require.Nil(t, err, "shouldn't return an error")
-			require.Equal(t, aumo.UserStartingPoints-price, gotUser.Points)
+			require.Equal(t, aumo.UserStartingPoints-price, gotUser.Points, "should've decremented user's points")
 
 			// Check if order is in User's orders
 			require.Contains(t, gotUser.Orders, *order)
