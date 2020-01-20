@@ -1,4 +1,5 @@
 import React from "react"
+import { ProductAPI } from "../api"
 import { BACKEND_URL } from "../config"
 import { withNavigationFocus } from "react-navigation"
 import axios from "axios"
@@ -18,7 +19,7 @@ function ShopScreen(props) {
 
   React.useEffect(() => {
     ;(async () => {
-      const res = await axios.get(BACKEND_URL + "/shop")
+      const res = await ProductAPI.getAll()
 
       setItems(res.data)
       setLoading(false)

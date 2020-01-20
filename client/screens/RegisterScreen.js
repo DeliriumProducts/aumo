@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { Input, Icon, Button } from "react-native-ui-kitten"
-
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
-
+import { AuthAPI } from "../api"
 import { BACKEND_URL } from "../config"
 
 export default function RegisterScreen(props) {
@@ -13,7 +12,7 @@ export default function RegisterScreen(props) {
 
   const register = async () => {
     try {
-      const resp = await axios.post(BACKEND_URL + "/users/register", {
+      const resp = await AuthAPI.register({
         email,
         name,
         password,

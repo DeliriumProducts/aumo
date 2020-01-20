@@ -1,4 +1,5 @@
 import axios from "axios"
+import { AuthAPI } from "../api"
 import * as SecureStore from "expo-secure-store"
 import React, { useState } from "react"
 import {
@@ -19,7 +20,7 @@ export default function LoginScreen(props) {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(BACKEND_URL + "/users/login", {
+      const res = await AuthAPI.login({
         email,
         password
       })
