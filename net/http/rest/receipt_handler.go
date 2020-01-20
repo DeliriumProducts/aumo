@@ -3,6 +3,7 @@ package rest
 import (
 	"net/http"
 
+	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
 )
 
@@ -16,7 +17,7 @@ func (rest *Rest) receiptCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	receipt := auth.NewReceipt(re.Content)
+	receipt := aumo.NewReceipt(re.Content)
 
 	err := rest.receiptService.Create(receipt)
 	if err != nil {
