@@ -92,5 +92,5 @@ func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rest.JSON(w, Message{"User sucessfully logged out!"}, 200)
+	rest.JSON(w, Message{"User successfully logged out!"}, 200)
 }

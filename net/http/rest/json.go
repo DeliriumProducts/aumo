@@ -38,7 +38,7 @@ func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
 
 // Message is a struct for JSON responses in the format of
 //    {
-//        message: "User sucessfully deleted!"
+//        message: "User successfully deleted!"
 //    }
 type Message struct {
 	Message string `json:"message"`
