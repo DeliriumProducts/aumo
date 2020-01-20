@@ -1,7 +1,9 @@
 package rest
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -14,13 +16,26 @@ type ValidationError struct {
 // Form parses, validates, writes any errors that may have occurred during the process
 // and returns if it succeeded or not
 func (rest *Rest) Form(w http.ResponseWriter, r *http.Request, form interface{}) bool {
-	if err := r.ParseForm(); err != nil {
-		rest.JSONError(w, err, http.StatusBadRequest)
-		return false
-	}
+	switch contentType := r.Header.Get("Content-Type"); {
+	case strings.HasPrefix(contentType, "application/json"):
+		if err := json.NewDecoder(r.Body).Decode(form); err != nil {
+			rest.JSONError(w, err, http.StatusBadRequest)
+			return false
+		}
+	case
+		strings.HasPrefix(contentType, "application/x-www-form-urlencoded"),
+		strings.HasPrefix(contentType, "multipart/form-data"):
+		if err := r.ParseForm(); err != nil {
+			rest.JSONError(w, err, http.StatusBadRequest)
+			return false
+		}
 
-	if err := rest.decoder.Decode(form, r.Form); err != nil {
-		rest.JSONError(w, err, http.StatusBadRequest)
+		if err := rest.decoder.Decode(form, r.Form); err != nil {
+			rest.JSONError(w, err, http.StatusBadRequest)
+			return false
+		}
+	default:
+		rest.JSONError(w, Error{"Bad Request"}, http.StatusBadRequest)
 		return false
 	}
 

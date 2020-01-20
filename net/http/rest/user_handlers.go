@@ -37,8 +37,8 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Email    string `form:"email" validate:"required,email"`
-		Password string `form:"password" validate:"required"`
+		Email    string `form:"email" validate:"required,email" json:"email"`
+		Password string `form:"password" validate:"required" json:"password"`
 	}
 
 	var um request
@@ -48,7 +48,7 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 
 	user, err := rest.userService.UserByEmail(um.Email, false)
 	if err != nil {
-		rest.JSONError(w, err, http.StatusNotFound)
+		rest.JSONError(w, aumo.ErrUserNotFound, http.StatusNotFound)
 		return
 	}
 

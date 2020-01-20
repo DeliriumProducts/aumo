@@ -10,7 +10,6 @@ import (
 const (
 	// UserStartingPoints is the starting points of a user
 	UserStartingPoints = float64(5000)
-
 	// UserPointsPerReceipt is the amount of points a user gets per receipt claimed
 	UserPointsPerReceipt = float64(500)
 )
@@ -22,6 +21,8 @@ var (
 	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
 	// ErrInvalidPassword is an error for when the user provided an invalid password
 	ErrInvalidPassword = errors.New("aumo: wrong password")
+	// ErrUserNotFound is an error for when a user hasn't been found
+	ErrUserNotFound = errors.New("aumo: user not found")
 )
 
 // User represents a user of aumo
