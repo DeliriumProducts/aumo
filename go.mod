@@ -7,6 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-chi/cors v1.0.0
+	github.com/go-chi/docgen v1.0.5
 	github.com/go-playground/form/v4 v4.1.1
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
