@@ -1,7 +1,7 @@
 INSERT INTO `users` VALUES 
-    (1,'Simo','simo3003@me.com','123','github.com/fr3fou.png',5000, "Admin"),
-    (2,'Pesho','pesho@me.com','1234','github.com/pesho.png',5000, "Customer"),
-    (3,'Lyubo','lyubo@me.com','1234234','github.com/impzero.png',5000, "Admin");
+    (1,'Simo','simo3003@me.com','123','github.com/fr3fou.png', 5000, "Admin"),
+    (2,'Pesho','pesho@me.com','1234','github.com/pesho.png', 5000, "Customer"),
+    (3,'Lyubo','lyubo@me.com','1234234','github.com/impzero.png', 5000, "Admin");
 INSERT INTO `products` VALUES 
     (1,'TV',500,'image',"it's decent",5),
     (2,'PC',500,'PC ok',"it's bad",5),
