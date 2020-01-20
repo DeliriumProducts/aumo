@@ -123,7 +123,7 @@ func TestUserService(t *testing.T) {
 				// Add the order
 				user.Orders = append(user.Orders, *order)
 
-				// Substract points
+				// Subtract points
 				user.Points -= product.Price
 
 				// Get the user
