@@ -35,7 +35,7 @@ func (rest *Rest) userHandlerRegister(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) userHandlerLogin(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Email    string `form:"email" validate:"required,email"`
 		Password string `form:"password" validate:"required"`
@@ -67,7 +67,7 @@ func (rest *Rest) userHandlerLogin(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
-func (rest *Rest) userHandlerGetCurrent(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)

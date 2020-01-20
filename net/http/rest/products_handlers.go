@@ -6,7 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo"
 )
 
-func (rest *Rest) productHandlerGetAll(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productGetAll(w http.ResponseWriter, r *http.Request) {
 	products, err := rest.productService.Products()
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
@@ -16,7 +16,7 @@ func (rest *Rest) productHandlerGetAll(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, products, http.StatusOK)
 }
 
-func (rest *Rest) productHandlerCreate(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Name        string  `form:"name" validate:"required"`
 		Image       string  `form:"image" validate:"required,url"`
@@ -41,7 +41,7 @@ func (rest *Rest) productHandlerCreate(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, product, http.StatusOK)
 }
 
-func (rest *Rest) productHandlerGet(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productGet(w http.ResponseWriter, r *http.Request) {
 	pID := rest.ParamNumber(w, r, "id")
 
 	order, err := rest.productService.Product(pID)
@@ -53,7 +53,7 @@ func (rest *Rest) productHandlerGet(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, order, http.StatusOK)
 }
 
-func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Name        string  `form:"name" validate:"required"`
 		Image       string  `form:"image" validate:"required,url"`

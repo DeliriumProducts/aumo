@@ -6,7 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo/auth"
 )
 
-func (rest *Rest) orderHandlerCreate(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) orderCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		ProductID uint `form:"product_id" validate:"required,numeric"`
 	}
@@ -31,7 +31,7 @@ func (rest *Rest) orderHandlerCreate(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, order, http.StatusOK)
 }
 
-func (rest *Rest) orderHandlerGetAll(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) orderGetAll(w http.ResponseWriter, r *http.Request) {
 	orders, err := rest.orderService.Orders()
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
@@ -41,7 +41,7 @@ func (rest *Rest) orderHandlerGetAll(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, orders, http.StatusOK)
 }
 
-func (rest *Rest) orderHandlerGet(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) orderGet(w http.ResponseWriter, r *http.Request) {
 	orderID := rest.ParamNumber(w, r, "id")
 
 	order, err := rest.orderService.Order(orderID)

@@ -7,10 +7,10 @@ import (
 
 func (rest *Rest) routes() {
 	rest.router.Post("/register", rest.userHandlerRegister)
-	rest.router.Post("/login", rest.userHandlerLogin)
+	rest.router.Post("/login", rest.userLogin)
 	rest.router.Route("/me", func(r chi.Router) {
 		r.Use(rest.WithAuth())
-		r.Get("/", rest.userHandlerGetCurrent)
+		r.Get("/", rest.userGetCurrent)
 	})
 
 	// r.Route("/receipts", func(r chi.Router) {
@@ -19,16 +19,16 @@ func (rest *Rest) routes() {
 	// })
 
 	rest.router.Route("/products", func(r chi.Router) {
-		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productHandlerCreate)
-		r.Get("/", rest.productHandlerGetAll)
-		r.Get("/{id}", rest.productHandlerGet)
-		r.Put("/{id}", rest.productHandlerEdit)
+		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productCreate)
+		r.Get("/", rest.productGetAll)
+		r.Get("/{id}", rest.productGet)
+		r.Put("/{id}", rest.productEdit)
 		// 	r.Get("/{id}", w.ShopItemHandler)
 	})
 
 	rest.router.Route("/orders", func(r chi.Router) {
-		r.With(rest.WithAuth(aumo.Customer)).Post("/", rest.orderHandlerCreate)
-		r.With(rest.WithAuth(aumo.Admin)).Get("/", rest.orderHandlerGetAll)
-		r.With(rest.WithAuth(aumo.Admin)).Get("/{id}", rest.orderHandlerGet)
+		r.With(rest.WithAuth(aumo.Customer)).Post("/", rest.orderCreate)
+		r.With(rest.WithAuth(aumo.Admin)).Get("/", rest.orderGetAll)
+		r.With(rest.WithAuth(aumo.Admin)).Get("/{id}", rest.orderGet)
 	})
 }
