@@ -61,7 +61,7 @@ func (rest *Rest) productHandlerEdit(w http.ResponseWriter, r *http.Request) {
 		Description string  `form:"description" validate:"required"`
 		Stock       uint    `form:"stock" validate:"required,numeric"`
 	}
-	
+
 	pID := rest.ParamNumber(w, r, "id")
 
 	var npf request
