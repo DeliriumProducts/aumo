@@ -3,7 +3,6 @@ package tests
 import (
 	"testing"
 
-	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/ordering"
 	"github.com/deliriumproducts/aumo/products"
@@ -92,47 +91,45 @@ func TestUserService(t *testing.T) {
 
 		t.Run("by_email", func(t *testing.T) {
 			defer TidyDB(sess)
-			u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
-			assert.Nil(t, err, "shouldn't return an error")
-			err = us.Create(u)
-			assert.Nil(t, err, "shouldn't return an error")
+			user := createUser(t, us)
 
 			t.Run("no_relations", func(t *testing.T) {
-				us, err := us.User(u.ID, false)
-				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *u, *us, "should be equal")
+				gotUser, err := us.UserByEmail(user.Email, false)
+
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *user, *gotUser, "should be equal")
 			})
 
 			t.Run("with_relations", func(t *testing.T) {
 				// Create a receipt
-				r := aumo.NewReceipt("Paconi: 250LV")
-				err = rs.Create(r)
-				assert.Nil(t, err, "shouldn't return an error")
+				receipt := createReceipt(t, rs)
+
+				var err error
 
 				// Claim the receipt
-				rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
-				assert.Nil(t, err, "shouldn't return an error")
+				receipt, err = rs.ClaimReceipt(user.ID, receipt.ReceiptID)
+				require.Nil(t, err, "shouldn't return an error")
 
 				// Add the receipt
-				u.Receipts = append(u.Receipts, *rc)
+				user.Receipts = append(user.Receipts, *receipt)
 
 				// Create a product
-				p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
-				err = ps.Create(p)
-				assert.Nil(t, err, "shouldn't return an error")
+				product := createProduct(t, ps)
 
 				// Buy the product
-				order, err := os.PlaceOrder(u.ID, p.ID)
-				assert.Nil(t, err, "shouldn't return an error")
+				order, err := os.PlaceOrder(user.ID, product.ID)
+				require.Nil(t, err, "shouldn't return an error")
 
 				// Add the order
-				u.Orders = append(u.Orders, *order)
-				u.Points -= p.Price
+				user.Orders = append(user.Orders, *order)
+
+				// Substract points
+				user.Points -= product.Price
 
 				// Get the user
-				um, err := us.UserByEmail(u.Email, true)
+				gotUser, err := us.UserByEmail(user.Email, true)
 				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *u, *um, "should be equal")
+				assert.Equal(t, *user, *gotUser, "should be equal")
 			})
 		})
 	})
