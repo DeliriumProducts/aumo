@@ -6,8 +6,6 @@ import (
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/ordering"
-	"github.com/deliriumproducts/aumo/products"
-	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -26,18 +24,17 @@ func TestOrderService(t *testing.T) {
 
 	pstore := mysql.NewProductStore(sess)
 	ustore := mysql.NewUserStore(sess)
+	ostore := mysql.NewOrderStore(sess)
 
-	os := ordering.New(mysql.NewOrderStore(sess), pstore, ustore)
-	ps := products.New(pstore)
-	us := users.New(ustore)
+	os := ordering.New(ostore, pstore, ustore)
 
 	t.Run("place_order", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		user := createUser(t, us)
+		user := createUser(t, ustore)
 
 		var price float64 = 500
-		product := createProduct(t, ps, price, 1)
+		product := createProduct(t, pstore, price, 1)
 
 		t.Run("valid", func(t *testing.T) {
 			// Place order

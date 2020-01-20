@@ -6,7 +6,6 @@ import (
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/ordering"
-	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
@@ -27,16 +26,17 @@ func TestUserService(t *testing.T) {
 
 	pstore := mysql.NewProductStore(sess)
 	ustore := mysql.NewUserStore(sess)
+	ostore := mysql.NewOrderStore(sess)
+	rstore := mysql.NewReceiptStore(sess)
 
-	os := ordering.New(mysql.NewOrderStore(sess), pstore, ustore)
-	ps := products.New(pstore)
+	os := ordering.New(ostore, pstore, ustore)
 	us := users.New(ustore)
-	rs := receipt.New(mysql.NewReceiptStore(sess))
+	rs := receipt.New(rstore)
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		user := createUser(t, us)
+		user := createUser(t, ustore)
 
 		gotUser, err := ustore.FindByID(nil, user.ID, false)
 
@@ -47,7 +47,7 @@ func TestUserService(t *testing.T) {
 	testUserFetcher := func(t *testing.T, userFetcher func(user *aumo.User, relations bool) (*aumo.User, error)) {
 		t.Run("no_relations", func(t *testing.T) {
 			defer TidyDB(sess)
-			user := createUser(t, us)
+			user := createUser(t, ustore)
 			gotUser, err := userFetcher(user, false)
 
 			require.Nil(t, err, "shouldn't return an error")
@@ -57,7 +57,7 @@ func TestUserService(t *testing.T) {
 		t.Run("with_relations", func(t *testing.T) {
 			t.Run("empty_relations", func(t *testing.T) {
 				defer TidyDB(sess)
-				user := createUser(t, us)
+				user := createUser(t, ustore)
 
 				// Get the user
 				gotUser, err := userFetcher(user, true)
@@ -66,10 +66,10 @@ func TestUserService(t *testing.T) {
 			})
 			t.Run("only_receipts", func(t *testing.T) {
 				defer TidyDB(sess)
-				user := createUser(t, us)
+				user := createUser(t, ustore)
 
 				// Create a receipt
-				receipt := createReceipt(t, rs)
+				receipt := createReceipt(t, rstore)
 
 				var err error
 
@@ -87,10 +87,10 @@ func TestUserService(t *testing.T) {
 			})
 			t.Run("only_orders", func(t *testing.T) {
 				defer TidyDB(sess)
-				user := createUser(t, us)
+				user := createUser(t, ustore)
 
 				// Create a product
-				product := createProduct(t, ps, 500, 5)
+				product := createProduct(t, pstore, 500, 5)
 
 				// Buy the product
 				order, err := os.PlaceOrder(user.ID, product.ID)
@@ -110,10 +110,10 @@ func TestUserService(t *testing.T) {
 			})
 			t.Run("all_relations", func(t *testing.T) {
 				defer TidyDB(sess)
-				user := createUser(t, us)
+				user := createUser(t, ustore)
 
 				// Create a receipt
-				receipt := createReceipt(t, rs)
+				receipt := createReceipt(t, rstore)
 
 				var err error
 
@@ -125,7 +125,7 @@ func TestUserService(t *testing.T) {
 				user.Receipts = append(user.Receipts, *receipt)
 
 				// Create a product
-				product := createProduct(t, ps, 500, 5)
+				product := createProduct(t, pstore, 500, 5)
 
 				// Buy the product
 				order, err := os.PlaceOrder(user.ID, product.ID)

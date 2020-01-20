@@ -21,32 +21,27 @@ func TestProductService(t *testing.T) {
 		TidyDB(sess)
 		sess.Close()
 	}()
-
-	ps := products.New(mysql.NewProductStore(sess))
+	pstore := mysql.NewProductStore(sess)
+	ps := products.New(pstore)
 
 	t.Run("create_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		pd := aumo.NewProduct("TV", 500, "image.com", "ok", 5)
-		err := ps.Create(pd)
-		assert.Nil(t, err, "shouldn't return an error")
+		product := createProduct(t, pstore, 500, 5)
 
-		pm := aumo.Product{}
-		err = sess.Collection(mysql.ProductTable).Find("id", pd.ID).One(&pm)
+		gotProduct, err := pstore.FindByID(nil, product.ID)
 		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, pm, *pd)
+		assert.Equal(t, *product, *gotProduct)
 	})
 
 	t.Run("get_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		pd := aumo.NewProduct("Laptop", 100, "image.com", "it's a good laptop", 5)
-		err := ps.Create(pd)
-		assert.Nil(t, err, "shouldn't return an error")
+		product := createProduct(t, pstore, 500, 5)
 
-		pm, err := ps.Product(pd.ID)
+		gotProduct, err := ps.Product(product.ID)
 		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *pd, *pm)
+		assert.Equal(t, *product, *gotProduct)
 	})
 
 	t.Run("get_products", func(t *testing.T) {
