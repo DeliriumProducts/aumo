@@ -7,8 +7,13 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
-// UserStartingPoints is the starting points of a user
-const UserStartingPoints = float64(5000)
+const (
+	// UserStartingPoints is the starting points of a user
+	UserStartingPoints = float64(5000)
+
+	// UserPointsPerReceipt is the amount of points a user gets per receipt claimed
+	UserPointsPerReceipt = float64(500)
+)
 
 var (
 	// ErrNotSufficientPoints is an error for when the user doens't have enough points
