@@ -9,7 +9,6 @@ import (
 	"github.com/deliriumproducts/aumo/ordering"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -65,8 +64,8 @@ func TestUserService(t *testing.T) {
 
 				// Get the user
 				gotUser, err := userFetcher(user, true)
-				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *user, *gotUser, "should be equal")
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *user, *gotUser, "should be equal")
 			})
 			t.Run("only_receipts", func(t *testing.T) {
 				defer TidyDB(sess)
@@ -86,8 +85,8 @@ func TestUserService(t *testing.T) {
 
 				// Get the user
 				gotUser, err := userFetcher(user, true)
-				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *user, *gotUser, "should be equal")
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *user, *gotUser, "should be equal")
 			})
 			t.Run("only_orders", func(t *testing.T) {
 				defer TidyDB(sess)
@@ -108,8 +107,8 @@ func TestUserService(t *testing.T) {
 
 				// Get the user
 				gotUser, err := userFetcher(user, true)
-				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *user, *gotUser, "should be equal")
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *user, *gotUser, "should be equal")
 
 			})
 			t.Run("all_relations", func(t *testing.T) {
@@ -143,8 +142,8 @@ func TestUserService(t *testing.T) {
 
 				// Get the user
 				gotUser, err := userFetcher(user, true)
-				assert.Nil(t, err, "shouldn't return an error")
-				assert.Equal(t, *user, *gotUser, "should be equal")
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *user, *gotUser, "should be equal")
 			})
 		})
 	}
