@@ -3,11 +3,11 @@ package tests
 import (
 	"testing"
 
+	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/receipt"
-	"github.com/deliriumproducts/aumo/users"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"upper.io/db.v3"
 )
 
@@ -23,140 +23,105 @@ func TestReceiptService(t *testing.T) {
 		sess.Close()
 	}()
 
-	// ps := mysql.NewProductStore(sess)
-	// os := mysql.NewOrderStore(sess)
+	ustore := mysql.NewUserStore(sess)
+	rstore := mysql.NewReceiptStore(sess)
 
-	us := users.New(mysql.NewUserStore(sess))
-	rs := receipt.New(mysql.NewReceiptStore(sess))
+	rs := receipt.New(rstore)
 
 	t.Run("create_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		receipt := aumo.NewReceipt("Paconi: 230")
 
-		rp := aumo.NewReceipt("Paconi: 230")
-		err = rs.Create(rp)
-		assert.Nil(t, err, "shouldn't return an error")
+		err = rs.Create(receipt)
+		require.Nil(t, err, "shouldn't return an error")
 
-		r := aumo.Receipt{}
-		err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", rp.ReceiptID).One(&r)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, r, *rp)
+		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *receipt, *gotReceipt)
 	})
 
 	t.Run("get_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("Pesho", "pe@sho.com", "123123", "asdff")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		receipt := createReceipt(t, rstore)
 
-		rp := aumo.NewReceipt("CBA: 30 Leva")
-		err = rs.Create(rp)
-		assert.Nil(t, err, "shouldn't return an error")
+		gotReceipt, err := rs.Receipt(receipt.ReceiptID)
 
-		r, err := rs.Receipt(rp.ReceiptID)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *r, *rp)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *receipt, *gotReceipt)
 	})
 
 	t.Run("get_receipts", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("Pesho", "pe@sho.com", "123123", "asdff")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		rds := []*aumo.Receipt{
-			aumo.NewReceipt("CBA: 30 Leva"),
-			aumo.NewReceipt("Pesho: 60 Leva"),
-			aumo.NewReceipt("Pesho: 100 Leva"),
+		receipts := []*aumo.Receipt{
+			aumo.NewReceipt(faker.AmountWithCurrency()),
+			aumo.NewReceipt(faker.AmountWithCurrency()),
+			aumo.NewReceipt(faker.AmountWithCurrency()),
 		}
 
-		for _, rd := range rds {
-			err := rs.Create(rd)
-			assert.Nil(t, err, "shouldn't return an error")
+		for _, receipt := range receipts {
+			err := rstore.Save(nil, receipt)
+			require.Nil(t, err, "shouldn't return an error")
 		}
 
-		rms, err := rs.Receipts()
-		assert.Nil(t, err, "it shouldn't return an error")
-		assert.Equal(t, len(rms), len(rds), "it should have equal length")
+		gotReceipts, err := rs.Receipts()
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, len(gotReceipts), len(receipts), "should have equal length")
 
-		for i := 0; i < len(rms); i++ {
-			assert.Equal(t, *rds[i], rms[i], "it should be equal")
+		for i := 0; i < len(gotReceipts); i++ {
+			require.Equal(t, *receipts[i], gotReceipts[i], "should be equal")
 		}
 	})
 
 	t.Run("delete_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("Ognyan", "ogny@sho.com", "ogiEMNOGOLUD", "asdf")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		receipt := createReceipt(t, rstore)
 
-		rp := aumo.NewReceipt("Paconi: 230")
-		err = rs.Create(rp)
-		assert.Nil(t, err, "shouldn't return an error")
+		err = rs.Delete(receipt.ReceiptID)
+		require.Nil(t, err, "shouldn't return an error")
 
-		err = rs.Delete(rp.ReceiptID)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		_, err = rs.Receipt(rp.ReceiptID)
-		assert.Equal(t, err, db.ErrNoMoreRows)
+		_, err = rstore.FindByID(nil, receipt.ReceiptID)
+		require.Equal(t, err, db.ErrNoMoreRows)
 	})
 
 	t.Run("update_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("George", "go@sho.com", "1234", "asdf")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		receipt := createReceipt(t, rstore)
+		receipt.Content = "Kaufland 23233232323"
 
-		rp := aumo.NewReceipt("Paconi: 230")
-		err = rs.Create(rp)
-		assert.Nil(t, err, "shouldn't return an error")
+		err = rs.Update(receipt.ReceiptID, receipt)
+		require.Nil(t, err, "shouldn't return an error")
 
-		rp.Content = "Kaufland 23233232323"
-
-		err = rs.Update(rp.ReceiptID, rp)
-		assert.Nil(t, err, "shouldn't return an error")
-
-		rm, err := rs.Receipt(rp.ReceiptID)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *rp, *rm)
+		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *receipt, *gotReceipt)
 	})
 
 	t.Run("claim_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("Adrian", "adrian@pesho.com", "123456", "ok")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		user := createUser(t, ustore)
 
 		t.Run("valid", func(t *testing.T) {
-			r := aumo.NewReceipt("Paconi: 250LV")
-			err := rs.Create(r)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, false, r.IsClaimed())
+			receipt := createReceipt(t, rstore)
+			require.Equal(t, false, receipt.IsClaimed())
 
-			rc, err := rs.ClaimReceipt(u.ID, r.ReceiptID)
-			assert.Nil(t, err, "shouldn't return an error")
+			var err error
+			receipt, err = rs.ClaimReceipt(user.ID, receipt.ReceiptID)
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, true, receipt.IsClaimed())
 
-			err = sess.Collection(mysql.ReceiptTable).Find("receipt_id", r.ReceiptID).One(r)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, true, r.IsClaimed())
+			gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, true, gotReceipt.IsClaimed())
 
-			um, err := us.User(u.ID, true)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Contains(t, um.Receipts, *rc)
+			gotUser, err := ustore.FindByID(nil, user.ID, true)
+			require.Nil(t, err, "shouldn't return an error")
+			require.Contains(t, gotUser.Receipts, *gotReceipt)
 		})
 	})
 }

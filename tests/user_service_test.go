@@ -44,7 +44,6 @@ func TestUserService(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 
 		gotUser, err := ustore.FindByID(nil, user.ID, false)
-
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser)
 	})

@@ -22,6 +22,7 @@ func TestProductService(t *testing.T) {
 		TidyDB(sess)
 		sess.Close()
 	}()
+
 	pstore := mysql.NewProductStore(sess)
 	ps := products.New(pstore)
 
