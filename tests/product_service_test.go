@@ -72,18 +72,6 @@ func TestProductService(t *testing.T) {
 		}
 	})
 
-	t.Run("delete_product", func(t *testing.T) {
-		defer TidyDB(sess)
-
-		product := createProduct(t, pstore, 500, 5)
-
-		err = ps.Delete(product.ID)
-		require.Nil(t, err, "shouldn't return an error")
-
-		_, err = pstore.FindByID(nil, product.ID)
-		require.Equal(t, err, db.ErrNoMoreRows)
-	})
-
 	t.Run("update_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
@@ -96,5 +84,17 @@ func TestProductService(t *testing.T) {
 		gotProduct, err := pstore.FindByID(nil, product.ID)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *product, *gotProduct)
+	})
+
+	t.Run("delete_product", func(t *testing.T) {
+		defer TidyDB(sess)
+
+		product := createProduct(t, pstore, 500, 5)
+
+		err = ps.Delete(product.ID)
+		require.Nil(t, err, "shouldn't return an error")
+
+		_, err = pstore.FindByID(nil, product.ID)
+		require.Equal(t, err, db.ErrNoMoreRows)
 	})
 }
