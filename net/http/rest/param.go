@@ -15,7 +15,6 @@ func (rest *Rest) Param(r *http.Request, param string) string {
 // ParamNumber is method to automatically get the param
 // and convert it to uint
 func (rest *Rest) ParamNumber(w http.ResponseWriter, r *http.Request, param string) uint {
-
 	p := chi.URLParam(r, param)
 
 	n, err := strconv.ParseInt(p, 10, 32)
