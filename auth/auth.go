@@ -63,6 +63,10 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 	return a.us.FindByID(nil, uint(uID), false)
 }
 
+func (a *Authenticator) Del(sID string) error {
+        return a.redis.Do("DEL", sID)
+}
+
 // GetFromRequest gets a session from Redis based on the Cookie value from the request
 func (a *Authenticator) GetFromRequest(r *http.Request) (*aumo.User, error) {
 	cookie, err := r.Cookie(CookieKey)
