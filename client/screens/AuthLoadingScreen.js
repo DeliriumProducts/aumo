@@ -1,5 +1,6 @@
 import React from "react"
 import { ActivityIndicator, StatusBar, View } from "react-native"
+import { AuthAPI } from "../api"
 
 import * as SecureStore from "expo-secure-store"
 
@@ -9,10 +10,14 @@ export default class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
-    // TODO: repalce with request to /me and check for status code
-    const userSession = await SecureStore.getItemAsync("aumo")
-
-    this.props.navigation.navigate(userSession ? "Main" : "Auth")
+    try {
+      await AuthAPI.me()
+      this.props.navigation.navigate("Main")
+    } catch (e) {
+      if (e.response.status === 401) {
+        this.props.navigation.navigate("Auth")
+      }
+    }
   }
 
   render() {
