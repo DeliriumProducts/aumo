@@ -70,7 +70,7 @@ func TestUserService(t *testing.T) {
 				user.Receipts = append(user.Receipts, *receipt)
 
 				// Create a product
-				product := createProduct(t, ps)
+				product := createProduct(t, ps, 500, 5)
 
 				// Buy the product
 				order, err := os.PlaceOrder(user.ID, product.ID)
@@ -114,7 +114,7 @@ func TestUserService(t *testing.T) {
 				user.Receipts = append(user.Receipts, *receipt)
 
 				// Create a product
-				product := createProduct(t, ps)
+				product := createProduct(t, ps, 500, 3)
 
 				// Buy the product
 				order, err := os.PlaceOrder(user.ID, product.ID)

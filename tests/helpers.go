@@ -27,8 +27,8 @@ func createReceipt(t *testing.T, rs aumo.ReceiptService) *aumo.Receipt {
 	return r
 }
 
-func createProduct(t *testing.T, ps aumo.ProductService) *aumo.Product {
-	p := aumo.NewProduct("TV", 500, "image.com", "it's good", 5)
+func createProduct(t *testing.T, ps aumo.ProductService, price float64, stock uint) *aumo.Product {
+	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock)
 
 	err := ps.Create(p)
 	require.Nil(t, err, "shouldn't return an error")

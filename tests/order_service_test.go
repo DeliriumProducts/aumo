@@ -33,44 +33,47 @@ func TestOrderService(t *testing.T) {
 	t.Run("place_order", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		u, err := aumo.NewUser("Jordan", "jord@an.com", "asdfjkl", "imgur.com")
-		assert.Nil(t, err, "shouldn't return an error")
-		err = us.Create(u)
-		assert.Nil(t, err, "shouldn't return an error")
+		user := createUser(t, us)
 
 		var price float64 = 500
-		p := aumo.NewProduct("TV", price, "image.com", "it's good", 1)
-		err = ps.Create(p)
-		assert.Nil(t, err, "shouldn't return an error")
+		product := createProduct(t, ps, price, 1)
 
 		t.Run("valid", func(t *testing.T) {
-			_, err := os.PlaceOrder(u.ID, p.ID)
+			// Place order
+			_, err := os.PlaceOrder(user.ID, product.ID)
 			assert.Nil(t, err, "shouldn't return an error")
 
-			p.Stock--
-			u.Points -= p.Price
+			// Update stock
+			product.Stock--
 
-			pm, err := ps.Product(p.ID)
+			// Update points
+			user.Points -= product.Price
+
+			// Get product
+			gotProduct, err := pstore.FindByID(nil, product.ID)
 			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, p.Stock, pm.Stock)
+			assert.Equal(t, product.Stock, gotProduct.Stock)
 
-			us, err := us.User(u.ID, false)
+			// Get User
+			gotUser, err := ustore.FindByID(nil, user.ID, false)
 			assert.Nil(t, err, "shouldn't return an error")
-
-			assert.Equal(t, aumo.UserStartingPoints-price, us.Points)
+			assert.Equal(t, aumo.UserStartingPoints-price, gotUser.Points)
 		})
 
 		t.Run("not_valid", func(t *testing.T) {
-			_, err := os.PlaceOrder(u.ID, p.ID)
+			// Place order
+			_, err := os.PlaceOrder(user.ID, product.ID)
 			assert.Equal(t, aumo.ErrNotInStock, err)
 
-			pm, err := ps.Product(p.ID)
+			// Get product
+			gotProduct, err := pstore.FindByID(nil, product.ID)
 			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, p.Stock, pm.Stock, "shouldn't have been decremented")
+			assert.Equal(t, product.Stock, gotProduct.Stock, "shouldn't have been decremented")
 
-			us, err := us.User(u.ID, false)
+			// Get user
+			gotUser, err := ustore.FindByID(nil, user.ID, false)
 			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, u.Points, us.Points, "user shouldn't have been taxed")
+			assert.Equal(t, user.Points, gotUser.Points, "user shouldn't have been taxed")
 		})
 	})
 
