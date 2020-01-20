@@ -6,7 +6,7 @@ import (
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/products"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"upper.io/db.v3"
 )
 
@@ -30,8 +30,8 @@ func TestProductService(t *testing.T) {
 		product := createProduct(t, pstore, 500, 5)
 
 		gotProduct, err := pstore.FindByID(nil, product.ID)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *product, *gotProduct)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *product, *gotProduct)
 	})
 
 	t.Run("get_product", func(t *testing.T) {
@@ -40,8 +40,8 @@ func TestProductService(t *testing.T) {
 		product := createProduct(t, pstore, 500, 5)
 
 		gotProduct, err := ps.Product(product.ID)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *product, *gotProduct)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *product, *gotProduct)
 	})
 
 	t.Run("get_products", func(t *testing.T) {
@@ -55,15 +55,15 @@ func TestProductService(t *testing.T) {
 
 		for _, pd := range pds {
 			err := ps.Create(pd)
-			assert.Nil(t, err, "shouldn't return an error")
+			require.Nil(t, err, "shouldn't return an error")
 		}
 
 		pms, err := ps.Products()
-		assert.Nil(t, err, "it shouldn't return an error")
-		assert.Equal(t, len(pms), len(pds), "it should have equal length")
+		require.Nil(t, err, "it shouldn't return an error")
+		require.Equal(t, len(pms), len(pds), "it should have equal length")
 
 		for i := 0; i < len(pms); i++ {
-			assert.Equal(t, *pds[i], pms[i], "it should be equal")
+			require.Equal(t, *pds[i], pms[i], "it should be equal")
 		}
 	})
 
@@ -72,13 +72,13 @@ func TestProductService(t *testing.T) {
 
 		pd := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
 		err := ps.Create(pd)
-		assert.Nil(t, err, "shouldn't return an error")
+		require.Nil(t, err, "shouldn't return an error")
 
 		err = ps.Delete(pd.ID)
-		assert.Nil(t, err, "shouldn't return an error")
+		require.Nil(t, err, "shouldn't return an error")
 
 		_, err = ps.Product(pd.ID)
-		assert.Equal(t, err, db.ErrNoMoreRows)
+		require.Equal(t, err, db.ErrNoMoreRows)
 	})
 
 	t.Run("update_product", func(t *testing.T) {
@@ -86,14 +86,14 @@ func TestProductService(t *testing.T) {
 
 		pd := aumo.NewProduct("Computer", 400, "computer.com", "it's powerful", 10)
 		err := ps.Create(pd)
-		assert.Nil(t, err, "shouldn't return an error")
+		require.Nil(t, err, "shouldn't return an error")
 
 		pd.Name = "not a computer"
 		err = ps.Update(pd.ID, pd)
-		assert.Nil(t, err, "shouldn't return an error")
+		require.Nil(t, err, "shouldn't return an error")
 
 		pm, err := ps.Product(pd.ID)
-		assert.Nil(t, err, "shouldn't return an error")
-		assert.Equal(t, *pd, *pm)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *pd, *pm)
 	})
 }
