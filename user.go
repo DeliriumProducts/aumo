@@ -16,7 +16,7 @@ var (
 	// ErrNotInStock is an error for when an item isn't in stock
 	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
 	// ErrInvalidPassword is an error for when the user provided an invalid password
-	ErrInvalidPassword = errors.New("aumo: invalid password")
+	ErrInvalidPassword = errors.New("aumo: wrong password")
 )
 
 // User represents a user of aumo
