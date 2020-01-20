@@ -67,7 +67,8 @@ func TestOrderService(t *testing.T) {
 		t.Run("not_valid", func(t *testing.T) {
 			// Place order
 			order, err := os.PlaceOrder(user.ID, product.ID)
-			require.Equal(t, aumo.ErrNotInStock, err)
+			require.Nil(t, order, "shouldn't have returned an error")
+			require.NotNil(t, err, "should've returned an error")
 
 			// Get product
 			gotProduct, err := pstore.FindByID(nil, product.ID)
@@ -80,7 +81,7 @@ func TestOrderService(t *testing.T) {
 			require.Equal(t, user.Points, gotUser.Points, "user shouldn't have been taxed")
 
 			// Check if order isn't in User's orders
-			require.NotContains(t, gotUser.Orders, order)
+			require.Len(t, gotUser.Orders, 1)
 		})
 	})
 
