@@ -2,8 +2,6 @@ import React from "react"
 import { ActivityIndicator, StatusBar, View } from "react-native"
 import { AuthAPI } from "../api"
 
-import * as SecureStore from "expo-secure-store"
-
 export default class AuthLoadingScreen extends React.Component {
   componentDidMount() {
     this._bootstrapAsync()

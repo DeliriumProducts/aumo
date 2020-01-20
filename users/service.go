@@ -1,6 +1,8 @@
 package users
 
-import "github.com/deliriumproducts/aumo"
+import (
+	"github.com/deliriumproducts/aumo"
+)
 
 type service struct {
 	store aumo.UserStore

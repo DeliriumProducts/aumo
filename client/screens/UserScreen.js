@@ -1,5 +1,4 @@
 import axios from "axios"
-import * as SecureStore from "expo-secure-store"
 import React from "react"
 import {
   ActivityIndicator,
@@ -11,6 +10,7 @@ import {
 import { Avatar, Button } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
 import Receipt from "../components/Receipt"
+import { AuthAPI } from "../api"
 import ShopItemList from "../components/ShopItemList"
 import { BACKEND_URL } from "../config"
 
@@ -41,7 +41,7 @@ const UserScreen = props => {
 
   const logout = async () => {
     try {
-      await SecureStore.deleteItemAsync("aumo")
+      await AuthAPI.logout()
     } catch (e) {}
     props.navigation.navigate("LogIn")
   }

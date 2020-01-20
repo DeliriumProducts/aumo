@@ -1,18 +1,13 @@
 import React from "react"
-import { BACKEND_URL } from "../config"
-import axios from "axios"
 import {
   Image,
-  Platform,
   TouchableWithoutFeedback,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from "react-native"
 
-import { MonoText } from "../components/StyledText"
 import Circle from "../components/Circle"
 import { AntDesign } from "@expo/vector-icons"
 
@@ -29,7 +24,7 @@ export default function HomeScreen() {
             style={styles.welcomeImage}
           />
           <Text style={styles.getStartedText}>
-            Approach phone to an aumo device, to get your digital receipt
+            Approach phone to an aumo device to get your digital receipt
           </Text>
         </View>
         <TouchableWithoutFeedback
