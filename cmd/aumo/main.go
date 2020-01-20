@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/deliriumproducts/aumo/auth"
 	"github.com/deliriumproducts/aumo/mysql"
@@ -26,6 +27,7 @@ func main() {
 
 	Address := os.Getenv("ADDRESS")
 	RedisURL := os.Getenv("REDIS_URL")
+	RedisDatabase := os.Getenv("REDIS_DATABASE")
 	MySQLUser := os.Getenv("MYSQL_USER")
 	MySQLPassword := os.Getenv("MYSQL_PASSWORD")
 	MySQLHost := os.Getenv("MYSQL_HOST")
@@ -43,7 +45,12 @@ func main() {
 
 	defer db.Close()
 
-	conn, err := redis.DialURL(RedisURL)
+	redisDbN, err := strconv.Atoi(RedisDatabase)
+	if err != nil {
+		panic(err)
+	}
+
+	conn, err := redis.DialURL(RedisURL, redis.DialDatabase(redisDbN))
 	if err != nil {
 		panic(err)
 	}
