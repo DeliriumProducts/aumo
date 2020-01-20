@@ -101,6 +101,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 
 func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
 	var err error
+	user := &aumo.User{}
 
 	type (
 		UserReceipt struct {
@@ -117,7 +118,16 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		orders       = []OrderProduct{}
 	)
 
-	err = u.db.
+	err = tx.
+		Select("*").
+		From("users as u").
+		Where(where, args).
+		One(user)
+	if err != nil {
+		return nil, err
+	}
+
+	err = tx.
 		Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "u.role", "r.receipt_id", "r.content", "r.user_id").
 		From("users as u").
 		Join("receipts as r").On("u.id = r.user_id").
@@ -127,7 +137,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
-	err = u.db.
+	err = tx.
 		Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
 		From("users as u").
 		Join("orders as o").On("u.id = o.user_id").
@@ -138,7 +148,6 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
-	user := &userReceipts[0].User
 	user.Orders = []aumo.Order{}
 	user.Receipts = []aumo.Receipt{}
 

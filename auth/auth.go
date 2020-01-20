@@ -60,7 +60,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 		return nil, err
 	}
 
-	return a.us.FindByID(nil, uint(uID), false)
+	return a.us.FindByID(nil, uint(uID), true)
 }
 
 func (a *Authenticator) Del(sID string) error {
