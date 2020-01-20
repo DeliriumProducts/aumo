@@ -161,4 +161,16 @@ func TestUserService(t *testing.T) {
 			})
 		})
 	})
+
+	t.Run("update_user", func(t *testing.T) {
+		user := createUser(t, ustore)
+		user.Name = "New Name"
+
+		err := us.Update(user.ID, user)
+		require.Nil(t, err, "shouldn't return an error")
+
+		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *user, *gotUser, "should be equal")
+	})
 }
