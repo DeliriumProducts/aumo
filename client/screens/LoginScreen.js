@@ -1,9 +1,6 @@
-import React, { useState } from "react"
-import { Input, Icon, Button } from "react-native-ui-kitten"
 import axios from "axios"
-import { BACKEND_URL } from "../config"
 import * as SecureStore from "expo-secure-store"
-
+import React, { useState } from "react"
 import {
   Image,
   Platform,
@@ -13,6 +10,8 @@ import {
   View
 } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { Button, Icon, Input } from "react-native-ui-kitten"
+import { BACKEND_URL } from "../config"
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("")
