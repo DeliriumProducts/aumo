@@ -10,7 +10,7 @@ import (
 	upper "upper.io/db.v3/mysql"
 )
 
-// SetupDB creates a new in memory sqlite database
+// SetupDB creates a new MySQL database
 func SetupDB() (sqlbuilder.Database, error) {
 	err := godotenv.Load("../.env")
 	if err != nil {

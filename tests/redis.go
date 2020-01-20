@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// SetupRedis creates a new Redis connection
 func SetupRedis() (redis.Conn, error) {
 	err := godotenv.Load("../.env")
 	if err != nil {
@@ -27,16 +28,15 @@ func SetupRedis() (redis.Conn, error) {
 		log.Fatalln("Couldn't establish a connection: ", err)
 	}
 
-	defer conn.Close()
-
 	TidyRedis(conn)
 
 	return conn, nil
 }
 
+// TidRedis clears the Redis db
 func TidyRedis(r redis.Conn) {
 	_, err := r.Do("FLUSHDB")
 	if err != nil {
-		log.Fatalln("Couldn't FLUSHDB on Redis database")
+		log.Fatalln("Couldn't FLUSHDB on Redis database: ", err)
 	}
 }
