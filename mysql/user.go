@@ -52,7 +52,7 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 	}
 
 	if relations {
-		user, err = u.userRelations(tx, "u.id = ?", id)
+		user, err = u.userRelations(tx, "users.id = ?", id)
 	} else {
 		err = tx.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
@@ -89,7 +89,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 	}
 
 	if relations {
-		user, err = u.userRelations(tx, "u.email = ?", email)
+		user, err = u.userRelations(tx, "users.email = ?", email)
 	} else {
 		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
@@ -120,7 +120,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 
 	err = tx.
 		Select("*").
-		From("users as u").
+		From(UserTable).
 		Where(where, args).
 		One(user)
 	if err != nil {
@@ -128,9 +128,9 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("u.id", "u.name", "u.email", "u.password", "u.avatar", "u.points", "u.role", "r.receipt_id", "r.content", "r.user_id").
-		From("users as u").
-		Join("receipts as r").On("u.id = r.user_id").
+		Select("r.receipt_id", "r.content", "r.user_id").
+		From(UserTable).
+		Join("receipts as r").On("users.id = r.user_id").
 		Where(where, args).
 		All(&userReceipts)
 	if err != nil {
@@ -139,8 +139,8 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 
 	err = tx.
 		Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
-		From("users as u").
-		Join("orders as o").On("u.id = o.user_id").
+		From(UserTable).
+		Join("orders as o").On("users.id = o.user_id").
 		Join("products as p").On("o.product_id = p.id").
 		Where(where, args).
 		All(&orders)
