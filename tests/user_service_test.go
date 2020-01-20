@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/ordering"
@@ -36,7 +37,11 @@ func TestUserService(t *testing.T) {
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		user := createUser(t, ustore)
+		user, err := aumo.NewUser(faker.FirstName(), faker.Email(), faker.Password(), faker.URL())
+		require.Nil(t, err, "shouldn't return an error")
+
+		err = us.Create(user)
+		require.Nil(t, err, "shouldn't return an error")
 
 		gotUser, err := ustore.FindByID(nil, user.ID, false)
 

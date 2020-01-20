@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/products"
@@ -27,7 +28,10 @@ func TestProductService(t *testing.T) {
 	t.Run("create_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, 500, 5)
+		product := aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5)
+
+		err := ps.Create(product)
+		require.Nil(t, err, "shouldn't return an error")
 
 		gotProduct, err := pstore.FindByID(nil, product.ID)
 		require.Nil(t, err, "shouldn't return an error")
@@ -47,53 +51,49 @@ func TestProductService(t *testing.T) {
 	t.Run("get_products", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		pds := []*aumo.Product{
-			aumo.NewProduct("Phone", 100, "image.com", "it's a good phone", 5),
-			aumo.NewProduct("ok", 100, "image.com", "it's a good phone", 5),
-			aumo.NewProduct("TV", 100, "image.tv", "it's a good tv", 6),
+		products := []*aumo.Product{
+			aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 99),
+			aumo.NewProduct(faker.Word(), 20, faker.URL(), faker.Sentence(), 10),
+			aumo.NewProduct(faker.Word(), 5000, faker.URL(), faker.Sentence(), 2),
 		}
 
-		for _, pd := range pds {
-			err := ps.Create(pd)
+		for _, product := range products {
+			err := pstore.Save(nil, product)
 			require.Nil(t, err, "shouldn't return an error")
 		}
 
-		pms, err := ps.Products()
-		require.Nil(t, err, "it shouldn't return an error")
-		require.Equal(t, len(pms), len(pds), "it should have equal length")
+		gotProducts, err := ps.Products()
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, len(gotProducts), len(products), "should have equal length")
 
-		for i := 0; i < len(pms); i++ {
-			require.Equal(t, *pds[i], pms[i], "it should be equal")
+		for i := 0; i < len(gotProducts); i++ {
+			require.Equal(t, *products[i], gotProducts[i], "should be equal")
 		}
 	})
 
 	t.Run("delete_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		pd := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
-		err := ps.Create(pd)
+		product := createProduct(t, pstore, 500, 5)
+
+		err = ps.Delete(product.ID)
 		require.Nil(t, err, "shouldn't return an error")
 
-		err = ps.Delete(pd.ID)
-		require.Nil(t, err, "shouldn't return an error")
-
-		_, err = ps.Product(pd.ID)
+		_, err = pstore.FindByID(nil, product.ID)
 		require.Equal(t, err, db.ErrNoMoreRows)
 	})
 
 	t.Run("update_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		pd := aumo.NewProduct("Computer", 400, "computer.com", "it's powerful", 10)
-		err := ps.Create(pd)
+		product := createProduct(t, pstore, 500, 5)
+		product.Name = "not a computer"
+
+		err = ps.Update(product.ID, product)
 		require.Nil(t, err, "shouldn't return an error")
 
-		pd.Name = "not a computer"
-		err = ps.Update(pd.ID, pd)
+		gotProduct, err := pstore.FindByID(nil, product.ID)
 		require.Nil(t, err, "shouldn't return an error")
-
-		pm, err := ps.Product(pd.ID)
-		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, *pd, *pm)
+		require.Equal(t, *product, *gotProduct)
 	})
 }
