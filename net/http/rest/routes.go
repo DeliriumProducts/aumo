@@ -8,9 +8,10 @@ import (
 func (rest *Rest) routes() {
 	rest.router.Post("/register", rest.userRegister)
 	rest.router.Post("/login", rest.userLogin)
-	rest.router.Route("/me", func(r chi.Router) {
+	rest.router.Group(func(r chi.Router) {
 		r.Use(rest.WithAuth())
-		r.Get("/", rest.userGetCurrent)
+		r.Get("/logout", rest.userLogout)
+		r.Get("/me", rest.userGetCurrent)
 	})
 
 	// r.Route("/receipts", func(r chi.Router) {

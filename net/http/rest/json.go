@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// Error is a json type for error handling
+// Error is a JSON type for error handling
 type Error struct {
 	Err string `json:"error"`
 }
@@ -34,6 +34,14 @@ func (rest *Rest) JSONError(w http.ResponseWriter, err error, statusCode int) {
 
 	w.WriteHeader(statusCode)
 	_, _ = w.Write(json)
+}
+
+// Message is a struct for JSON responses in the format of
+//    {
+//        message: "User sucessfully deleted!"
+//    }
+type Message struct {
+	Message string `json:"message"`
 }
 
 // JSON is a convenience function for writing to JSON

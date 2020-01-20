@@ -76,3 +76,21 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 
 	rest.JSON(w, user, http.StatusOK)
 }
+
+func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
+	sID, err := r.Cookie(auth.CookieKey)
+
+	if err != nil {
+		rest.JSONError(w, err, http.StatusUnauthorized)
+		return
+	}
+
+	err = rest.auth.Del(sID.Value)
+
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"User sucessfully logged out!"}, 200)
+}
