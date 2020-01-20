@@ -10,6 +10,7 @@ import (
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/require"
+	"upper.io/db.v3"
 )
 
 func TestUserService(t *testing.T) {
@@ -172,5 +173,16 @@ func TestUserService(t *testing.T) {
 		gotUser, err := ustore.FindByID(nil, user.ID, false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser, "should be equal")
+	})
+
+	t.Run("delete_user", func(t *testing.T) {
+		user := createUser(t, ustore)
+		user.Name = "New Name"
+
+		err := us.Delete(user.ID)
+		require.Nil(t, err, "shouldn't return an error")
+
+		_, err = ustore.FindByID(nil, user.ID, false)
+		require.Equal(t, err, db.ErrNoMoreRows)
 	})
 }
