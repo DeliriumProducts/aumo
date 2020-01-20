@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"net/http"
         "time"
+	"net/http"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
