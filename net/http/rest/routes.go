@@ -14,10 +14,10 @@ func (rest *Rest) routes() {
 		r.Get("/me", rest.userGetCurrent)
 	})
 
-	// r.Route("/receipts", func(r chi.Router) {
-	// 	r.Post("/", rest.NewReceiptHandler)
-	// 	r.Get("/{id}", w.ReceiptHandler)
-	// })
+	rest.router.Route("/receipts", func(r chi.Router) {
+		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.receiptCreate)
+		r.With(rest.WithAuth(aumo.Customer)).Get("/{id}", rest.receiptClaim)
+	})
 
 	rest.router.Route("/products", func(r chi.Router) {
 		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productCreate)
