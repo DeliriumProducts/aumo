@@ -9,6 +9,7 @@ import (
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestOrderService(t *testing.T) {
@@ -51,35 +52,35 @@ func TestOrderService(t *testing.T) {
 
 			// Get product
 			gotProduct, err := pstore.FindByID(nil, product.ID)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, product.Stock, gotProduct.Stock)
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, product.Stock, gotProduct.Stock)
 
 			// Get User
 			gotUser, err := ustore.FindByID(nil, user.ID, true)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, aumo.UserStartingPoints-price, gotUser.Points)
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, aumo.UserStartingPoints-price, gotUser.Points)
 
 			// Check if order is in User's orders
-			assert.Contains(t, gotUser.Orders, *order)
+			require.Contains(t, gotUser.Orders, *order)
 		})
 
 		t.Run("not_valid", func(t *testing.T) {
 			// Place order
 			order, err := os.PlaceOrder(user.ID, product.ID)
-			assert.Equal(t, aumo.ErrNotInStock, err)
+			require.Equal(t, aumo.ErrNotInStock, err)
 
 			// Get product
 			gotProduct, err := pstore.FindByID(nil, product.ID)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, product.Stock, gotProduct.Stock, "shouldn't have been decremented")
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, product.Stock, gotProduct.Stock, "shouldn't have been decremented")
 
 			// Get user
 			gotUser, err := ustore.FindByID(nil, user.ID, true)
-			assert.Nil(t, err, "shouldn't return an error")
-			assert.Equal(t, user.Points, gotUser.Points, "user shouldn't have been taxed")
+			require.Nil(t, err, "shouldn't return an error")
+			require.Equal(t, user.Points, gotUser.Points, "user shouldn't have been taxed")
 
 			// Check if order isn't in User's orders
-			assert.NotContains(t, gotUser.Orders, order)
+			require.NotContains(t, gotUser.Orders, order)
 		})
 	})
 
