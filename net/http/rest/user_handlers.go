@@ -7,7 +7,7 @@ import (
 	"github.com/deliriumproducts/aumo/auth"
 )
 
-func (rest *Rest) userHandlerRegister(w http.ResponseWriter, r *http.Request) {
+func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Name     string `form:"name" validate:"required"`
 		Email    string `form:"email" validate:"required,email"`

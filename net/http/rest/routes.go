@@ -6,7 +6,7 @@ import (
 )
 
 func (rest *Rest) routes() {
-	rest.router.Post("/register", rest.userHandlerRegister)
+	rest.router.Post("/register", rest.userRegister)
 	rest.router.Post("/login", rest.userLogin)
 	rest.router.Route("/me", func(r chi.Router) {
 		r.Use(rest.WithAuth())
