@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/go-sql-driver/mysql"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -218,7 +219,14 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 		}()
 	}
 
-	return tx.Collection(UserTable).InsertReturning(us)
+	err = tx.Collection(UserTable).InsertReturning(us)
+	if mysqlError, ok := err.(*mysql.MySQLError); ok {
+		if mysqlError.Number == ErrDupEntry {
+			return aumo.ErrDuplicateEmail
+		}
+	}
+
+	return err
 }
 
 func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {

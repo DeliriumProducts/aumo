@@ -23,6 +23,8 @@ var (
 	ErrInvalidPassword = errors.New("aumo: wrong password")
 	// ErrUserNotFound is an error for when a user hasn't been found
 	ErrUserNotFound = errors.New("aumo: user not found")
+	// ErrDuplicateEmail is an error for when a user tries to register with an already existing email
+	ErrDuplicateEmail = errors.New("aumo: duplicate email")
 )
 
 // User represents a user of aumo

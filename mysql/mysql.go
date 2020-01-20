@@ -6,6 +6,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+const ErrDupEntry = 1062
+
 // ExecSchema takes a schema and splits it by `;` and executes it
 func ExecSchema(db sqlbuilder.Database) error {
 	l := strings.SplitAfter(Schema, ";")
