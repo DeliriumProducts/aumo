@@ -17,4 +17,8 @@ export class AuthAPI {
   static async logout() {
     return await axios.get(`${BACKEND_URL}/logout`, this.opts)
   }
+
+  static async me() {
+    return await axios.get(`${BACKEND_URL}/me`, this.opts)
+  }
 }

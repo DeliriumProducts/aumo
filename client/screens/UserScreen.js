@@ -1,4 +1,3 @@
-import axios from "axios"
 import React from "react"
 import {
   ActivityIndicator,
@@ -9,10 +8,9 @@ import {
 } from "react-native"
 import { Avatar, Button } from "react-native-ui-kitten"
 import { withNavigationFocus } from "react-navigation"
-import Receipt from "../components/Receipt"
 import { AuthAPI } from "../api"
+import Receipt from "../components/Receipt"
 import ShopItemList from "../components/ShopItemList"
-import { BACKEND_URL } from "../config"
 
 const receiptContent = `Портокалов сок 1L x 1: 1,99лв.
 
@@ -33,7 +31,7 @@ const UserScreen = props => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get(BACKEND_URL + "/me")
+      const res = await AuthAPI.me()
       setUser(res.data)
     } catch (e) {}
     setLoading(false)
