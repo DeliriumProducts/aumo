@@ -8,13 +8,15 @@ import (
 )
 
 type service struct {
-	store aumo.ReceiptStore
+	store     aumo.ReceiptStore
+	userStore aumo.UserStore
 }
 
 // New returns an instance of `aumo.ReceiptService`
-func New(store aumo.ReceiptStore) aumo.ReceiptService {
+func New(store aumo.ReceiptStore, userStore aumo.UserStore) aumo.ReceiptService {
 	return &service{
-		store: store,
+		store:     store,
+		userStore: userStore,
 	}
 }
 
@@ -49,12 +51,24 @@ func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
 			return err
 		}
 
+		user, err := rs.userStore.FindByID(tx, uID, false)
+		if err != nil {
+			return err
+		}
+
 		err = receipt.Claim(uID)
 		if err != nil {
 			return err
 		}
 
 		err = rs.store.Update(tx, rID, receipt)
+		if err != nil {
+			return err
+		}
+
+		user.Points += aumo.UserPointsPerReceipt
+
+		err = rs.userStore.Update(tx, uID, user)
 		if err != nil {
 			return err
 		}

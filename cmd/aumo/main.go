@@ -70,7 +70,7 @@ func main() {
 
 	r := rest.New(rest.Config{
 		UserService:    users.New(us),
-		ReceiptService: receipt.New(rs),
+		ReceiptService: receipt.New(rs, us),
 		OrderService:   ordering.New(os, ps, us),
 		ProductService: products.New(ps),
 		Auth:           auth,

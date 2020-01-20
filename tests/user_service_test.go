@@ -32,7 +32,7 @@ func TestUserService(t *testing.T) {
 
 	os := ordering.New(ostore, pstore, ustore)
 	us := users.New(ustore)
-	rs := receipt.New(rstore)
+	rs := receipt.New(rstore, ustore)
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
@@ -84,6 +84,9 @@ func TestUserService(t *testing.T) {
 				// Add the receipt
 				user.Receipts = append(user.Receipts, *receipt)
 
+				// Add points
+				user.Points += aumo.UserPointsPerReceipt
+
 				// Get the user
 				gotUser, err := userFetcher(user, true)
 				require.Nil(t, err, "shouldn't return an error")
@@ -127,6 +130,8 @@ func TestUserService(t *testing.T) {
 
 				// Add the receipt
 				user.Receipts = append(user.Receipts, *receipt)
+				// Add points
+				user.Points += aumo.UserPointsPerReceipt
 
 				// Create a product
 				product := createProduct(t, pstore, 500, 5)
