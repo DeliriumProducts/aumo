@@ -180,6 +180,18 @@ func TestUserService(t *testing.T) {
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
 
+	t.Run("edit_role", func(t *testing.T) {
+		user := createUser(t, ustore)
+		user.Role = aumo.Admin
+
+		err := us.EditRole(user.ID, aumo.Admin)
+		require.Nil(t, err, "shouldn't return an error")
+
+		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *user, *gotUser, "should be equal")
+	})
+
 	t.Run("delete_user", func(t *testing.T) {
 		user := createUser(t, ustore)
 		user.Name = "New Name"
