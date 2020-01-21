@@ -55,5 +55,6 @@ func (rest *Rest) JSON(w http.ResponseWriter, v interface{}, statusCode int) {
 		return
 	}
 
+	w.WriteHeader(statusCode)
 	_, _ = w.Write(buf.Bytes())
 }
