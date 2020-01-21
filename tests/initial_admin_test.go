@@ -53,9 +53,10 @@ func TestInitialAdmin(t *testing.T) {
 			require.NotNil(t, user, "should not be nil")
 
 			// Act
-			user, err = users.InitialAdmin(ustore, password, email)
+			user1, err := users.InitialAdmin(ustore, password, email)
 			require.Nil(t, err, "shouldn't return an error")
 			require.NotNil(t, user, "should not be nil")
+			require.Equal(t, user, user1, "should be equal")
 
 			// Assert
 			gotUsers, err := ustore.FindAll(nil)
