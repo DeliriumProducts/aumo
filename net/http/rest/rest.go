@@ -98,7 +98,7 @@ func New(c Config) *Rest {
 	)
 	r.Use(Security)
 	r.Use(middleware.RedirectSlashes)
-	r.Use(middleware.Heartbeat("/ping"))
+	r.Use(middleware.Heartbeat(c.MountRoute + "/ping"))
 	r.Mount(c.MountRoute, r)
 
 	rest.routes()

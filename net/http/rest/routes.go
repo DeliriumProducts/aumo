@@ -24,6 +24,7 @@ func (rest *Rest) routes() {
 		r.Get("/", rest.productGetAll)
 		r.Get("/{id}", rest.productGet)
 		r.Put("/{id}", rest.productEdit)
+		r.Delete("/{id}", rest.productDelete)
 	})
 
 	rest.router.Route("/orders", func(r chi.Router) {

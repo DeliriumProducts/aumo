@@ -79,3 +79,15 @@ func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
 
 	rest.JSON(w, product, http.StatusOK)
 }
+
+func (rest *Rest) productDelete(w http.ResponseWriter, r *http.Request) {
+	pID := rest.ParamNumber(w, r, "id")
+
+	err := rest.productService.Delete(pID)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusNotFound)
+		return
+	}
+
+	rest.JSON(w, Message{"Product successfully deleted!"}, http.StatusOK)
+}
