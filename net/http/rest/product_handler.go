@@ -44,13 +44,13 @@ func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 func (rest *Rest) productGet(w http.ResponseWriter, r *http.Request) {
 	pID := rest.ParamNumber(w, r, "id")
 
-	order, err := rest.productService.Product(pID)
+	product, err := rest.productService.Product(pID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
 	}
 
-	rest.JSON(w, order, http.StatusOK)
+	rest.JSON(w, product, http.StatusOK)
 }
 
 func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
