@@ -106,6 +106,7 @@ type UserService interface {
 	Users() ([]User, error)
 	Create(*User) error
 	Update(id uint, u *User) error
+	EditRole(id uint, role Role) error
 	Delete(id uint) error
 }
 

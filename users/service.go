@@ -1,7 +1,10 @@
 package users
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
+	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 type service struct {
@@ -33,6 +36,19 @@ func (us *service) Create(u *aumo.User) error {
 
 func (us *service) Update(id uint, u *aumo.User) error {
 	return us.store.Update(nil, id, u)
+}
+
+func (us *service) EditRole(id uint, role aumo.Role) error {
+	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
+		user, err := us.store.FindByID(tx, id, false)
+		if err != nil {
+			return err
+		}
+
+		user.Role = role
+
+		return us.store.Update(tx, id, user)
+	})
 }
 
 func (us *service) Delete(id uint) error {

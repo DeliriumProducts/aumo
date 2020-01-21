@@ -17,6 +17,9 @@ func (rest *Rest) routes() {
 	rest.router.Route("/users", func(r chi.Router) {
 		r.Use(rest.WithAuth(aumo.Admin))
 		r.Get("/", rest.userGetAll)
+		r.Get("/{id}", rest.userGet)
+		r.Put("/{id}", rest.userEditRole)
+		r.Delete("/{id}", rest.userDelete)
 	})
 
 	rest.router.Route("/receipts", func(r chi.Router) {
