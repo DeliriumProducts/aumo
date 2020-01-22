@@ -51,6 +51,32 @@ func (us *service) EditRole(id uint, role aumo.Role) error {
 	})
 }
 
+func (us *service) AddPoints(id uint, points float64) error {
+	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
+		user, err := us.store.FindByID(tx, id, false)
+		if err != nil {
+			return err
+		}
+
+		user.Points += points
+
+		return us.store.Update(tx, id, user)
+	})
+}
+
+func (us *service) SubPoints(id uint, points float64) error {
+	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
+		user, err := us.store.FindByID(tx, id, false)
+		if err != nil {
+			return err
+		}
+
+		user.Points -= points
+
+		return us.store.Update(tx, id, user)
+	})
+}
+
 func (us *service) Delete(id uint) error {
 	return us.store.Delete(nil, id)
 }

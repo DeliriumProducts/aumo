@@ -107,6 +107,8 @@ type UserService interface {
 	Create(*User) error
 	Update(id uint, u *User) error
 	EditRole(id uint, role Role) error
+	AddPoints(id uint, points float64) error
+	SubPoints(id uint, points float64) error
 	Delete(id uint) error
 }
 

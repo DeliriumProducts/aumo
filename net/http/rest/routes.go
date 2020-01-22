@@ -18,7 +18,9 @@ func (rest *Rest) routes() {
 		r.Use(rest.WithAuth(aumo.Admin))
 		r.Get("/", rest.userGetAll)
 		r.Get("/{id}", rest.userGet)
-		r.Put("/{id}", rest.userEditRole)
+		r.Put("/{id}/set-role", rest.userEditRole)
+		r.Put("/{id}/add-points", rest.userAddPoints)
+		r.Put("/{id}/sub-points", rest.userSubPoints)
 		r.Delete("/{id}", rest.userDelete)
 	})
 
