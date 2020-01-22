@@ -1,0 +1,39 @@
+name: Mobile App Workflow
+on: [push, pull_request]
+jobs:
+  bulid-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      - name: Install deps
+        working-directory: ./client
+        run: yarn
+      - name: Build
+        working-directory: ./client
+        run: expo build:android
+  bulid-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      - name: Install deps
+        working-directory: ./client
+        run: yarn
+      - name: Build
+        working-directory: ./client
+        run: expo build:ios
