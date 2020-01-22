@@ -1,4 +1,4 @@
-name: ci
+name: go-backend-jobs
 on: [push, pull_request]
 jobs:
   lint:
