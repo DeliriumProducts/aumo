@@ -11,19 +11,22 @@ const links = [
   key: `nav-link-${link.href}-${link.label}`
 }))
 
-const Nav = () => (
+const Nav = ({ props }) => (
   <nav>
     <Menu>
       <img src="aumo.png" className="aumo-logo" />
-      <div className="welcome-text">dsjaj</div>
+      <div className="welcome-text">
+        Welcome back, <strong className="welcome-name">Nasko</strong>
+      </div>
       <LinkList>
         {links.map(({ key, href, label }) => (
           <Link key={key} href={href}>
             <LinkItem>{label}</LinkItem>
           </Link>
         ))}
-        <Link href={"/logout"}>
-          <LinkItem>LOGOUT</LinkItem>
+        <Divider type="vertical" />
+        <Link href={"/login"}>
+          <LinkItem type="primary">LOGOUT</LinkItem>
         </Link>
       </LinkList>
     </Menu>
@@ -52,12 +55,19 @@ const Menu = styled.div`
   .welcome-text {
     width: 100%;
     align-self: center;
-    margin-left: 2rem;
+    margin-left: 4rem;
+    text-align: left;
+    font-family: "Montserrat";
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .welcome-name {
     text-align: left;
     font-family: "Montserrat";
     color: #083aa4;
     font-size: 1rem;
-    font-weight: 500;
     text-decoration: none;
   }
 
