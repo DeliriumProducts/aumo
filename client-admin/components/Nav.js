@@ -24,7 +24,7 @@ const Nav = ({ props }) => (
             <LinkItem>{label}</LinkItem>
           </Link>
         ))}
-        <Divider type="vertical" />
+        <Divider type="vertical" className="divider" />
         <Link href={"/login"}>
           <LinkItem type="primary">LOGOUT</LinkItem>
         </Link>
@@ -78,6 +78,12 @@ const Menu = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    .divider {
+      display: none;
+    }
+    .welcome-text {
+      text-align: center;
+    }
   }
 `
 const LinkList = styled.ul`
