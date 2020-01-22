@@ -54,6 +54,7 @@ const Menu = styled.div`
 
   .welcome-text {
     width: 100%;
+    color: black;
     align-self: center;
     margin-left: 4rem;
     text-align: left;
