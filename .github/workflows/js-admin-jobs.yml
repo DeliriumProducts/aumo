@@ -1,4 +1,4 @@
-name: js-admin-jobs
+name: Admin Panel Workflow
 on: [push, pull_request]
 jobs:
   build:

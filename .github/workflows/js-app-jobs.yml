@@ -1,4 +1,4 @@
-name: js-app-jobs
+name: Mobile App Workflow
 on: [push, pull_request]
 jobs:
   publish:

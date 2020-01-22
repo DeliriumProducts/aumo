@@ -1,4 +1,4 @@
-name: go-backend-jobs
+name: Backend Workflow
 on: [push, pull_request]
 jobs:
   lint:
