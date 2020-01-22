@@ -2,7 +2,7 @@ import React from "react"
 import Head from "next/head"
 import styled from "styled-components"
 
-const Home = () => (
+const Home = props => (
   <>
     <Head>
       <title>Aumo</title>

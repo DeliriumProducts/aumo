@@ -1475,6 +1475,13 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
+aumo-api@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/aumo-api/-/aumo-api-2.0.0.tgz#c709b23714b6d06dbc30a4e6726b98f199889833"
+  integrity sha512-X58MOfeIymqs5j73W1rCicK/AAmOtKPN109EoWmx7FBy/IB/yAuzBrD4bVneijoNq7O+vSuv8FY8VcyFK0+hhQ==
+  dependencies:
+    axios "^0.19.2"
+
 autodll-webpack-plugin@0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.4.2.tgz#36e98fbaf30c235d1d5d076330464ac80901415c"

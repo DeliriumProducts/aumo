@@ -1,7 +1,7 @@
 import React from "react"
 import Link from "next/link"
 import styled from "styled-components"
-import { Divider } from "antd"
+import { Divider, Button } from "antd"
 
 const links = [
   { href: "/products", label: "Products" },
@@ -14,26 +14,39 @@ const links = [
 const Nav = props => (
   <nav>
     <Menu>
-      <Logo src="aumo.png" />
-      <Welcome>
-        Welcome back, <span>{props.name}</span>
-      </Welcome>
-      <LinkList>
-        {links.map(({ key, href, label }) => (
-          <Link key={key} href={href}>
-            <LinkItem>{label}</LinkItem>
-          </Link>
-        ))}
-        <Divider type="vertical" className="divider" />
-        <Link href={"/login"}>
-          <LinkItem>LOGOUT</LinkItem>
+      <Link href={"/"}>
+        <Logo src="aumo.png" />
+      </Link>
+      {props.route === "/" ? (
+        <Link href="/login">
+          <Button type="primary">LOGIN NOW</Button>
         </Link>
-      </LinkList>
+      ) : props.route === "/login" ? (
+        <></>
+      ) : (
+        <>
+          <Welcome>
+            Welcome back, <span>{props.name}</span>
+          </Welcome>
+          <LinkList>
+            {links.map(({ key, href, label }) => (
+              <Link key={key} href={href}>
+                <LinkItem>{label}</LinkItem>
+              </Link>
+            ))}
+            <Divider type="vertical" className="divider" />
+            <Link href={"/login"}>
+              <LinkItem>LOGOUT</LinkItem>
+            </Link>
+          </LinkList>
+        </>
+      )}
     </Menu>
   </nav>
 )
 
 const Logo = styled.img`
+  cursor: pointer;
   align-self: center;
   max-width: 10%;
   height: auto;

@@ -54,11 +54,16 @@ const GlobalStyle = createGlobalStyle`
 
 export default class MyApp extends App {
   render() {
-    const { Component, pageProps } = this.props
+    const {
+      Component,
+      pageProps,
+      router: { route }
+    } = this.props
+
     return (
       <>
         <Affix offsetTop={0}>
-          <Nav name="Nasko" />
+          <Nav name="Nasko" route={route} />
         </Affix>
         <GlobalStyle />
         <Component {...pageProps} />
