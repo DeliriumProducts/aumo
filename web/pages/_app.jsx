@@ -1,6 +1,7 @@
 import App from "next/app"
 import Nav from "../components/Nav"
 import Router from "next/router"
+import { Affix } from "antd"
 import NProgress from "nprogress"
 import React from "react"
 import { createGlobalStyle } from "styled-components"
@@ -56,7 +57,9 @@ export default class MyApp extends App {
     const { Component, pageProps } = this.props
     return (
       <>
-        <Nav name="Nasko" />
+        <Affix offsetTop={0}>
+          <Nav name="Nasko" />
+        </Affix>
         <GlobalStyle />
         <Component {...pageProps} />
       </>

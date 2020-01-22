@@ -66,6 +66,10 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
+  @media only screen and (max-width: 600px) {
+    margin-top: 300px;
+    flex-direction: column;
+  }
 `
 
 export default Home
