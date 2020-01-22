@@ -14,6 +14,6 @@ jobs:
           expo-version: 3.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-        working-directory: ./client-admin
+        working-directory: ./client
       - run: yarn install
       - run: expo build
