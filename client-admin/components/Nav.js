@@ -44,7 +44,7 @@ const Nav = ({ props }) => (
 
 const Menu = styled.div`
   display: flex;
-  padding: 0.5rem;
+  padding: 1.2rem;
   justify-content: space-between;
   .aumo-logo {
     width: 10%;
