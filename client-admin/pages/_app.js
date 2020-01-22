@@ -27,6 +27,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100%;
     height: initial;
+    background-color: #F9FAFF;
     /* background-image: url('/static/circles-primary.svg'),
     url('/static/circles-accent.svg');
     background-repeat: repeat-y;
