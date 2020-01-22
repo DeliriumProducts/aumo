@@ -22,7 +22,7 @@ if (typeof require !== "undefined") {
 module.exports = withOffline(
   withLess(
     withSass({
-      webpack(config) {
+      webpack(config, { isServer }) {
         // Fixes npm packages that depend on `fs` module
         config.node = {
           fs: "empty"
@@ -34,6 +34,27 @@ module.exports = withOffline(
             systemvars: true
           })
         )
+
+        if (isServer) {
+          const antStyles = /antd\/.*?\/style.*?/
+          const origExternals = [...config.externals]
+          config.externals = [
+            (context, request, callback) => {
+              if (request.match(antStyles)) return callback()
+              if (typeof origExternals[0] === "function") {
+                origExternals[0](context, request, callback)
+              } else {
+                callback()
+              }
+            },
+            ...(typeof origExternals[0] === "function" ? [] : origExternals)
+          ]
+
+          config.module.rules.unshift({
+            test: antStyles,
+            use: "null-loader"
+          })
+        }
 
         if (process.env.NODE_ENV === "production") {
           config.plugins = config.plugins.filter(
@@ -48,9 +69,9 @@ module.exports = withOffline(
               }
             })
           )
-
-          config.plugins.push(new OptimizeCSSAssetsPlugin())
         }
+
+        config.plugins.push(new OptimizeCSSAssetsPlugin())
 
         return config
       },
