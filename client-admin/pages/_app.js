@@ -1,5 +1,6 @@
 import App from "next/app"
 import React from "react"
+import { createGlobalStyle } from "styled-components"
 
 const GlobalStyle = createGlobalStyle`
   html,
