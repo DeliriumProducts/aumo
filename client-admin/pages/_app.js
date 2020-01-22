@@ -1,15 +1,6 @@
 import App from "next/app"
-import Router from "next/router"
-import NProgress from "nprogress"
 import React from "react"
 import { createGlobalStyle } from "styled-components"
-import "../assets/nprogress.less"
-
-Router.events.on("routeChangeStart", () => {
-  NProgress.start()
-})
-Router.events.on("routeChangeComplete", () => NProgress.done())
-Router.events.on("routeChangeError", () => NProgress.done())
 
 const GlobalStyle = createGlobalStyle`
   html,
