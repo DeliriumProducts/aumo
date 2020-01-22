@@ -1,4 +1,5 @@
 import App from "next/app"
+import Nav from "../components/Nav"
 import Router from "next/router"
 import NProgress from "nprogress"
 import React from "react"
@@ -25,8 +26,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    min-height: 100%;
-    height: initial;
     background-color: #F9FAFF;
     /* background-image: url('/static/circles-primary.svg'),
     url('/static/circles-accent.svg');
@@ -44,10 +43,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: Montserrat, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  #__next,
-  #__next > div {
-    height: 100%;
-    min-height: 100%;
+    #__next,
+    #__next > div {
+        min-height: 100vh;
+        min-width: 100vw;
+        position: absolute;
   }
 `
 
@@ -56,6 +56,7 @@ export default class MyApp extends App {
     const { Component, pageProps } = this.props
     return (
       <>
+        <Nav name="Nasko" />
         <GlobalStyle />
         <Component {...pageProps} />
       </>

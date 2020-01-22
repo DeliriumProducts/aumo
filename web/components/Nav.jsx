@@ -69,6 +69,8 @@ const Welcome = styled.div`
 `
 
 const Menu = styled.div`
+  position: fixed;
+  width: 100%;
   display: flex;
   background-color: #fff;
   padding: 1.2rem;
