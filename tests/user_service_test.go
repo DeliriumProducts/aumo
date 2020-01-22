@@ -169,6 +169,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("update_user", func(t *testing.T) {
+		defer TidyDB(sess)
 		user := createUser(t, ustore)
 		user.Name = "New Name"
 
@@ -181,6 +182,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("edit_role", func(t *testing.T) {
+		defer TidyDB(sess)
 		user := createUser(t, ustore)
 		user.Role = aumo.Admin
 
@@ -192,9 +194,37 @@ func TestUserService(t *testing.T) {
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
 
-	t.Run("delete_user", func(t *testing.T) {
+	t.Run("add_points", func(t *testing.T) {
+		defer TidyDB(sess)
 		user := createUser(t, ustore)
-		user.Name = "New Name"
+		var points float64 = 500
+		user.Points += points
+
+		err := us.AddPoints(user.ID, points)
+		require.Nil(t, err, "shouldn't return an error")
+
+		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *user, *gotUser, "should be equal")
+	})
+
+	t.Run("sub_points", func(t *testing.T) {
+		defer TidyDB(sess)
+		user := createUser(t, ustore)
+		var points float64 = 500
+		user.Points -= points
+
+		err := us.AddPoints(user.ID, points)
+		require.Nil(t, err, "shouldn't return an error")
+
+		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		require.Nil(t, err, "shouldn't return an error")
+		require.Equal(t, *user, *gotUser, "should be equal")
+	})
+
+	t.Run("delete_user", func(t *testing.T) {
+		defer TidyDB(sess)
+		user := createUser(t, ustore)
 
 		err := us.Delete(user.ID)
 		require.Nil(t, err, "shouldn't return an error")
