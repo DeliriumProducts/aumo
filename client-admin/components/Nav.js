@@ -50,6 +50,7 @@ const Menu = styled.div`
     width: 10%;
     align-self: center;
     height: 20%;
+    margin-bottom: 9px;
   }
 
   .welcome-text {
@@ -80,6 +81,8 @@ const Menu = styled.div`
 `
 const LinkList = styled.ul`
   display: flex;
+  margin-bottom: 0;
+  margin-top: 0;
   justify-content: center;
   align-items: center;
   flex-direction: row;
