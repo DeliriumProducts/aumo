@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import styled from 'styled-components';
 
 const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT' },
-  { href: 'https://github.com/zeit/next.js', label: 'GitHub' }
+  { href: '/products', label: 'Products' },
+  { href: '/users', label: 'Users' }
 ].map(link => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`
@@ -11,46 +12,75 @@ const links = [
 
 const Nav = () => (
   <nav>
-    <ul>
-      <li>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
+    <Menu>
+      <img src="aumo.png" className="aumo-logo" />
+      <div className="welcome-text">dsjaj</div>
+      <LinkList>
+        {links.map(({ key, href, label }) => (
+          <Link key={key} href={href}>
+            <LinkItem>{label}</LinkItem>
+          </Link>
+        ))}
+      </LinkList>
+    </Menu>
 
     <style jsx>{`
+      https://nextjs.org
       :global(body) {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
           Helvetica, sans-serif;
       }
-      nav {
-        text-align: center;
-      }
-      ul {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav > ul {
-        padding: 4px 16px;
-      }
-      li {
-        display: flex;
-        padding: 6px 8px;
-      }
-      a {
-        color: #067df7;
-        text-decoration: none;
-        font-size: 13px;
-      }
     `}</style>
   </nav>
 );
+
+const Menu = styled.div`
+  display: flex;
+  justify-content: space-between;
+  .aumo-logo {
+    width: 10%;
+    align-self: center;
+    height: 20%;
+  }
+
+  .welcome-text {
+    width: 100%;
+    align-self: center;
+    margin-left: 2rem;
+    text-align: left;
+    font-family: 'Montserrat';
+    color: #083aa4;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  @media only screen and (max-width: 600px) {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+`;
+const LinkList = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  @media only screen and (max-width: 600px) {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+`;
+
+const LinkItem = styled.a`
+  font-family: 'Montserrat';
+  color: #083aa4;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 10px;
+`;
 
 export default Nav;

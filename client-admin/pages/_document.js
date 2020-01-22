@@ -36,7 +36,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <link
-            href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+            href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
             rel="stylesheet"
           ></link>
           <meta name="description" content="Manage your aumo here!" />
