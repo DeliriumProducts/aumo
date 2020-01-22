@@ -214,7 +214,7 @@ func TestUserService(t *testing.T) {
 		var points float64 = 500
 		user.Points -= points
 
-		err := us.AddPoints(user.ID, points)
+		err := us.SubPoints(user.ID, points)
 		require.Nil(t, err, "shouldn't return an error")
 
 		gotUser, err := ustore.FindByID(nil, user.ID, false)
