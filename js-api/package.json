@@ -1,0 +1,19 @@
+{
+  "name": "aumo-api",
+  "version": "1.0.0",
+  "description": "A JavaScript API for the Aumo API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deliriumproducts/aumo.git"
+  },
+  "author": "Delirium Products",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deliriumproducts/aumo/issues"
+  },
+  "homepage": "https://github.com/deliriumproducts/aumo#readme"
+}
