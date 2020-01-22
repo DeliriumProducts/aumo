@@ -1,14 +1,15 @@
-import React from 'react';
-import Link from 'next/link';
-import styled from 'styled-components';
+import React from "react"
+import Link from "next/link"
+import styled from "styled-components"
+import { Divider } from "antd"
 
 const links = [
-  { href: '/products', label: 'Products' },
-  { href: '/users', label: 'Users' }
+  { href: "/products", label: "Products" },
+  { href: "/users", label: "Users" }
 ].map(link => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`
-}));
+}))
 
 const Nav = () => (
   <nav>
@@ -21,6 +22,9 @@ const Nav = () => (
             <LinkItem>{label}</LinkItem>
           </Link>
         ))}
+        <Link href={"/logout"}>
+          <LinkItem>LOGOUT</LinkItem>
+        </Link>
       </LinkList>
     </Menu>
 
@@ -33,10 +37,11 @@ const Nav = () => (
       }
     `}</style>
   </nav>
-);
+)
 
 const Menu = styled.div`
   display: flex;
+  padding: 0.5rem;
   justify-content: space-between;
   .aumo-logo {
     width: 10%;
@@ -49,7 +54,7 @@ const Menu = styled.div`
     align-self: center;
     margin-left: 2rem;
     text-align: left;
-    font-family: 'Montserrat';
+    font-family: "Montserrat";
     color: #083aa4;
     font-size: 1rem;
     font-weight: 500;
@@ -61,7 +66,7 @@ const Menu = styled.div`
     justify-content: center;
     flex-direction: column;
   }
-`;
+`
 const LinkList = styled.ul`
   display: flex;
   justify-content: center;
@@ -72,15 +77,15 @@ const LinkList = styled.ul`
     justify-content: center;
     flex-direction: column;
   }
-`;
+`
 
 const LinkItem = styled.a`
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   color: #083aa4;
   font-size: 1.2rem;
   font-weight: 700;
   text-decoration: none;
   padding: 10px;
-`;
+`
 
-export default Nav;
+export default Nav
