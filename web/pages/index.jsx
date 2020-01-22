@@ -25,6 +25,7 @@ const Home = () => (
 
 const Badge = styled.img`
   width: 20%;
+  padding: 5px;
 `
 
 const BadgeContainer = styled.div`
