@@ -10,10 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/deliriumproducts/aumo.git"
   },
-  "author": "Delirium Products",
+  "author": "Delirium Products!",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/deliriumproducts/aumo/issues"
   },
-  "homepage": "https://github.com/deliriumproducts/aumo#readme"
+  "homepage": "https://github.com/deliriumproducts/aumo#readme",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
