@@ -14,8 +14,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Install deps
-        working-directory: ./client-admin
+        working-directory: ./web
         run: yarn
       - name: Build
-        working-directory: ./client-admin
+        working-directory: ./web
         run: yarn build
