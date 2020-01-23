@@ -7,6 +7,38 @@ import { BACKEND_URL } from "../config"
 
 const FormItem = Form.Item
 
+Login.getInitialProps = async ctx => {
+  const { req, res } = ctx
+  let auth = {}
+  /**
+   * Check wheter authentication is happening server-side or client-side based on received context
+   */
+  if (req && res) {
+    if (req.headers.cookie) {
+      try {
+        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
+        if (auth.role === "Admin") {
+          res.writeHead(302, {
+            Location: "/products"
+          })
+          res.end()
+        }
+      } catch (err) {}
+    }
+  } else {
+    try {
+      auth = await new AuthAPI(BACKEND_URL).me()
+      if (auth.role === "Admin") {
+        Router.replace("/products")
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        Router.replace("/login")
+      }
+    }
+  }
+}
+
 const Login = props => {
   const { getFieldDecorator } = props.form
   const handleSubmit = e => {
