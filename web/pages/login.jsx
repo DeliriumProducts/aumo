@@ -1,9 +1,10 @@
 import React from "react"
 import Head from "next/head"
 import styled from "styled-components"
-import { Input, Icon, Form, Button } from "antd"
+import { Input, Icon, Form, Button, message } from "antd"
 import { AuthAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
+import Router from "next/router"
 
 const FormItem = Form.Item
 
@@ -21,7 +22,14 @@ const Login = props => {
         }
 
         const authAPI = new AuthAPI(BACKEND_URL)
-        await authAPI.login(credentials)
+        try {
+          await authAPI.login(credentials)
+        } catch (e) {
+          message.error(`${e.response.data.error}`, 5)
+          return
+        }
+
+        Router.replace("/products")
       }
     })
   }

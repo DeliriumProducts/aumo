@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import Router from "next/router"
 import { AuthAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context.js"
