@@ -29,4 +29,4 @@ class ProductAPI {
   }
 }
 
-export default ProductAPI;
+module.exports = ProductAPI;

@@ -25,4 +25,4 @@ class AuthAPI {
   }
 }
 
-export default AuthAPI;
+module.exports = AuthAPI;

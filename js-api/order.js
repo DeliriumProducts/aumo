@@ -21,4 +21,4 @@ class OrderAPI {
   }
 }
 
-export default OrderAPI;
+module.exports = OrderAPI;

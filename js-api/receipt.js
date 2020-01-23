@@ -17,4 +17,4 @@ class ReceiptAPI {
   }
 }
 
-export default ReceiptAPI;
+module.exports = ReceiptAPI;
