@@ -33,6 +33,7 @@ func main() {
 	MySQLHost := os.Getenv("MYSQL_HOST")
 	MySQLDatabase := os.Getenv("MYSQL_DATABASE")
 	InitialAdminPassword := os.Getenv("INITIAL_ADMIN_PASSWORD")
+	FrontendURL := os.Getenv("FRONTEND_URL")
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     MySQLUser,
@@ -67,7 +68,7 @@ func main() {
 	os := mysql.NewOrderStore(db)
 	rs := mysql.NewReceiptStore(db)
 	us := mysql.NewUserStore(db)
-	auth := auth.New(conn, us, 60*60*24)
+	auth := auth.New(conn, us, FrontendURL, "/", 60*60*24)
 
 	_, err = users.InitialAdmin(us, InitialAdminPassword, "admin@deliriumproducts.me")
 	if err != nil {

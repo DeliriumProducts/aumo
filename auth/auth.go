@@ -29,14 +29,18 @@ var (
 type Authenticator struct {
 	redis      redis.Conn
 	us         aumo.UserStore
+	domain     string
+	path       string
 	expiryTime int
 }
 
 // New returns new Auth instance
-func New(r redis.Conn, us aumo.UserStore, expiryTime int) *Authenticator {
+func New(r redis.Conn, us aumo.UserStore, domain, path string, expiryTime int) *Authenticator {
 	return &Authenticator{
 		r,
 		us,
+		domain,
+		path,
 		expiryTime,
 	}
 }
@@ -84,7 +88,8 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 		Name:     CookieKey,
 		Value:    sID,
 		HttpOnly: true,
-		Path:     "/",
+		Path:     a.path,
+		Domain:   a.domain,
 		Expires: time.Now().Add(
 			time.Duration(a.expiryTime) * time.Second,
 		),
