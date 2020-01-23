@@ -9,23 +9,24 @@ class ProductAPI {
   }
 
   async getAll() {
-    return await axios.get(`${this.backend}/products`, opts);
+    return await axios.get(`${this.backend}/products`, opts).data;
   }
 
   async get(id) {
-    return await axios.get(`${this.backend}/products/${id}`, opts);
+    return await axios.get(`${this.backend}/products/${id}`, opts).data;
   }
 
   async create(product) {
-    return await axios.post(`${this.backend}/products`, product, opts);
+    return await axios.post(`${this.backend}/products`, product, opts).data;
   }
 
   async edit(id, product) {
-    return await axios.put(`${this.backend}/products/${id}`, product, opts);
+    return await axios.put(`${this.backend}/products/${id}`, product, opts)
+      .data;
   }
 
   async delete(id) {
-    return await axios.delete(`${this.backend}/products/${id}`, opts);
+    return await axios.delete(`${this.backend}/products/${id}`, opts).data;
   }
 }
 

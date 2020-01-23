@@ -9,15 +9,15 @@ class AuthAPI {
   }
 
   async login(creds) {
-    return await axios.post(`${this.backend}/login`, creds, opts);
+    return await axios.post(`${this.backend}/login`, creds, opts).data;
   }
 
   async register(creds) {
-    return await axios.post(`${this.backend}/register`, creds);
+    return await axios.post(`${this.backend}/register`, creds).data;
   }
 
   async logout() {
-    return await axios.get(`${this.backend}/logout`, opts);
+    return await axios.get(`${this.backend}/logout`, opts).data;
   }
 
   async me(cookie) {
@@ -27,12 +27,10 @@ class AuthAPI {
       opts = { headers: { cookie } };
     }
 
-    const auth = (
-      await axios.get(`${this.backend}/me`, {
-        withCredentials: true,
-        ...opts
-      })
-    ).data;
+    const auth = await axios.get(`${this.backend}/me`, {
+      withCredentials: true,
+      ...opts
+    }).data;
 
     return auth;
   }
