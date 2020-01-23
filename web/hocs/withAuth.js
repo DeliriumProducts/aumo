@@ -1,47 +1,56 @@
 import React, { Component } from "react"
+import { AuthAPI } from "aumo-api"
+import { BACKEND_URL } from "../config"
 
 export const withAuth = (C, roles = []) =>
   class extends Component {
     static async getInitialProps(ctx) {
       const { req, res } = ctx
-      let auth = {
-        user: null,
-        isAuthenticated: false
-      }
+      let auth = {}
       /**
        * Check wheter authentication is happening server-side or client-side based on received context
        */
       if (req && res) {
         if (req.headers.cookie) {
-          auth = await StaffAPI.isAuthenticated(req.headers.cookie)
-        }
-        if (!auth.isAuthenticated) {
-          res.writeHead(302, {
-            Location: "/login"
-          })
-          res.end()
-        } else if (
-          roles.length &&
-          auth.user &&
-          auth.user.role !== "Admin" &&
-          !roles.includes(auth.user.role)
-        ) {
-          res.writeHead(302, {
-            Location: "/admin"
-          })
-          res.end()
+          try {
+            auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
+            if (auth.role === "Admin") {
+              res.writeHead(302, {
+                Location: "/products"
+              })
+              res.end()
+            } else {
+              throw {
+                response: {
+                  status: 401
+                }
+              }
+            }
+          } catch (err) {
+            if (err.response.status === 401) {
+              res.writeHead(302, {
+                Location: "/login"
+              })
+              res.end()
+            }
+          }
         }
       } else {
-        auth = await StaffAPI.isAuthenticated()
-        if (!auth.isAuthenticated) {
-          Router.replace("/login")
-        } else if (
-          roles.length &&
-          auth.user &&
-          auth.user.role !== "Admin" &&
-          !roles.includes(auth.user.role)
-        ) {
-          Router.replace("/admin")
+        try {
+          auth = await new AuthAPI(BACKEND_URL).me()
+          if (auth.role === "Admin") {
+            Router.replace("/products")
+          } else {
+            throw {
+              response: {
+                status: 401
+              }
+            }
+          }
+        } catch (err) {
+          if (err.response.status === 401) {
+            Router.replace("/login")
+          }
         }
       }
       /**
@@ -52,7 +61,7 @@ export const withAuth = (C, roles = []) =>
         : {}
       return {
         ...composedInitialProps,
-        user: auth.user
+        user: auth
       }
     }
     componentDidMount() {
