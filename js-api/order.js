@@ -1,25 +1,24 @@
-const axios = require("axios")
+const axios = require('axios');
+const opts = {
+  withCredentials: true
+};
 
 class OrderAPI {
-  static opts = {
-    withCredentials: true
-  }
-
   constructor(backend) {
-    this.backend = backend
+    this.backend = backend;
   }
 
   async place(order) {
-    return await axios.post(`${this.backend}/orders`, order, this.opts)
+    return await axios.post(`${this.backend}/orders`, order, opts);
   }
 
   async getAll() {
-    return await axios.get(`${this.backend}/orders`, this.opts)
+    return await axios.get(`${this.backend}/orders`, opts);
   }
 
   async get(id) {
-    return await axios.get(`${this.backend}/orders/${id}`, this.opts)
+    return await axios.get(`${this.backend}/orders/${id}`, opts);
   }
 }
 
-export default OrderAPI
+export default OrderAPI;

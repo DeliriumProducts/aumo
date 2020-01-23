@@ -1,49 +1,48 @@
-const axios = require("axios")
+const axios = require('axios');
+const opts = {
+  withCredentials: true
+};
 
 class UserAPI {
-  static opts = {
-    withCredentials: true
-  }
-
   constructor(backend) {
-    this.backend = backend
+    this.backend = backend;
   }
 
   async getAll() {
-    return await axios.get(`${this.backend}/users`, this.opts)
+    return await axios.get(`${this.backend}/users`, opts);
   }
 
   async get(id) {
-    return await axios.get(`${this.backend}/users/${id}`, this.opts)
+    return await axios.get(`${this.backend}/users/${id}`, opts);
   }
 
   async setRole(id, role) {
     return await axios.put(
       `${this.backend}/users/${id}/set-role`,
       { role: role },
-      this.opts
-    )
+      opts
+    );
   }
 
   async addPoints(id, points) {
     return await axios.put(
       `${this.backend}/users/${id}/add-points`,
       { points: points },
-      this.opts
-    )
+      opts
+    );
   }
 
   async subPoints(id, points) {
     return await axios.put(
       `${this.backend}/users/${id}/sub-points`,
       { points: points },
-      this.opts
-    )
+      opts
+    );
   }
 
   async delete(id) {
-    return await axios.delete(`${this.backend}/users/${id}`, this.opts)
+    return await axios.delete(`${this.backend}/users/${id}`, opts);
   }
 }
 
-export default UserAPI
+export default UserAPI;

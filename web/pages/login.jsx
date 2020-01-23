@@ -20,8 +20,8 @@ const Login = props => {
           password
         }
 
-        const authAPI = new AuthAPI(BACKEND_URL)
-        authAPI.login(credentials)
+        const authAPI = AuthAPI(BACKEND_URL)
+        await authAPI.login(credentials)
       }
     })
   }

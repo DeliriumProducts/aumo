@@ -1,16 +1,15 @@
-const axios = require("axios");
+const axios = require('axios');
+const opts = {
+  withCredentials: true
+};
 
 class AuthAPI {
-  opts = {
-    withCredentials: true
-  };
-
   constructor(backend) {
     this.backend = backend;
   }
 
   async login(creds) {
-    return await axios.post(`${this.backend}/login`, creds, this.opts);
+    return await axios.post(`${this.backend}/login`, creds, opts);
   }
 
   async register(creds) {
@@ -18,11 +17,11 @@ class AuthAPI {
   }
 
   async logout() {
-    return await axios.get(`${this.backend}/logout`, this.opts);
+    return await axios.get(`${this.backend}/logout`, opts);
   }
 
   async me() {
-    return await axios.get(`${this.backend}/me`, this.opts);
+    return await axios.get(`${this.backend}/me`, opts);
   }
 }
 
