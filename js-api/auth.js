@@ -20,8 +20,21 @@ class AuthAPI {
     return await axios.get(`${this.backend}/logout`, opts);
   }
 
-  async me() {
-    return await axios.get(`${this.backend}/me`, opts);
+  async me(cookie) {
+    let opts = {};
+
+    if (cookie) {
+      opts = { headers: { cookie } };
+    }
+
+    const auth = (
+      await axios.get(`${this.backend}/me`, {
+        withCredentials: true,
+        ...opts
+      })
+    ).data;
+
+    return auth;
   }
 }
 
