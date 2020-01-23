@@ -1,1 +1,9 @@
-export default () => <div>Users</div>
+import Head from "next/head"
+
+export default () => (
+  <>
+    <Head>
+      <title>Aumo Users</title>
+    </Head>
+  </>
+)
