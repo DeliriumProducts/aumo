@@ -2,10 +2,10 @@ import { initialState, Context } from "../context.js"
 import React from "react"
 
 const handlers = {
-  setFoo(state, foo) {
+  setUser(state, user) {
     return {
       ...state,
-      foo
+      user
     }
   }
 }
