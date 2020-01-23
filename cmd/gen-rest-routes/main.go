@@ -18,7 +18,7 @@ func main() {
 	os := mysql.NewOrderStore(nil)
 	rs := mysql.NewReceiptStore(nil)
 	us := mysql.NewUserStore(nil)
-	auth := auth.New(nil, us, 0)
+	auth := auth.New(nil, us, "", "", 0)
 
 	r := rest.New(rest.Config{
 		UserService:    users.New(us),
