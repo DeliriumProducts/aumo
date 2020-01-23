@@ -122,7 +122,7 @@ Login.getInitialProps = async ctx => {
     }
   }
 
-  return {}
+  return { auth }
 }
 
 const Card = styled.div`

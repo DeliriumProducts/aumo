@@ -8,7 +8,6 @@ export const withAuth = C =>
     static contextType = Context
 
     static async getInitialProps(ctx) {
-      console.log("dsds")
       const { req, res } = ctx
       let auth = {}
 
@@ -34,6 +33,11 @@ export const withAuth = C =>
               res.end()
             }
           }
+        } else {
+          res.writeHead(302, {
+            Location: "/login"
+          })
+          res.end()
         }
       } else {
         try {
