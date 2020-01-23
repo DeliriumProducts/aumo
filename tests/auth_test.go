@@ -30,7 +30,7 @@ func TestAuthenticator(t *testing.T) {
 
 	ustore := mysql.NewUserStore(sess)
 
-	a := auth.New(r, ustore, 60*60*24)
+	a := auth.New(r, ustore, "http://localhost:3000", "/", 60*60*24)
 
 	t.Run("new_session", func(t *testing.T) {
 		defer TidyRedis(r)
