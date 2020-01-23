@@ -1,12 +1,17 @@
 import React, { Component } from "react"
 import { AuthAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
+import { Context } from "../context/context.js"
 
-export const withAuth = (C, roles = []) =>
+export const withAuth = C =>
   class extends Component {
+    static contextType = Context
+
     static async getInitialProps(ctx) {
+      console.log("dsds")
       const { req, res } = ctx
       let auth = {}
+
       /**
        * Check wheter authentication is happening server-side or client-side based on received context
        */
@@ -46,6 +51,7 @@ export const withAuth = (C, roles = []) =>
           }
         }
       }
+
       /**
        * Call the getInitalProps of the wrapped component
        */
@@ -57,10 +63,11 @@ export const withAuth = (C, roles = []) =>
         user: auth
       }
     }
+
     componentDidMount() {
       this.context.dispatch({ type: "setUser", payload: this.props.user })
     }
     render() {
-      return React.createElement(C, Object.assign({}, this.props))
+      return <C {...this.props} />
     }
   }

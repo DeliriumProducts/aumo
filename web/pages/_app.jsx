@@ -6,6 +6,7 @@ import NProgress from "nprogress"
 import React from "react"
 import { createGlobalStyle } from "styled-components"
 import "../assets/nprogress.less"
+import ContextProvider from "../context/providers/contextProvider"
 
 /**
  * https://github.com/zeit/next.js/tree/canary/examples/with-loading
@@ -61,13 +62,13 @@ export default class MyApp extends App {
     } = this.props
 
     return (
-      <>
+      <ContextProvider>
         <Affix offsetTop={0}>
           <Nav name="Nasko" route={route} />
         </Affix>
         <GlobalStyle />
         <Component {...pageProps} />
-      </>
+      </ContextProvider>
     )
   }
 }
