@@ -1,4 +1,7 @@
 import React from "react"
+import Router from "next/router"
+import { BACKEND_URL } from "../config"
+import { AuthAPI } from "aumo-api"
 import Link from "next/link"
 import styled from "styled-components"
 import { Divider, Button } from "antd"
@@ -35,9 +38,15 @@ const Nav = props => (
               </Link>
             ))}
             <Divider type="vertical" className="divider" />
-            <Link href={"/login"}>
-              <LinkItem>LOGOUT</LinkItem>
-            </Link>
+            <Button
+              type="primary"
+              onClick={async () => {
+                await new AuthAPI(BACKEND_URL).logout()
+                Router.replace("/")
+              }}
+            >
+              LOGOUT
+            </Button>
           </LinkList>
         </>
       )}
