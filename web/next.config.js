@@ -16,8 +16,6 @@ const themeVariables = lessToJS(
   fs.readFileSync(path.join(__dirname, "./assets/antd-custom.less"), "utf8")
 )
 
-console.log(process.env.BACKEND_URL)
-
 // fix: prevents error when .css or .less files are required by node
 if (typeof require !== "undefined") {
   require.extensions[".css"] = file => {}
