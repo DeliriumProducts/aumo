@@ -9,6 +9,8 @@ RUN yarn
 
 COPY . .
 
+ARG BACKEND_URL
+
 RUN yarn build
 
 EXPOSE 3000
