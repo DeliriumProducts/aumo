@@ -47,7 +47,6 @@ const Nav = props => (
 
 const Logo = styled.img`
   cursor: pointer;
-  align-self: center;
   max-width: 10%;
   height: auto;
   margin-bottom: 9px;
@@ -88,6 +87,7 @@ const Menu = styled.div`
   background-color: #fff;
   padding: 1.2rem;
   justify-content: space-between;
+  align-items: center;
   z-index: 999;
   @media only screen and (max-width: 600px) {
     align-items: center;
