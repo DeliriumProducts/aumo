@@ -30,13 +30,6 @@ module.exports = withOffline(
           fs: "empty"
         }
 
-        const env = Object.keys(process.env).reduce((acc, curr) => {
-          acc[`process.env.${curr}`] = JSON.stringify(process.env[curr])
-          return acc
-        }, {})
-
-        config.plugins.push(new webpack.DefinePlugin(env))
-
         if (isServer) {
           const antStyles = /antd\/.*?\/style.*?/
           const origExternals = [...config.externals]
@@ -82,7 +75,8 @@ module.exports = withOffline(
         modifyVars: themeVariables
       },
       env: {
-        THEME_VARIABLES: themeVariables
+        THEME_VARIABLES: themeVariables,
+        BACKEND_URL: process.env.BACKEND_URL
       }
     })
   )
