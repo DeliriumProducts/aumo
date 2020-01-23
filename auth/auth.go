@@ -96,6 +96,18 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 	})
 }
 
+// ExpireCookieHeader sets the cookie to expire now
+func (a *Authenticator) ExpireCookieHeader(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     CookieKey,
+		Value:    "",
+		HttpOnly: true,
+		Path:     a.path,
+		Domain:   a.domain,
+		Expires:  time.Now(),
+	})
+}
+
 // WithUser sets a user to a context
 func WithUser(ctx context.Context, user *aumo.User) context.Context {
 	return context.WithValue(ctx, UserContextKey, *user)

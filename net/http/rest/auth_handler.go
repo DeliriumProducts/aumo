@@ -74,6 +74,7 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rest.auth.ExpireCookieHeader(w)
 	rest.JSON(w, user, http.StatusOK)
 }
 
