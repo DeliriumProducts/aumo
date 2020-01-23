@@ -41,6 +41,7 @@ export const withAuth = C =>
           res.end()
         }
       } else {
+        console.log("vsichki pedali sa bahti typite sushtestva")
         try {
           auth = await new AuthAPI(BACKEND_URL).me()
           if (auth.role !== "Admin") {

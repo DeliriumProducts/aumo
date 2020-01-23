@@ -26,7 +26,6 @@ const Login = props => {
           await authAPI.login(credentials)
         } catch (e) {
           message.error(`${e.response.data.error}`, 5)
-          return
         }
 
         Router.replace("/products")
@@ -123,11 +122,7 @@ Login.getInitialProps = async ctx => {
       if (auth.role === "Admin") {
         Router.replace("/products")
       }
-    } catch (err) {
-      if (err.response.status === 401) {
-        Router.replace("/login")
-      }
-    }
+    } catch (err) {}
   }
 
   return { auth }
