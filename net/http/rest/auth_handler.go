@@ -74,7 +74,6 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rest.auth.ExpireCookieHeader(w)
 	rest.JSON(w, user, http.StatusOK)
 }
 
@@ -93,5 +92,6 @@ func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rest.auth.ExpireCookieHeader(w)
 	rest.JSON(w, Message{"User successfully logged out!"}, 200)
 }
