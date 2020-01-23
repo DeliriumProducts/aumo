@@ -4,7 +4,7 @@ import { AuthAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context.js"
 
-export const withAuth = C =>
+export default C =>
   class extends Component {
     static contextType = Context
 
