@@ -1,6 +1,5 @@
 import React from "react"
 import Head from "next/head"
-import Router from "next/router"
 import styled from "styled-components"
 import { Input, Icon, Form, Button, message } from "antd"
 import { AuthAPI } from "aumo-api"
