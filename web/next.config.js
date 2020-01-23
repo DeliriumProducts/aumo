@@ -7,7 +7,10 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const fs = require("fs")
 const path = require("path")
 const lessToJS = require("less-vars-to-js")
-const Dotenv = require("dotenv-webpack")
+
+require("dotenv").config({
+  path: path.join(__dirname, "/../.env")
+})
 
 const themeVariables = lessToJS(
   fs.readFileSync(path.join(__dirname, "./assets/antd-custom.less"), "utf8")
@@ -23,17 +26,16 @@ module.exports = withOffline(
   withLess(
     withSass({
       webpack(config, { isServer }) {
-        // Fixes npm packages that depend on `fs` module
         config.node = {
           fs: "empty"
         }
 
-        config.plugins.push(
-          new Dotenv({
-            path: path.join(__dirname, "/../.env"),
-            systemvars: true
-          })
-        )
+        const env = Object.keys(process.env).reduce((acc, curr) => {
+          acc[`process.env.${curr}`] = JSON.stringify(process.env[curr])
+          return acc
+        }, {})
+
+        config.plugins.push(new webpack.DefinePlugin(env))
 
         if (isServer) {
           const antStyles = /antd\/.*?\/style.*?/
