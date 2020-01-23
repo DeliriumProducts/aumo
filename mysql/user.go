@@ -154,7 +154,9 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 
 	for _, o := range orders {
 		ord := o.Order
-		ord.Product = &o.Product
+
+		product := o.Product
+		ord.Product = &product
 
 		user.Orders = append(user.Orders, ord)
 	}

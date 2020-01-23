@@ -49,109 +49,114 @@ func TestUserService(t *testing.T) {
 	})
 
 	testUserFetcher := func(t *testing.T, userFetcher func(user *aumo.User, relations bool) (*aumo.User, error)) {
-		t.Run("no_relations", func(t *testing.T) {
-			defer TidyDB(sess)
-			user := createUser(t, ustore)
-			gotUser, err := userFetcher(user, false)
+		// helper func for require.Nil() on the err
+		user := func(t *testing.T) *aumo.User {
+			u, err := aumo.NewUser(faker.FirstName(), faker.Email(), faker.Password(), faker.URL())
+			require.Nil(t, err, "shouldn't return an err")
+			return u
+		}
 
-			require.Nil(t, err, "shouldn't return an error")
-			require.Equal(t, *user, *gotUser, "should be equal")
-		})
+		tests := []struct {
+			name      string
+			user      *aumo.User
+			receipts  []aumo.Receipt
+			products  []aumo.Product
+			relations bool
+		}{
+			{
+				"no_relations",
+				user(t),
+				[]aumo.Receipt{},
+				[]aumo.Product{},
+				false,
+			},
+			{
+				"one_order",
+				user(t),
+				[]aumo.Receipt{},
+				[]aumo.Product{*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5)},
+				true,
+			},
+			{
+				"one_receipt",
+				user(t),
+				[]aumo.Receipt{*aumo.NewReceipt(faker.AmountWithCurrency())},
+				[]aumo.Product{},
+				true,
+			},
+			{
+				"many_orders",
+				user(t),
+				[]aumo.Receipt{},
+				[]aumo.Product{
+					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 5),
+					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 9),
+				},
+				true,
+			},
+			{
+				"many_receipts",
+				user(t),
+				[]aumo.Receipt{
+					*aumo.NewReceipt(faker.AmountWithCurrency()),
+					*aumo.NewReceipt(faker.AmountWithCurrency()),
+				},
+				[]aumo.Product{},
+				true,
+			},
+			{
+				"many_orders_many_receipts",
+				user(t),
+				[]aumo.Receipt{
+					*aumo.NewReceipt(faker.AmountWithCurrency()),
+					*aumo.NewReceipt(faker.AmountWithCurrency()),
+				},
+				[]aumo.Product{
+					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 5),
+					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 9),
+				},
+				true,
+			},
+		}
 
-		t.Run("with_relations", func(t *testing.T) {
-			t.Run("empty_relations", func(t *testing.T) {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
 				defer TidyDB(sess)
-				user := createUser(t, ustore)
 
-				// Get the user
-				gotUser, err := userFetcher(user, true)
+				err = ustore.Save(nil, tt.user)
 				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *user, *gotUser, "should be equal")
+
+				for _, receipt := range tt.receipts {
+					r := receipt
+
+					err = rstore.Save(nil, &r)
+					require.Nil(t, err, "shouldn't return an error")
+
+					receipt, err := rs.ClaimReceipt(tt.user.ID, r.ReceiptID)
+					require.Nil(t, err, "shouldn't return an error")
+
+					tt.user.Points += aumo.UserPointsPerReceipt
+					tt.user.Receipts = append(tt.user.Receipts, *receipt)
+				}
+
+				for _, product := range tt.products {
+					p := product
+
+					err = pstore.Save(nil, &p)
+					require.Nil(t, err, "shouldn't return an error")
+
+					ord, err := os.PlaceOrder(tt.user.ID, p.ID)
+					require.Nil(t, err, "shouldn't return an error")
+
+					tt.user.Points -= p.Price
+					tt.user.Orders = append(tt.user.Orders, *ord)
+				}
+
+				gotUser, err := userFetcher(tt.user, tt.relations)
+				require.Nil(t, err, "shouldn't return an error")
+				require.Equal(t, *tt.user, *gotUser, "should be equal")
 			})
-			t.Run("only_receipts", func(t *testing.T) {
-				defer TidyDB(sess)
-				user := createUser(t, ustore)
-
-				// Create a receipt
-				receipt := createReceipt(t, rstore)
-
-				var err error
-
-				// Claim the receipt
-				receipt, err = rs.ClaimReceipt(user.ID, receipt.ReceiptID)
-				require.Nil(t, err, "shouldn't return an error")
-
-				// Add the receipt
-				user.Receipts = append(user.Receipts, *receipt)
-
-				// Add points
-				user.Points += aumo.UserPointsPerReceipt
-
-				// Get the user
-				gotUser, err := userFetcher(user, true)
-				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *user, *gotUser, "should be equal")
-			})
-			t.Run("only_orders", func(t *testing.T) {
-				defer TidyDB(sess)
-				user := createUser(t, ustore)
-
-				// Create a product
-				product := createProduct(t, pstore, 500, 5)
-
-				// Buy the product
-				order, err := os.PlaceOrder(user.ID, product.ID)
-				require.Nil(t, err, "shouldn't return an error")
-
-				// Add the order
-				user.Orders = append(user.Orders, *order)
-
-				// Subtract points
-				user.Points -= product.Price
-
-				// Get the user
-				gotUser, err := userFetcher(user, true)
-				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *user, *gotUser, "should be equal")
-
-			})
-			t.Run("all_relations", func(t *testing.T) {
-				defer TidyDB(sess)
-				user := createUser(t, ustore)
-
-				// Create a receipt
-				receipt := createReceipt(t, rstore)
-
-				var err error
-
-				// Claim the receipt
-				receipt, err = rs.ClaimReceipt(user.ID, receipt.ReceiptID)
-				require.Nil(t, err, "shouldn't return an error")
-
-				// Add the receipt
-				user.Receipts = append(user.Receipts, *receipt)
-				// Add points
-				user.Points += aumo.UserPointsPerReceipt
-
-				// Create a product
-				product := createProduct(t, pstore, 500, 5)
-
-				// Buy the product
-				order, err := os.PlaceOrder(user.ID, product.ID)
-				require.Nil(t, err, "shouldn't return an error")
-
-				// Add the order
-				user.Orders = append(user.Orders, *order)
-
-				// Subtract points
-				user.Points -= product.Price
-
-				// Get the user
-				gotUser, err := userFetcher(user, true)
-				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *user, *gotUser, "should be equal")
-			})
-		})
+		}
 	}
 
 	t.Run("get_user", func(t *testing.T) {
