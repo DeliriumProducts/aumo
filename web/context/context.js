@@ -1,7 +1,7 @@
 import React from "react"
 
 export const initialState = {
-  user: undefined
+  user: null
 }
 
 export const Context = React.createContext(initialState)
