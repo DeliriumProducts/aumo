@@ -1,4 +1,4 @@
-import { withAuth } from "../hocs/withAuth"
+import withAuth from "../hocs/withAuth"
 
 export const Products = () => <div>Products</div>
 
