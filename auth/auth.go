@@ -81,8 +81,10 @@ func (a *Authenticator) GetFromRequest(r *http.Request) (*aumo.User, error) {
 // SetCookieHeader sets the cookie to the response
 func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:  CookieKey,
-		Value: sID,
+		Name:     CookieKey,
+		Value:    sID,
+		HttpOnly: true,
+		Path:     "/",
 		Expires: time.Now().Add(
 			time.Duration(a.expiryTime) * time.Second,
 		),

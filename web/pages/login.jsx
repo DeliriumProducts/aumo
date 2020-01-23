@@ -20,7 +20,7 @@ const Login = props => {
           password
         }
 
-        const authAPI = AuthAPI(BACKEND_URL)
+        const authAPI = new AuthAPI(BACKEND_URL)
         await authAPI.login(credentials)
       }
     })
@@ -112,7 +112,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   @media only screen and (max-width: 600px) {
-    margin-top: 300px;
     flex-direction: column;
   }
 `
