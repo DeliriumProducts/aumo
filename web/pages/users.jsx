@@ -151,7 +151,9 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   @media only screen and (max-width: 900px) {
-    padding: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
   }
 `
 
