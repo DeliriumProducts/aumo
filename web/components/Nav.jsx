@@ -22,7 +22,7 @@ const Nav = props => (
       </Link>
       {props.route === "/" ? (
         <Link href="/login">
-          <Button type="primary">LOGIN NOW</Button>
+          <Button type="primary">GO TO ADMIN PANEL</Button>
         </Link>
       ) : props.route === "/login" ? (
         <></>
