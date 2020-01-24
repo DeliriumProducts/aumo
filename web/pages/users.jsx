@@ -1,5 +1,15 @@
 import Head from "next/head"
-import { Icon, Card, Button, Avatar, Modal, Carousel } from "antd"
+import {
+  Icon,
+  Card,
+  Button,
+  Avatar,
+  Modal,
+  Carousel,
+  Popconfirm,
+  Tag,
+  message
+} from "antd"
 import React from "react"
 import { UserAPI } from "aumo-api"
 import { THEME_VARIABLES } from "../config"
@@ -7,8 +17,9 @@ import styled from "styled-components"
 import withAuth from "../hocs/withAuth.js"
 import { BACKEND_URL } from "../config"
 
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+const colors = {
+  Waiter: "blue",
+  Admin: "magenta"
 }
 
 const Users = () => {
@@ -28,23 +39,32 @@ const Users = () => {
   const showUser = async (e, user) => {
     setLoading(true)
     setUserModal(true)
-    const newUser = await new UserAPI(BACKEND_URL).get(user.id)
-    setLoading(false)
-    setCurrentUser(newUser)
-    // Modal.info({
-    //   title: user.name,
-    //   content: (
-    //     <div>
-    //       <p>some messages...some messages...</p>
-    //       <p>some messages...some messages...</p>
-    //     </div>
-    //   ),
-    //   onOk() {}
-    // })
+    try {
+      const newUser = await new UserAPI(BACKEND_URL).get(user.id)
+      setCurrentUser(newUser)
+    } catch (e) {
+      message.error(`${e.error}`)
+      setUserModal(false)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const deleteUser = (e, user) => {
-    console.log(id)
+  const deleteUser = async user => {
+    setLoading(true)
+    try {
+      await new UserAPI(BACKEND_URL).delete(user.id)
+      message.success(`Successfully deleted user ${user.name} 🎉`)
+      setUsers(prevUsers =>
+        prevUsers.filter(pu => {
+          return pu.id !== user.id
+        })
+      )
+    } catch (e) {
+      message.error(`${e}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -68,6 +88,7 @@ const Users = () => {
             />
           ))}
         <Modal
+          width={400}
           visible={userModal}
           centered
           onCancel={() => setUserModal(false)}
@@ -97,24 +118,36 @@ const User = ({ user, loading }) => {
                 />
               }
             >
-              <Card.Meta title={user.name} description={user.email} />
+              <Card.Meta
+                title={
+                  <>
+                    {user.name}
+                    <Tag
+                      color={colors[user.role]}
+                      key={user.role}
+                      style={{ marginLeft: 10 }}
+                    >
+                      {user.role.toUpperCase()}
+                    </Tag>
+                  </>
+                }
+                description={user.email}
+              />
+              <UserInfo>
+                <div>
+                  <Bold>{user.points}</Bold> pts.
+                </div>
+                <div>
+                  <Bold>{user.receipts.length}</Bold> receipts
+                </div>
+                <div>
+                  <Bold>{user.orders.length}</Bold> orders
+                </div>
+              </UserInfo>
             </Card>
-            <UserInfo>
-              <div>
-                <Bold>{user.points}</Bold> pts.
-              </div>
-              <div>
-                <Bold>{user.receipts.length}</Bold> receipts
-              </div>
-              <div>
-                <Bold>{user.orders.length}</Bold> orders
-              </div>
-              <Filler />
-            </UserInfo>
           </>
         )}
       </Center>
-
       {user && user.orders && user.orders.length > 0 && (
         <Orders
           autoplay
@@ -173,11 +206,7 @@ const Orders = styled(Carousel)`
 `
 
 const UserInfo = styled.div`
-  display: flex;
-  padding: 1rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 8px;
 `
 
 const Bold = styled.span`
@@ -187,6 +216,8 @@ const Bold = styled.span`
 
 const Center = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const UserCard = ({ user, onDelete, onClick }) => {
@@ -205,20 +236,29 @@ const UserCard = ({ user, onDelete, onClick }) => {
         <h2>{user.email}</h2>
       </NameContainer>
       <Filler />
-      <Button
-        type="danger"
-        icon="delete"
-        size="large"
-        onClick={e => {
+      <Popconfirm
+        onConfirm={e => {
           e.stopPropagation()
-          onDelete(e, user)
+          onDelete(user)
         }}
-        style={{
-          right: 10
-        }}
+        title={`Are you sure?`}
+        placement="bottom"
+        okText="Yes"
+        okType="danger"
+        onCancel={e => e.stopPropagation()}
       >
-        Delete
-      </Button>
+        <Button
+          type="danger"
+          icon="delete"
+          size="large"
+          onClick={e => e.stopPropagation()}
+          style={{
+            right: 10
+          }}
+        >
+          Delete
+        </Button>
+      </Popconfirm>
     </UserCardContainer>
   )
 }

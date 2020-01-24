@@ -52,7 +52,8 @@ const Nav = props => (
               type="ghost"
               onClick={async () => {
                 await new AuthAPI(BACKEND_URL).logout()
-                message.success("Logged out!", 2, () => Router.replace("/"))
+                message.success("Logged out!")
+                Router.replace("/")
               }}
             >
               <Icon type="logout" />
