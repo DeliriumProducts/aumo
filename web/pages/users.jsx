@@ -66,7 +66,7 @@ const Users = () => {
     }
     try {
       await new UserAPI(BACKEND_URL).setRole(user.id, role)
-      message.success(`Successfully changed ${user.name}'s role to ${role}!`)
+      message.success(`Successfully changed ${user.name}'s role to ${role}! 🎉`)
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
@@ -97,7 +97,7 @@ const Users = () => {
   const deleteUser = async user => {
     try {
       await new UserAPI(BACKEND_URL).delete(user.id)
-      message.success(`Successfully deleted user ${user.name} 🎉`)
+      message.success(`Successfully deleted user ${user.name}! 🎉`)
       setUsers(prevUsers =>
         prevUsers.filter(pu => {
           return pu.id !== user.id

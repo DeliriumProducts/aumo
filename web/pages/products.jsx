@@ -46,7 +46,7 @@ export const Products = () => {
           price: Number(product.price),
           stock: Number(product.stock)
         })
-        message.success(`Successfully edited product ${product.name}!`)
+        message.success(`Successfully edited product ${product.name}! 🎉`)
         const prods = ctx.state.products.map(pp => {
           if (pp.id === curProduct.id) {
             return {
@@ -79,7 +79,7 @@ export const Products = () => {
   const handleDelete = async p => {
     try {
       await new ProductAPI(BACKEND_URL).delete(p.id)
-      message.success(`Successfully deleted product ${p.name}!`)
+      message.success(`Successfully deleted product ${p.name}! 🎉`)
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
