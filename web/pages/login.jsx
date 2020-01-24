@@ -28,7 +28,6 @@ const Login = props => {
           await authAPI.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
         } catch (err) {
-          console.log(err)
           if (!err.response) {
             message.error(`${err}`, 5)
             return
@@ -122,7 +121,7 @@ Login.getInitialProps = async ctx => {
   if (req && res) {
     if (req.headers.cookie) {
       try {
-        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
+        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie).data
         if (auth.role === "Admin") {
           res.writeHead(302, {
             Location: "/products"
@@ -133,14 +132,14 @@ Login.getInitialProps = async ctx => {
     }
   } else {
     try {
-      auth = await new AuthAPI(BACKEND_URL).me()
+      auth = await new AuthAPI(BACKEND_URL).me().data
       if (auth.role === "Admin") {
         Router.replace("/products")
       }
     } catch (err) {}
   }
 
-  return { auth }
+  return { user: !!auth }
 }
 
 const Card = styled.div`
