@@ -41,7 +41,6 @@ export default C =>
       } else {
         try {
           auth = await new AuthAPI(BACKEND_URL).me()
-          console.log(auth)
           if (auth.role !== "Admin") {
             throw {
               status: 401

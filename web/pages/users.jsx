@@ -1,4 +1,6 @@
 import Head from "next/head"
+import { THEME_VARIABLES } from "../config"
+import { Card, Button, Avatar } from "antd"
 import React from "react"
 import { UserAPI } from "aumo-api"
 import styled from "styled-components"
@@ -24,6 +26,7 @@ const Users = () => {
           users.length > 0 &&
           users.map(u => (
             <UserCard
+              id={u.id}
               key={u.id}
               name={u.name}
               email={u.email}
@@ -35,40 +38,96 @@ const Users = () => {
   )
 }
 
-const UserCard = ({ name, email, avatar, onDelete }) => {
+const UserCard = ({ id, name, email, avatar, onDelete }) => {
   return (
-    <UserCardContainer>
-      <img src={avatar} />
+    <UserCardContainer hoverable>
+      <div>
+        <Avatar src={avatar} size={80} key={id} className="avatar" />
+      </div>
       <NameContainer>
-        {name}
-        {email}
+        <h1>{name}</h1>
+        <h2>{email}</h2>
       </NameContainer>
+      <Filler />
+      <Button
+        type="danger"
+        icon="delete"
+        size="large"
+        onClick={e => {
+          e.stopPropagation()
+          onDelete(e)
+        }}
+      >
+        Delete
+      </Button>
     </UserCardContainer>
   )
 }
 
-const UserCardContainer = styled.div`
+const Filler = styled.div`
   width: 100%;
+`
+
+const UserCardContainer = styled(Card)`
+  margin-top: 8px;
+  border-radius: 20px;
+  width: 100%;
+  border: none;
+  text-align: center;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  margin-bottom: 1rem;
-  border-radius: 30px;
+  flex-direction: row;
+  padding: 0.5rem;
+  height: 8rem;
   box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
+
+  .ant-card-body {
+    width: 100%;
+    display: flex;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 0;
+    justify-content: center;
+  }
+
+  .ant-btn-group {
+    min-width: 8rem;
+  }
+
+  .ant-avatar > img {
+    object-fit: cover;
+    border: 4px solid #fff;
+    border-radius: 45px;
+  }
+
+  .ant-avatar {
+    left: 10px;
+  }
 `
 
 const NameContainer = styled.div`
   display: flex;
-  width: 100%;
+  margin-left: 2rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  h1 {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    font-weight: 700;
+  }
+  h2 {
+    margin: 0;
+    text-align: left;
+    font-weight: 400;
+  }
 `
 
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  min-width: 100%;
   display: flex;
   justify-content: center;
   padding: 10rem;
