@@ -4,17 +4,20 @@ import {
   Card,
   Button,
   Avatar,
+  Radio,
   Modal,
   Carousel,
   Popconfirm,
   Tag,
   message
 } from "antd"
+import RadioGroup from "antd/lib/radio/group"
 import React from "react"
 import { UserAPI } from "aumo-api"
 import { THEME_VARIABLES } from "../config"
 import styled from "styled-components"
 import withAuth from "../hocs/withAuth.js"
+import { Context } from "../context/context.js"
 import { BACKEND_URL } from "../config"
 
 const colors = {
@@ -23,7 +26,9 @@ const colors = {
 }
 
 const Users = () => {
+  const ctx = React.useContext(Context)
   const [users, setUsers] = React.useState([])
+  const [role, setRole] = React.useState("Admin")
   const [loading, setLoading] = React.useState(true)
   const [userModal, setUserModal] = React.useState(false)
   const [currentUser, setCurrentUser] = React.useState(null)
@@ -36,7 +41,7 @@ const Users = () => {
     })()
   }, [])
 
-  const showUser = async (e, user) => {
+  const showUser = async (_, user) => {
     setLoading(true)
     setUserModal(true)
     try {
@@ -50,8 +55,30 @@ const Users = () => {
     }
   }
 
+  const handleRoleChange = e => {
+    const role = e.target.value
+    setRole(role)
+  }
+
+  const changeRole = async (e, user) => {
+    try {
+      await new UserAPI(BACKEND_URL).setRole(user.id, role)
+      message.success(`Successfully changed ${user.name}'s role to ${role}!`)
+    } catch (err) {
+      if (!err.response) {
+        message.error(`${err}`, 5)
+        return
+      }
+      if (err.response.status === 401) {
+        message.error("Unathorized. Try again.", 1)
+      } else {
+        message.error("Server error, please try again")
+      }
+      return
+    }
+  }
+
   const deleteUser = async user => {
-    setLoading(true)
     try {
       await new UserAPI(BACKEND_URL).delete(user.id)
       message.success(`Successfully deleted user ${user.name} 🎉`)
@@ -60,10 +87,17 @@ const Users = () => {
           return pu.id !== user.id
         })
       )
-    } catch (e) {
-      message.error(`${e}`)
-    } finally {
-      setLoading(false)
+    } catch (err) {
+      if (!err.response) {
+        message.error(`${err}`, 5)
+        return
+      }
+      if (err.response.status === 401) {
+        message.error("Unathorized. Try again.", 1)
+      } else {
+        message.error("Server error, please try again")
+      }
+      return
     }
   }
 
@@ -80,11 +114,15 @@ const Users = () => {
           users.length > 0 &&
           users.map(u => (
             <UserCard
+              myEmail={ctx.state.user?.email}
               key={u.id}
               id={u.id}
               user={u}
               onClick={showUser}
               onDelete={deleteUser}
+              handleRoleChange={handleRoleChange}
+              changeRole={changeRole}
+              role={role}
             />
           ))}
         <Modal
@@ -220,7 +258,15 @@ const Center = styled.div`
   align-items: center;
 `
 
-const UserCard = ({ user, onDelete, onClick }) => {
+const UserCard = ({
+  myEmail,
+  user,
+  onDelete,
+  onClick,
+  handleRoleChange,
+  changeRole,
+  role
+}) => {
   return (
     <UserCardContainer
       hoverable
@@ -236,11 +282,55 @@ const UserCard = ({ user, onDelete, onClick }) => {
         <h2>{user.email}</h2>
       </NameContainer>
       <Filler />
+      <div onClick={e => e.stopPropagation()}>
+        <Popconfirm
+          icon={<Icon type="team" style={{ color: "unset" }} />}
+          placement="bottom"
+          onClick={e => e.stopPropagation()}
+          onCancel={e => e.stopPropagation()}
+          disabled={myEmail === user.email}
+          onConfirm={e => {
+            e.stopPropagation()
+            changeRole(e, user)
+          }}
+          title={
+            <>
+              <RadioGroup
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={e => e.stopPropagation()}
+                onChange={e => {
+                  e.stopPropagation()
+                  handleRoleChange(e)
+                }}
+                value={role}
+              >
+                <span style={{ fontWeight: 500, marginBottom: 5 }}>
+                  Available Roles
+                </span>
+                <Radio value={"Customer"}>Customer</Radio>
+                <Radio value={"Admin"}> Admin</Radio>
+              </RadioGroup>
+            </>
+          }
+        >
+          <Button
+            icon="edit"
+            disabled={myEmail === user.email}
+            onClick={e => e.stopPropagation()}
+            style={{
+              marginRight: 20
+            }}
+          >
+            Change role
+          </Button>
+        </Popconfirm>
+      </div>
       <Popconfirm
         onConfirm={e => {
           e.stopPropagation()
           onDelete(user)
         }}
+        disabled={myEmail === user.email}
         title={`Are you sure?`}
         placement="bottom"
         okText="Yes"
@@ -250,7 +340,7 @@ const UserCard = ({ user, onDelete, onClick }) => {
         <Button
           type="danger"
           icon="delete"
-          size="large"
+          disabled={myEmail === user.email}
           onClick={e => e.stopPropagation()}
           style={{
             right: 10

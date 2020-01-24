@@ -86,7 +86,7 @@ export const Products = () => {
         return
       }
       if (err.response.status === 401) {
-        message.error("Invalid credentials. Try again.", 1)
+        message.error("Unathorized. Try again.", 1)
       } else {
         message.error("Server error, please try again")
       }
