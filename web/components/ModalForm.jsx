@@ -6,6 +6,7 @@ export default Form.create()(
     render() {
       const { visible, onCancel, onCreate, form, product } = this.props
       const { getFieldDecorator } = form
+
       return (
         <Modal
           visible={visible}
@@ -21,8 +22,9 @@ export default Form.create()(
                   {
                     required: true
                   }
-                ]
-              })(<Input value={product?.name} />)}
+                ],
+                initialValue: product?.name
+              })(<Input />)}
             </Form.Item>
             <Form.Item label="Image">
               {getFieldDecorator("image", {
@@ -30,8 +32,9 @@ export default Form.create()(
                   {
                     required: true
                   }
-                ]
-              })(<Input value={product?.image} />)}
+                ],
+                initialValue: product?.image
+              })(<Input />)}
             </Form.Item>
             <Form.Item label="Price">
               {getFieldDecorator("price", {
@@ -39,8 +42,19 @@ export default Form.create()(
                   {
                     required: true
                   }
-                ]
-              })(<Input value={product?.price} />)}
+                ],
+                initialValue: product?.price
+              })(<Input />)}
+            </Form.Item>
+            <Form.Item label="Stock">
+              {getFieldDecorator("stock", {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue: product?.stock
+              })(<Input />)}
             </Form.Item>
             <Form.Item label="Description">
               {getFieldDecorator("description", {
@@ -48,8 +62,10 @@ export default Form.create()(
                   {
                     required: true
                   }
-                ]
-              })(<Input type="textarea" value={product?.description} />)}
+                ],
+
+                initialValue: product?.description
+              })(<Input type="textarea" />)}
             </Form.Item>
           </Form>
         </Modal>

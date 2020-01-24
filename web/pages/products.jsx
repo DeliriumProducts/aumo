@@ -1,16 +1,31 @@
 import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
-import { Card as c, Button } from "antd"
+import { Card as c, Button, Icon, message } from "antd"
 import { useState } from "react"
 import ModalForm from "../components/ModalForm"
-import {ProductAPI} from 'aumo-api'
+import { ProductAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
 
 export const Products = () => {
-  const [visible, setVisible] = useState(true)
+  const [products, setProducts] = useState([])
+  const [curProduct, setCurProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [formRef, setFormRef] = useState(null)
 
+  React.useEffect(() => {
+    ;(async () => {
+      const data = await new ProductAPI(BACKEND_URL).getAll()
+      setProducts(data)
+      setLoading(false)
+    })()
+  }, [])
+
+  const handleEdit = p => {
+    setCurProduct(p)
+    showModal()
+  }
   const showModal = () => setVisible(true)
 
   const handleCancel = () => setVisible(false)
@@ -18,12 +33,34 @@ export const Products = () => {
   const handleCreate = () => {
     const { form } = formRef.props
 
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, product) => {
       if (err) {
         return
       }
 
-      console.log("Received values of form: ", values)
+      try {
+        await new ProductAPI(BACKEND_URL).edit(curProduct.id, product)
+        message.success(`Successfully edited product ${product.name}!`)
+        setProducts(p =>
+          p.map(pp => {
+            if (pp.id === curProduct.id) {
+              return { id: curProduct.id, ...product }
+            }
+            return pp
+          })
+        )
+      } catch (err) {
+        if (!err.response) {
+          message.error(`${err}`, 5)
+          return
+        }
+        if (err.response.status === 401) {
+          message.error("Invalid credentials. Try again.", 1)
+        } else {
+          message.error("Server error, please try again")
+        }
+        return
+      }
       form.resetFields()
       setVisible(false)
     })
@@ -40,51 +77,49 @@ export const Products = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Card
-          hoverable
-          cover={
-            <img
-              alt="Product"
-              src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
-            />
-          }
-        >
-          <StyledMeta
-            title={"Get 2 Buy 1 - applies for any product!"}
-            description={
-              <p>
-                kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
-                smqtaii braaat bait 10grama
-              </p>
-            }
-          />
-          <span className="actions">
-            <span>
-              <span className="price">199 </span>pts.
-            </span>
-            <span className="actions-buttons">
-              <Button
-                size="small"
-                type="primary"
-                className="edit-button"
-                icon="edit"
-              ></Button>
-              <Button size="small" type="danger" icon="delete"></Button>
-            </span>
-          </span>
-        </Card>
+        {loading && products.length < 1 && (
+          <Icon type="loading" style={{ fontSize: 24 }} spin />
+        )}
+
+        {products &&
+          products.length > 0 &&
+          products.map(p => (
+            <ProductCard
+              key={p.id}
+              hoverable
+              cover={<img alt="Product" src={p.image} />}
+            >
+              <StyledMeta title={p.name} description={<p>{p.description}</p>} />
+              <span className="actions">
+                <span>
+                  <span className="price">{p.price} </span>pts.
+                </span>
+                <span className="actions-buttons">
+                  <Button
+                    size="small"
+                    type="primary"
+                    className="edit-button"
+                    icon="edit"
+                    onClick={() => handleEdit(p)}
+                  ></Button>
+                  <Button size="small" type="danger" icon="delete"></Button>
+                </span>
+              </span>
+            </ProductCard>
+          ))}
         <ModalForm
           wrappedComponentRef={saveFormRef}
           visible={visible}
           onCancel={handleCancel}
           onCreate={handleCreate}
+          product={curProduct}
         />
       </Container>
     </>
   )
 }
 
-const Card = styled(c)`
+const ProductCard = styled(c)`
   border-radius: 24px;
   display: flex;
   border: none;
@@ -170,6 +205,7 @@ const StyledMeta = styled(c.Meta)`
 
 const Container = styled.div`
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: center;
   & > div {
@@ -182,27 +218,12 @@ const Container = styled.div`
 
   min-height: 100%;
   min-width: 100%;
-  display: flex;
-  justify-content: center;
   padding: 10rem;
-  align-items: center;
-  flex-direction: column;
   @media only screen and (max-width: 900px) {
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
   }
 `
-
-Products.getInitialProps = () => {
-  let products = {}
-  try {
-    
-    products = await new ProductAPI(BACKEND_URL).getAll()
-  } catch (error) {
-    
-  }
-}
-
 
 export default withAuth(Products)
