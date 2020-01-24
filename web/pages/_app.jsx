@@ -23,9 +23,11 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     margin: 0;
+    padding: 0;
     height: auto;
     min-height: 100%;
     scroll-behavior: smooth;
+    box-sizing: border-box
   }
 
    body {
@@ -40,8 +42,9 @@ const GlobalStyle = createGlobalStyle`
     #__next,
     #__next > div {
         min-height: 100vh;
-        min-width: 100vw;
+        min-width: 100%;
         position: absolute;
+        box-sizing: border-box
   }
 `
 

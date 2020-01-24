@@ -8,15 +8,48 @@ export const Products = () => (
       <title>Aumo</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <Container>Products</Container>
+    <Container>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+      <Card>sdsd</Card>
+    </Container>
   </>
 )
+
+const Card = styled.div`
+  /* margin-top: 190px; */
+  background-color: #fff;
+  width: 200px;
+  height: 150px;
+  text-align: center;
+  /* padding: 20px; */
+  border-radius: 30px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.12);
+
+  & p {
+    color: black;
+    font-weight: 600;
+  }
+`
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
+  /* height: 100%; */
+  /* width: 100%; */
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   @media only screen and (max-width: 600px) {
     flex-direction: column;
   }
