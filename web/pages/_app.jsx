@@ -1,17 +1,12 @@
 import App from "next/app"
 import Nav from "../components/Nav"
 import Router from "next/router"
-import { Affix } from "antd"
 import NProgress from "nprogress"
 import React from "react"
 import styled, { createGlobalStyle } from "styled-components"
 import "../assets/nprogress.less"
 import ContextProvider from "../context/providers/contextProvider"
 import { Context } from "../context/context.js"
-
-/**
- * https://github.com/zeit/next.js/tree/canary/examples/with-loading
- */
 
 Router.events.on("routeChangeStart", () => {
   NProgress.start()
@@ -31,7 +26,16 @@ const GlobalStyle = createGlobalStyle`
   }
 
    body {
-       background-color: #f9faff;
+    min-height: 100%;
+    height: initial;
+    background-image: url('blob-shape.svg'), url('blob-shape-2.svg');
+       background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 
+      top -8vmax
+      right -10vmax,
+      left -8vmax
+      bottom -13vmax;
    }
 
   * {
@@ -67,49 +71,11 @@ export default class MyApp extends App {
   }
 }
 
-const BlobWrapper = styled.div`
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-`
-
-const Blob = styled.img`
-  position: absolute;
-  z-index: 0;
-  @media only screen and (max-width: 900px) {
-    display: none;
-  }
-`
-
 const Layout = ({ children, route }) => {
   const ctx = React.useContext(Context)
 
   return (
     <>
-      <BlobWrapper>
-        <Blob
-          src="blob-shape.svg"
-          style={{
-            top: "-8vmax",
-            right: "-10vmax",
-            transform: "rotate(90deg)"
-          }}
-        />
-        <Blob
-          src="blob-shape-2.svg"
-          style={{
-            left: "-8vmax",
-            bottom: "-13vmax"
-          }}
-        />
-        <Blob
-          src="blob-shape-3.svg"
-          style={{
-            bottom: "-13vmax",
-            right: "-7vmax"
-          }}
-        />
-      </BlobWrapper>
       <Nav name={ctx.state.user?.name} route={route} />
       {children}
     </>
