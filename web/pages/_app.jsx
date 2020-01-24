@@ -29,13 +29,30 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     height: initial;
     background-image: url('blob-shape.svg'), url('blob-shape-2.svg');
-       background-repeat: no-repeat;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 
       top -8vmax
       right -10vmax,
       left -8vmax
       bottom -13vmax;
+
+      @media only screen and (max-width: 1366px) {
+            background-position: 
+              top -8vmax
+              right -20vmax,
+              left -8vmax
+              bottom -34vmax;
+      }
+
+      @media only screen and (max-width: 600px) {
+            background-position: 
+              top -25vmax
+              right -20vmax,
+              left -23vmax
+              bottom -34vmax;
+      }
+
    }
 
   * {
