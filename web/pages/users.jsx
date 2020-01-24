@@ -11,7 +11,7 @@ const Users = () => {
   React.useEffect(() => {
     ;(async () => {
       const data = await new UserAPI(BACKEND_URL).getAll()
-      setUsers(data.data)
+      setUsers(data)
     })()
   }, [])
 

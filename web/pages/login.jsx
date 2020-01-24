@@ -121,7 +121,7 @@ Login.getInitialProps = async ctx => {
   if (req && res) {
     if (req.headers.cookie) {
       try {
-        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie).data
+        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
         if (auth.role === "Admin") {
           res.writeHead(302, {
             Location: "/products"
@@ -132,7 +132,7 @@ Login.getInitialProps = async ctx => {
     }
   } else {
     try {
-      auth = await new AuthAPI(BACKEND_URL).me().data
+      auth = await new AuthAPI(BACKEND_URL).me()
       if (auth.role === "Admin") {
         Router.replace("/products")
       }
