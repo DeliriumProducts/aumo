@@ -32,6 +32,7 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.ID = 0
 	rest.JSON(w, user, http.StatusOK)
 }
 
@@ -63,6 +64,7 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.ID = 0
 	rest.auth.SetCookieHeader(w, sID)
 	rest.JSON(w, user, http.StatusOK)
 }
@@ -74,6 +76,7 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.ID = 0
 	rest.JSON(w, user, http.StatusOK)
 }
 

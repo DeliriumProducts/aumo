@@ -1,5 +1,4 @@
 import Head from "next/head"
-import { THEME_VARIABLES } from "../config"
 import { Card, Button, Avatar } from "antd"
 import React from "react"
 import { UserAPI } from "aumo-api"
@@ -15,7 +14,15 @@ const Users = () => {
       setUsers(data.data)
     })()
   }, [])
-  console.log(users)
+
+  const showUser = (e, id) => {
+    console.log(id)
+  }
+
+  const deleteUser = (e, id) => {
+    console.log(id)
+  }
+
   return (
     <>
       <Head>
@@ -29,6 +36,8 @@ const Users = () => {
               id={u.id}
               key={u.id}
               name={u.name}
+              onClick={showUser}
+              onDelete={deleteUser}
               email={u.email}
               avatar={u.avatar}
             />
@@ -38,9 +47,14 @@ const Users = () => {
   )
 }
 
-const UserCard = ({ id, name, email, avatar, onDelete }) => {
+const UserCard = ({ id, name, email, avatar, onDelete, onClick }) => {
   return (
-    <UserCardContainer hoverable>
+    <UserCardContainer
+      hoverable
+      onClick={e => {
+        onClick(e, id)
+      }}
+    >
       <div>
         <Avatar src={avatar} size={80} key={id} className="avatar" />
       </div>
@@ -55,7 +69,7 @@ const UserCard = ({ id, name, email, avatar, onDelete }) => {
         size="large"
         onClick={e => {
           e.stopPropagation()
-          onDelete(e)
+          onDelete(e, id)
         }}
       >
         Delete
