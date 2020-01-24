@@ -1,6 +1,7 @@
 import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
+import { Card as c } from "antd"
 
 export const Products = () => (
   <>
@@ -9,40 +10,96 @@ export const Products = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Container>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
-      <Card>sdsd</Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="price">199 </span>pts.
+      </Card>
       <Card>sdsd</Card>
     </Container>
   </>
 )
 
-const Card = styled.div`
-  background-color: #fff;
-  width: 200px;
-  height: 150px;
+const Card = styled(c)`
+  border-radius: 24px;
+  display: flex;
+  border: none;
+  flex-direction: column;
   text-align: center;
-  padding: 20px;
-  border-radius: 30px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.12);
+  margin: 8px;
+  box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
+  width: 220px;
+  height: 320px;
 
-  & p {
+  .ant-card-body {
+    padding-top: 0;
+    height: 100%;
+    text-align: left;
+  }
+
+  & img {
+    border-radius: 7px 7px 0 0;
+    object-fit: cover;
+    /* width: 100%; */
+    height: 10rem;
+  }
+
+  .ant-card-actions {
+    background-color: #fff;
+    border-radius: 0 0 7px 7px;
+  }
+
+  .price {
     color: black;
-    font-weight: 600;
+    font-weight: 500;
   }
 `
+
+const StyledMeta = styled(c.Meta)`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  & * {
+    white-space: initial;
+    overflow-wrap: normal;
+  }
+  .ant-card-meta-title {
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .ant-card-meta-description {
+    color: black;
+    & p {
+      /* width: 100%; */
+      font-size: 14px;
+      max-height: 30px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  .ant-card-meta-detail {
+  }
+`
+
 const Container = styled.div`
   margin-top: 190px;
   width: 100%;
