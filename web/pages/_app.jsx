@@ -46,11 +46,7 @@ const GlobalStyle = createGlobalStyle`
       }
 
       @media only screen and (max-width: 600px) {
-            background-position: 
-              top -25vmax
-              right -20vmax,
-              left -23vmax
-              bottom -34vmax;
+          background: #F9FAFF;
       }
 
    }
