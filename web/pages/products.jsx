@@ -30,12 +30,11 @@ export const Products = () => (
 )
 
 const Card = styled.div`
-  /* margin-top: 190px; */
   background-color: #fff;
   width: 200px;
   height: 150px;
   text-align: center;
-  /* padding: 20px; */
+  padding: 20px;
   border-radius: 30px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.12);
 
@@ -45,12 +44,16 @@ const Card = styled.div`
   }
 `
 const Container = styled.div`
-  /* height: 100%; */
-  /* width: 100%; */
+  margin-top: 190px;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  & > div {
+    margin: 2rem;
+  }
   @media only screen and (max-width: 600px) {
+    align-items: center;
     flex-direction: column;
   }
 `
