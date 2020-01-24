@@ -1,7 +1,7 @@
 import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
-import { Card as c, Button, Icon, message } from "antd"
+import { Card as c, Button, Icon, message, Popconfirm } from "antd"
 import { useState, useContext } from "react"
 import ModalForm from "../components/ModalForm"
 import { ProductAPI } from "aumo-api"
@@ -76,6 +76,26 @@ export const Products = () => {
     })
   }
 
+  const handleDelete = async p => {
+    try {
+      await new ProductAPI(BACKEND_URL).delete(p.id)
+      message.success(`Successfully deleted product ${p.name}!`)
+    } catch (err) {
+      if (!err.response) {
+        message.error(`${err}`, 5)
+        return
+      }
+      if (err.response.status === 401) {
+        message.error("Invalid credentials. Try again.", 1)
+      } else {
+        message.error("Server error, please try again")
+      }
+      return
+    }
+    const prods = ctx.state.products.filter(pp => pp.id !== p.id)
+    ctx.dispatch({ type: "setProducts", payload: prods })
+  }
+
   const saveFormRef = fr => {
     setFormRef(fr)
   }
@@ -112,7 +132,20 @@ export const Products = () => {
                     icon="edit"
                     onClick={() => handleEdit(p)}
                   ></Button>
-                  <Button size="small" type="danger" icon="delete"></Button>
+
+                  <Popconfirm
+                    onConfirm={e => {
+                      e.stopPropagation()
+                      handleDelete(p)
+                    }}
+                    title={`Are you sure?`}
+                    placement="bottom"
+                    okText="Yes"
+                    okType="danger"
+                    onCancel={e => e.stopPropagation()}
+                  >
+                    <Button size="small" type="danger" icon="delete"></Button>
+                  </Popconfirm>
                 </span>
               </span>
             </ProductCard>
