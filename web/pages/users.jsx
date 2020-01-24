@@ -55,12 +55,14 @@ const Users = () => {
     }
   }
 
-  const handleRoleChange = e => {
-    const role = e.target.value
+  const handleRoleChange = role => {
     setRole(role)
   }
 
   const changeRole = async (e, user) => {
+    if (user.role === role) {
+      return
+    }
     try {
       await new UserAPI(BACKEND_URL).setRole(user.id, role)
       message.success(`Successfully changed ${user.name}'s role to ${role}!`)
@@ -76,6 +78,19 @@ const Users = () => {
       }
       return
     }
+
+    setUsers(users =>
+      users.map(pu => {
+        if (pu.id == user.id) {
+          return {
+            ...pu,
+            role: role
+          }
+        }
+
+        return pu
+      })
+    )
   }
 
   const deleteUser = async user => {
@@ -139,6 +154,108 @@ const Users = () => {
   )
 }
 
+const UserCard = ({
+  myEmail,
+  user,
+  onDelete,
+  onClick,
+  handleRoleChange,
+  changeRole,
+  role
+}) => {
+  return (
+    <UserCardContainer
+      hoverable
+      onClick={e => {
+        onClick(e, user)
+      }}
+    >
+      <div>
+        <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
+      </div>
+      <NameContainer>
+        <div className="role">
+          <h1>{user.name}</h1>
+          <Tag color={colors[user.role]}>{user.role.toUpperCase()}</Tag>
+        </div>
+        <h2>{user.email}</h2>
+      </NameContainer>
+      <Filler />
+      <div onClick={e => e.stopPropagation()}>
+        <Popconfirm
+          icon={<Icon type="team" style={{ color: "unset" }} />}
+          placement="bottom"
+          onClick={e => e.stopPropagation()}
+          onCancel={e => e.stopPropagation()}
+          disabled={myEmail === user.email}
+          onConfirm={e => {
+            e.stopPropagation()
+            changeRole(e, user)
+          }}
+          title={
+            <>
+              <RadioGroup
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={e => e.stopPropagation()}
+                onChange={e => {
+                  e.stopPropagation()
+                  const role = e.target.value
+                  handleRoleChange(role)
+                }}
+                value={role}
+              >
+                <span style={{ fontWeight: 500, marginBottom: 5 }}>
+                  Available Roles
+                </span>
+                <Radio value={"Customer"}>Customer</Radio>
+                <Radio value={"Admin"}> Admin</Radio>
+              </RadioGroup>
+            </>
+          }
+        >
+          <Button
+            icon="edit"
+            disabled={myEmail === user.email}
+            onClick={e => {
+              e.stopPropagation()
+              handleRoleChange(user.role)
+            }}
+            style={{
+              marginRight: 20
+            }}
+          >
+            Change role
+          </Button>
+        </Popconfirm>
+      </div>
+      <Popconfirm
+        onConfirm={e => {
+          e.stopPropagation()
+          onDelete(user)
+        }}
+        disabled={myEmail === user.email}
+        title={`Are you sure?`}
+        placement="bottom"
+        okText="Yes"
+        okType="danger"
+        onCancel={e => e.stopPropagation()}
+      >
+        <Button
+          type="danger"
+          icon="delete"
+          disabled={myEmail === user.email}
+          onClick={e => e.stopPropagation()}
+          style={{
+            right: 10
+          }}
+        >
+          Delete
+        </Button>
+      </Popconfirm>
+    </UserCardContainer>
+  )
+}
+
 const User = ({ user, loading }) => {
   return (
     <>
@@ -176,10 +293,12 @@ const User = ({ user, loading }) => {
                   <Bold>{user.points}</Bold> pts.
                 </div>
                 <div>
-                  <Bold>{user.receipts.length}</Bold> receipts
+                  <Bold>{user.receipts.length}</Bold>{" "}
+                  {user.receipts.length == 1 ? "receipt" : "receipts"}
                 </div>
                 <div>
-                  <Bold>{user.orders.length}</Bold> orders
+                  <Bold>{user.orders.length}</Bold>{" "}
+                  {user.orders.length == 1 ? "order" : "orders"}
                 </div>
               </UserInfo>
             </Card>
@@ -258,101 +377,6 @@ const Center = styled.div`
   align-items: center;
 `
 
-const UserCard = ({
-  myEmail,
-  user,
-  onDelete,
-  onClick,
-  handleRoleChange,
-  changeRole,
-  role
-}) => {
-  return (
-    <UserCardContainer
-      hoverable
-      onClick={e => {
-        onClick(e, user)
-      }}
-    >
-      <div>
-        <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
-      </div>
-      <NameContainer>
-        <h1>{user.name}</h1>
-        <h2>{user.email}</h2>
-      </NameContainer>
-      <Filler />
-      <div onClick={e => e.stopPropagation()}>
-        <Popconfirm
-          icon={<Icon type="team" style={{ color: "unset" }} />}
-          placement="bottom"
-          onClick={e => e.stopPropagation()}
-          onCancel={e => e.stopPropagation()}
-          disabled={myEmail === user.email}
-          onConfirm={e => {
-            e.stopPropagation()
-            changeRole(e, user)
-          }}
-          title={
-            <>
-              <RadioGroup
-                style={{ display: "flex", flexDirection: "column" }}
-                onClick={e => e.stopPropagation()}
-                onChange={e => {
-                  e.stopPropagation()
-                  handleRoleChange(e)
-                }}
-                value={role}
-              >
-                <span style={{ fontWeight: 500, marginBottom: 5 }}>
-                  Available Roles
-                </span>
-                <Radio value={"Customer"}>Customer</Radio>
-                <Radio value={"Admin"}> Admin</Radio>
-              </RadioGroup>
-            </>
-          }
-        >
-          <Button
-            icon="edit"
-            disabled={myEmail === user.email}
-            onClick={e => e.stopPropagation()}
-            style={{
-              marginRight: 20
-            }}
-          >
-            Change role
-          </Button>
-        </Popconfirm>
-      </div>
-      <Popconfirm
-        onConfirm={e => {
-          e.stopPropagation()
-          onDelete(user)
-        }}
-        disabled={myEmail === user.email}
-        title={`Are you sure?`}
-        placement="bottom"
-        okText="Yes"
-        okType="danger"
-        onCancel={e => e.stopPropagation()}
-      >
-        <Button
-          type="danger"
-          icon="delete"
-          disabled={myEmail === user.email}
-          onClick={e => e.stopPropagation()}
-          style={{
-            right: 10
-          }}
-        >
-          Delete
-        </Button>
-      </Popconfirm>
-    </UserCardContainer>
-  )
-}
-
 const Filler = styled.div`
   width: 100%;
   height: 100%;
@@ -402,7 +426,7 @@ const NameContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h1 {
+  * h1 {
     margin: 0;
     width: 100%;
     text-align: left;
@@ -412,6 +436,14 @@ const NameContainer = styled.div`
     margin: 0;
     text-align: left;
     font-weight: 400;
+  }
+  .role {
+    width: 100%;
+  }
+  .role span {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    float: left;
   }
 `
 
