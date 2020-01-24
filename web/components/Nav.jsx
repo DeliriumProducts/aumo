@@ -32,9 +32,12 @@ const Nav = props => (
             Welcome back, <span>{props.name}</span>
           </Welcome>
           {props.route === "/products" ? (
-            <Button type="primary" icon="plus" className="new-button">
-              NEW
-            </Button>
+            <>
+              <Button type="primary" icon="plus" className="new-button">
+                NEW
+              </Button>
+              <Divider type="vertical" className="btn-divider" />
+            </>
           ) : (
             <></>
           )}
@@ -52,7 +55,8 @@ const Nav = props => (
               type="ghost"
               onClick={async () => {
                 await new AuthAPI(BACKEND_URL).logout()
-                message.success("Logged out!", 2, () => Router.replace("/"))
+                message.success("Logged out!")
+                Router.replace("/")
               }}
             >
               <Icon type="logout" />
@@ -114,8 +118,13 @@ const Menu = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    .btn-divider {
+      display: none;
+    }
+    .new-button {
+      order: 2;
+    }
   }
-
   .new-button {
     background-color: #55c353;
     border: none;
@@ -128,6 +137,7 @@ const LinkList = styled.ul`
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  padding-left: 0;
   @media only screen and (max-width: 600px) {
     width: 100%;
     margin-top: 1%;
