@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../config"
 import { AuthAPI } from "aumo-api"
 import Link from "next/link"
 import styled from "styled-components"
-import { Icon, Divider, Button } from "antd"
+import { Icon, Divider, Button, message } from "antd"
 
 const links = [
   { href: "/products", label: "Products", icon: <Icon type="shop" /> },
@@ -45,7 +45,7 @@ const Nav = props => (
               type="ghost"
               onClick={async () => {
                 await new AuthAPI(BACKEND_URL).logout()
-                Router.replace("/")
+                message.success("Logged out!", 2, () => Router.replace("/"))
               }}
             >
               <Icon type="logout" />

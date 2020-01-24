@@ -24,12 +24,11 @@ const Login = props => {
         const authAPI = new AuthAPI(BACKEND_URL)
         try {
           await authAPI.login(credentials)
+          message.success("Logged in!", 3, () => Router.replace("/products"))
         } catch (e) {
           message.error(`${e.response.data.error}`, 5)
           return
         }
-
-        Router.replace("/products")
       }
     })
   }
