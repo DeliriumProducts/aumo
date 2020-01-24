@@ -1,7 +1,7 @@
 import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
-import { Card as c } from "antd"
+import { Card as c, Button } from "antd"
 
 export const Products = () => (
   <>
@@ -27,9 +27,405 @@ export const Products = () => (
             </p>
           }
         />
-        <span className="price">199 </span>pts.
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
       </Card>
-      <Card>sdsd</Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
+      <Card
+        cover={
+          <img
+            alt="Product"
+            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+          />
+        }
+      >
+        <StyledMeta
+          title={"Get 2 Buy 1 - applies for any product!"}
+          description={
+            <p>
+              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+              smqtaii braaat bait 10grama
+            </p>
+          }
+        />
+        <span className="actions">
+          <span>
+            <span className="price">199 </span>pts.
+          </span>
+          <span className="actions-buttons">
+            <Button
+              size="small"
+              type="primary"
+              className="edit-button"
+              icon="edit"
+            ></Button>
+            <Button size="small" type="danger" icon="delete"></Button>
+          </span>
+        </span>
+      </Card>
     </Container>
   </>
 )
@@ -49,6 +445,26 @@ const Card = styled(c)`
     padding-top: 0;
     height: 100%;
     text-align: left;
+    & .actions {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      button {
+        top: 3px;
+        border: none;
+        margin-left: 5px;
+        border-radius: 11px;
+        width: 40px;
+        height: 40px;
+        font-size: 18p55c353x;
+        box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
+      }
+
+      .edit-button {
+        background-color: #55c353;
+      }
+    }
   }
 
   & img {
