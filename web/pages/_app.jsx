@@ -73,6 +73,9 @@ const BlobWrapper = styled.div`
 const Blob = styled.img`
   position: absolute;
   z-index: 0;
+  @media only screen and (max-width: 900px) {
+    display: none;
+  }
 `
 
 const Layout = ({ children, route }) => {
@@ -94,6 +97,13 @@ const Layout = ({ children, route }) => {
           style={{
             left: "-8vmax",
             bottom: "-13vmax"
+          }}
+        />
+        <Blob
+          src="blob-shape-3.svg"
+          style={{
+            bottom: "-13vmax",
+            right: "-7vmax"
           }}
         />
       </BlobWrapper>

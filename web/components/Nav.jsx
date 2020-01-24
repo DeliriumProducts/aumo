@@ -40,7 +40,7 @@ const Nav = props => (
                 </LinkItem>
               </Link>
             ))}
-            <Divider type="vertical" className="divider" />
+            <Divider type="vertical" />
             <Button
               type="ghost"
               onClick={async () => {
@@ -107,9 +107,6 @@ const Menu = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    .divider {
-      display: none;
-    }
   }
 `
 const LinkList = styled.ul`
@@ -120,10 +117,12 @@ const LinkList = styled.ul`
   align-items: center;
   flex-direction: row;
   @media only screen and (max-width: 600px) {
+    width: 100%;
+    margin-top: 1%;
     align-items: center;
+    flex-direction: row;
     padding-left: 0;
     justify-content: center;
-    flex-direction: column;
   }
 `
 
