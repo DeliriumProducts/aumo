@@ -31,6 +31,13 @@ const Nav = props => (
           <Welcome>
             Welcome back, <span>{props.name}</span>
           </Welcome>
+          {props.route === "/products" ? (
+            <Button type="primary" icon="plus" className="new-button">
+              NEW
+            </Button>
+          ) : (
+            <></>
+          )}
           <LinkList>
             {links.map(({ key, href, label, icon }) => (
               <Link key={key} href={href}>
@@ -107,6 +114,11 @@ const Menu = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .new-button {
+    background-color: #55c353;
+    border: none;
   }
 `
 const LinkList = styled.ul`

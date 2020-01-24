@@ -132,7 +132,6 @@ const StyledMeta = styled(c.Meta)`
 `
 
 const Container = styled.div`
-  margin-top: 190px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -142,6 +141,19 @@ const Container = styled.div`
   @media only screen and (max-width: 600px) {
     align-items: center;
     flex-direction: column;
+  }
+
+  min-height: 100%;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10rem;
+  align-items: center;
+  flex-direction: column;
+  @media only screen and (max-width: 900px) {
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
   }
 `
 
