@@ -1,25 +1,49 @@
 import Head from "next/head"
-import { Card, Button, Avatar } from "antd"
+import { Icon, Card, Button, Avatar, Modal, Carousel } from "antd"
 import React from "react"
 import { UserAPI } from "aumo-api"
+import { THEME_VARIABLES } from "../config"
 import styled from "styled-components"
 import withAuth from "../hocs/withAuth.js"
 import { BACKEND_URL } from "../config"
 
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const Users = () => {
   const [users, setUsers] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+  const [userModal, setUserModal] = React.useState(false)
+  const [currentUser, setCurrentUser] = React.useState(null)
+
   React.useEffect(() => {
     ;(async () => {
       const data = await new UserAPI(BACKEND_URL).getAll()
       setUsers(data)
+      setLoading(false)
     })()
   }, [])
 
-  const showUser = (e, id) => {
-    console.log(id)
+  const showUser = async (e, user) => {
+    setLoading(true)
+    setUserModal(true)
+    const newUser = await new UserAPI(BACKEND_URL).get(user.id)
+    setLoading(false)
+    setCurrentUser(newUser)
+    // Modal.info({
+    //   title: user.name,
+    //   content: (
+    //     <div>
+    //       <p>some messages...some messages...</p>
+    //       <p>some messages...some messages...</p>
+    //     </div>
+    //   ),
+    //   onOk() {}
+    // })
   }
 
-  const deleteUser = (e, id) => {
+  const deleteUser = (e, user) => {
     console.log(id)
   }
 
@@ -29,38 +53,156 @@ const Users = () => {
         <title>Aumo Users</title>
       </Head>
       <Container>
+        {loading && users.length < 1 && (
+          <Icon type="loading" style={{ fontSize: 24 }} spin />
+        )}
         {users &&
           users.length > 0 &&
           users.map(u => (
             <UserCard
-              id={u.id}
               key={u.id}
-              name={u.name}
+              id={u.id}
+              user={u}
               onClick={showUser}
               onDelete={deleteUser}
-              email={u.email}
-              avatar={u.avatar}
             />
           ))}
+        <Modal
+          visible={userModal}
+          centered
+          onCancel={() => setUserModal(false)}
+          footer={null}
+        >
+          <User loading={loading} user={currentUser} />
+        </Modal>
       </Container>
     </>
   )
 }
 
-const UserCard = ({ id, name, email, avatar, onDelete, onClick }) => {
+const User = ({ user, loading }) => {
+  return (
+    <>
+      <Center>
+        {loading && <Icon type="loading" style={{ fontSize: 24 }} spin />}
+        {user && (
+          <>
+            <Card
+              bordered={false}
+              cover={
+                <img
+                  alt={user.email}
+                  src={user.avatar}
+                  style={{ width: 300 }}
+                />
+              }
+            >
+              <Card.Meta title={user.name} description={user.email} />
+            </Card>
+            <UserInfo>
+              <div>
+                <Bold>{user.points}</Bold> pts.
+              </div>
+              <div>
+                <Bold>{user.receipts.length}</Bold> receipts
+              </div>
+              <div>
+                <Bold>{user.orders.length}</Bold> orders
+              </div>
+              <Filler />
+            </UserInfo>
+          </>
+        )}
+      </Center>
+
+      {user && user.orders && user.orders.length > 0 && (
+        <Orders
+          autoplay
+          effect="fade"
+          prevArrow={<Icon type="left-circle" style={{ color: "black" }} />}
+          nextArrow={<Icon type="right-circle" style={{ color: "black" }} />}
+        >
+          {user.orders.map(o => (
+            <Order product={o.product} key={o.order_id} />
+          ))}
+        </Orders>
+      )}
+    </>
+  )
+}
+
+const Order = ({ product }) => (
+  <Card
+    size="small"
+    height={400}
+    cover={
+      <img
+        src={product.image}
+        alt={product.name}
+        height={300}
+        style={{ objectFit: "cover" }}
+      />
+    }
+  >
+    <Card.Meta
+      title={<span>{product.name}</span>}
+      description={
+        <>
+          <Bold>{product.price}</Bold> pts.
+        </>
+      }
+    />
+  </Card>
+)
+
+const Orders = styled(Carousel)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .slick-slide {
+    overflow: hidden;
+    height: 400px;
+  }
+
+  .slick-dots li button {
+    background: #444;
+  }
+  .slick-dots li.slick-active button {
+    background: ${THEME_VARIABLES["@primary-color"]};
+  }
+`
+
+const UserInfo = styled.div`
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Bold = styled.span`
+  color: black;
+  font-weight: 500;
+`
+
+const Center = styled.div`
+  display: flex;
+`
+
+const UserCard = ({ user, onDelete, onClick }) => {
   return (
     <UserCardContainer
       hoverable
       onClick={e => {
-        onClick(e, id)
+        onClick(e, user)
       }}
     >
       <div>
-        <Avatar src={avatar} size={80} key={id} className="avatar" />
+        <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
       </div>
       <NameContainer>
-        <h1>{name}</h1>
-        <h2>{email}</h2>
+        <h1>{user.name}</h1>
+        <h2>{user.email}</h2>
       </NameContainer>
       <Filler />
       <Button
@@ -69,7 +211,7 @@ const UserCard = ({ id, name, email, avatar, onDelete, onClick }) => {
         size="large"
         onClick={e => {
           e.stopPropagation()
-          onDelete(e, id)
+          onDelete(e, user)
         }}
         style={{
           right: 10
@@ -83,6 +225,7 @@ const UserCard = ({ id, name, email, avatar, onDelete, onClick }) => {
 
 const Filler = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 const UserCardContainer = styled(Card)`
