@@ -36,7 +36,7 @@ const Nav = props => (
               <Button type="primary" icon="plus" className="new-button">
                 NEW
               </Button>
-              <Divider type="vertical" />
+              <Divider type="vertical" className="btn-divider" />
             </>
           ) : (
             <></>
@@ -118,8 +118,13 @@ const Menu = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    .btn-divider {
+      display: none;
+    }
+    .new-button {
+      order: 2;
+    }
   }
-
   .new-button {
     background-color: #55c353;
     border: none;
