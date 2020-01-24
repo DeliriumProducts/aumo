@@ -25,8 +25,16 @@ const Login = props => {
         try {
           await authAPI.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
-        } catch (e) {
-          message.error(`${e.response.data.error}`, 5)
+        } catch (err) {
+          if (!err.response) {
+            message.error(`${err.response.data.error}`, 5)
+            return
+          }
+          if (err.response.status === 401) {
+            message.error("Invalid credentials. Try again.", 1)
+          } else {
+            message.error("Server error, please try again")
+          }
           return
         }
       }

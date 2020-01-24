@@ -15,6 +15,9 @@ const Home = props => (
           <Badge src="app-store.png" />
           <Badge src="google-play.png" />
         </BadgeContainer>
+        <a style={{ marginTop: "3%" }} href="paper.pdf">
+          Learn more
+        </a>
       </LeftContainer>
       <RightContainer>
         <Phone src="iphone.png" alt="iphone screenshot" />
@@ -24,8 +27,11 @@ const Home = props => (
 )
 
 const Badge = styled.img`
-  width: 20%;
   padding: 5px;
+  width: 25%;
+  @media only screen and (max-width: 600px) {
+    width: 35%;
+  }
 `
 
 const BadgeContainer = styled.div`
