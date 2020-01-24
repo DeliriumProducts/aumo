@@ -28,8 +28,9 @@ const Login = props => {
           await authAPI.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
         } catch (err) {
+          console.log(err)
           if (!err.response) {
-            message.error(`${err.response.data.error}`, 5)
+            message.error(`${err}`, 5)
             return
           }
           if (err.response.status === 401) {
