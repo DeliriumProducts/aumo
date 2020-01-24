@@ -2,50 +2,87 @@ import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
 import { Card as c, Button } from "antd"
+import { useState } from "react"
+import ModalForm from "../components/ModalForm"
+import {ProductAPI} from 'aumo-api'
+import { BACKEND_URL } from "../config"
 
-export const Products = () => (
-  <>
-    <Head>
-      <title>Aumo</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-    <Container>
-      <Card
-        hoverable
-        cover={
-          <img
-            alt="Product"
-            src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
-          />
-        }
-      >
-        <StyledMeta
-          title={"Get 2 Buy 1 - applies for any product!"}
-          description={
-            <p>
-              kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
-              smqtaii braaat bait 10grama
-            </p>
+export const Products = () => {
+  const [visible, setVisible] = useState(true)
+  const [formRef, setFormRef] = useState(null)
+
+  const showModal = () => setVisible(true)
+
+  const handleCancel = () => setVisible(false)
+
+  const handleCreate = () => {
+    const { form } = formRef.props
+
+    form.validateFields((err, values) => {
+      if (err) {
+        return
+      }
+
+      console.log("Received values of form: ", values)
+      form.resetFields()
+      setVisible(false)
+    })
+  }
+
+  const saveFormRef = fr => {
+    setFormRef(fr)
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Aumo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Container>
+        <Card
+          hoverable
+          cover={
+            <img
+              alt="Product"
+              src="https://m.investor.bg/images/photos/0297/0000297236-article3.jpg"
+            />
           }
+        >
+          <StyledMeta
+            title={"Get 2 Buy 1 - applies for any product!"}
+            description={
+              <p>
+                kartofi na kilogram kolkoto iskate samo dnes i samo sega 5 levdd
+                smqtaii braaat bait 10grama
+              </p>
+            }
+          />
+          <span className="actions">
+            <span>
+              <span className="price">199 </span>pts.
+            </span>
+            <span className="actions-buttons">
+              <Button
+                size="small"
+                type="primary"
+                className="edit-button"
+                icon="edit"
+              ></Button>
+              <Button size="small" type="danger" icon="delete"></Button>
+            </span>
+          </span>
+        </Card>
+        <ModalForm
+          wrappedComponentRef={saveFormRef}
+          visible={visible}
+          onCancel={handleCancel}
+          onCreate={handleCreate}
         />
-        <span className="actions">
-          <span>
-            <span className="price">199 </span>pts.
-          </span>
-          <span className="actions-buttons">
-            <Button
-              size="small"
-              type="primary"
-              className="edit-button"
-              icon="edit"
-            ></Button>
-            <Button size="small" type="danger" icon="delete"></Button>
-          </span>
-        </span>
-      </Card>
-    </Container>
-  </>
-)
+      </Container>
+    </>
+  )
+}
 
 const Card = styled(c)`
   border-radius: 24px;
@@ -156,5 +193,16 @@ const Container = styled.div`
     padding-left: 0;
   }
 `
+
+Products.getInitialProps = () => {
+  let products = {}
+  try {
+    
+    products = await new ProductAPI(BACKEND_URL).getAll()
+  } catch (error) {
+    
+  }
+}
+
 
 export default withAuth(Products)
