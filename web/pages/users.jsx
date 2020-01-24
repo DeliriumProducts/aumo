@@ -42,6 +42,7 @@ const Users = () => {
   }, [])
 
   const showUser = async (_, user) => {
+    setCurrentUser(null)
     setLoading(true)
     setUserModal(true)
     try {
@@ -142,9 +143,11 @@ const Users = () => {
           ))}
         <Modal
           width={400}
-          visible={userModal}
+          visible={userModal && currentUser != null}
           centered
-          onCancel={() => setUserModal(false)}
+          onCancel={() => {
+            setUserModal(false)
+          }}
           footer={null}
         >
           <User loading={loading} user={currentUser} />
