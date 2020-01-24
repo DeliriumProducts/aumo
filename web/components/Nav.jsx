@@ -32,9 +32,12 @@ const Nav = props => (
             Welcome back, <span>{props.name}</span>
           </Welcome>
           {props.route === "/products" ? (
-            <Button type="primary" icon="plus" className="new-button">
-              NEW
-            </Button>
+            <>
+              <Button type="primary" icon="plus" className="new-button">
+                NEW
+              </Button>
+              <Divider type="vertical" />
+            </>
           ) : (
             <></>
           )}
@@ -129,6 +132,7 @@ const LinkList = styled.ul`
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  padding-left: 0;
   @media only screen and (max-width: 600px) {
     width: 100%;
     margin-top: 1%;
