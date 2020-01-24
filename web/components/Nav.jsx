@@ -5,6 +5,10 @@ import { AuthAPI } from "aumo-api"
 import Link from "next/link"
 import styled from "styled-components"
 import { Icon, Divider, Button, message } from "antd"
+import { useState, useContext } from "react"
+import { ProductAPI } from "aumo-api"
+import ModalForm from "./ModalForm"
+import { Context } from "../context/context"
 
 const links = [
   { href: "/products", label: "Products", icon: <Icon type="shop" /> },
@@ -14,60 +18,122 @@ const links = [
   key: `nav-link-${link.href}-${link.label}`
 }))
 
-const Nav = props => (
-  <nav>
-    <Menu>
-      <Link href={"/"}>
-        <Logo src="aumo.png" />
-      </Link>
-      {props.route === "/" ? (
-        <Link href="/login">
-          <Button type="primary">GO TO ADMIN PANEL</Button>
+const Nav = props => {
+  const ctx = useContext(Context)
+  const [visible, setVisible] = useState(false)
+  const [formRef, setFormRef] = useState(null)
+
+  const showModal = () => setVisible(true)
+
+  const handleCancel = () => setVisible(false)
+
+  const handleCreate = () => {
+    const { form } = formRef.props
+
+    form.validateFields(async (err, product) => {
+      if (err) {
+        return
+      }
+
+      try {
+        const prdct = await new ProductAPI(BACKEND_URL).create({
+          ...product,
+          price: Number(product.price),
+          stock: Number(product.stock)
+        })
+        message.success(`Successfully created product ${product.name}!`)
+        ctx.dispatch({
+          type: "setProducts",
+          payload: [...ctx.state.products, prdct]
+        })
+      } catch (err) {
+        if (!err.response) {
+          message.error(`${err}`, 5)
+          return
+        }
+        if (err.response.status === 401) {
+          message.error("Invalid credentials. Try again.", 1)
+        } else {
+          message.error("Server error, please try again")
+        }
+        return
+      }
+      form.resetFields()
+      setVisible(false)
+    })
+  }
+
+  const saveFormRef = fr => {
+    setFormRef(fr)
+  }
+
+  return (
+    <nav>
+      <Menu>
+        <Link href={"/"}>
+          <Logo src="aumo.png" />
         </Link>
-      ) : props.route === "/login" ? (
-        <></>
-      ) : (
-        <>
-          <Welcome>
-            Welcome back, <span>{props.name}</span>
-          </Welcome>
-          {props.route === "/products" ? (
-            <>
-              <Button type="primary" icon="plus" className="new-button">
-                NEW
+        {props.route === "/" ? (
+          <Link href="/login">
+            <Button type="primary">GO TO ADMIN PANEL</Button>
+          </Link>
+        ) : props.route === "/login" ? (
+          <></>
+        ) : (
+          <>
+            <Welcome>
+              Welcome back, <span>{props.name}</span>
+            </Welcome>
+            {props.route === "/products" ? (
+              <>
+                <Button
+                  type="primary"
+                  icon="plus"
+                  onClick={() => showModal()}
+                  className="new-button"
+                >
+                  NEW
+                </Button>
+                <Divider type="vertical" className="btn-divider" />
+              </>
+            ) : (
+              <></>
+            )}
+            <LinkList>
+              {links.map(({ key, href, label, icon }) => (
+                <Link key={key} href={href}>
+                  <LinkItem isSelected={props.route === href}>
+                    {icon}
+                    {label}
+                  </LinkItem>
+                </Link>
+              ))}
+              <Divider type="vertical" />
+              <Button
+                type="ghost"
+                onClick={async () => {
+                  await new AuthAPI(BACKEND_URL).logout()
+                  message.success("Logged out!")
+                  Router.replace("/")
+                }}
+              >
+                <Icon type="logout" />
+                LOGOUT
               </Button>
-              <Divider type="vertical" className="btn-divider" />
-            </>
-          ) : (
-            <></>
-          )}
-          <LinkList>
-            {links.map(({ key, href, label, icon }) => (
-              <Link key={key} href={href}>
-                <LinkItem isSelected={props.route === href}>
-                  {icon}
-                  {label}
-                </LinkItem>
-              </Link>
-            ))}
-            <Divider type="vertical" />
-            <Button
-              type="ghost"
-              onClick={async () => {
-                await new AuthAPI(BACKEND_URL).logout()
-                message.success("Logged out!")
-                Router.replace("/")
-              }}
-            >
-              <Icon type="logout" />
-              LOGOUT
-            </Button>
-          </LinkList>
-        </>
-      )}
-    </Menu>
-  </nav>
-)
+              <ModalForm
+                wrappedComponentRef={saveFormRef}
+                visible={visible}
+                onCancel={handleCancel}
+                onCreate={handleCreate}
+                product={{}}
+              />
+            </LinkList>
+          </>
+        )}
+      </Menu>
+    </nav>
+  )
+}
 
 const Logo = styled.img`
   cursor: pointer;

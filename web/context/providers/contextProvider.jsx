@@ -7,6 +7,12 @@ const handlers = {
       ...state,
       user
     }
+  },
+  setProducts(state, products) {
+    return {
+      ...state,
+      products
+    }
   }
 }
 

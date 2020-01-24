@@ -110,9 +110,7 @@ const Layout = ({ children, route }) => {
           }}
         />
       </BlobWrapper>
-      <Affix offsetTop={0}>
-        <Nav name={ctx.state.user?.name} route={route} />
-      </Affix>
+      <Nav name={ctx.state.user?.name} route={route} />
       {children}
     </>
   )

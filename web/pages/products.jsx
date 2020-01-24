@@ -2,13 +2,14 @@ import Head from "next/head"
 import withAuth from "../hocs/withAuth"
 import styled from "styled-components"
 import { Card as c, Button, Icon, message } from "antd"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import ModalForm from "../components/ModalForm"
 import { ProductAPI } from "aumo-api"
 import { BACKEND_URL } from "../config"
+import { Context } from "../context/context"
 
 export const Products = () => {
-  const [products, setProducts] = useState([])
+  const ctx = useContext(Context)
   const [curProduct, setCurProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
@@ -17,7 +18,7 @@ export const Products = () => {
   React.useEffect(() => {
     ;(async () => {
       const data = await new ProductAPI(BACKEND_URL).getAll()
-      setProducts(data)
+      ctx.dispatch({ type: "setProducts", payload: data })
       setLoading(false)
     })()
   }, [])
@@ -26,11 +27,12 @@ export const Products = () => {
     setCurProduct(p)
     showModal()
   }
+
   const showModal = () => setVisible(true)
 
   const handleCancel = () => setVisible(false)
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     const { form } = formRef.props
 
     form.validateFields(async (err, product) => {
@@ -39,16 +41,24 @@ export const Products = () => {
       }
 
       try {
-        await new ProductAPI(BACKEND_URL).edit(curProduct.id, product)
+        await new ProductAPI(BACKEND_URL).edit(curProduct.id, {
+          ...product,
+          price: Number(product.price),
+          stock: Number(product.stock)
+        })
         message.success(`Successfully edited product ${product.name}!`)
-        setProducts(p =>
-          p.map(pp => {
-            if (pp.id === curProduct.id) {
-              return { id: curProduct.id, ...product }
+        const prods = ctx.state.products.map(pp => {
+          if (pp.id === curProduct.id) {
+            return {
+              id: curProduct.id,
+              ...product,
+              stock: Number(product.stock),
+              price: Number(product.price)
             }
-            return pp
-          })
-        )
+          }
+          return pp
+        })
+        ctx.dispatch({ type: "setProducts", payload: prods })
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -77,13 +87,13 @@ export const Products = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        {loading && products.length < 1 && (
+        {loading && ctx.state.products.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
 
-        {products &&
-          products.length > 0 &&
-          products.map(p => (
+        {ctx.state.products &&
+          ctx.state.products.length > 0 &&
+          ctx.state.products.map(p => (
             <ProductCard
               key={p.id}
               hoverable
@@ -111,7 +121,7 @@ export const Products = () => {
           wrappedComponentRef={saveFormRef}
           visible={visible}
           onCancel={handleCancel}
-          onCreate={handleCreate}
+          onCreate={handleSubmit}
           product={curProduct}
         />
       </Container>

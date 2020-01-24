@@ -10,8 +10,8 @@ export default Form.create()(
       return (
         <Modal
           visible={visible}
-          title="Edit product"
-          okText="Edit"
+          title="Product Form"
+          okText="Submit"
           onCancel={onCancel}
           onOk={onCreate}
         >
