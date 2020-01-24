@@ -9,6 +9,7 @@ import Router from "next/router"
 const FormItem = Form.Item
 
 const Login = props => {
+  const [loading, setLoading] = React.useState(false)
   const { getFieldDecorator } = props.form
   const handleSubmit = e => {
     e.preventDefault()
@@ -22,6 +23,7 @@ const Login = props => {
         }
 
         const authAPI = new AuthAPI(BACKEND_URL)
+        setLoading(true)
         try {
           await authAPI.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
@@ -36,10 +38,13 @@ const Login = props => {
             message.error("Server error, please try again")
           }
           return
+        } finally {
+          setLoading(false)
         }
       }
     })
   }
+
   return (
     <>
       <Head>
@@ -93,6 +98,7 @@ const Login = props => {
             <FormItem>
               <Button
                 type="primary"
+                loading={loading}
                 htmlType="submit"
                 className="login-form-button"
               >

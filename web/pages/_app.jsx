@@ -80,6 +80,7 @@ const Blob = styled.img`
 
 const Layout = ({ children, route }) => {
   const ctx = React.useContext(Context)
+  console.log(ctx.user)
 
   return (
     <>

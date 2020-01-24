@@ -1475,10 +1475,10 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-aumo-api@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/aumo-api/-/aumo-api-2.1.0.tgz#1e039d14dcb5f9f362f748ad7d656b9b4e5b5580"
-  integrity sha512-7dNjqHlp55+7woeTvfuHAQzj+Lo5CJ56BO2wG/0ru//ugWCmN7mQ8svB6o3fNJvVruLqHhFI3aTzKWsS+brNCQ==
+aumo-api@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/aumo-api/-/aumo-api-2.3.0.tgz#0efdc25c106c106027f14942cd75e343532babb0"
+  integrity sha512-W5rQlHVWBOZ928FcKo0hxHJd8CDQ30THrfSSvnLwQ4P2aPFchuF99GhNnpj5BqEaEKJDabr5LD+YmqtBNvzoXg==
   dependencies:
     axios "^0.19.2"
 

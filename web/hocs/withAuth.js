@@ -21,13 +21,11 @@ export default C =>
             auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
             if (auth.role !== "Admin") {
               throw {
-                response: {
-                  status: 401
-                }
+                status: 401
               }
             }
           } catch (err) {
-            if (err.response.status === 401) {
+            if (err.status === 401) {
               res.writeHead(302, {
                 Location: "/login"
               })
@@ -43,15 +41,14 @@ export default C =>
       } else {
         try {
           auth = await new AuthAPI(BACKEND_URL).me()
+          console.log(auth)
           if (auth.role !== "Admin") {
             throw {
-              response: {
-                status: 401
-              }
+              status: 401
             }
           }
         } catch (err) {
-          if (err.response.status === 401) {
+          if (err.status === 401) {
             Router.replace("/login")
           }
         }

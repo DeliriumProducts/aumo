@@ -1,33 +1,32 @@
-const axios = require('axios');
+const axios = require("axios")
 const opts = {
   withCredentials: true
-};
+}
 
 class ProductAPI {
   constructor(backend) {
-    this.backend = backend;
+    this.backend = backend
   }
 
   async getAll() {
-    return await axios.get(`${this.backend}/products`, opts).data;
+    return await axios.get(`${this.backend}/products`, opts)
   }
 
   async get(id) {
-    return await axios.get(`${this.backend}/products/${id}`, opts).data;
+    return await axios.get(`${this.backend}/products/${id}`, opts)
   }
 
   async create(product) {
-    return await axios.post(`${this.backend}/products`, product, opts).data;
+    return await axios.post(`${this.backend}/products`, product, opts)
   }
 
   async edit(id, product) {
     return await axios.put(`${this.backend}/products/${id}`, product, opts)
-      .data;
   }
 
   async delete(id) {
-    return await axios.delete(`${this.backend}/products/${id}`, opts).data;
+    return await axios.delete(`${this.backend}/products/${id}`, opts)
   }
 }
 
-module.exports = ProductAPI;
+module.exports = ProductAPI
