@@ -100,6 +100,7 @@ const Menu = styled.div`
   background-color: #fff;
   padding: 1.2rem;
   justify-content: space-between;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 2px;
   align-items: center;
   z-index: 999;
   @media only screen and (max-width: 600px) {

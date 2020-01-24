@@ -4,7 +4,7 @@ import Router from "next/router"
 import { Affix } from "antd"
 import NProgress from "nprogress"
 import React from "react"
-import { createGlobalStyle } from "styled-components"
+import styled, { createGlobalStyle } from "styled-components"
 import "../assets/nprogress.less"
 import ContextProvider from "../context/providers/contextProvider"
 import { Context } from "../context/context.js"
@@ -28,18 +28,9 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
   }
 
-  body {
-    background-color: #F9FAFF;
-    /* background-image: url('/static/circles-primary.svg'),
-    url('/static/circles-accent.svg');
-    background-repeat: repeat-y;
-    background-size: 85vmax, 65vmax;
-    background-position: bottom -20vmax left -60vmax, top -10vmax right -36vmax;
-    @media screen and (max-width: 768px) {
-      background-position: bottom -10vmax left -60vmax, top -80vmax right -36vmax;
-      background-size: 80vmax, 100%;
-    } */
-  }
+   body {
+       background-color: #f9faff;
+   }
 
   * {
     box-sizing: border-box;
@@ -73,11 +64,39 @@ export default class MyApp extends App {
   }
 }
 
+const BlobWrapper = styled.div`
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+`
+
+const Blob = styled.img`
+  position: absolute;
+  z-index: 0;
+`
+
 const Layout = ({ children, route }) => {
   const ctx = React.useContext(Context)
 
   return (
     <>
+      <BlobWrapper>
+        <Blob
+          src="blob-shape.svg"
+          style={{
+            top: "-8vmax",
+            right: "-10vmax",
+            transform: "rotate(90deg)"
+          }}
+        />
+        <Blob
+          src="blob-shape-2.svg"
+          style={{
+            left: "-8vmax",
+            bottom: "-13vmax"
+          }}
+        />
+      </BlobWrapper>
       <Affix offsetTop={0}>
         <Nav name={ctx.state.user?.name} route={route} />
       </Affix>
