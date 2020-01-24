@@ -71,6 +71,9 @@ const UserCard = ({ id, name, email, avatar, onDelete, onClick }) => {
           e.stopPropagation()
           onDelete(e, id)
         }}
+        style={{
+          right: 10
+        }}
       >
         Delete
       </Button>
@@ -147,8 +150,8 @@ const Container = styled.div`
   padding: 10rem;
   align-items: center;
   flex-direction: column;
-  @media only screen and (max-width: 600px) {
-    flex-direction: column;
+  @media only screen and (max-width: 900px) {
+    padding: 0;
   }
 `
 
