@@ -4,11 +4,11 @@ import { BACKEND_URL } from "../config"
 import { AuthAPI } from "aumo-api"
 import Link from "next/link"
 import styled from "styled-components"
-import { Divider, Button } from "antd"
+import { Icon, Divider, Button } from "antd"
 
 const links = [
-  { href: "/products", label: "Products" },
-  { href: "/users", label: "Users" }
+  { href: "/products", label: "Products", icon: <Icon type="shop" /> },
+  { href: "/users", label: "Users", icon: <Icon type="user" /> }
 ].map(link => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`
@@ -32,19 +32,23 @@ const Nav = props => (
             Welcome back, <span>{props.name}</span>
           </Welcome>
           <LinkList>
-            {links.map(({ key, href, label }) => (
+            {links.map(({ key, href, label, icon }) => (
               <Link key={key} href={href}>
-                <LinkItem>{label}</LinkItem>
+                <LinkItem isSelected={props.route === href}>
+                  {icon}
+                  {label}
+                </LinkItem>
               </Link>
             ))}
             <Divider type="vertical" className="divider" />
             <Button
-              type="primary"
+              type="ghost"
               onClick={async () => {
                 await new AuthAPI(BACKEND_URL).logout()
                 Router.replace("/")
               }}
             >
+              <Icon type="logout" />
               LOGOUT
             </Button>
           </LinkList>
@@ -124,11 +128,20 @@ const LinkList = styled.ul`
 
 const LinkItem = styled.a`
   font-family: "Montserrat";
-  color: #083aa4;
-  font-size: 1.2rem;
-  font-weight: 700;
+  color: ${props => (props.isSelected ? "#fff" : "#083aa4")};
+  background-color: ${props => (props.isSelected ? "#083aa4" : "")};
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
   text-decoration: none;
-  padding: 10px;
+  border-radius: 10px;
+  padding: 8px;
+  i {
+    margin-right: 5px;
+  }
 `
 
 export default Nav

@@ -7,6 +7,7 @@ import React from "react"
 import { createGlobalStyle } from "styled-components"
 import "../assets/nprogress.less"
 import ContextProvider from "../context/providers/contextProvider"
+import { Context } from "../context/context.js"
 
 /**
  * https://github.com/zeit/next.js/tree/canary/examples/with-loading
@@ -63,12 +64,24 @@ export default class MyApp extends App {
 
     return (
       <ContextProvider>
-        <Affix offsetTop={0}>
-          <Nav name="Nasko" route={route} />
-        </Affix>
         <GlobalStyle />
-        <Component {...pageProps} />
+        <Layout route={route}>
+          <Component {...pageProps} />
+        </Layout>
       </ContextProvider>
     )
   }
+}
+
+const Layout = ({ children, route }) => {
+  const ctx = React.useContext(Context)
+
+  return (
+    <>
+      <Affix offsetTop={0}>
+        <Nav name={ctx.state.user?.name} route={route} />
+      </Affix>
+      {children}
+    </>
+  )
 }

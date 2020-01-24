@@ -36,13 +36,13 @@ const Login = props => {
   return (
     <>
       <Head>
-        <title>Aumo</title>
+        <title>Aumo Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
         <Card>
           <Form onSubmit={handleSubmit} className="login-form">
-            <p>Login to manage aumo</p>
+            <p>Login to manage Aumo</p>
             <FormItem>
               {getFieldDecorator("email", {
                 rules: [
@@ -132,14 +132,21 @@ Login.getInitialProps = async ctx => {
 const Card = styled.div`
   background-color: #fff;
   text-align: center;
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3.5rem;
   border-radius: 30px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
   display: flex;
 
   & p {
     color: black;
     font-weight: 600;
+  }
+
+  .login-form-button {
+    width: 100%;
   }
 `
 
