@@ -118,7 +118,7 @@ const Users = () => {
 
   const addPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).addPoints(user.id, 1000)
+      await new UserAPI(BACKEND_URL).addPoints(user.id, 500)
       message.success(`Successfully added 500 points to user ${user.name}! 🎉`)
     } catch (error) {
       if (!err.response) {
@@ -136,7 +136,7 @@ const Users = () => {
 
   const subPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).subPoints(user.id, 1000)
+      await new UserAPI(BACKEND_URL).subPoints(user.id, 500)
       message.success(
         `Successfully removed 500 points from user ${user.name}! 🎉`
       )
