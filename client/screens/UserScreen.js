@@ -32,6 +32,7 @@ const UserScreen = props => {
   const fetchUser = async () => {
     try {
       const res = await AuthAPI.me()
+      console.log(res.data.orders)
       setUser(res.data)
     } catch (e) {}
     setLoading(false)
@@ -106,11 +107,14 @@ const UserScreen = props => {
               user.orders.length > 0 && (
                 <ShopItemList
                   numColumns={1}
-                  data={user.orders.map(o => ({
-                    ...o,
-                    buyable: false,
-                    image: { uri: o.image }
-                  }))}
+                  data={user.orders.map(
+                    o =>
+                      console.log(o) || {
+                        ...o.product,
+                        buyable: false,
+                        image: { uri: o.product.image }
+                      }
+                  )}
                 />
               )
             ) : (

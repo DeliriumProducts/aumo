@@ -1,5 +1,5 @@
 import React from "react"
-import { ProductAPI } from "../api"
+import { ProductAPI, OrderAPI } from "../api"
 import { BACKEND_URL } from "../config"
 import { withNavigationFocus } from "react-navigation"
 import axios from "axios"
@@ -47,13 +47,7 @@ function ShopScreen(props) {
                     text: "Yes",
                     onPress: async () => {
                       try {
-                        const res = await axios.post(
-                          BACKEND_URL + "/users/buy/" + shopItem.id,
-                          {
-                            quantity: 1
-                          }
-                        )
-
+                        const res = await OrderAPI.placeOrder(shopItem.id)
                         if (res.status === 200) {
                           Alert.alert(
                             "Successfull!",
