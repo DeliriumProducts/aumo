@@ -1,24 +1,23 @@
-import Head from "next/head"
 import {
-  Icon,
-  Card,
-  Button,
   Avatar,
-  Radio,
-  Modal,
+  Button,
+  Card,
   Carousel,
+  Icon,
+  message,
+  Modal,
   Popconfirm,
-  Tag,
-  message
+  Radio,
+  Tag
 } from "antd"
 import RadioGroup from "antd/lib/radio/group"
-import React from "react"
 import { UserAPI } from "aumo-api"
-import { THEME_VARIABLES } from "../config"
+import Head from "next/head"
+import React from "react"
 import styled from "styled-components"
-import withAuth from "../hocs/withAuth.js"
+import { BACKEND_URL, THEME_VARIABLES } from "../config"
 import { Context } from "../context/context.js"
-import { BACKEND_URL } from "../config"
+import withAuth from "../hocs/withAuth.js"
 
 const colors = {
   Waiter: "blue",
@@ -117,6 +116,44 @@ const Users = () => {
     }
   }
 
+  const addPoints = async user => {
+    try {
+      await new UserAPI(BACKEND_URL).addPoints(user.id, 1000)
+      message.success(`Successfully added 500 points to user ${user.name}! 🎉`)
+    } catch (error) {
+      if (!err.response) {
+        message.error(`${err}`, 5)
+        return
+      }
+      if (err.response.status === 401) {
+        message.error("Unathorized. Try again.", 1)
+      } else {
+        message.error("Server error, please try again")
+      }
+      return
+    }
+  }
+
+  const subPoints = async user => {
+    try {
+      await new UserAPI(BACKEND_URL).subPoints(user.id, 1000)
+      message.success(
+        `Successfully removed 500 points from user ${user.name}! 🎉`
+      )
+    } catch (error) {
+      if (!err.response) {
+        message.error(`${err}`, 5)
+        return
+      }
+      if (err.response.status === 401) {
+        message.error("Unathorized. Try again.", 1)
+      } else {
+        message.error("Server error, please try again")
+      }
+      return
+    }
+  }
+
   return (
     <>
       <Head>
@@ -138,6 +175,8 @@ const Users = () => {
               onDelete={deleteUser}
               handleRoleChange={handleRoleChange}
               changeRole={changeRole}
+              addPoints={addPoints}
+              subPoints={subPoints}
               role={role}
             />
           ))}
@@ -164,7 +203,9 @@ const UserCard = ({
   onClick,
   handleRoleChange,
   changeRole,
-  role
+  role,
+  addPoints,
+  subPoints
 }) => {
   return (
     <UserCardContainer
@@ -184,6 +225,28 @@ const UserCard = ({
         <h2>{user.email}</h2>
       </NameContainer>
       <Filler />
+      <Button
+        icon="plus"
+        shape="circle"
+        onClick={e => {
+          e.stopPropagation()
+          addPoints(user)
+        }}
+        style={{
+          marginRight: 20
+        }}
+      ></Button>
+      <Button
+        icon="minus"
+        shape="circle"
+        onClick={e => {
+          e.stopPropagation()
+          subPoints(user)
+        }}
+        style={{
+          marginRight: 20
+        }}
+      ></Button>
       <div onClick={e => e.stopPropagation()}>
         <Popconfirm
           icon={<Icon type="team" style={{ color: "unset" }} />}
