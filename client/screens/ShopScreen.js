@@ -37,7 +37,6 @@ function ShopScreen(props) {
         ) : (
           <ShopItemList
             onItemAddPress={async idx => {
-              console.log("here")
               const shopItem = items[idx]
               Alert.alert(
                 "Purchase confirmation",

@@ -18,12 +18,17 @@ class ProductListItemComponent extends React.Component {
       themedStyle,
       image,
       name,
+      onPress,
       price,
       buyable = true,
       ...restProps
     } = this.props
     return (
-      <View {...restProps} style={[themedStyle.container, style]}>
+      <TouchableOpacity
+        {...restProps}
+        onPress={onPress}
+        style={[themedStyle.container, style]}
+      >
         <Image style={themedStyle.image} source={image} />
         <View style={themedStyle.infoContainer}>
           <View>
@@ -44,7 +49,7 @@ class ProductListItemComponent extends React.Component {
             )}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }

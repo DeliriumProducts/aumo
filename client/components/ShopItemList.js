@@ -1,6 +1,7 @@
 import React from "react"
 import { withStyles } from "react-native-ui-kitten"
 import { List } from "react-native-ui-kitten"
+import { Alert } from "react-native"
 import ProductListItem from "./ShopItem"
 
 class ProductListComponent extends React.Component {
@@ -15,10 +16,11 @@ class ProductListComponent extends React.Component {
       return (
         <ProductListItem
           style={themedStyle.item}
+          onPress={() => Alert.alert(item.name, item.description)}
           activeOpacity={0.75}
           image={item.image}
           name={item.name}
-          price={`${item.price} points`}
+          price={`${item.price} pts`}
           onAddPress={this.onProductAddPress}
           buyable={item.buyable}
         />
