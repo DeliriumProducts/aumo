@@ -28,6 +28,7 @@ const GlobalStyle = createGlobalStyle`
    body {
     min-height: 100%;
     height: initial;
+    background-color: #f9faff;
     background-image: url('blob-shape.svg'), url('blob-shape-2.svg');
     background-repeat: no-repeat;
     background-attachment: fixed;
