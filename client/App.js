@@ -1,38 +1,24 @@
 import React from "react"
-import { Platform, StyleSheet, Text, View } from "react-native"
+import {
+  ApplicationProvider,
+  Layout,
+  Text,
+  Button
+} from "@ui-kitten/components"
+import { mapping } from "@eva-design/eva"
+import theme from "./theme"
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-})
-
-const App = () => (
-  <View style={styles.container}>
-    <Text style={styles.welcome}>THE WORLD IS YOURS</Text>
-    <Text style={styles.instructions}>To get started, edit App.js</Text>
-    <Text style={styles.instructions}>{instructions}</Text>
-  </View>
+const HomeScreen = () => (
+  <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <Text category="h1">HOME</Text>
+    <Button>hiii!</Button>
+  </Layout>
 )
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
-})
+const App = () => (
+  <ApplicationProvider mapping={mapping} theme={theme}>
+    <HomeScreen />
+  </ApplicationProvider>
+)
 
 export default App
