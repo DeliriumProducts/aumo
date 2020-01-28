@@ -1,5 +1,5 @@
-import Routes from "./routes"
 import { createStackNavigator } from "react-navigation-stack"
+import Routes from "../routes"
 import AuthLoadingScreen from "../../screens/auth/loading"
 
 export default createStackNavigator({
