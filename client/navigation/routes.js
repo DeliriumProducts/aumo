@@ -2,7 +2,7 @@ export default {
   AuthLoading: "AuthLoading",
   Auth: "Auth",
   App: "App",
-  LogIn: "LogIn",
+  Login: "Login",
   Register: "Register",
   Home: "Home",
   Shop: "Shop",

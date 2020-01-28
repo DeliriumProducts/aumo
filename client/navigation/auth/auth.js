@@ -3,7 +3,7 @@ import Routes from "../routes"
 import LoginScreen from "../../screens/auth/login"
 import RegisterScreen from "../../screens/auth/register"
 
-export default AuthStack = createStackNavigator({
-  [Routes.LogIn]: LoginScreen,
+export default createStackNavigator({
+  [Routes.Login]: LoginScreen,
   [Routes.Register]: RegisterScreen
 })
