@@ -1208,6 +1208,11 @@
     wcwidth "^1.0.1"
     ws "^1.1.0"
 
+"@react-native-community/masked-view@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.6.tgz#c7f2ac187c1f25aa8c30d11baa8f4398eca3bb84"
+  integrity sha512-PpMoeXwPUoldCRKDuSi+zK5rT+sJTW6ri6RdGPkSKRzU77Q1d9IaR0O5IKvBj0XSdL3p+dcOa05gk35aGDffBQ==
+
 "@react-navigation/core@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.5.1.tgz#7a2339fca3496979305fb3a8ab88c2ca8d8c214d"
@@ -5444,6 +5449,11 @@ react-native-reanimated@^1.7.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.7.0.tgz#896db2576552ac59d288a1f6c7f00afc171f240c"
   integrity sha512-FQWSqP605eQVJumuK2HpR+7heF0ZI+qfy4jNguv3Xv8nPFHeIgZaRTXHCEQL2AcuSIj50zy8jGJf5l134QMQWQ==
 
+react-native-safe-area-context@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-0.6.2.tgz#d467ac8a953426bfbb6d8f417222b0dc3952be7a"
+  integrity sha512-VtBW0JymVCwVt0TGxTv25Co3wtOv3Yb/K5pAUYkjKXNhWFDz5ZwUG/Yho/p0EkWYlFdroJcSqlvVFl2n3AU7SA==
+
 react-native-safe-area-view@^0.14.1:
   version "0.14.8"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.14.8.tgz#ef33c46ff8164ae77acad48c3039ec9c34873e5b"
@@ -5458,10 +5468,10 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     debounce "^1.2.0"
 
-react-native-screens@^2.0.0-alpha.31:
-  version "2.0.0-alpha.31"
-  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.0.0-alpha.31.tgz#399f9fbd882730b4df72e102ce5563109009eb3f"
-  integrity sha512-eHYjWBnKSSMtxxzT9o/RYxNL80wWIuXWSGbbb2uxjvpbZdQByq2tl84m+wXFyTz1rbJqqIHrcqWD/hEW58CQsg==
+react-native-screens@^2.0.0-alpha.32:
+  version "2.0.0-alpha.32"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.0.0-alpha.32.tgz#a23e0458e24984e3a1bd130292f9ad8a118b1e15"
+  integrity sha512-dMw+dGL8UfcS+RQXfUGpdduSkmQN/8l3CJg9+YAwgrgejUpE1YYFnr2gP4GPhie0sBLBdfLj0svNwY1vhnO0Tg==
   dependencies:
     debounce "^1.2.0"
 

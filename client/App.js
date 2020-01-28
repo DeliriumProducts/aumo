@@ -8,6 +8,7 @@ import {
   Icon
 } from "@ui-kitten/components"
 import { mapping } from "@eva-design/eva"
+// import AppNavigator from "./navigation"
 import { EvaIconsPack } from "@ui-kitten/eva-icons"
 import theme from "./theme"
 import customM from "./mapping"
@@ -21,7 +22,7 @@ export const LoginButton = () => (
 const HomeScreen = () => (
   <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
     <Text category="h1">Home</Text>
-    <LoginButton />
+    <Button>BUTTON</Button>
   </Layout>
 )
 
