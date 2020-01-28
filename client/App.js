@@ -1,7 +1,7 @@
 import React from "react"
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
 import { mapping } from "@eva-design/eva"
-import Container from "./navigation/Container"
+import Container from "./navigation/container"
 import { EvaIconsPack } from "@ui-kitten/eva-icons"
 import theme from "./theme"
 import customM from "./mapping"
