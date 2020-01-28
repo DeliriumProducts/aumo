@@ -1,7 +1,14 @@
 import React, { useState } from "react"
 import Routes from "../../navigation/routes"
 import { BACKEND_URL } from "../../config/index.js"
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native"
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image
+} from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { Button, Icon, Input } from "@ui-kitten/components"
 
@@ -35,16 +42,15 @@ export default function LoginScreen(props) {
     >
       <View>
         <View style={styles.welcomeContainer}>
-          {/* <Image */}
-          {/*   source={require("../assets/images/AumoLogo.png")} */}
-          {/*   style={styles.welcomeImage} */}
-          {/* /> */}
+          <Image
+            source={require("../../assets/AumoLogo.png")}
+            style={styles.welcomeImage}
+          />
           <Text style={styles.getStartedText}>The future of receipts.</Text>
         </View>
         <View style={styles.inputform}>
           <Input
             placeholder="Email"
-            size="medium"
             icon={style => <Icon {...style} name="email-outline" />}
             value={email}
             onChangeText={setEmail}
@@ -52,7 +58,6 @@ export default function LoginScreen(props) {
           />
           <Input
             placeholder="Password"
-            size="medium"
             secureTextEntry={true}
             icon={style => <Icon {...style} name="lock-outline" />}
             value={password}
