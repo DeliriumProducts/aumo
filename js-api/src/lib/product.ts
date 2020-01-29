@@ -35,7 +35,10 @@ export async function editProduct(
   ).data;
 }
 
-export async function deleteProduct(id: string, cookie?: string) {
+export async function deleteProduct(
+  id: string,
+  cookie?: string
+): Promise<BaseResponse> {
   return (
     await axios.delete(`${options.Backend}/products/${id}`, withAuth(cookie))
   ).data;
