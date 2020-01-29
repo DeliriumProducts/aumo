@@ -45,10 +45,3 @@ interface RegisterRequest {
   password: string;
   avatar: string;
 }
-
-export default {
-  login,
-  register,
-  logout,
-  me
-};

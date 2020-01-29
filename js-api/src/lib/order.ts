@@ -12,11 +12,13 @@ export async function place(
   ).data;
 }
 
-export async function getAll(cookie?: string): Promise<BaseResponse<Order[]>> {
+export async function getAllOrders(
+  cookie?: string
+): Promise<BaseResponse<Order[]>> {
   return (await axios.get(`${options.Backend}/orders`, withAuth(cookie))).data;
 }
 
-export async function get(id: number, cookie?: string) {
+export async function getOrder(id: string, cookie?: string) {
   return (await axios.get(`${options.Backend}/orders/${id}`, withAuth(cookie)))
     .data;
 }
@@ -24,9 +26,3 @@ export async function get(id: number, cookie?: string) {
 interface PlaceRequest {
   product_id: number;
 }
-
-export default {
-  place,
-  getAll,
-  get
-};
