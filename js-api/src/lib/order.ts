@@ -3,7 +3,7 @@ import { BaseResponse, Order } from './aumo';
 import { withAuth } from './axios';
 import { options } from './config';
 
-export async function place(
+export async function placeOrder(
   order: PlaceRequest,
   cookie?: string
 ): Promise<BaseResponse<Order>> {
