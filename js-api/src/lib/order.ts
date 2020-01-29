@@ -9,12 +9,12 @@ export async function place(order: PlaceRequest): Promise<BaseResponse<Order>> {
 }
 
 export async function getAll(cookie?: string): Promise<BaseResponse<Order[]>> {
-  return (
-    await axios.get(`${options.Backend}/orders`, {
-      ...axiosRequest,
-      ...withAuth(cookie)
-    })
-  ).data;
+  return (await axios.get(`${options.Backend}/orders`, withAuth(cookie))).data;
+}
+
+export async function get(id: number, cookie?: string) {
+  return (await axios.get(`${options.Backend}/orders/${id}`, withAuth(cookie)))
+    .data;
 }
 
 interface PlaceRequest {
