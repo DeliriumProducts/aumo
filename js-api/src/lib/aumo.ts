@@ -36,15 +36,15 @@ export interface Receipt {
 }
 
 export interface MessageResponse {
-  Message: string;
+  message: string;
 }
 
 export interface ErrorResponse {
-  Err: string;
+  err: string;
 }
 
 export interface ValidationErrorResponse {
-  Errors: string[];
+  errors: string[];
 }
 
 export type BaseResponse<T = {}> = AxiosResponse<
