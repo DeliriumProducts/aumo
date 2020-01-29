@@ -20,18 +20,7 @@ export async function logout(cookie?: string): Promise<BaseResponse> {
 }
 
 export async function me(cookie?: string): Promise<BaseResponse<User>> {
-  let opts = {};
-
-  if (cookie) {
-    opts = { headers: { cookie } };
-  }
-
-  return (
-    await axios.get(`${options.Backend}/me`, {
-      ...axiosRequest,
-      ...opts
-    })
-  ).data;
+  return (await axios.get(`${options.Backend}/me`, withAuth(cookie))).data;
 }
 
 interface LoginRequest {
