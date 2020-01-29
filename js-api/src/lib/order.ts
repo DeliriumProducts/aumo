@@ -1,11 +1,20 @@
 import axios from 'axios';
 import { BaseResponse, Order } from './aumo';
-import { axiosRequest } from './axios';
+import { axiosRequest, withAuth } from './axios';
 import { options } from './config';
 
 export async function place(order: PlaceRequest): Promise<BaseResponse<Order>> {
   return (await axios.post(`${options.Backend}/orders`, order, axiosRequest))
     .data;
+}
+
+export async function getAll(cookie?: string): Promise<BaseResponse<Order[]>> {
+  return (
+    await axios.get(`${options.Backend}/orders`, {
+      ...axiosRequest,
+      ...withAuth(cookie)
+    })
+  ).data;
 }
 
 interface PlaceRequest {
