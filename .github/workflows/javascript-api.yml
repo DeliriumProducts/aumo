@@ -1,0 +1,21 @@
+name: JavaScript API Workflow
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["13", "10", "8"]
+    name: Node ${{ matrix.node }} sample
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install deps
+        working-directory: ./js-api
+        run: yarn
+      - name: Build
+        working-directory: ./js-api
+        run: yarn build
