@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -10,7 +10,7 @@ export interface Product {
 }
 
 export interface User {
-  id?: number;
+  id?: string;
   name: string;
   email: string;
   password: string;
@@ -24,14 +24,14 @@ export interface User {
 export type Role = 'Admin' | 'Customer';
 
 export interface Order {
-  order_id: number;
-  user_id: number;
-  product_id: number;
+  order_id: string;
+  user_id: string;
+  product_id: string;
   product: Product;
 }
 
 export interface Receipt {
-  receipt_id: number;
+  receipt_id: string;
   content: string;
 }
 
