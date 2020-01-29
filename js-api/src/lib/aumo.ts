@@ -32,3 +32,21 @@ export interface Receipt {
   receipt_id: number;
   content: string;
 }
+
+export interface MessageResponse {
+  Message: string;
+}
+
+export interface ErrorResponse {
+  Err: string;
+}
+
+export interface ValidationErrorResponse {
+  Errors: string[];
+}
+
+export type BaseResponse<T = {}> =
+  | MessageResponse
+  | ErrorResponse
+  | ValidationErrorResponse
+  | T;
