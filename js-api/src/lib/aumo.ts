@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 export interface Product {
   id: number;
   name: string;
@@ -45,8 +47,6 @@ export interface ValidationErrorResponse {
   Errors: string[];
 }
 
-export type BaseResponse<T = {}> =
-  | MessageResponse
-  | ErrorResponse
-  | ValidationErrorResponse
-  | T;
+export type BaseResponse<T = {}> = AxiosResponse<
+  MessageResponse | ErrorResponse | ValidationErrorResponse | T
+>;

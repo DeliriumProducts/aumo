@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BaseResponse, User } from './aumo';
-import { axiosRequest } from './axios';
+import { axiosRequest, withAuth } from './axios';
 import { options } from './config';
 
 export async function login(creds: LoginRequest): Promise<BaseResponse<User>> {
@@ -15,8 +15,8 @@ export async function register(
     .data;
 }
 
-export async function logout(): Promise<BaseResponse> {
-  return (await axios.get(`${options.Backend}/logout`, axiosRequest)).data;
+export async function logout(cookie?: string): Promise<BaseResponse> {
+  return (await axios.get(`${options.Backend}/logout`, withAuth(cookie))).data;
 }
 
 export async function me(cookie?: string): Promise<BaseResponse<User>> {
