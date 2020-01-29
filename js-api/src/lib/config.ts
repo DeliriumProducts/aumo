@@ -3,7 +3,7 @@ export interface AumoOptions {
 }
 
 export let options: AumoOptions = {
-  Backend: 'https://aumo-api.deliriumproducts.me'
+  Backend: 'https://aumo-api.deliriumproducts.me/api/v1'
 };
 
 export function config(opts: AumoOptions) {
