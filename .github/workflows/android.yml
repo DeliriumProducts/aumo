@@ -1,8 +1,5 @@
 name: Build Android App
-on:
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 jobs:
   build-android:
     runs-on: ubuntu-latest
