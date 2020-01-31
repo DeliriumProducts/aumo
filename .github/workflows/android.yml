@@ -29,9 +29,9 @@ jobs:
             ${{ runner.OS }}-npm-cache-
 
       - name: Install yarn dependencies
-        working-directory: ./web
+        working-directory: ./client
         run: yarn --frozen-lockfile
 
       - name: Build
-        working-directory: ./web
+        working-directory: ./client
         run: cd android && ./gradlew assembleRelease
