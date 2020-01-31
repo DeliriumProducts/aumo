@@ -11,8 +11,8 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		3DE4DAD41476765101945408 /* libPods-Aumo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FF9D506E70904424FA7E9 /* libPods-Aumo.a */; };
 		36C7030A622241F4972A936A /* opensans-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3A4B10B33B349E59886E929 /* opensans-regular.ttf */; };
+		3DE4DAD41476765101945408 /* libPods-Aumo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FF9D506E70904424FA7E9 /* libPods-Aumo.a */; };
 		7D58F45BB231459F8044ADA4 /* AumoLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D82468578194AC6B5F40876 /* AumoLogo.png */; };
 /* End PBXBuildFile section */
 
@@ -27,14 +27,12 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Aumo/main.m; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B47C5AFCB8BDE514B7D1AC6 /* Pods-Aumo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aumo.debug.xcconfig"; path = "Target Support Files/Pods-Aumo/Pods-Aumo.debug.xcconfig"; sourceTree = "<group>"; };
+		6D82468578194AC6B5F40876 /* AumoLogo.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AumoLogo.png; path = ../assets/AumoLogo.png; sourceTree = "<group>"; };
 		8AC623DBF3A3E2CB072F81F2 /* Pods-Aumo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aumo.release.xcconfig"; path = "Target Support Files/Pods-Aumo/Pods-Aumo.release.xcconfig"; sourceTree = "<group>"; };
+		D3A4B10B33B349E59886E929 /* opensans-regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "opensans-regular.ttf"; path = "../assets/opensans-regular.ttf"; sourceTree = "<group>"; };
 		D43FF9D506E70904424FA7E9 /* libPods-Aumo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Aumo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		0164471C11A74D1D9C7DA0E7 /* Lato-Black.ttf */ = {isa = PBXFileReference; name = "Lato-Black.ttf"; path = "../assets/Lato-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		82D2D1B98ABF4F769B428E37 /* Lato-Regular.ttf */ = {isa = PBXFileReference; name = "Lato-Regular.ttf"; path = "../assets/Lato-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D3A4B10B33B349E59886E929 /* opensans-regular.ttf */ = {isa = PBXFileReference; name = "opensans-regular.ttf"; path = "../assets/opensans-regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6D82468578194AC6B5F40876 /* AumoLogo.png */ = {isa = PBXFileReference; name = "AumoLogo.png"; path = "../assets/AumoLogo.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +78,6 @@
 				3B47C5AFCB8BDE514B7D1AC6 /* Pods-Aumo.debug.xcconfig */,
 				8AC623DBF3A3E2CB072F81F2 /* Pods-Aumo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -115,16 +112,13 @@
 			sourceTree = "<group>";
 		};
 		AA5C043698E04D0E8B778840 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
-				0164471C11A74D1D9C7DA0E7 /* Lato-Black.ttf */,
-				82D2D1B98ABF4F769B428E37 /* Lato-Regular.ttf */,
 				D3A4B10B33B349E59886E929 /* opensans-regular.ttf */,
 				6D82468578194AC6B5F40876 /* AumoLogo.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -157,18 +151,13 @@
 			attributes = {
 				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
-				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
-				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Aumo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -189,8 +178,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				DFE8FD19D0C54524A69E9DDF /* Lato-Black.ttf in Resources */,
-				E428D62846E047C6970F520C /* Lato-Regular.ttf in Resources */,
 				36C7030A622241F4972A936A /* opensans-regular.ttf in Resources */,
 				7D58F45BB231459F8044ADA4 /* AumoLogo.png in Resources */,
 			);

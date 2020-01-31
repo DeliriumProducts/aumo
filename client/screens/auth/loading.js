@@ -9,8 +9,9 @@ export default ({ navigation }) => {
     ;(async () => {
       try {
         await new AuthAPI(BACKEND_URL).me()
-        navigation.navigate(Routes.Main)
+        navigation.navigate(Routes.App)
       } catch (e) {
+        console.warn(e)
         if (e.response.status === 401) {
           navigation.navigate(Routes.Auth)
         }
