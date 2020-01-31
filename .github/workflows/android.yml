@@ -28,9 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-npm-cache-
 
-      - name: Install yarn dependencies
+      - name: Install npm dependencies
         working-directory: ./client
-        run: yarn --frozen-lockfile
+        run: npm install
 
       - name: Build
         working-directory: ./client
