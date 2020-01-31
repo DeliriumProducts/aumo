@@ -45,7 +45,7 @@ jobs:
           MYSQL_DATABASE: aumo_test
           REDIS_URL_TEST: redis://localhost
           REDIS_DATABASE_TEST: 1
-        run: go test -v -covermode=atomic -race  ./...
+        run: go test -v -covermode=atomic -race ./tests
   build:
     runs-on: ubuntu-latest
     needs: [lint, test]
