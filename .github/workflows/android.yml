@@ -20,10 +20,18 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: https://registry.npmjs.org/
 
-      - name: Install npm dependencies
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: client/node_modules
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+
+      - name: Install yarn dependencies
         working-directory: ./client
-        run: npm install
+        run: yarn --frozen-lockfile
 
       - name: Build
         working-directory: ./client
-        run: cd android && ./gradlew assembleRelease
+        run: cd android && ./gradlew bundleRelease
