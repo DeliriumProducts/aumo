@@ -35,6 +35,7 @@ jobs:
       - name: Build
         working-directory: ./client
         run: | 
+          mkdir config
           echo "export const BACKEND_URL = 'https://aumo-api.deliriumproducts.me/api/v1'" > ./config/index.js
           cd android 
           ./gradlew bundleRelease
