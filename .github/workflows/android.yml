@@ -34,4 +34,8 @@ jobs:
 
       - name: Build
         working-directory: ./client
-        run: cd android && ./gradlew bundleRelease
+        run: |
+          ls
+          cd android 
+          ls
+          ./gradlew bundleRelease
