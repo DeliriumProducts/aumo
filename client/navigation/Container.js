@@ -6,8 +6,8 @@ import Routes from "./routes"
 
 export default createAppContainer(
   createSwitchNavigator({
-    [Routes.AuthLoading]: AuthLoading,
     [Routes.Auth]: Auth,
+    [Routes.AuthLoading]: AuthLoading,
     [Routes.App]: App
   })
 )
