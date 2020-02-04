@@ -2,6 +2,7 @@ package aumo
 
 import (
 	"errors"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 	"upper.io/db.v3/lib/sqlbuilder"
@@ -81,14 +82,13 @@ func (u *User) PlaceOrder(o *Order) error {
 // NewUser is a constructor for `User`
 func NewUser(name string, email string, password string, avatar string) (*User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-
 	if err != nil {
 		return nil, err
 	}
 
 	return &User{
 		Name:     name,
-		Email:    email,
+		Email:    strings.ToLower(strings.Trim(email, " ")),
 		Password: string(pwd),
 		Avatar:   avatar,
 		Points:   UserStartingPoints,
