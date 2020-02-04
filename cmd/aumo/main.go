@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/deliriumproducts/aumo/auth"
 	"github.com/deliriumproducts/aumo/mysql"
@@ -73,7 +74,7 @@ func main() {
 	os := mysql.NewOrderStore(db)
 	rs := mysql.NewReceiptStore(db)
 	us := mysql.NewUserStore(db)
-	auth := auth.New(conn, us, FrontendURL, "/", 60*60*24)
+	auth := auth.New(conn, us, FrontendURL, "/", time.Hour*24)
 
 	_, err = users.InitialAdmin(us, InitialAdminPassword, "admin@deliriumproducts.me")
 	if err != nil {
