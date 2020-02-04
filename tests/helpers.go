@@ -2,10 +2,11 @@ package tests
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/redis/v7"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,10 +38,10 @@ func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint
 	return p
 }
 
-func createSession(t *testing.T, r redis.Conn, user *aumo.User, expiryTime int) string {
+func createSession(t *testing.T, r *redis.Client, user *aumo.User, expiryTime time.Duration) string {
 	sID := faker.UUIDDigit()
 
-	_, err := r.Do("SETEX", sID, expiryTime, user.ID)
+	err := r.Set(sID, user.ID, expiryTime).Err()
 	require.Nil(t, err, "shouldn't return an error")
 	require.NotEmpty(t, sID, "should return a session ID")
 
