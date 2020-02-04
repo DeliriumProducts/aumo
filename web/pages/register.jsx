@@ -36,7 +36,7 @@ const Register = props => {
             return
           }
           if (err.response.status === 422) {
-            message.error("An account with the same email already exists.", 1)
+            message.error("An account with the same email already exists.", 3)
           } else {
             message.error("Server error, please try again")
           }

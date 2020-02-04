@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
@@ -27,7 +28,13 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = rest.userService.Create(user)
-	if err != nil {
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrDuplicateEmail):
+		rest.JSONError(w, err, http.StatusUnprocessableEntity)
+		return
+	default:
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
