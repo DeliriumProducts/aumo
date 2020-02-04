@@ -39,3 +39,10 @@ jobs:
           echo "export const BACKEND_URL = 'https://aumo-api.deliriumproducts.me/api/v1'" > ./config/index.js
           cd android 
           ./gradlew bundleRelease
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: .apk
+          path: client/android/app/build/outputs/apk/release/app-release.apk
+
