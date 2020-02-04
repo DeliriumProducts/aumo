@@ -5,12 +5,33 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
+
+func TestNewUser(t *testing.T) {
+	t.Run("lowers_email", func(t *testing.T) {
+		u, err := aumo.NewUser("Pesho", "FOO@bar.com", "123456", "pesho.com/pesho.png")
+		require.Nil(t, err)
+		require.Equal(t, u.Email, "foo@bar.com")
+	})
+
+	t.Run("trims_email", func(t *testing.T) {
+		u, err := aumo.NewUser("Pesho", "           foo@bar.com            ", "123456", "pesho.com/pesho.png")
+		require.Nil(t, err)
+		require.Equal(t, u.Email, "foo@bar.com")
+	})
+
+	t.Run("trims_and_lowers_email", func(t *testing.T) {
+		u, err := aumo.NewUser("Pesho", "           foo@BAR.com            ", "123456", "pesho.com/pesho.png")
+		require.Nil(t, err)
+		require.Equal(t, u.Email, "foo@bar.com")
+	})
+}
 
 func TestUserPlaceOrder(t *testing.T) {
 	t.Run("valid_purchase", func(t *testing.T) {
 		u, err := aumo.NewUser("Gosho", "gosho@abv.bg", "123456", "pesho.com/gosho.png")
-		assert.Nil(t, err, "shouldn't return an err")
+		require.Nil(t, err, "shouldn't return an err")
 		u.ID = 1
 
 		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
@@ -18,14 +39,14 @@ func TestUserPlaceOrder(t *testing.T) {
 
 		o := aumo.NewOrder(u, p)
 		err = u.PlaceOrder(o)
-		assert.Nil(t, err, "shouldn't return an err")
+		require.Nil(t, err, "shouldn't return an err")
 
-		assert.Contains(t, u.Orders, *o, "the order should be appeneded to the array")
+		require.Contains(t, u.Orders, *o, "the order should be appeneded to the array")
 	})
 
 	t.Run("not_enough_points", func(t *testing.T) {
 		u, err := aumo.NewUser("Gosho", "gosho@abv.bg", "123456", "pesho.com/gosho.png")
-		assert.Nil(t, err, "shouldn't return an err")
+		require.Nil(t, err, "shouldn't return an err")
 		u.ID = 1
 		u.Points = 0
 
@@ -34,9 +55,9 @@ func TestUserPlaceOrder(t *testing.T) {
 
 		o := aumo.NewOrder(u, p)
 		err = u.PlaceOrder(o)
-		assert.Equal(t, err, aumo.ErrNotSufficientPoints)
+		require.Equal(t, err, aumo.ErrNotSufficientPoints)
 
-		assert.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
+		require.NotContains(t, u.Orders, *o, "the order shouldn't have been appended to the array")
 	})
 
 	t.Run("not_in_stock", func(t *testing.T) {
