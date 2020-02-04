@@ -4,14 +4,16 @@ import "upper.io/db.v3/lib/sqlbuilder"
 
 // Shop is a shop in aumo
 type Shop struct {
-	ID   uint   `json:"shop_id" db:"shop_id,omitempty"`
-	Name string `json:"name" db:"name"`
+	ID     uint   `json:"shop_id" db:"shop_id,omitempty"`
+	Name   string `json:"name" db:"name"`
+	Owners []User `json:"owners" db:"-"`
 }
 
 // NewShop is a constructor for `Shop`
 func NewShop(name string) *Shop {
 	return &Shop{
-		Name: name,
+		Name:   name,
+		Owners: []User{},
 	}
 }
 
