@@ -39,7 +39,7 @@ jobs:
           MYSQL_PASSWORD: root
           MYSQL_HOST: localhost
           MYSQL_DATABASE: aumo_test
-          REDIS_URL_TEST: redis://localhost
+          REDIS_URL_TEST: localhost:6379
           REDIS_DATABASE_TEST: 1
         run: go test -v -covermode=atomic -race  ./...
   build:
