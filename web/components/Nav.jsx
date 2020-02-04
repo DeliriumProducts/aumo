@@ -1,14 +1,12 @@
-import React from "react"
-import Router from "next/router"
-import { BACKEND_URL } from "../config"
-import { AuthAPI } from "aumo-api"
+import { Button, Divider, Icon, message } from "antd"
+import { AuthAPI, ProductAPI } from "aumo-api"
 import Link from "next/link"
+import Router from "next/router"
+import React, { useContext, useState } from "react"
 import styled from "styled-components"
-import { Icon, Divider, Button, message } from "antd"
-import { useState, useContext } from "react"
-import { ProductAPI } from "aumo-api"
-import ModalForm from "./ModalForm"
+import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
+import ModalForm from "./ModalForm"
 
 const links = [
   { href: "/products", label: "Products", icon: <Icon type="shop" /> },
@@ -77,7 +75,7 @@ const Nav = props => {
           <Link href="/login">
             <Button type="primary">GO TO ADMIN PANEL</Button>
           </Link>
-        ) : props.route === "/login" ? (
+        ) : props.route === "/login" || props.route === "/register" ? (
           <></>
         ) : (
           <>
