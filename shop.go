@@ -18,21 +18,21 @@ func NewShop(name string) *Shop {
 // ShopService contains all `Shop`
 // related business logic
 type ShopService interface {
-	Shop(id uint) (*Order, error)
+	Shop(id uint) (*Shop, error)
+	Shops() ([]Shop, error)
 	Owners(id uint) ([]User, error)
-	Shops() ([]Order, error)
-	Update(id uint, o *Order) error
+	Update(id uint, o *Shop) error
 	Delete(id uint) error
-	New(uID, pID uint) (*Order, error)
+	New(uID, pID uint) (*Shop, error)
 }
 
 // ShopStore contains all `Shop`
 // related persistence logic
 type ShopStore interface {
 	DB() sqlbuilder.Database
-	FindByID(tx Tx, id uint) (*Order, error)
-	FindAll(tx Tx) ([]Order, error)
-	Save(tx Tx, o *Order) error
-	Update(tx Tx, id uint, o *Order) error
+	FindByID(tx Tx, id uint) (*Shop, error)
+	FindAll(tx Tx) ([]Shop, error)
+	Save(tx Tx, s *Shop) error
+	Update(tx Tx, id uint, s *Shop) error
 	Delete(tx Tx, id uint) error
 }
