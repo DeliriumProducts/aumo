@@ -31,10 +31,10 @@ func (rest *Rest) routes() {
 
 	rest.router.Route("/products", func(r chi.Router) {
 		r.Get("/", rest.productGetAll)
-		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productCreate)
 		r.Get("/{id}", rest.productGet)
-		r.Put("/{id}", rest.productEdit)
-		r.Delete("/{id}", rest.productDelete)
+		r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productCreate)
+		r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.productEdit)
+		r.With(rest.WithAuth(aumo.Admin)).Delete("/{id}", rest.productDelete)
 	})
 
 	rest.router.Route("/orders", func(r chi.Router) {
