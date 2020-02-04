@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/deliriumproducts/aumo"
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/redis/v7"
 	uuid "github.com/google/uuid"
 )
 
@@ -27,15 +27,15 @@ var (
 
 // Authenticator holds the methods and config used for authentication
 type Authenticator struct {
-	redis      redis.Conn
+	redis      redis.Client
 	us         aumo.UserStore
 	domain     string
 	path       string
-	expiryTime int
+	expiryTime time.Duration
 }
 
 // New returns new Auth instance
-func New(r redis.Conn, us aumo.UserStore, domain, path string, expiryTime int) *Authenticator {
+func New(r redis.Client, us aumo.UserStore, domain, path string, expiryTime time.Duration) *Authenticator {
 	return &Authenticator{
 		r,
 		us,
@@ -49,7 +49,7 @@ func New(r redis.Conn, us aumo.UserStore, domain, path string, expiryTime int) *
 func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 	sID := uuid.New().String()
 
-	_, err := a.redis.Do("SETEX", sID, a.expiryTime, u.ID)
+	err := a.redis.SetXX(sID, u.ID, a.expiryTime).Err()
 	if err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 
 // Get gets a session from Redis based on the session ID
 func (a *Authenticator) Get(sID string) (*aumo.User, error) {
-	uID, err := redis.Uint64(a.redis.Do("GET", sID))
+	uID, err := a.redis.Get(sID).Uint64()
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +68,7 @@ func (a *Authenticator) Get(sID string) (*aumo.User, error) {
 }
 
 func (a *Authenticator) Del(sID string) error {
-	_, err := a.redis.Do("DEL", sID)
-	return err
+	return a.redis.Del(sID).Err()
 }
 
 // GetFromRequest gets a session from Redis based on the Cookie value from the request
