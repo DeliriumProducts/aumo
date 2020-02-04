@@ -40,9 +40,6 @@ func RateLimit(lmt *limiter.Limiter) func(next http.Handler) http.Handler {
 			httpError := tollbooth.LimitByRequest(lmt, w, r)
 			if httpError != nil {
 				lmt.ExecOnLimitReached(w, r)
-				w.Header().Add("Content-Type", lmt.GetMessageContentType())
-				w.WriteHeader(httpError.StatusCode)
-				w.Write([]byte(httpError.Message))
 				return
 			}
 
