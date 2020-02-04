@@ -1,12 +1,13 @@
-import Head from "next/head"
-import withAuth from "../hocs/withAuth"
-import styled from "styled-components"
-import { Card as c, Button, Icon, message, Popconfirm } from "antd"
-import { useState, useContext } from "react"
-import ModalForm from "../components/ModalForm"
+import { Button, Card as c, Icon, message, Popconfirm } from "antd"
 import { ProductAPI } from "aumo-api"
+import Head from "next/head"
+import { useContext, useState } from "react"
+import styled from "styled-components"
+import ModalForm from "../components/ModalForm"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
+import { actions } from "../context/providers/contextProvider"
+import withAuth from "../hocs/withAuth"
 
 export const Products = () => {
   const ctx = useContext(Context)
@@ -18,7 +19,7 @@ export const Products = () => {
   React.useEffect(() => {
     ;(async () => {
       const data = await new ProductAPI(BACKEND_URL).getAll()
-      ctx.dispatch({ type: "setProducts", payload: data })
+      ctx.dispatch({ type: actions.SET_PRODUCTS, payload: data })
       setLoading(false)
     })()
   }, [])
@@ -58,7 +59,7 @@ export const Products = () => {
           }
           return pp
         })
-        ctx.dispatch({ type: "setProducts", payload: prods })
+        ctx.dispatch({ type: actions.SET_PRODUCTS, payload: prods })
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -93,7 +94,7 @@ export const Products = () => {
       return
     }
     const prods = ctx.state.products.filter(pp => pp.id !== p.id)
-    ctx.dispatch({ type: "setProducts", payload: prods })
+    ctx.dispatch({ type: actions.SET_PRODUCTS, payload: prods })
   }
 
   const saveFormRef = fr => {

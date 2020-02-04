@@ -1,8 +1,9 @@
-import React, { Component } from "react"
-import Router from "next/router"
 import { AuthAPI } from "aumo-api"
+import Router from "next/router"
+import React, { Component } from "react"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context.js"
+import { actions } from "../context/providers/contextProvider"
 
 export default C =>
   class extends Component {
@@ -66,7 +67,10 @@ export default C =>
     }
 
     componentDidMount() {
-      this.context.dispatch({ type: "setUser", payload: this.props.user })
+      this.context.dispatch({
+        type: actions.SET_USER,
+        payload: this.props.user
+      })
     }
     render() {
       return <C {...this.props} />

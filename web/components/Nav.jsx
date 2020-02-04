@@ -6,6 +6,7 @@ import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
+import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
 
 const links = [
@@ -41,7 +42,7 @@ const Nav = props => {
         })
         message.success(`Successfully created product ${product.name}!`)
         ctx.dispatch({
-          type: "setProducts",
+          type: actions.SET_PRODUCTS,
           payload: [...ctx.state.products, prdct]
         })
       } catch (err) {
@@ -84,58 +85,59 @@ const Nav = props => {
               </Button>
             </Link>
           </div>
-        ) : props.route === "/login" || props.route === "/register" ? (
-          <></>
         ) : (
-          <>
-            <Welcome>
-              Welcome back, <span>{props.name}</span>
-            </Welcome>
-            {props.route === "/products" ? (
-              <>
+          props.route !== "/login" &&
+          props.route !== "/register" && (
+            <>
+              <Welcome>
+                Welcome back, <span>{props.name}</span>
+              </Welcome>
+              {props.route === "/products" ? (
+                <>
+                  <Button
+                    type="primary"
+                    icon="plus"
+                    onClick={() => showModal()}
+                    className="new-button"
+                  >
+                    NEW
+                  </Button>
+                  <Divider type="vertical" className="btn-divider" />
+                </>
+              ) : (
+                <></>
+              )}
+              <LinkList>
+                {links.map(({ key, href, label, icon }) => (
+                  <Link key={key} href={href}>
+                    <LinkItem isSelected={props.route === href}>
+                      {icon}
+                      {label}
+                    </LinkItem>
+                  </Link>
+                ))}
+                <Divider type="vertical" />
                 <Button
-                  type="primary"
-                  icon="plus"
-                  onClick={() => showModal()}
-                  className="new-button"
+                  type="ghost"
+                  onClick={async () => {
+                    await new AuthAPI(BACKEND_URL).logout()
+                    message.success("Logged out!")
+                    Router.replace("/")
+                  }}
                 >
-                  NEW
+                  <Icon type="logout" />
+                  LOGOUT
                 </Button>
-                <Divider type="vertical" className="btn-divider" />
-              </>
-            ) : (
-              <></>
-            )}
-            <LinkList>
-              {links.map(({ key, href, label, icon }) => (
-                <Link key={key} href={href}>
-                  <LinkItem isSelected={props.route === href}>
-                    {icon}
-                    {label}
-                  </LinkItem>
-                </Link>
-              ))}
-              <Divider type="vertical" />
-              <Button
-                type="ghost"
-                onClick={async () => {
-                  await new AuthAPI(BACKEND_URL).logout()
-                  message.success("Logged out!")
-                  Router.replace("/")
-                }}
-              >
-                <Icon type="logout" />
-                LOGOUT
-              </Button>
-              <ModalForm
-                wrappedComponentRef={saveFormRef}
-                visible={visible}
-                onCancel={handleCancel}
-                onCreate={handleCreate}
-                product={{}}
-              />
-            </LinkList>
-          </>
+                <ModalForm
+                  wrappedComponentRef={saveFormRef}
+                  visible={visible}
+                  onCancel={handleCancel}
+                  onCreate={handleCreate}
+                  product={{}}
+                />
+              </LinkList>
+            </>
+          )
         )}
       </Menu>
     </nav>
