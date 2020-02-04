@@ -115,8 +115,8 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		}
 	)
 	var (
-		userReceipts = []UserReceipt{}
-		orders       = []OrderProduct{}
+		receipts = []UserReceipt{}
+		orders   = []OrderProduct{}
 	)
 
 	err = tx.
@@ -133,7 +133,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
 		Where(where, args).
-		All(&userReceipts)
+		All(&receipts)
 	if err != nil {
 		return nil, err
 	}
@@ -152,16 +152,14 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	user.Orders = []aumo.Order{}
 	user.Receipts = []aumo.Receipt{}
 
-	for _, o := range orders {
-		ord := o.Order
-
-		product := o.Product
-		ord.Product = &product
-
-		user.Orders = append(user.Orders, ord)
+	for i := range orders {
+		order := orders[i].Order
+		order.Product = &orders[i].Product
+		user.Orders = append(user.Orders, order)
 	}
-	for _, r := range userReceipts {
-		user.Receipts = append(user.Receipts, r.Receipt)
+
+	for i := range receipts {
+		user.Receipts = append(user.Receipts, receipts[i].Receipt)
 	}
 
 	return user, nil
