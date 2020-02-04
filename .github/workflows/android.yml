@@ -38,10 +38,8 @@ jobs:
           mkdir config
           echo "export const BACKEND_URL = 'https://aumo-api.deliriumproducts.me/api/v1'" > ./config/index.js
           cd android 
-          ./gradlew bundleRelease
+          ./gradlew assembleRelease
 
-      - name: deugging ls
-        run: ls -R client/android/app/build/
       - name: Upload Artifacts
         uses: actions/upload-artifact@master
         with:
