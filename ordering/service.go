@@ -9,7 +9,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
-type orderService struct {
+type service struct {
 	store aumo.OrderStore
 	ps    aumo.ProductStore
 	us    aumo.UserStore
@@ -17,30 +17,30 @@ type orderService struct {
 
 // New returns an instance of `aumo.OrderService`
 func New(store aumo.OrderStore, ps aumo.ProductStore, us aumo.UserStore) aumo.OrderService {
-	return &orderService{
+	return &service{
 		store: store,
 		ps:    ps,
 		us:    us,
 	}
 }
 
-func (o *orderService) Order(id uint) (*aumo.Order, error) {
+func (o *service) Order(id uint) (*aumo.Order, error) {
 	return o.store.FindByID(nil, id)
 }
 
-func (o *orderService) Orders() ([]aumo.Order, error) {
+func (o *service) Orders() ([]aumo.Order, error) {
 	return o.store.FindAll(nil)
 }
 
-func (o *orderService) Update(id uint, order *aumo.Order) error {
+func (o *service) Update(id uint, order *aumo.Order) error {
 	return o.store.Update(nil, id, order)
 }
 
-func (o *orderService) Delete(id uint) error {
+func (o *service) Delete(id uint) error {
 	return o.store.Delete(nil, id)
 }
 
-func (o *orderService) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
+func (o *service) PlaceOrder(uID, pID uint) (*aumo.Order, error) {
 	order := &aumo.Order{}
 	err := aumo.TxDo(context.Background(), o.store.DB(), func(tx sqlbuilder.Tx) error {
 		// Get Product
