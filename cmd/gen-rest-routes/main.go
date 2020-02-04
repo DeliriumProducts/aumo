@@ -20,7 +20,7 @@ func main() {
 	us := mysql.NewUserStore(nil)
 	auth := auth.New(nil, us, "", "", 0)
 
-	r := rest.New(rest.Config{
+	r := rest.New(&rest.Config{
 		UserService:    users.New(us),
 		ReceiptService: receipt.New(rs, us),
 		OrderService:   ordering.New(os, ps, us),
