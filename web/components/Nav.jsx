@@ -74,12 +74,14 @@ const Nav = props => {
         {props.route === "/" ? (
           <div>
             <Link href="/login">
-              <Button type="primary" style={{ marginRight: 5 }}>
+              <Button type="primary" style={{ marginRight: 5 }} icon="login">
                 LOGIN
               </Button>
             </Link>
             <Link href="/register">
-              <Button type="primary">REGISTER</Button>
+              <Button type="primary" icon="form">
+                REGISTER
+              </Button>
             </Link>
           </div>
         ) : props.route === "/login" || props.route === "/register" ? (
