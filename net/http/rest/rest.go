@@ -88,7 +88,7 @@ func New(c Config) *Rest {
 		middleware.RealIP,
 		middleware.Logger,
 		middleware.Recoverer,
-		RateLimit(tollbooth.NewLimiter(5, nil)),
+		RateLimit(tollbooth.NewLimiter(5, nil).SetOnLimitReached(rest.onRateLimit)),
 		Security,
 		cors.New(cors.Options{
 			AllowedOrigins:   []string{"*"},
