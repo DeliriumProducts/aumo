@@ -6,6 +6,7 @@ import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
+import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
 
 const links = [
@@ -41,7 +42,7 @@ const Nav = props => {
         })
         message.success(`Successfully created product ${product.name}!`)
         ctx.dispatch({
-          type: "setProducts",
+          type: actions.SET_PRODUCTS,
           payload: [...ctx.state.products, prdct]
         })
       } catch (err) {

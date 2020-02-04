@@ -1,14 +1,19 @@
-import { initialState, Context } from "../context.js"
 import React from "react"
+import { Context, initialState } from "../context.js"
+
+export const actions = {
+  SET_USER: "SET_USER",
+  SET_PRODUCTS: "SET_PRODUCTS"
+}
 
 const handlers = {
-  setUser(state, user) {
+  [actions.SET_USER]: (state, user) => {
     return {
       ...state,
       user
     }
   },
-  setProducts(state, products) {
+  [actions.SET_PRODUCTS]: (state, products) => {
     return {
       ...state,
       products
