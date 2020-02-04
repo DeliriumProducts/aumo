@@ -5,6 +5,8 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth/limiter"
 )
 
 const (
@@ -31,11 +33,31 @@ func Security(next http.Handler) http.Handler {
 	})
 }
 
+// RateLimit is a rate limiting middleware
+func RateLimit(lmt *limiter.Limiter) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		middle := func(w http.ResponseWriter, r *http.Request) {
+			httpError := tollbooth.LimitByRequest(lmt, w, r)
+			if httpError != nil {
+				lmt.ExecOnLimitReached(w, r)
+				w.Header().Add("Content-Type", lmt.GetMessageContentType())
+				w.WriteHeader(httpError.StatusCode)
+				w.Write([]byte(httpError.Message))
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		}
+
+		return http.HandlerFunc(middle)
+	}
+}
+
 // WithAuth is a middleware that only allows authenticated users in
 // while also checking the role of the user
 func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		middle := func(w http.ResponseWriter, r *http.Request) {
 			user, err := rest.auth.GetFromRequest(r)
 			if err != nil {
 				rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
@@ -60,6 +82,8 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 			next.ServeHTTP(w, r.WithContext(
 				auth.WithUser(r.Context(), user),
 			))
-		})
+		}
+
+		return http.HandlerFunc(middle)
 	}
 }
