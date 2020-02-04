@@ -72,9 +72,16 @@ const Nav = props => {
           <Logo src="aumo.png" />
         </Link>
         {props.route === "/" ? (
-          <Link href="/login">
-            <Button type="primary">GO TO ADMIN PANEL</Button>
-          </Link>
+          <div>
+            <Link href="/login">
+              <Button type="primary" style={{ marginRight: 5 }}>
+                LOGIN
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button type="primary">REGISTER</Button>
+            </Link>
+          </div>
         ) : props.route === "/login" || props.route === "/register" ? (
           <></>
         ) : (
