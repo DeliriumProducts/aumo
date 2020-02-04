@@ -9,32 +9,34 @@ import { BACKEND_URL } from "../config"
 
 const FormItem = Form.Item
 
-const Login = props => {
+const Register = props => {
   const [loading, setLoading] = React.useState(false)
   const { getFieldDecorator } = props.form
   const handleSubmit = e => {
     e.preventDefault()
     props.form.validateFields(async (err, values) => {
       if (!err) {
-        const { email, password } = values
+        const { email, password, name } = values
 
         const credentials = {
+          name,
           email,
-          password
+          password,
+          avatar: "https://i.imgur.com/4Ws6pd9.png"
         }
 
         const authAPI = new AuthAPI(BACKEND_URL)
         setLoading(true)
         try {
-          await authAPI.login(credentials)
-          message.success("Logged in!", 3, () => Router.replace("/products"))
+          await authAPI.register(credentials)
+          message.success("Registered, you can now login in the Aumo App!")
         } catch (err) {
           if (!err.response) {
             message.error(`${err}`, 5)
             return
           }
-          if (err.response.status === 401) {
-            message.error("Invalid credentials. Try again.", 1)
+          if (err.response.status === 422) {
+            message.error("An account with the same email already exists.", 1)
           } else {
             message.error("Server error, please try again")
           }
@@ -49,13 +51,30 @@ const Login = props => {
   return (
     <>
       <Head>
-        <title>Aumo Login</title>
+        <title>Aumo Register</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
         <Card>
-          <Form onSubmit={handleSubmit} className="login-form">
-            <p>Login to manage Aumo</p>
+          <Form onSubmit={handleSubmit} className="register-form">
+            <p>Register an Aumo Account</p>
+            <FormItem>
+              {getFieldDecorator("name", {
+                rules: [
+                  {
+                    required: true,
+                    message: "Please input your Name!"
+                  }
+                ]
+              })(
+                <Input
+                  prefix={
+                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
+                  placeholder="Name"
+                />
+              )}
+            </FormItem>
             <FormItem>
               {getFieldDecorator("email", {
                 rules: [
@@ -84,6 +103,10 @@ const Login = props => {
                   {
                     required: true,
                     message: "Please input your password!"
+                  },
+                  {
+                    pattern: /.{6,24}/,
+                    message: "Password must be between 6 and 24 characters long"
                   }
                 ]
               })(
@@ -101,13 +124,13 @@ const Login = props => {
                 type="primary"
                 loading={loading}
                 htmlType="submit"
-                className="login-form-button"
+                className="register-form-button"
               >
-                Login
+                Register
               </Button>
-              Or{" "}
-              <Link href="/register">
-                <a>register now!</a>
+              Already registered?{" "}
+              <Link href="login">
+                <a>Login now!</a>
               </Link>
             </FormItem>
           </Form>
@@ -117,7 +140,7 @@ const Login = props => {
   )
 }
 
-Login.getInitialProps = async ctx => {
+Register.getInitialProps = async ctx => {
   const { req, res } = ctx
   let auth = {}
   /**
@@ -163,7 +186,11 @@ const Card = styled.div`
     font-weight: 600;
   }
 
-  .login-form-button {
+  .register-form {
+    max-width: 300px;
+  }
+
+  .register-form-button {
     width: 100%;
   }
 `
@@ -179,6 +206,6 @@ const Container = styled.div`
   }
 `
 
-const WrappedLogin = Form.create()(Login)
+const WrappedRegister = Form.create()(Register)
 
-export default WrappedLogin
+export default WrappedRegister
