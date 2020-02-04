@@ -1,10 +1,11 @@
-import React from "react"
-import Head from "next/head"
-import styled from "styled-components"
-import { Input, Icon, Form, Button, message } from "antd"
+import { Button, Form, Icon, Input, message } from "antd"
 import { AuthAPI } from "aumo-api"
-import { BACKEND_URL } from "../config"
+import Head from "next/head"
+import Link from "next/link"
 import Router from "next/router"
+import React from "react"
+import styled from "styled-components"
+import { BACKEND_URL } from "../config"
 
 const FormItem = Form.Item
 
@@ -104,6 +105,10 @@ const Login = props => {
               >
                 Login
               </Button>
+              Or{" "}
+              <Link href="/register">
+                <a>register now!</a>
+              </Link>
             </FormItem>
           </Form>
         </Card>
@@ -148,7 +153,7 @@ const Card = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3.5rem;
+  padding: 2rem;
   border-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
   display: flex;
