@@ -89,9 +89,7 @@ func (a *Authenticator) SetCookieHeader(w http.ResponseWriter, sID string) {
 		HttpOnly: true,
 		Path:     a.path,
 		Domain:   a.domain,
-		Expires: time.Now().Add(
-			time.Duration(a.expiryTime) * time.Second,
-		),
+		Expires:  time.Now().Add(a.expiryTime),
 	})
 }
 
