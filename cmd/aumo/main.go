@@ -14,7 +14,7 @@ import (
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/redis/v7"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
 )
@@ -52,7 +52,12 @@ func main() {
 		panic(err)
 	}
 
-	conn, err := redis.DialURL(RedisURL, redis.DialDatabase(redisDbN))
+	conn := redis.NewClient(&redis.Options{
+		Addr: RedisURL,
+		DB:   redisDbN,
+	})
+
+	err = conn.Ping().Err()
 	if err != nil {
 		panic(err)
 	}

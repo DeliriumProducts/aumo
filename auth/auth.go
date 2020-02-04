@@ -27,7 +27,7 @@ var (
 
 // Authenticator holds the methods and config used for authentication
 type Authenticator struct {
-	redis      redis.Client
+	redis      *redis.Client
 	us         aumo.UserStore
 	domain     string
 	path       string
@@ -35,7 +35,7 @@ type Authenticator struct {
 }
 
 // New returns new Auth instance
-func New(r redis.Client, us aumo.UserStore, domain, path string, expiryTime time.Duration) *Authenticator {
+func New(r *redis.Client, us aumo.UserStore, domain, path string, expiryTime time.Duration) *Authenticator {
 	return &Authenticator{
 		r,
 		us,
