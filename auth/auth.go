@@ -49,7 +49,7 @@ func New(r *redis.Client, us aumo.UserStore, domain, path string, expiryTime tim
 func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 	sID := uuid.New().String()
 
-	err := a.redis.SetXX(sID, u.ID, a.expiryTime).Err()
+	err := a.redis.Set(sID, u.ID, a.expiryTime).Err()
 	if err != nil {
 		return "", err
 	}
