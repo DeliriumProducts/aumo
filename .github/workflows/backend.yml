@@ -64,7 +64,7 @@ jobs:
           GOOS=linux   GOARCH=amd64 go build -o bin/ci-test-linux-amd64
           GOOS=darwin  GOARCH=amd64 go build -o bin/ci-test-macos-amd64
 
-      - name: Upload artifacts
+      - name: upload artifacts
         uses: actions/upload-artifact@master
         with:
           name: binaries

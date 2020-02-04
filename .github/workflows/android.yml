@@ -40,9 +40,11 @@ jobs:
           cd android 
           ./gradlew bundleRelease
 
+      - name: deugging ls
+        run: ls -R client/android/app/build/
       - name: Upload Artifacts
         uses: actions/upload-artifact@master
         with:
-          name: .apk
+          name: Aumo.apk
           path: client/android/app/build/outputs/apk/release/app-release.apk
 
