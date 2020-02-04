@@ -5,6 +5,7 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
+	"github.com/didip/tollbooth"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -82,25 +83,25 @@ func New(c Config) *Rest {
 		decoder:        decoder,
 	}
 
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
-	r.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-	}).Handler,
-	)
-	r.Use(Security)
-	r.Use(middleware.RedirectSlashes)
-	r.Use(middleware.Heartbeat(c.MountRoute + "/ping"))
+	r.Use(middleware.RequestID,
+		middleware.RedirectSlashes,
+		middleware.RealIP,
+		middleware.Logger,
+		middleware.Recoverer,
+		RateLimit(tollbooth.NewLimiter(5, nil).SetOnLimitReached(rest.onRateLimit)),
+		Security,
+		cors.New(cors.Options{
+			AllowedOrigins:   []string{"*"},
+			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+			ExposedHeaders:   []string{"Link"},
+			AllowCredentials: true,
+		}).Handler,
+		middleware.Heartbeat(c.MountRoute+"/ping"))
+
 	r.Mount(c.MountRoute, r)
 
 	rest.routes()
-
 	return rest
 }
 
