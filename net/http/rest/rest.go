@@ -41,7 +41,7 @@ type Rest struct {
 }
 
 // New returns a new instance of aumo's REST API
-func New(c Config) *Rest {
+func New(c *Config) *Rest {
 	switch {
 	case c.UserService == nil:
 		panic("rest: UserService not provided")
