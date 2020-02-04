@@ -164,3 +164,35 @@ func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
 
 	return tx.Collection(OrderTable).Find("id", id).Delete()
 }
+
+func (s *shopStore) shopRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
+	var err error
+	shop := &aumo.Shop{}
+
+	type ShopUsers struct {
+		aumo.User `db:",inline"`
+	}
+
+	var (
+		users = []ShopUsers{}
+	)
+
+	err = tx.
+		Select("*").
+		From(ProductTable).
+		Where(where, args).
+		One(shop)
+	if err != nil {
+		return nil, err
+	}
+
+	err = tx.Select("u.user_id", "u.name", "u.email", "u.avatar", "u.points").
+		From(ShopTable).
+		Join("users as u").On("shops_owners.user_id = u.user_id").
+		Where(where, args).
+		All(&users)
+	if err != nil {
+		return nil, err
+	}
+
+}
