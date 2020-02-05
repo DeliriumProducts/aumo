@@ -23,9 +23,10 @@ func InitialAdmin(us aumo.UserStore, initialPassword, initialEmail string) (*aum
 		return user, us.Save(nil, user)
 	}
 
-	// Exists but wrong role
-	if user.Role != aumo.Admin {
+	// Exists but wrong role or not verified
+	if user.Role != aumo.Admin || !user.IsVerified {
 		user.Role = aumo.Admin
+		user.IsVerified = true
 		return user, us.Update(nil, user.ID, user)
 	}
 
