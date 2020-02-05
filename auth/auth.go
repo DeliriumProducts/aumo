@@ -49,7 +49,7 @@ func New(r *redis.Client, us aumo.UserStore, domain, path string, expiryTime tim
 func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 	sID := uuid.New().String()
 
-	err := a.redis.Set(sID, u.ID, a.expiryTime).Err()
+	err := a.redis.Set(sID, u.ID.String(), a.expiryTime).Err()
 	if err != nil {
 		return "", err
 	}
@@ -59,12 +59,12 @@ func (a *Authenticator) NewSession(u *aumo.User) (string, error) {
 
 // Get gets a session from Redis based on the session ID
 func (a *Authenticator) Get(sID string) (*aumo.User, error) {
-	uID, err := a.redis.Get(sID).Uint64()
+	uID, err := a.redis.Get(sID).Result()
 	if err != nil {
 		return nil, err
 	}
 
-	return a.us.FindByID(nil, uint(uID), true)
+	return a.us.FindByID(nil, uID, true)
 }
 
 func (a *Authenticator) Del(sID string) error {

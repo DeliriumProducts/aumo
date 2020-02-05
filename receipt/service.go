@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/google/uuid"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
