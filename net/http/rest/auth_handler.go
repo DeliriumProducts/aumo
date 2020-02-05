@@ -48,8 +48,7 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.ID = 0
-	rest.JSON(w, user, http.StatusOK)
+	rest.JSON(w, Message{"Email confirmation sent!"}, http.StatusOK)
 }
 
 func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
