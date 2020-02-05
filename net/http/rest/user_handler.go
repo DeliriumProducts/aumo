@@ -17,7 +17,7 @@ func (rest *Rest) userGetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) userGet(w http.ResponseWriter, r *http.Request) {
-	uID := rest.ParamNumber(w, r, "id")
+	uID := rest.Param(r, "id")
 
 	user, err := rest.userService.User(uID, true)
 	if err != nil {
@@ -33,7 +33,7 @@ func (rest *Rest) userEditRole(w http.ResponseWriter, r *http.Request) {
 		Role aumo.Role `form:"role" validate:"required,oneof=Admin Customer" json:"role"`
 	}
 
-	uID := rest.ParamNumber(w, r, "id")
+	uID := rest.Param(r, "id")
 
 	var ur request
 	if ok := rest.Form(w, r, &ur); !ok {
@@ -54,7 +54,7 @@ func (rest *Rest) userAddPoints(w http.ResponseWriter, r *http.Request) {
 		Points float64 `form:"points" validate:"required,numeric" json:"points"`
 	}
 
-	uID := rest.ParamNumber(w, r, "id")
+	uID := rest.Param(r, "id")
 
 	var ur request
 	if ok := rest.Form(w, r, &ur); !ok {
@@ -75,7 +75,7 @@ func (rest *Rest) userSubPoints(w http.ResponseWriter, r *http.Request) {
 		Points float64 `form:"points" validate:"required,numeric" json:"points"`
 	}
 
-	uID := rest.ParamNumber(w, r, "id")
+	uID := rest.Param(r, "id")
 
 	var ur request
 	if ok := rest.Form(w, r, &ur); !ok {
@@ -92,7 +92,7 @@ func (rest *Rest) userSubPoints(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) userDelete(w http.ResponseWriter, r *http.Request) {
-	uID := rest.ParamNumber(w, r, "id")
+	uID := rest.Param(r, "id")
 
 	err := rest.userService.Delete(uID)
 	if err != nil {
