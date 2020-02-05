@@ -1,7 +1,6 @@
 package verifications
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/deliriumproducts/aumo/mail"
@@ -37,10 +36,10 @@ func New(m mail.Mailer, r *redis.Client) *Verifier {
 }
 
 // Send starts the sirst part of the verification process
-func (v *Verifier) Send(to string, value fmt.Stringer, subject, body, link string, expiry time.Duration) error {
+func (v *Verifier) Send(to string, value, subject, body, link string, expiry time.Duration) error {
 	token := uuid.New().String()
 
-	err := v.r.Set(token, value.String(), expiry).Err()
+	err := v.r.Set(token, value, expiry).Err()
 	if err != nil {
 		return err
 	}

@@ -3,6 +3,8 @@ package rest
 import (
 	"errors"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
@@ -39,7 +41,8 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = rest.verifier.Send(user.Email, user.ID, "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
+	id := strconv.FormatUint(uint64(user.ID), 10)
+	err = rest.verifier.Send(user.Email, id, "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
