@@ -8,6 +8,20 @@ import (
 	"github.com/google/uuid"
 )
 
+// Verifier is a struct for verifications
+//
+// First part (Sending)
+//
+// Generate a unique token (UUID), which will be used as a key
+// in a Redis store. A value is also provided to set in the redis store.
+// This is followed by sending an email which contains the UUID + a link.
+// A user can check their email and click the link to proceed to the second part.
+//
+// Second part (Verifying)
+//
+// After a user has clicked the link, the Verifier can check if the UUID exists
+// and if it does, the value will be returned to the caller, meaning they can
+// carry on with their actual logic.
 type Verifier struct {
 	mailer mail.Mailer
 	r      *redis.Client
