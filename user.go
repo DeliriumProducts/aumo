@@ -26,19 +26,22 @@ var (
 	ErrUserNotFound = errors.New("aumo: user not found")
 	// ErrDuplicateEmail is an error for when a user tries to register with an already existing email
 	ErrDuplicateEmail = errors.New("aumo: duplicate email")
+	// ErrNotVerified is an error for when a user isn't verified
+	ErrNotVerified = errors.New("aumo: user is not verified")
 )
 
 // User represents a user of aumo
 type User struct {
-	ID       uint      `json:"id,omitempty" db:"id,omitempty"`
-	Name     string    `json:"name" db:"name"`
-	Email    string    `json:"email" db:"email"`
-	Password string    `json:"-" db:"password"`
-	Avatar   string    `json:"avatar" db:"avatar"`
-	Points   float64   `json:"points" db:"points"`
-	Role     Role      `json:"role" db:"role"`
-	Orders   []Order   `json:"orders" db:"-"`
-	Receipts []Receipt `json:"receipts" db:"-"`
+	ID         uint      `json:"id,omitempty" db:"id,omitempty"`
+	Name       string    `json:"name" db:"name"`
+	Email      string    `json:"email" db:"email"`
+	Password   string    `json:"-" db:"password"`
+	Avatar     string    `json:"avatar" db:"avatar"`
+	Points     float64   `json:"points" db:"points"`
+	Role       Role      `json:"role" db:"role"`
+	Orders     []Order   `json:"orders" db:"-"`
+	Receipts   []Receipt `json:"receipts" db:"-"`
+	IsVerified bool      `json:"isVerified" db:"verified"`
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array
@@ -87,14 +90,15 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 	}
 
 	return &User{
-		Name:     name,
-		Email:    strings.ToLower(strings.Trim(email, " ")),
-		Password: string(pwd),
-		Avatar:   avatar,
-		Points:   UserStartingPoints,
-		Role:     Customer,
-		Orders:   []Order{},
-		Receipts: []Receipt{},
+		Name:       name,
+		Email:      strings.ToLower(strings.Trim(email, " ")),
+		Password:   string(pwd),
+		Avatar:     avatar,
+		Points:     UserStartingPoints,
+		Role:       Customer,
+		Orders:     []Order{},
+		Receipts:   []Receipt{},
+		IsVerified: false,
 	}, nil
 }
 
@@ -109,6 +113,7 @@ type UserService interface {
 	EditRole(id uint, role Role) error
 	AddPoints(id uint, points float64) error
 	SubPoints(id uint, points float64) error
+	Verify(id uint) error
 	Delete(id uint) error
 }
 

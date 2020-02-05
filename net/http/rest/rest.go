@@ -5,6 +5,7 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
+	"github.com/deliriumproducts/aumo/verifications"
 	"github.com/didip/tollbooth"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -24,7 +25,9 @@ type Config struct {
 	OrderService   aumo.OrderService
 	ProductService aumo.ProductService
 	Auth           *auth.Authenticator
+	Verifier       *verifications.Verifier
 	MountRoute     string
+	BackendURL     string
 }
 
 // Rest is a REST API for Aumo
@@ -36,8 +39,10 @@ type Rest struct {
 	productService aumo.ProductService
 	auth           *auth.Authenticator
 	validator      *validator.Validate
+	verifier       *verifications.Verifier
 	decoder        *form.Decoder
 	translator     ut.Translator
+	backendURL     string
 }
 
 // New returns a new instance of aumo's REST API
@@ -78,6 +83,8 @@ func New(c *Config) *Rest {
 		orderService:   c.OrderService,
 		productService: c.ProductService,
 		auth:           c.Auth,
+		verifier:       c.Verifier,
+		backendURL:     c.BackendURL,
 		validator:      validator,
 		translator:     trans,
 		decoder:        decoder,

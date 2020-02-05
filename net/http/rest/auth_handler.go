@@ -3,6 +3,8 @@ package rest
 import (
 	"errors"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
@@ -39,8 +41,14 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.ID = 0
-	rest.JSON(w, user, http.StatusOK)
+	id := strconv.FormatUint(uint64(user.ID), 10)
+	_, err = rest.verifier.Send(user.Email, id, "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"Email confirmation sent!"}, http.StatusOK)
 }
 
 func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
@@ -62,6 +70,11 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 
 	if !user.ValidatePassword(um.Password) {
 		rest.JSONError(w, aumo.ErrInvalidPassword, http.StatusUnauthorized)
+		return
+	}
+
+	if !user.IsVerified {
+		rest.JSONError(w, aumo.ErrNotVerified, http.StatusUnauthorized)
 		return
 	}
 
@@ -87,6 +100,40 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, user, http.StatusOK)
 }
 
+func (rest *Rest) userConfirmEmail(w http.ResponseWriter, r *http.Request) {
+	token := rest.Param(r, "token")
+	if token == "" {
+		rest.JSONError(w, Error{"Token not provided"}, http.StatusBadRequest)
+		return
+	}
+
+	userID, err := rest.verifier.Verify(token)
+	if err != nil {
+		rest.JSONError(w, Error{"Token not found"}, http.StatusNotFound)
+		return
+	}
+
+	id, err := strconv.ParseUint(userID, 10, 64)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = rest.userService.Verify(uint(id))
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrUserNotFound):
+		rest.JSONError(w, err, http.StatusNotFound)
+		return
+	default:
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"User verified"}, 200)
+}
+
 func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
 	sID, err := r.Cookie(auth.CookieKey)
 
@@ -103,5 +150,5 @@ func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.auth.ExpireCookieHeader(w)
-	rest.JSON(w, Message{"User successfully logged out!"}, 200)
+	rest.JSON(w, Message{"User successfully logged out!"}, http.StatusOK)
 }

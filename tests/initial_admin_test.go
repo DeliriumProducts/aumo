@@ -40,6 +40,7 @@ func TestInitialAdmin(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 		require.NotNil(t, *gotUser, "should not be nil")
 		require.Equal(t, aumo.Admin, gotUser.Role, "should be an admin")
+		require.True(t, gotUser.IsVerified, "should be verified")
 	})
 
 	t.Run("already_exists", func(t *testing.T) {
@@ -62,6 +63,7 @@ func TestInitialAdmin(t *testing.T) {
 			gotUsers, err := ustore.FindAll(nil)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Len(t, gotUsers, 1, "should only have the first admin")
+			require.True(t, gotUsers[0].IsVerified, "should be verified")
 			require.Equal(t, aumo.Admin, gotUsers[0].Role, "should be an admin")
 		})
 
@@ -89,6 +91,7 @@ func TestInitialAdmin(t *testing.T) {
 			gotUsers, err := ustore.FindAll(nil)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Len(t, gotUsers, 1, "should only have the first admin")
+			require.True(t, gotUsers[0].IsVerified, "should be verified")
 			require.Equal(t, aumo.Admin, gotUsers[0].Role, "should be an admin")
 		})
 	})

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
   avatar varchar(255) NOT NULL,
   points double NOT NULL,
   role varchar(255) NOT NULL,
+  verified tinyint(1) NOT NULL,
   UNIQUE KEY email (email)
 );
 
