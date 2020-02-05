@@ -10,7 +10,6 @@ import (
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
 	"github.com/stretchr/testify/require"
-	"upper.io/db.v3"
 )
 
 func TestUserService(t *testing.T) {
@@ -235,6 +234,6 @@ func TestUserService(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 
 		_, err = ustore.FindByID(nil, user.ID, false)
-		require.Equal(t, err, db.ErrNoMoreRows)
+		require.Equal(t, err, aumo.ErrUserNotFound)
 	})
 }
