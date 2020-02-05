@@ -29,7 +29,7 @@ func (rest *Rest) receiptCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) receiptClaim(w http.ResponseWriter, r *http.Request) {
-	rID := rest.ParamNumber(w, r, "id")
+	rID := rest.Param(r, "id")
 
 	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
@@ -37,7 +37,7 @@ func (rest *Rest) receiptClaim(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	receipt, err := rest.receiptService.ClaimReceipt(user.ID, rID)
+	receipt, err := rest.receiptService.ClaimReceipt(user.ID.String(), rID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
