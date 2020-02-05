@@ -27,6 +27,7 @@ type Verifier struct {
 	r      *redis.Client
 }
 
+// New returns an instance of a Verifier
 func New(m mail.Mailer, r *redis.Client) *Verifier {
 	return &Verifier{
 		mailer: m,
@@ -34,7 +35,8 @@ func New(m mail.Mailer, r *redis.Client) *Verifier {
 	}
 }
 
-func (v *Verifier) Send(to string, value interface{}, subject, body, link string, expiry time.Duration) error {
+// Send starts the sirst part of the verification process
+func (v *Verifier) Send(to string, value string, subject, body, link string, expiry time.Duration) error {
 	token := uuid.New().String()
 
 	err := v.r.Set(token, value, expiry).Err()
@@ -53,4 +55,9 @@ func (v *Verifier) Send(to string, value interface{}, subject, body, link string
 			"Your link is "+link+"/"+token+
 			"\r\n",
 	)
+}
+
+// Verifiy is the second part of the verification process
+func (v *Verifier) Verify(token string) (string, error) {
+	return v.r.Get(token).Result()
 }
