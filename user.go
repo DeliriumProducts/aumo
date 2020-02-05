@@ -113,6 +113,7 @@ type UserService interface {
 	EditRole(id uint, role Role) error
 	AddPoints(id uint, points float64) error
 	SubPoints(id uint, points float64) error
+	Verify(id uint) error
 	Delete(id uint) error
 }
 

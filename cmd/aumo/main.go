@@ -38,6 +38,7 @@ func main() {
 	InitialAdminPassword := os.Getenv("INITIAL_ADMIN_PASSWORD")
 	FrontendURL := os.Getenv("FRONTEND_URL")
 	Env := os.Getenv("ENV")
+	BackendURL := os.Getenv("BACKEND_URL")
 	SMTPHost := os.Getenv("SMTP_HOST")
 	SMTPUser := os.Getenv("SMTP_USER")
 	SMTPPass := os.Getenv("SMTP_PASS")
@@ -107,6 +108,7 @@ func main() {
 		ProductService: products.New(ps),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
+		BackendURL:     BackendURL,
 		Verifier:       verifications.New(mailer, conn),
 	})
 

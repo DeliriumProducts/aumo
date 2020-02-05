@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/go-sql-driver/mysql"
@@ -60,6 +62,10 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 		user.Orders = []aumo.Order{}
 	}
 
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, aumo.ErrUserNotFound
+	}
+
 	return user, err
 }
 
@@ -95,6 +101,10 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
+	}
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, aumo.ErrUserNotFound
 	}
 
 	return user, err

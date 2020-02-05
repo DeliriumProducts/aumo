@@ -51,6 +51,19 @@ func (us *service) EditRole(id uint, role aumo.Role) error {
 	})
 }
 
+func (us *service) Verify(id uint) error {
+	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
+		user, err := us.store.FindByID(tx, id, false)
+		if err != nil {
+			return err
+		}
+
+		user.IsVerified = true
+
+		return us.store.Update(tx, id, user)
+	})
+}
+
 func (us *service) AddPoints(id uint, points float64) error {
 	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
 		user, err := us.store.FindByID(tx, id, false)
