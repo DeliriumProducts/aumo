@@ -4,13 +4,12 @@ import (
 	"errors"
 
 	"github.com/deliriumproducts/aumo"
-	"upper.io/db.v3"
 )
 
 // InitialAdmin creates an Admin and returns it if it was created
 func InitialAdmin(us aumo.UserStore, initialPassword, initialEmail string) (*aumo.User, error) {
 	user, err := us.FindByEmail(nil, initialEmail, false)
-	if errors.Is(err, db.ErrNoMoreRows) {
+	if errors.Is(err, aumo.ErrUserNotFound) {
 		// Doesn't exist
 		user, err := aumo.NewUser("Aumo Admin", initialEmail, initialPassword, "https://i.imgur.com/QUEMEDP.png")
 		if err != nil {
