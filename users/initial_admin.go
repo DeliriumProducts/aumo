@@ -18,6 +18,7 @@ func InitialAdmin(us aumo.UserStore, initialPassword, initialEmail string) (*aum
 		}
 
 		user.Role = aumo.Admin
+		user.IsVerified = true
 
 		return user, us.Save(nil, user)
 	}
