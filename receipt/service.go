@@ -20,7 +20,7 @@ func New(store aumo.ReceiptStore, userStore aumo.UserStore) aumo.ReceiptService 
 	}
 }
 
-func (rs *service) Receipt(id uint) (*aumo.Receipt, error) {
+func (rs *service) Receipt(id string) (*aumo.Receipt, error) {
 	return rs.store.FindByID(nil, id)
 }
 
@@ -32,15 +32,15 @@ func (rs *service) Create(r *aumo.Receipt) error {
 	return rs.store.Save(nil, r)
 }
 
-func (rs *service) Update(id uint, r *aumo.Receipt) error {
+func (rs *service) Update(id string, r *aumo.Receipt) error {
 	return rs.store.Update(nil, id, r)
 }
 
-func (rs *service) Delete(id uint) error {
+func (rs *service) Delete(id string) error {
 	return rs.store.Delete(nil, id)
 }
 
-func (rs *service) ClaimReceipt(uID uint, rID uint) (*aumo.Receipt, error) {
+func (rs *service) ClaimReceipt(uID string, rID string) (*aumo.Receipt, error) {
 	var receipt *aumo.Receipt
 	db := rs.store.DB()
 
