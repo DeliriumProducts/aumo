@@ -15,8 +15,9 @@ type Receipt struct {
 // NewReceipt is a contrsuctor for `Receipt`
 func NewReceipt(content string) *Receipt {
 	return &Receipt{
-		Content: content,
-		UserID:  nil,
+		ReceiptID: uuid.New(),
+		Content:   content,
+		UserID:    nil,
 	}
 }
 
