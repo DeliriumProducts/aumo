@@ -1,16 +1,7 @@
 package aumo
 
 import (
-	"errors"
-
 	"upper.io/db.v3/lib/sqlbuilder"
-)
-
-var (
-	// ErrUserAlreadySet is an error for when a user has already claimed a receipt
-	ErrUserAlreadySet = errors.New("aumo: this receipt has already been claimed")
-	// ErrReceiptUserNotExist is an error for when a user doesn't exist when trying to claim a receipt
-	ErrReceiptUserNotExist = errors.New("aumo: can't claim a receipt for a user that doesn't exist")
 )
 
 // Receipt is a digital receipt

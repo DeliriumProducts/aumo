@@ -2,8 +2,10 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -51,7 +53,18 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 		}()
 	}
 
-	return product, tx.Collection(ProductTable).Find("id", id).One(product)
+	err = tx.Collection(ProductTable).Find("id", id).One(product)
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrProductNotFound
+	default:
+		return nil, err
+	}
+
+	return product, err
 }
 
 func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {

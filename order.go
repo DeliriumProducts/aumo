@@ -1,6 +1,8 @@
 package aumo
 
-import "upper.io/db.v3/lib/sqlbuilder"
+import (
+	"upper.io/db.v3/lib/sqlbuilder"
+)
 
 // Order is an order in aumo
 type Order struct {
