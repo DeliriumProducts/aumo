@@ -8,7 +8,6 @@ import (
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/stretchr/testify/require"
-	"upper.io/db.v3"
 )
 
 func TestReceiptService(t *testing.T) {
@@ -84,7 +83,7 @@ func TestReceiptService(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 
 		_, err = rstore.FindByID(nil, receipt.ReceiptID)
-		require.Equal(t, err, db.ErrNoMoreRows)
+		require.Equal(t, err, aumo.ErrReceiptNotFound)
 	})
 
 	t.Run("update_receipt", func(t *testing.T) {
