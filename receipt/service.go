@@ -56,7 +56,12 @@ func (rs *service) ClaimReceipt(uID string, rID string) (*aumo.Receipt, error) {
 			return err
 		}
 
-		err = receipt.Claim(uID)
+		uuid, err := uuid.Parse(uID)
+		if err != nil {
+			return err
+		}
+
+		err = receipt.Claim(uuid)
 		if err != nil {
 			return err
 		}
