@@ -2,11 +2,11 @@ package mysql
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/go-sql-driver/mysql"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -31,7 +31,6 @@ func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
 	var err error
 	user := &aumo.User{}
-
 	if tx == nil {
 		tx, err = u.db.NewTx(context.Background())
 
@@ -62,7 +61,7 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 		user.Orders = []aumo.Order{}
 	}
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if errors.Is(err, upper.ErrNoMoreRows) {
 		return nil, aumo.ErrUserNotFound
 	}
 
@@ -103,7 +102,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 		user.Orders = []aumo.Order{}
 	}
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if errors.Is(err, upper.ErrNoMoreRows) {
 		return nil, aumo.ErrUserNotFound
 	}
 
