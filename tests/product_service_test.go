@@ -8,7 +8,6 @@ import (
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/stretchr/testify/require"
-	"upper.io/db.v3"
 )
 
 func TestProductService(t *testing.T) {
