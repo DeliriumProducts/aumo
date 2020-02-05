@@ -65,5 +65,15 @@ func (v *Verifier) Send(to string, value, subject, body, link string, expiry tim
 
 // Verify is the second part of the verification process
 func (v *Verifier) Verify(token string) (string, error) {
-	return v.r.Get(token).Result()
+	val, err := v.r.Get(token).Result()
+	if err != nil {
+		return "", err
+	}
+
+	err = v.r.Del(token).Err()
+	if err != nil {
+		return "", err
+	}
+
+	return val, err
 }

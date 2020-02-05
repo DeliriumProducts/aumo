@@ -38,7 +38,7 @@ func SetupRedis() (*redis.Client, error) {
 	return conn, nil
 }
 
-// TidRedis clears the Redis db
+// TidyRedis clears the Redis db
 func TidyRedis(r *redis.Client) {
 	err := r.FlushDB().Err()
 	if err != nil {

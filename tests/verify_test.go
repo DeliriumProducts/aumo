@@ -49,7 +49,7 @@ func TestVerification(t *testing.T) {
 		require.Equal(t, val, gotVal, "should be equal")
 
 		gotVal, err = r.Get(key).Result()
-		require.Nil(t, err, "shouldn't return an error")
+		require.NotNil(t, err, "should return an error")
 		require.Equal(t, "", gotVal, "should be empty")
 	})
 
