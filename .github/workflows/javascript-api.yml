@@ -14,8 +14,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Install deps
-        working-directory: ./js-api
+        working-directory: ./aumo-api
         run: yarn
       - name: Build
-        working-directory: ./js-api
+        working-directory: ./aumo-api
         run: yarn build
