@@ -7,10 +7,8 @@ import (
 )
 
 var (
-	// ErrOrderProductNotFound is an error for when a user places an order on a product that doesn't exist
-	ErrOrderProductNotFound = errors.New("aumo: can't place an order for a non existing product")
-	// ErrOrderUserNotFound is an error for when a user doesn't exist when placing an order
-	ErrOrderUserNotFound = errors.New("aumo: can't place an order for a user that doesn't exist")
+	// ErrProductNotFound when a receipt isn't found
+	ErrProductNotFound = errors.New("aumo: product not found")
 )
 
 // Product is a product in the shop of aumo

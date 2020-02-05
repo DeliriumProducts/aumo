@@ -2,8 +2,10 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -51,7 +53,18 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
 		}()
 	}
 
-	return receipt, tx.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
+	err = tx.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrReceiptNotFound
+	default:
+		return nil, err
+	}
+
+	return receipt, err
 }
 
 func (r *receiptStore) FindAll(tx aumo.Tx) ([]aumo.Receipt, error) {

@@ -2,8 +2,10 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -51,7 +53,18 @@ func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 		}()
 	}
 
-	return order, tx.Collection(OrderTable).Find("id", id).One(order)
+	err = tx.Collection(OrderTable).Find("id", id).One(order)
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrOrderNotFound
+	default:
+		return nil, err
+	}
+
+	return order, err
 }
 
 func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {

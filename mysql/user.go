@@ -61,8 +61,13 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 		user.Orders = []aumo.Order{}
 	}
 
-	if errors.Is(err, upper.ErrNoMoreRows) {
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
 		return nil, aumo.ErrUserNotFound
+	default:
+		return nil, err
 	}
 
 	return user, err
@@ -102,8 +107,13 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 		user.Orders = []aumo.Order{}
 	}
 
-	if errors.Is(err, upper.ErrNoMoreRows) {
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
 		return nil, aumo.ErrUserNotFound
+	default:
+		return nil, err
 	}
 
 	return user, err
