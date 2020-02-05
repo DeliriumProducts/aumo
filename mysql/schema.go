@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE TABLE IF NOT EXISTS receipts (
-  receipt_id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  receipt_id varchar(36) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   content TEXT NOT NULL,
   user_id varchar(36) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
