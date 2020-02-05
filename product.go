@@ -1,14 +1,7 @@
 package aumo
 
 import (
-	"errors"
-
 	"upper.io/db.v3/lib/sqlbuilder"
-)
-
-var (
-	// ErrProductNotFound when a receipt isn't found
-	ErrProductNotFound = errors.New("aumo: product not found")
 )
 
 // Product is a product in the shop of aumo

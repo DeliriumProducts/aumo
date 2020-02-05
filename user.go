@@ -1,7 +1,6 @@
 package aumo
 
 import (
-	"errors"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -13,21 +12,6 @@ const (
 	UserStartingPoints = float64(5000)
 	// UserPointsPerReceipt is the amount of points a user gets per receipt claimed
 	UserPointsPerReceipt = float64(500)
-)
-
-var (
-	// ErrNotSufficientPoints is an error for when the user doens't have enough points
-	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
-	// ErrNotInStock is an error for when an item isn't in stock
-	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
-	// ErrInvalidPassword is an error for when the user provided an invalid password
-	ErrInvalidPassword = errors.New("aumo: wrong password")
-	// ErrUserNotFound is an error for when a user hasn't been found
-	ErrUserNotFound = errors.New("aumo: user not found")
-	// ErrDuplicateEmail is an error for when a user tries to register with an already existing email
-	ErrDuplicateEmail = errors.New("aumo: duplicate email")
-	// ErrNotVerified is an error for when a user isn't verified
-	ErrNotVerified = errors.New("aumo: user is not verified")
 )
 
 // User represents a user of aumo

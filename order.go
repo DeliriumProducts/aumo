@@ -1,18 +1,7 @@
 package aumo
 
 import (
-	"errors"
-
 	"upper.io/db.v3/lib/sqlbuilder"
-)
-
-var (
-	// ErrOrderProductNotFound is an error for when a user places an order on a product that doesn't exist
-	ErrOrderProductNotFound = errors.New("aumo: can't place an order for a non existing product")
-	// ErrOrderUserNotFound is an error for when a user doesn't exist when placing an order
-	ErrOrderUserNotFound = errors.New("aumo: can't place an order for a user that doesn't exist")
-	// ErrOrderNotFound when a receipt isn't found
-	ErrOrderNotFound = errors.New("aumo: order not found")
 )
 
 // Order is an order in aumo
