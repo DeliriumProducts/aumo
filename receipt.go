@@ -8,7 +8,7 @@ import (
 // Receipt is a digital receipt
 type Receipt struct {
 	ReceiptID uuid.UUID  `json:"receipt_id" db:"receipt_id"`
-	Content   string     `json:"content" db:"content" validate:"required"`
+	Content   string     `json:"content" db:"content"`
 	UserID    *uuid.UUID `json:"-" db:"user_id,omitempty"`
 }
 
@@ -16,6 +16,7 @@ type Receipt struct {
 func NewReceipt(content string) *Receipt {
 	return &Receipt{
 		Content: content,
+		UserID:  nil,
 	}
 }
 

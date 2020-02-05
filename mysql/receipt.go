@@ -121,7 +121,8 @@ func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
 		}()
 	}
 
-	return tx.Collection(ReceiptTable).InsertReturning(rs)
+	_, err = tx.Collection(ReceiptTable).Insert(rs)
+	return err
 }
 
 func (r *receiptStore) Update(tx aumo.Tx, id string, rr *aumo.Receipt) error {

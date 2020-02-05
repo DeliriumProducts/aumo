@@ -121,7 +121,8 @@ func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
 		}()
 	}
 
-	return tx.Collection(OrderTable).InsertReturning(os)
+	_, err = tx.Collection(OrderTable).Insert(os)
+	return err
 }
 
 func (o *orderStore) Update(tx aumo.Tx, id string, or *aumo.Order) error {

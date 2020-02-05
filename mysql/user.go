@@ -238,7 +238,7 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 		}()
 	}
 
-	err = tx.Collection(UserTable).InsertReturning(us)
+	_, err = tx.Collection(UserTable).Insert(us)
 	if mysqlError, ok := err.(*mysql.MySQLError); ok {
 		if mysqlError.Number == ErrDupEntry {
 			return aumo.ErrDuplicateEmail
