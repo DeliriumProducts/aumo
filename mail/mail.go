@@ -28,7 +28,6 @@ type ProdMailer struct {
 	From string
 }
 
-// SendMail sends mail
 func (m *ProdMailer) SendMail(to, content string) error {
 	return smtp.SendMail(
 		m.Host+":"+m.Port,
