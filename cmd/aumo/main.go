@@ -9,12 +9,14 @@ import (
 	"time"
 
 	"github.com/deliriumproducts/aumo/auth"
+	"github.com/deliriumproducts/aumo/mail"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/net/http/rest"
 	"github.com/deliriumproducts/aumo/ordering"
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/receipt"
 	"github.com/deliriumproducts/aumo/users"
+	"github.com/deliriumproducts/aumo/verifications"
 	"github.com/go-redis/redis/v7"
 	"github.com/joho/godotenv"
 	upper "upper.io/db.v3/mysql"
@@ -35,6 +37,10 @@ func main() {
 	MySQLDatabase := os.Getenv("MYSQL_DATABASE")
 	InitialAdminPassword := os.Getenv("INITIAL_ADMIN_PASSWORD")
 	FrontendURL := os.Getenv("FRONTEND_URL")
+	Env := os.Getenv("ENV")
+	SMTPHost := os.Getenv("SMTP_HOST")
+	SMTPUser := os.Getenv("SMTP_USER")
+	SMTPPass := os.Getenv("SMTP_PASS")
 
 	db, err := upper.Open(upper.ConnectionURL{
 		User:     MySQLUser,
@@ -70,6 +76,19 @@ func main() {
 		panic(err)
 	}
 
+	var mailer mail.Mailer
+	if Env == "PROD" {
+		mailer = &mail.ProdMailer{
+			Host: SMTPHost,
+			Port: "587",
+			User: SMTPUser,
+			Pass: SMTPPass,
+			From: "thedeliriumproducts@gmail.com",
+		}
+	} else {
+		mailer = &mail.DevMailer{}
+	}
+
 	ps := mysql.NewProductStore(db)
 	os := mysql.NewOrderStore(db)
 	rs := mysql.NewReceiptStore(db)
@@ -88,6 +107,7 @@ func main() {
 		ProductService: products.New(ps),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
+		Verifier:       verifications.New(mailer, conn),
 	})
 
 	fmt.Printf("🧾 aumo server running on %s\n", Address)

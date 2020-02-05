@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/deliriumproducts/aumo/mail"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 )
 
@@ -57,7 +57,7 @@ func (v *Verifier) Send(to string, value, subject, body, link string, expiry tim
 	)
 }
 
-// Verifiy is the second part of the verification process
+// Verify is the second part of the verification process
 func (v *Verifier) Verify(token string) (string, error) {
 	return v.r.Get(token).Result()
 }
