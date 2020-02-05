@@ -8,6 +8,7 @@ import (
 func (rest *Rest) routes() {
 	rest.router.Post("/register", rest.userRegister)
 	rest.router.Post("/login", rest.userLogin)
+	rest.router.Get("/confirm-email/{token}", rest.userConfirmEmail)
 	rest.router.Group(func(r chi.Router) {
 		r.Use(rest.WithAuth())
 		r.Get("/logout", rest.userLogout)
