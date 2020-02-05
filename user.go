@@ -3,6 +3,7 @@ package aumo
 import (
 	"strings"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -74,6 +75,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 	}
 
 	return &User{
+		ID:         uuid.New(),
 		Name:       name,
 		Email:      strings.ToLower(strings.Trim(email, " ")),
 		Password:   string(pwd),

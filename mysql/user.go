@@ -28,7 +28,7 @@ func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 	}
 }
 
-func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByID(tx aumo.Tx, id string, relations bool) (*aumo.User, error) {
 	var err error
 	user := &aumo.User{}
 	if tx == nil {
@@ -248,7 +248,7 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 	return err
 }
 
-func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
+func (u *userStore) Update(tx aumo.Tx, id string, ur *aumo.User) error {
 	var err error
 
 	if tx == nil {
@@ -276,7 +276,7 @@ func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
 	return tx.Collection(UserTable).Find("id", id).Update(ur)
 }
 
-func (u *userStore) Delete(tx aumo.Tx, id uint) error {
+func (u *userStore) Delete(tx aumo.Tx, id string) error {
 	var err error
 
 	if tx == nil {
