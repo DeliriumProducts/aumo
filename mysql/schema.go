@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS receipts (
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-  order_id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  order_id varchar(36) unsigned NOT NULL PRIMARY KEY,
   user_id varchar(36) unsigned NOT NULL,
   product_id int(10) unsigned NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
