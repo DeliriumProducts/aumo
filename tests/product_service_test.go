@@ -95,6 +95,6 @@ func TestProductService(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 
 		_, err = pstore.FindByID(nil, product.ID)
-		require.Equal(t, err, db.ErrNoMoreRows)
+		require.Equal(t, err, aumo.ErrProductNotFound)
 	})
 }
