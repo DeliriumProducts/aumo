@@ -39,6 +39,12 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = rest.verifier.Send(user.Email, user.ID, "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
 	user.ID = 0
 	rest.JSON(w, user, http.StatusOK)
 }
