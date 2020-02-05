@@ -41,7 +41,7 @@ func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint
 func createSession(t *testing.T, r *redis.Client, user *aumo.User, expiryTime time.Duration) string {
 	sID := faker.UUIDDigit()
 
-	err := r.Set(sID, user.ID, expiryTime).Err()
+	err := r.Set(sID, user.ID.String(), expiryTime).Err()
 	require.Nil(t, err, "shouldn't return an error")
 	require.NotEmpty(t, sID, "should return a session ID")
 
