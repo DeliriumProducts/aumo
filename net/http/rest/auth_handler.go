@@ -73,6 +73,11 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !user.IsVerified {
+		rest.JSONError(w, aumo.ErrNotVerified, http.StatusUnauthorized)
+		return
+	}
+
 	sID, err := rest.auth.NewSession(user)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)

@@ -26,6 +26,8 @@ var (
 	ErrUserNotFound = errors.New("aumo: user not found")
 	// ErrDuplicateEmail is an error for when a user tries to register with an already existing email
 	ErrDuplicateEmail = errors.New("aumo: duplicate email")
+	// ErrNotVerified is an error for when a user isn't verified
+	ErrNotVerified = errors.New("aumo: user is not verified")
 )
 
 // User represents a user of aumo
