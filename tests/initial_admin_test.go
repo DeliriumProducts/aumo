@@ -79,7 +79,7 @@ func TestInitialAdmin(t *testing.T) {
 
 			// Update role
 			user.Role = aumo.Customer
-			err = ustore.Update(nil, user.ID, user)
+			err = ustore.Update(nil, user.ID.String(), user)
 			require.Nil(t, err, "shouldn't return an error")
 
 			// Act
