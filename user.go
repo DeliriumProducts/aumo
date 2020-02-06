@@ -26,7 +26,7 @@ type User struct {
 	Role       Role      `json:"role" db:"role"`
 	Orders     []Order   `json:"orders" db:"-"`
 	Receipts   []Receipt `json:"receipts" db:"-"`
-	IsVerified bool      `json:"isVerified" db:"verified"`
+	IsVerified bool      `json:"is_verified" db:"verified"`
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array

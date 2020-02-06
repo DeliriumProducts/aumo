@@ -19,6 +19,7 @@ export interface User {
   role: Role;
   orders: Order[];
   receipts: Receipt[];
+  is_verified: boolean;
 }
 
 export type Role = 'Admin' | 'Customer';
