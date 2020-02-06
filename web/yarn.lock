@@ -1482,10 +1482,10 @@ aumo-api@^2.4.0:
   dependencies:
     axios "^0.19.2"
 
-aumo@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/aumo/-/aumo-2.0.6.tgz#eb2cf30cd176db44a3176469d896cae93f082c51"
-  integrity sha512-EjoTrwqFbhDl4XI6jShd5aP2MbLREosrKN8DO2/HECegowfdIaiUueqDlf+pq6XWbl9KXdqXL2BJPiFWCqNJHA==
+aumo@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/aumo/-/aumo-2.0.7.tgz#5d437fce5f1f88fe325f904bfe4cb4a3492467fe"
+  integrity sha512-DkL2VDOk4t4K0z2p1x5BoZiY6P3MK0tGn/LBAZrsRli/OS8QQgPBu3+g9j5TnLQkE4LD0jDXX/kcd1sHvxUMOw==
   dependencies:
     axios "^0.19.2"
 

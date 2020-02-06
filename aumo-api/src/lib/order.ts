@@ -24,3 +24,9 @@ export async function getOrder(id: string, cookie?: string): Promise<Order> {
 interface PlaceRequest {
   product_id: number;
 }
+
+export default {
+  placeOrder,
+  getAllOrders,
+  getOrder
+};

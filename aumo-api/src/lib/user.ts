@@ -62,3 +62,12 @@ export async function deleteUser(
     await axios.delete(`${options.Backend}/users/${id}`, withAuth(cookie))
   ).data;
 }
+
+export default {
+  getAllUsers,
+  getUser,
+  deleteUser,
+  subPoints,
+  addPoints,
+  setRole
+};

@@ -24,3 +24,8 @@ export async function createReceipt(
 interface ReceiptRequest {
   content: string;
 }
+
+export default {
+  claimReceipt,
+  createReceipt
+};

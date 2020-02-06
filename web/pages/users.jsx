@@ -11,11 +11,11 @@ import {
   Tag
 } from "antd"
 import RadioGroup from "antd/lib/radio/group"
-import { UserAPI } from "aumo-api"
+import aumo from "aumo"
 import Head from "next/head"
 import React from "react"
 import styled from "styled-components"
-import { BACKEND_URL, THEME_VARIABLES } from "../config"
+import { THEME_VARIABLES } from "../config"
 import { Context } from "../context/context.js"
 import withAuth from "../hocs/withAuth.js"
 
@@ -34,7 +34,7 @@ const Users = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      const data = await new UserAPI(BACKEND_URL).getAll()
+      const data = await aumo.getAllUsers()
       setUsers(data)
       setLoading(false)
     })()
@@ -45,7 +45,7 @@ const Users = () => {
     setLoading(true)
     setUserModal(true)
     try {
-      const newUser = await new UserAPI(BACKEND_URL).get(user.id)
+      const newUser = await aumo.getUser(user.id)
       setCurrentUser(newUser)
     } catch (e) {
       message.error(`${e.error}`)
@@ -64,7 +64,7 @@ const Users = () => {
       return
     }
     try {
-      await new UserAPI(BACKEND_URL).setRole(user.id, role)
+      await aumo.setRole(user.id, role)
       message.success(`Successfully changed ${user.name}'s role to ${role}! 🎉`)
     } catch (err) {
       if (!err.response) {
@@ -95,7 +95,7 @@ const Users = () => {
 
   const deleteUser = async user => {
     try {
-      await new UserAPI(BACKEND_URL).delete(user.id)
+      await aumo.deleteUser(user.id)
       message.success(`Successfully deleted user ${user.name}! 🎉`)
       setUsers(prevUsers =>
         prevUsers.filter(pu => {
@@ -118,7 +118,7 @@ const Users = () => {
 
   const addPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).addPoints(user.id, 500)
+      await aumo.addPoints(user.id, 500)
       message.success(`Successfully added 500 points to user ${user.name}! 🎉`)
     } catch (error) {
       if (!err.response) {
@@ -136,7 +136,7 @@ const Users = () => {
 
   const subPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).subPoints(user.id, 500)
+      await aumo.subPoints(user.id, 500)
       message.success(
         `Successfully removed 500 points from user ${user.name}! 🎉`
       )

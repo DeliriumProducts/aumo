@@ -53,3 +53,11 @@ interface CreateRequest {
 }
 
 interface EditRequest extends CreateRequest {}
+
+export default {
+  editProduct,
+  deleteProduct,
+  createProduct,
+  getAllProducts,
+  getProduct
+};
