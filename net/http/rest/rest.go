@@ -106,9 +106,8 @@ func New(c *Config) *Rest {
 		}).Handler,
 		middleware.Heartbeat(c.MountRoute+"/ping"))
 
-	r.Mount(c.MountRoute, r)
+	rest.mount(c.MountRoute)
 
-	rest.routes()
 	return rest
 }
 
