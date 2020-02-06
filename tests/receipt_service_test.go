@@ -67,11 +67,7 @@ func TestReceiptService(t *testing.T) {
 
 		gotReceipts, err := rs.Receipts()
 		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, len(gotReceipts), len(receipts), "should have equal length")
-
-		for i := 0; i < len(gotReceipts); i++ {
-			require.Equal(t, *receipts[i], gotReceipts[i], "should be equal")
-		}
+		require.ElementsMatch(t, gotReceipts, receipts, "should be equal")
 	})
 
 	t.Run("delete_receipt", func(t *testing.T) {
