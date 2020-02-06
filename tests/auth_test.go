@@ -40,9 +40,9 @@ func TestAuthenticator(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 		require.NotEmpty(t, sID, "should return a session ID")
 
-		uID, err := r.Get(sID).Uint64()
+		uID, err := r.Get(sID).Result()
 		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, user.ID, uint(uID))
+		require.Equal(t, user.ID.String(), uID)
 	})
 
 	t.Run("get_user_from_session", func(t *testing.T) {

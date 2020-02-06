@@ -35,7 +35,7 @@ func TestReceiptService(t *testing.T) {
 		err = rs.Create(receipt)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID.String())
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *receipt, *gotReceipt)
 	})
@@ -45,7 +45,7 @@ func TestReceiptService(t *testing.T) {
 
 		receipt := createReceipt(t, rstore)
 
-		gotReceipt, err := rs.Receipt(receipt.ReceiptID)
+		gotReceipt, err := rs.Receipt(receipt.ReceiptID.String())
 
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *receipt, *gotReceipt)
@@ -54,24 +54,20 @@ func TestReceiptService(t *testing.T) {
 	t.Run("get_receipts", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipts := []*aumo.Receipt{
-			aumo.NewReceipt(faker.AmountWithCurrency()),
-			aumo.NewReceipt(faker.AmountWithCurrency()),
-			aumo.NewReceipt(faker.AmountWithCurrency()),
+		receipts := []aumo.Receipt{
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
 		}
 
 		for _, receipt := range receipts {
-			err := rstore.Save(nil, receipt)
+			err := rstore.Save(nil, &receipt)
 			require.Nil(t, err, "shouldn't return an error")
 		}
 
 		gotReceipts, err := rs.Receipts()
 		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, len(gotReceipts), len(receipts), "should have equal length")
-
-		for i := 0; i < len(gotReceipts); i++ {
-			require.Equal(t, *receipts[i], gotReceipts[i], "should be equal")
-		}
+		require.ElementsMatch(t, gotReceipts, receipts, "should be equal")
 	})
 
 	t.Run("delete_receipt", func(t *testing.T) {
@@ -79,10 +75,10 @@ func TestReceiptService(t *testing.T) {
 
 		receipt := createReceipt(t, rstore)
 
-		err = rs.Delete(receipt.ReceiptID)
+		err = rs.Delete(receipt.ReceiptID.String())
 		require.Nil(t, err, "shouldn't return an error")
 
-		_, err = rstore.FindByID(nil, receipt.ReceiptID)
+		_, err = rstore.FindByID(nil, receipt.ReceiptID.String())
 		require.Equal(t, err, aumo.ErrReceiptNotFound)
 	})
 
@@ -92,10 +88,10 @@ func TestReceiptService(t *testing.T) {
 		receipt := createReceipt(t, rstore)
 		receipt.Content = "Kaufland 23233232323"
 
-		err = rs.Update(receipt.ReceiptID, receipt)
+		err = rs.Update(receipt.ReceiptID.String(), receipt)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+		gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID.String())
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *receipt, *gotReceipt)
 	})
@@ -110,17 +106,17 @@ func TestReceiptService(t *testing.T) {
 			require.Equal(t, false, receipt.IsClaimed())
 
 			var err error
-			receipt, err = rs.ClaimReceipt(user.ID, receipt.ReceiptID)
+			receipt, err = rs.ClaimReceipt(user.ID.String(), receipt.ReceiptID.String())
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, receipt.IsClaimed())
 
 			user.Points += aumo.UserPointsPerReceipt
 
-			gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID)
+			gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID.String())
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, gotReceipt.IsClaimed())
 
-			gotUser, err := ustore.FindByID(nil, user.ID, true)
+			gotUser, err := ustore.FindByID(nil, user.ID.String(), true)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Contains(t, gotUser.Receipts, *gotReceipt)
 			require.Equal(t, user.Points, gotUser.Points)

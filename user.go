@@ -3,6 +3,7 @@ package aumo
 import (
 	"strings"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -16,7 +17,7 @@ const (
 
 // User represents a user of aumo
 type User struct {
-	ID         uint      `json:"id,omitempty" db:"id,omitempty"`
+	ID         uuid.UUID `json:"id,omitempty" db:"id,omitempty"`
 	Name       string    `json:"name" db:"name"`
 	Email      string    `json:"email" db:"email"`
 	Password   string    `json:"-" db:"password"`
@@ -74,6 +75,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 	}
 
 	return &User{
+		ID:         uuid.New(),
 		Name:       name,
 		Email:      strings.ToLower(strings.Trim(email, " ")),
 		Password:   string(pwd),
@@ -89,26 +91,26 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 // UserService contains all `User`
 // related business logic
 type UserService interface {
-	User(id uint, relations bool) (*User, error)
+	User(id string, relations bool) (*User, error)
 	UserByEmail(email string, relations bool) (*User, error)
 	Users() ([]User, error)
 	Create(*User) error
-	Update(id uint, u *User) error
-	EditRole(id uint, role Role) error
-	AddPoints(id uint, points float64) error
-	SubPoints(id uint, points float64) error
-	Verify(id uint) error
-	Delete(id uint) error
+	Update(id string, u *User) error
+	EditRole(id string, role Role) error
+	AddPoints(id string, points float64) error
+	SubPoints(id string, points float64) error
+	Verify(id string) error
+	Delete(id string) error
 }
 
 // UserStore contains all `User`
 // related persistence logic
 type UserStore interface {
 	DB() sqlbuilder.Database
-	FindByID(tx Tx, id uint, relations bool) (*User, error)
+	FindByID(tx Tx, id string, relations bool) (*User, error)
 	FindByEmail(tx Tx, email string, relations bool) (*User, error)
 	FindAll(tx Tx) ([]User, error)
 	Save(tx Tx, u *User) error
-	Update(tx Tx, id uint, u *User) error
-	Delete(tx Tx, id uint) error
+	Update(tx Tx, id string, u *User) error
+	Delete(tx Tx, id string) error
 }

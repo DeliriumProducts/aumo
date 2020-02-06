@@ -3,7 +3,6 @@ package rest
 import (
 	"errors"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/deliriumproducts/aumo"
@@ -41,8 +40,7 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := strconv.FormatUint(uint64(user.ID), 10)
-	_, err = rest.verifier.Send(user.Email, id, "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
+	_, err = rest.verifier.Send(user.Email, user.ID.String(), "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
@@ -84,7 +82,6 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.ID = 0
 	rest.auth.SetCookieHeader(w, sID)
 	rest.JSON(w, user, http.StatusOK)
 }
@@ -96,7 +93,6 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.ID = 0
 	rest.JSON(w, user, http.StatusOK)
 }
 
@@ -113,13 +109,7 @@ func (rest *Rest) userConfirmEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.ParseUint(userID, 10, 64)
-	if err != nil {
-		rest.JSONError(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	err = rest.userService.Verify(uint(id))
+	err = rest.userService.Verify(userID)
 	switch {
 	case err == nil:
 		break

@@ -42,7 +42,7 @@ func TestUserService(t *testing.T) {
 		err = us.Create(user)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		gotUser, err := ustore.FindByID(nil, user.ID.String(), false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser)
 	})
@@ -131,7 +131,7 @@ func TestUserService(t *testing.T) {
 					err = rstore.Save(nil, &r)
 					require.Nil(t, err, "shouldn't return an error")
 
-					receipt, err := rs.ClaimReceipt(tt.user.ID, r.ReceiptID)
+					receipt, err := rs.ClaimReceipt(tt.user.ID.String(), r.ReceiptID.String())
 					require.Nil(t, err, "shouldn't return an error")
 
 					tt.user.Points += aumo.UserPointsPerReceipt
@@ -144,16 +144,26 @@ func TestUserService(t *testing.T) {
 					err = pstore.Save(nil, &p)
 					require.Nil(t, err, "shouldn't return an error")
 
-					ord, err := os.PlaceOrder(tt.user.ID, p.ID)
+					order, err := os.PlaceOrder(tt.user.ID.String(), p.ID)
 					require.Nil(t, err, "shouldn't return an error")
 
 					tt.user.Points -= p.Price
-					tt.user.Orders = append(tt.user.Orders, *ord)
+					tt.user.Orders = append(tt.user.Orders, *order)
 				}
 
 				gotUser, err := userFetcher(tt.user, tt.relations)
+
 				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *tt.user, *gotUser, "should be equal")
+				require.ElementsMatch(t, gotUser.Receipts, tt.user.Receipts, "should be equal")
+				require.ElementsMatch(t, gotUser.Orders, tt.user.Orders, "should be equal")
+
+				tt.user.Receipts = []aumo.Receipt{}
+				tt.user.Orders = []aumo.Order{}
+
+				gotUser.Receipts = []aumo.Receipt{}
+				gotUser.Orders = []aumo.Order{}
+
+				require.Equal(t, gotUser, tt.user, "should be equal")
 			})
 		}
 	}
@@ -161,7 +171,7 @@ func TestUserService(t *testing.T) {
 	t.Run("get_user", func(t *testing.T) {
 		t.Run("by_id", func(t *testing.T) {
 			testUserFetcher(t, func(u *aumo.User, relations bool) (*aumo.User, error) {
-				return us.User(u.ID, relations)
+				return us.User(u.ID.String(), relations)
 			})
 		})
 
@@ -177,10 +187,10 @@ func TestUserService(t *testing.T) {
 		user := createUser(t, ustore)
 		user.Name = "New Name"
 
-		err := us.Update(user.ID, user)
+		err := us.Update(user.ID.String(), user)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		gotUser, err := ustore.FindByID(nil, user.ID.String(), false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
@@ -190,10 +200,10 @@ func TestUserService(t *testing.T) {
 		user := createUser(t, ustore)
 		user.Role = aumo.Admin
 
-		err := us.EditRole(user.ID, aumo.Admin)
+		err := us.EditRole(user.ID.String(), aumo.Admin)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		gotUser, err := ustore.FindByID(nil, user.ID.String(), false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
@@ -204,10 +214,10 @@ func TestUserService(t *testing.T) {
 		var points float64 = 500
 		user.Points += points
 
-		err := us.AddPoints(user.ID, points)
+		err := us.AddPoints(user.ID.String(), points)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		gotUser, err := ustore.FindByID(nil, user.ID.String(), false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
@@ -218,10 +228,10 @@ func TestUserService(t *testing.T) {
 		var points float64 = 500
 		user.Points -= points
 
-		err := us.SubPoints(user.ID, points)
+		err := us.SubPoints(user.ID.String(), points)
 		require.Nil(t, err, "shouldn't return an error")
 
-		gotUser, err := ustore.FindByID(nil, user.ID, false)
+		gotUser, err := ustore.FindByID(nil, user.ID.String(), false)
 		require.Nil(t, err, "shouldn't return an error")
 		require.Equal(t, *user, *gotUser, "should be equal")
 	})
@@ -230,10 +240,10 @@ func TestUserService(t *testing.T) {
 		defer TidyDB(sess)
 		user := createUser(t, ustore)
 
-		err := us.Delete(user.ID)
+		err := us.Delete(user.ID.String())
 		require.Nil(t, err, "shouldn't return an error")
 
-		_, err = ustore.FindByID(nil, user.ID, false)
+		_, err = ustore.FindByID(nil, user.ID.String(), false)
 		require.Equal(t, err, aumo.ErrUserNotFound)
 	})
 }

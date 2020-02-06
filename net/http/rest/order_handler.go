@@ -22,7 +22,7 @@ func (rest *Rest) orderCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	order, err := rest.orderService.PlaceOrder(user.ID, of.ProductID)
+	order, err := rest.orderService.PlaceOrder(user.ID.String(), of.ProductID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusBadRequest)
 		return
@@ -42,7 +42,7 @@ func (rest *Rest) orderGetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) orderGet(w http.ResponseWriter, r *http.Request) {
-	orderID := rest.ParamNumber(w, r, "id")
+	orderID := rest.Param(r, "id")
 
 	order, err := rest.orderService.Order(orderID)
 	if err != nil {

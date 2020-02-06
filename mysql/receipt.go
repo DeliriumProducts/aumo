@@ -27,7 +27,7 @@ func (r *receiptStore) DB() sqlbuilder.Database {
 	return r.db
 }
 
-func (r *receiptStore) FindByID(tx aumo.Tx, id uint) (*aumo.Receipt, error) {
+func (r *receiptStore) FindByID(tx aumo.Tx, id string) (*aumo.Receipt, error) {
 	var err error
 	receipt := &aumo.Receipt{}
 
@@ -121,10 +121,11 @@ func (r *receiptStore) Save(tx aumo.Tx, rs *aumo.Receipt) error {
 		}()
 	}
 
-	return tx.Collection(ReceiptTable).InsertReturning(rs)
+	_, err = tx.Collection(ReceiptTable).Insert(rs)
+	return err
 }
 
-func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
+func (r *receiptStore) Update(tx aumo.Tx, id string, rr *aumo.Receipt) error {
 	var err error
 
 	if tx == nil {
@@ -152,7 +153,7 @@ func (r *receiptStore) Update(tx aumo.Tx, id uint, rr *aumo.Receipt) error {
 	return tx.Collection(ReceiptTable).Find("receipt_id", id).Update(rr)
 }
 
-func (r *receiptStore) Delete(tx aumo.Tx, id uint) error {
+func (r *receiptStore) Delete(tx aumo.Tx, id string) error {
 	var err error
 
 	if tx == nil {
