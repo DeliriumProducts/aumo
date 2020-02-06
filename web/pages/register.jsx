@@ -1,5 +1,5 @@
 import { Button, Form, Icon, Input, message } from "antd"
-import { AuthAPI } from "aumo-api"
+import aumo from "aumo"
 import Head from "next/head"
 import Link from "next/link"
 import Router from "next/router"
@@ -25,10 +25,9 @@ const Register = props => {
           avatar: "https://i.imgur.com/4Ws6pd9.png"
         }
 
-        const authAPI = new AuthAPI(BACKEND_URL)
         setLoading(true)
         try {
-          await authAPI.register(credentials)
+          await aumo.auth.register(credentials)
           message.success("Registered, you can now login in the Aumo App!")
         } catch (err) {
           if (!err.response) {

@@ -1,5 +1,5 @@
 import { Button, Form, Icon, Input, message } from "antd"
-import { AuthAPI } from "aumo-api"
+import aumo from "aumo"
 import Head from "next/head"
 import Link from "next/link"
 import Router from "next/router"
@@ -23,10 +23,9 @@ const Login = props => {
           password
         }
 
-        const authAPI = new AuthAPI(BACKEND_URL)
         setLoading(true)
         try {
-          await authAPI.login(credentials)
+          await aumo.auth.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
         } catch (err) {
           if (!err.response) {
