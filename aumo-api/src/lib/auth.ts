@@ -15,6 +15,13 @@ export async function register(
     .data;
 }
 
+export async function confirmEmail(token: string): Promise<MessageResponse> {
+  return await axios.get(
+    `${options.Backend}/confirm-email/${token}`,
+    axiosRequest
+  );
+}
+
 export async function logout(cookie?: string): Promise<MessageResponse> {
   return (await axios.get(`${options.Backend}/logout`, withAuth(cookie))).data;
 }
