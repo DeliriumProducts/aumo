@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/bxcodec/faker/v3 v3.2.0
-	github.com/davecgh/go-spew v1.1.1
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-chi/cors v1.0.0
@@ -13,10 +13,8 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.1.0
-	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.6
 	github.com/go-sql-driver/mysql v1.4.1
-	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/uuid v1.1.1
 	github.com/joho/godotenv v1.3.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
