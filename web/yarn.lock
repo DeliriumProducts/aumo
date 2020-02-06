@@ -1475,10 +1475,17 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-aumo@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/aumo/-/aumo-2.0.8.tgz#3c17f5d280bddd00d6990c414278006d9ff73e46"
-  integrity sha512-3s8eBHtg/UI7dTZevKpVBHMbDTYFRKBNGaOE+f2giJo9APpWPiZ+ApOkYEh8/rAHUs2H49bUVC+BynmoY8nJqg==
+aumo-api@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/aumo-api/-/aumo-api-2.4.0.tgz#f2a45b3c1279e5ccad0bf74e72132a69b41232c1"
+  integrity sha512-nwgOuGOwSwO7xBgpfoA9HHC1pq/6srHnhEUTw4eNrn2CgEvB4vygWzBY3QQxbRIbN2nT1eR1rEVvXfGtVe8iPQ==
+  dependencies:
+    axios "^0.19.2"
+
+aumo@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/aumo/-/aumo-2.0.7.tgz#5d437fce5f1f88fe325f904bfe4cb4a3492467fe"
+  integrity sha512-DkL2VDOk4t4K0z2p1x5BoZiY6P3MK0tGn/LBAZrsRli/OS8QQgPBu3+g9j5TnLQkE4LD0jDXX/kcd1sHvxUMOw==
   dependencies:
     axios "^0.19.2"
 

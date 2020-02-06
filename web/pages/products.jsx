@@ -1,9 +1,10 @@
 import { Button, Card as c, Icon, message, Popconfirm } from "antd"
-import aumo from "aumo"
+import { ProductAPI } from "aumo-api"
 import Head from "next/head"
 import { useContext, useState } from "react"
 import styled from "styled-components"
 import ModalForm from "../components/ModalForm"
+import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
 import { actions } from "../context/providers/contextProvider"
 import withAuth from "../hocs/withAuth"
@@ -17,7 +18,7 @@ export const Products = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      const data = await aumo.product.getAllProducts()
+      const data = await new ProductAPI(BACKEND_URL).getAll()
       ctx.dispatch({ type: actions.SET_PRODUCTS, payload: data })
       setLoading(false)
     })()
@@ -41,7 +42,7 @@ export const Products = () => {
       }
 
       try {
-        await aumo.product.editProduct(curProduct.id, {
+        await new ProductAPI(BACKEND_URL).edit(curProduct.id, {
           ...product,
           price: Number(product.price),
           stock: Number(product.stock)
@@ -78,7 +79,7 @@ export const Products = () => {
 
   const handleDelete = async p => {
     try {
-      await aumo.product.deleteProduct(p.id)
+      await new ProductAPI(BACKEND_URL).delete(p.id)
       message.success(`Successfully deleted product ${p.name}! 🎉`)
     } catch (err) {
       if (!err.response) {
