@@ -1,11 +1,10 @@
 import { Button, Form, Icon, Input, message } from "antd"
-import { AuthAPI } from "aumo-api"
+import aumo from "aumo"
 import Head from "next/head"
 import Link from "next/link"
 import Router from "next/router"
 import React from "react"
 import styled from "styled-components"
-import { BACKEND_URL } from "../config"
 
 const FormItem = Form.Item
 
@@ -23,10 +22,9 @@ const Login = props => {
           password
         }
 
-        const authAPI = new AuthAPI(BACKEND_URL)
         setLoading(true)
         try {
-          await authAPI.login(credentials)
+          await aumo.auth.login(credentials)
           message.success("Logged in!", 3, () => Router.replace("/products"))
         } catch (err) {
           if (!err.response) {
@@ -126,7 +124,7 @@ Login.getInitialProps = async ctx => {
   if (req && res) {
     if (req.headers.cookie) {
       try {
-        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
+        auth = await aumo.auth.me(req.headers.cookie)
         if (auth.role === "Admin") {
           res.writeHead(302, {
             Location: "/products"
@@ -137,7 +135,7 @@ Login.getInitialProps = async ctx => {
     }
   } else {
     try {
-      auth = await new AuthAPI(BACKEND_URL).me()
+      auth = await aumo.auth.me()
       if (auth.role === "Admin") {
         Router.replace("/products")
       }
