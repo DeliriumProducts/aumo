@@ -27,7 +27,9 @@ const Register = props => {
         setLoading(true)
         try {
           await aumo.auth.register(credentials)
-          message.success("Registered, you can now login in the Aumo App!")
+          message.success(
+            "Registered, check your email, there will be a confirmation link!"
+          )
         } catch (err) {
           if (!err.response) {
             message.error(`${err}`, 5)
