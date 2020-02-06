@@ -1,7 +1,6 @@
-import { AuthAPI } from "aumo-api"
+import aumo from "aumo"
 import Router from "next/router"
 import React, { Component } from "react"
-import { BACKEND_URL } from "../config"
 import { Context } from "../context/context.js"
 import { actions } from "../context/providers/contextProvider"
 
@@ -19,7 +18,7 @@ export default C =>
       if (req && res) {
         if (req.headers.cookie) {
           try {
-            auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
+            auth = aumo.auth.me(req.headers.cookie)
             if (auth.role !== "Admin") {
               throw {
                 status: 401
@@ -41,7 +40,7 @@ export default C =>
         }
       } else {
         try {
-          auth = await new AuthAPI(BACKEND_URL).me()
+          auth = await aumo.auth.me()
           if (auth.role !== "Admin") {
             throw {
               status: 401
