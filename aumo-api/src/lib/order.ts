@@ -1,24 +1,22 @@
 import axios from 'axios';
-import { BaseResponse, Order } from './aumo';
+import { Order } from './aumo';
 import { withAuth } from './axios';
 import { options } from './config';
 
 export async function placeOrder(
   order: PlaceRequest,
   cookie?: string
-): Promise<BaseResponse<Order>> {
+): Promise<Order> {
   return (
     await axios.post(`${options.Backend}/orders`, order, withAuth(cookie))
   ).data;
 }
 
-export async function getAllOrders(
-  cookie?: string
-): Promise<BaseResponse<Order[]>> {
+export async function getAllOrders(cookie?: string): Promise<Order[]> {
   return (await axios.get(`${options.Backend}/orders`, withAuth(cookie))).data;
 }
 
-export async function getOrder(id: string, cookie?: string) {
+export async function getOrder(id: string, cookie?: string): Promise<Order> {
   return (await axios.get(`${options.Backend}/orders/${id}`, withAuth(cookie)))
     .data;
 }
@@ -26,3 +24,9 @@ export async function getOrder(id: string, cookie?: string) {
 interface PlaceRequest {
   product_id: number;
 }
+
+export default {
+  placeOrder,
+  getAllOrders,
+  getOrder
+};

@@ -9,3 +9,5 @@ export let options: AumoOptions = {
 export function config(opts: AumoOptions) {
   options = opts;
 }
+
+export default { config, options };
