@@ -1,10 +1,9 @@
 import { Button, Divider, Icon, message } from "antd"
-import { AuthAPI, ProductAPI } from "aumo-api"
+import aumo from "aumo"
 import Link from "next/link"
 import Router from "next/router"
 import React, { useContext, useState } from "react"
 import styled from "styled-components"
-import { BACKEND_URL } from "../config"
 import { Context } from "../context/context"
 import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
@@ -35,7 +34,7 @@ const Nav = props => {
       }
 
       try {
-        const prdct = await new ProductAPI(BACKEND_URL).create({
+        const prdct = await aumo.product.createProduct({
           ...product,
           price: Number(product.price),
           stock: Number(product.stock)
@@ -120,7 +119,7 @@ const Nav = props => {
                 <Button
                   type="ghost"
                   onClick={async () => {
-                    await new AuthAPI(BACKEND_URL).logout()
+                    await aumo.auth.logout()
                     message.success("Logged out!")
                     Router.replace("/")
                   }}
