@@ -12,10 +12,6 @@ require("dotenv").config({
   path: path.join(__dirname, "/../.env")
 })
 
-require("aumo").config({
-  Backend: process.env.BACKEND_URL
-})
-
 const themeVariables = lessToJS(
   fs.readFileSync(path.join(__dirname, "./assets/antd-custom.less"), "utf8")
 )
