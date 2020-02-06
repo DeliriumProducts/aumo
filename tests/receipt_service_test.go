@@ -54,14 +54,14 @@ func TestReceiptService(t *testing.T) {
 	t.Run("get_receipts", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipts := []*aumo.Receipt{
-			aumo.NewReceipt(faker.AmountWithCurrency()),
-			aumo.NewReceipt(faker.AmountWithCurrency()),
-			aumo.NewReceipt(faker.AmountWithCurrency()),
+		receipts := []aumo.Receipt{
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
+			*aumo.NewReceipt(faker.AmountWithCurrency()),
 		}
 
 		for _, receipt := range receipts {
-			err := rstore.Save(nil, receipt)
+			err := rstore.Save(nil, &receipt)
 			require.Nil(t, err, "shouldn't return an error")
 		}
 
