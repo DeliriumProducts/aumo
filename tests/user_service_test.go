@@ -144,16 +144,26 @@ func TestUserService(t *testing.T) {
 					err = pstore.Save(nil, &p)
 					require.Nil(t, err, "shouldn't return an error")
 
-					ord, err := os.PlaceOrder(tt.user.ID.String(), p.ID)
+					order, err := os.PlaceOrder(tt.user.ID.String(), p.ID)
 					require.Nil(t, err, "shouldn't return an error")
 
 					tt.user.Points -= p.Price
-					tt.user.Orders = append(tt.user.Orders, *ord)
+					tt.user.Orders = append(tt.user.Orders, *order)
 				}
 
 				gotUser, err := userFetcher(tt.user, tt.relations)
+
 				require.Nil(t, err, "shouldn't return an error")
-				require.Equal(t, *tt.user, *gotUser, "should be equal")
+				require.ElementsMatch(t, gotUser.Receipts, tt.user.Receipts, "should be equal")
+				require.ElementsMatch(t, gotUser.Orders, tt.user.Orders, "should be equal")
+
+				tt.user.Receipts = []aumo.Receipt{}
+				tt.user.Orders = []aumo.Order{}
+
+				gotUser.Receipts = []aumo.Receipt{}
+				gotUser.Orders = []aumo.Order{}
+
+				require.Equal(t, gotUser, tt.user, "should be equal")
 			})
 		}
 	}
