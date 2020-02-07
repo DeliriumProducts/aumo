@@ -61,6 +61,11 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 				return
 			}
 
+			if !user.IsVerified {
+				rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+				return
+			}
+
 			if len(roles) > 0 && user.Role != aumo.Admin {
 				isAuthorized := false
 				for _, role := range roles {
