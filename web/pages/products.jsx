@@ -1,7 +1,7 @@
 import { Button, Card as c, Icon, message, Popconfirm } from "antd"
 import aumo from "aumo"
 import Head from "next/head"
-import { useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import ModalForm from "../components/ModalForm"
 import { Context } from "../context/context"

@@ -120,7 +120,7 @@ const Users = () => {
     try {
       await aumo.user.addPoints(user.id, 500)
       message.success(`Successfully added 500 points to user ${user.name}! 🎉`)
-    } catch (error) {
+    } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
         return
@@ -140,7 +140,7 @@ const Users = () => {
       message.success(
         `Successfully removed 500 points from user ${user.name}! 🎉`
       )
-    } catch (error) {
+    } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
         return
@@ -169,7 +169,6 @@ const Users = () => {
             <UserCard
               myEmail={ctx.state.user?.email}
               key={u.id}
-              id={u.id}
               user={u}
               onClick={showUser}
               onDelete={deleteUser}
@@ -251,7 +250,6 @@ const UserCard = ({
         <Popconfirm
           icon={<Icon type="team" style={{ color: "unset" }} />}
           placement="bottom"
-          onClick={e => e.stopPropagation()}
           onCancel={e => e.stopPropagation()}
           disabled={myEmail === user.email}
           onConfirm={e => {
@@ -262,7 +260,6 @@ const UserCard = ({
             <>
               <RadioGroup
                 style={{ display: "flex", flexDirection: "column" }}
-                onClick={e => e.stopPropagation()}
                 onChange={e => {
                   e.stopPropagation()
                   const role = e.target.value
@@ -390,7 +387,6 @@ const User = ({ user, loading }) => {
 const Order = ({ product }) => (
   <Card
     size="small"
-    height={400}
     cover={
       <img
         src={product.image}
