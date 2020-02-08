@@ -36,5 +36,53 @@ CREATE TABLE IF NOT EXISTS orders (
   product_id int(10) unsigned NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+	name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+	password varchar(255) NOT NULL,
+	avatar varchar(255) NOT NULL,
+  points double NOT NULL,
+	role varchar(255) NOT NULL,
+	UNIQUE KEY email (email)
 );
+
+CREATE TABLE IF NOT EXISTS shops (
+  shop_id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name varchar(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS shop_owners (
+  shop_id int(10) unsigned NOT NULL,
+  user_id int(10) unsigned NOt NULL,
+  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS products (
+  id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name varchar(255) DEFAULT NULL,
+  price double DEFAULT NULL,
+  image varchar(255) DEFAULT NULL,
+  description varchar (255) DEFAULT NULL,
+  stock int (10) unsigned DEFAULT NULL,
+  shop_id int(10) unsigned NOT NULL,
+  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS receipts (
+  receipt_id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  content TEXT NOT NULL,
+  user_id int(10) unsigned NULL,
+  shop_id int(10) unsigned NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+  order_id int (10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id int (10) unsigned NOT NULL,
+  product_id int (10) unsigned NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
 `
