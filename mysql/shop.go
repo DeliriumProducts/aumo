@@ -1,8 +1,9 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
-	"golang.org/x/net/context"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
