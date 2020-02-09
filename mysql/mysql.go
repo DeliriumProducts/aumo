@@ -6,6 +6,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// ErrDupEntry  is error code for duplicate entry
 const ErrDupEntry = 1062
 
 // ExecSchema takes a schema and splits it by `;` and executes it

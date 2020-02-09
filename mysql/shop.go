@@ -14,6 +14,7 @@ type shopStore struct {
 	db sqlbuilder.Database
 }
 
+// NewShopStore returns a mysql instance of `aumo.ShopStore`
 func NewShopStore(db sqlbuilder.Database) aumo.ShopStore {
 	return &shopStore{
 		db: db,

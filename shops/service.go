@@ -8,8 +8,8 @@ type service struct {
 	store aumo.ShopStore
 }
 
-// New returns an instance of `aumo.ReceiptService`
-func New(store aumo.ShopStore) aumo.ShopService {
+//Create returns an instance of `aumo.ShopService`
+func Create(store aumo.ShopStore) aumo.ShopService {
 	return &service{
 		store: store,
 	}
