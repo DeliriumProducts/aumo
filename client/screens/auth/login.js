@@ -17,6 +17,7 @@ import Routes from "../../navigation/routes"
 export default function LoginScreen(props) {
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
+  const [passwordVisible, setPasswordVisible] = React.useState(false)
   const ctx = React.useContext(Context)
 
   const handleLogin = async () => {
@@ -30,6 +31,10 @@ export default function LoginScreen(props) {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const onPasswordIconPress = () => {
+    setPasswordVisible(!passwordVisible)
   }
 
   const goToRegister = () => {
@@ -59,8 +64,14 @@ export default function LoginScreen(props) {
           />
           <Input
             placeholder="Password"
-            secureTextEntry={true}
-            icon={style => <Icon {...style} name="lock-outline" />}
+            secureTextEntry={!passwordVisible}
+            icon={style => (
+              <Icon
+                {...style}
+                name={passwordVisible ? "eye-outline" : "eye-off-outline"}
+              />
+            )}
+            onIconPress={onPasswordIconPress}
             value={password}
             style={{ borderRadius: 10 }}
             onChangeText={setPassword}
@@ -86,6 +97,7 @@ export default function LoginScreen(props) {
         style={[styles.welcomeContainer, { paddingRight: 32, paddingLeft: 32 }]}
       >
         <Button
+          icon={style => <Icon name="log-in-outline" {...style} />}
           style={{ width: "100%", marginBottom: 10, borderRadius: 10 }}
           size="large"
           state="outline"
