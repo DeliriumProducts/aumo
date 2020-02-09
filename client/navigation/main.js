@@ -8,7 +8,10 @@ const Stack = createStackNavigator()
 
 export default props => (
   <Stack.Navigator {...props} headerMode="none">
-    <Stack.Screen name={Routes.Auth} component={Auth} />
-    <Stack.Screen name={Routes.App} component={App} />
+    {console.log(props) || props.isAuthenticated ? (
+      <Stack.Screen name={Routes.App} component={App} />
+    ) : (
+      <Stack.Screen name={Routes.Auth} component={Auth} />
+    )}
   </Stack.Navigator>
 )

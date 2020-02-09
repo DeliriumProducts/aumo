@@ -7,7 +7,6 @@ import React from "react"
 import { BACKEND_URL } from "./config"
 import customM from "./mapping"
 import AppNavigator from "./navigation/main"
-import Routes from "./navigation/routes"
 import theme from "./theme"
 
 if (__DEV__) {
@@ -37,9 +36,7 @@ const App = () => {
         customMapping={customM}
       >
         <NavigationContainer>
-          <AppNavigator
-            initialRouteName={user == null ? Routes.Auth : Routes.App}
-          />
+          <AppNavigator isAuthenticated={user != null} />
         </NavigationContainer>
       </ApplicationProvider>
     </>
