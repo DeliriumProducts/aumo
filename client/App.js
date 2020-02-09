@@ -30,7 +30,6 @@ const App = () => {
     })()
   }, [])
 
-  console.log(ctx.state.user)
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
