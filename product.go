@@ -12,6 +12,7 @@ type Product struct {
 	Image       string  `json:"image" db:"image" validate:"required,url"`
 	Description string  `json:"description" db:"description" validate:"required"`
 	Stock       uint    `json:"stock" db:"stock" validate:"required,gte=1"`
+	Shop        *Shop   `json:"shop,omitempty" db:"-"`
 }
 
 // DecrementStock decreases the stock of a `Product`
