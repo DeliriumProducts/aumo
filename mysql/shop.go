@@ -25,7 +25,7 @@ func (s *shopStore) DB() sqlbuilder.Database {
 	return s.db
 }
 
-func (s *shopStore) FindByID(tx aumo.Tx, id uint) (*aumo.Shop, error) {
+func (s *shopStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.Shop, error) {
 	var err error
 	shop := &aumo.Shop{}
 
@@ -51,7 +51,14 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint) (*aumo.Shop, error) {
 		}()
 	}
 
-	return shop, tx.Collection(ShopTable).Find("id", id).One(shop)
+	if relations {
+		shop, err = s.shopRelations(tx, "shop.shop_id = ?", id)
+	} else {
+		err = tx.Collection(ShopTable).Find("id", id).One(shop)
+		shop.Owners= []aumo.User{}
+	}
+
+	return shop, err
 }
 
 func (s *shopStore) FindAll(tx aumo.Tx) ([]aumo.Shop, error) {

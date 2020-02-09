@@ -25,14 +25,14 @@ type ShopService interface {
 	Owners(id uint) ([]User, error)
 	Update(id uint, o *Shop) error
 	Delete(id uint) error
-	Create(uID, pID uint) (*Shop, error)
+	Create(*Shop) (*Shop, error)
 }
 
 // ShopStore contains all `Shop`
 // related persistence logic
 type ShopStore interface {
 	DB() sqlbuilder.Database
-	FindByID(tx Tx, id uint) (*Shop, error)
+	FindByID(tx Tx, id uint, relations bool) (*Shop, error)
 	FindAll(tx Tx) ([]Shop, error)
 	Save(tx Tx, s *Shop) error
 	Update(tx Tx, id uint, s *Shop) error
