@@ -1,6 +1,5 @@
 node_modules/
 .env
 *.db
-client/config/index.js
 .DS_Store
 sqlboiler.toml

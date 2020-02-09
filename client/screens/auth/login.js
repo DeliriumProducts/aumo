@@ -1,17 +1,16 @@
+import { Button, Icon, Input } from "@ui-kitten/components"
+import aumo from "aumo"
 import React, { useState } from "react"
-import { AuthAPI } from "aumo-api"
-import Routes from "../../navigation/routes"
-import { BACKEND_URL } from "../../config/index.js"
 import {
+  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  View,
-  Image
+  View
 } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { Button, Icon, Input } from "@ui-kitten/components"
+import Routes from "../../navigation/routes"
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("")
@@ -19,14 +18,12 @@ export default function LoginScreen(props) {
 
   const handleLogin = async () => {
     try {
-      const res = await new AuthAPI(BACKEND_URL).login({
-        email,
-        password
+      await aumo.auth.login({
+        email: email.trim(),
+        password: password.trim()
       })
 
-      if (res.status == 200) {
-        props.navigation.navigate(Routes.App)
-      }
+      props.navigation.navigate(Routes.App)
     } catch (error) {
       console.log(error)
     }

@@ -1,21 +1,24 @@
-import { createStackNavigator } from "react-navigation-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { Text } from "react-native"
-import Routes from "../routes"
 import UserScreen from "../../screens/app/user"
+import Routes from "../routes"
 
-const UserStack = createStackNavigator({
-  [Routes.User]: UserScreen
-})
+const Stack = createStackNavigator()
 
-UserStack.navigationOptions = {
-  tabBarLabel: ({ focused }) => (
-    <Text style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}>
-      Me
-    </Text>
-  )
-}
-
-UserStack.path = ""
-
-export default UserStack
+export default () => (
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen
+      name={Routes.User}
+      component={UserScreen}
+      options={{
+        tabBarLabel: ({ focused }) => (
+          <Text
+            style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}
+          >
+            My Profile
+          </Text>
+        )
+      }}
+    />
+  </Stack.Navigator>
+)

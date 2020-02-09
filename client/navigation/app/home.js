@@ -1,21 +1,24 @@
-import { createStackNavigator } from "react-navigation-stack"
-import HomeScreen from "../../screens/app/home"
-import { Text } from "react-native"
-import Routes from "../routes"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
+import HomeScreen from "../../screens/app/home"
+import Routes from "../routes"
 
-const HomeStack = createStackNavigator({
-  [Routes.Home]: HomeScreen
-})
+const Stack = createStackNavigator()
 
-HomeStack.navigationOptions = {
-  tabBarLabel: ({ focused }) => (
-    <Text style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}>
-      Home
-    </Text>
-  )
-}
-
-HomeStack.path = ""
-
-export default HomeStack
+export default () => (
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen
+      name={Routes.Home}
+      component={HomeScreen}
+      options={{
+        tabBarLabel: ({ focused }) => (
+          <Text
+            style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}
+          >
+            Home
+          </Text>
+        )
+      }}
+    />
+  </Stack.Navigator>
+)
