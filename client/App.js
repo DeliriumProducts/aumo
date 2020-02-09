@@ -35,9 +35,11 @@ const App = () => {
         theme={theme}
         customMapping={customM}
       >
-        <NavigationContainer>
-          <AppNavigator isAuthenticated={user != null} />
-        </NavigationContainer>
+        <SafeAreaView style={{ flex: 1 }}>
+          <NavigationContainer>
+            <AppNavigator isAuthenticated={user != null} />
+          </NavigationContainer>
+        </SafeAreaView>
       </ApplicationProvider>
     </>
   )
