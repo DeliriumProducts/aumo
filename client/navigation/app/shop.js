@@ -7,18 +7,6 @@ const Stack = createStackNavigator()
 
 export default () => (
   <Stack.Navigator headerMode="none">
-    <Stack.Screen
-      name={Routes.Shop}
-      component={ShopScreen}
-      options={{
-        tabBarLabel: ({ focused }) => (
-          <Text
-            style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}
-          >
-            Shop
-          </Text>
-        )
-      }}
-    />
+    <Stack.Screen name={Routes.Shop} component={ShopScreen} />
   </Stack.Navigator>
 )

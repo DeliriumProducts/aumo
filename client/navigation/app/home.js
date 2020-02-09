@@ -7,18 +7,6 @@ const Stack = createStackNavigator()
 
 export default () => (
   <Stack.Navigator headerMode="none">
-    <Stack.Screen
-      name={Routes.Home}
-      component={HomeScreen}
-      options={{
-        tabBarLabel: ({ focused }) => (
-          <Text
-            style={{ color: focused ? "#083AA4" : "#CCC", textAlign: "center" }}
-          >
-            Home
-          </Text>
-        )
-      }}
-    />
+    <Stack.Screen name={Routes.Home} component={HomeScreen} />
   </Stack.Navigator>
 )
