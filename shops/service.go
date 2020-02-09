@@ -41,5 +41,5 @@ func (ss *service) Owners() ([]User, error) {
 		return nil, err
 	}
 
-	return shop, nil=
+	return shop, nil
 }
