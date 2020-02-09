@@ -35,6 +35,11 @@ func (ss *service) Delete(id uint) error {
 	return ss.store.Delete(nil, id)
 }
 
-func (ss *service) Owners() error {
-	return ss.store.FindByID(nil, id, true)
+func (ss *service) Owners() ([]User, error) {
+	shop, err = ss.store.FindByID(nil, id, true)
+	if err != nil {
+		return nil, err
+	}
+
+	return shop, nil=
 }

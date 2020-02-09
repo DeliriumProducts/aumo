@@ -25,7 +25,7 @@ type ShopService interface {
 	Owners(id uint) ([]User, error)
 	Update(id uint, o *Shop) error
 	Delete(id uint) error
-	Create(*Shop) (*Shop, error)
+	Create(*Shop) (error)
 }
 
 // ShopStore contains all `Shop`
