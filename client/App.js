@@ -4,7 +4,10 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
 import { EvaIconsPack } from "@ui-kitten/eva-icons"
 import aumo from "aumo"
 import React from "react"
+import { SafeAreaView } from "react-native"
 import { BACKEND_URL } from "./config"
+import { Context } from "./context/context"
+import ContextProvider, { actions } from "./context/providers/provider"
 import customM from "./mapping"
 import AppNavigator from "./navigation/main"
 import theme from "./theme"
@@ -16,17 +19,18 @@ if (__DEV__) {
 }
 
 const App = () => {
-  const [user, setUser] = React.useState(null)
+  const ctx = React.useContext(Context)
+
   React.useEffect(() => {
     ;(async () => {
       try {
         const val = await aumo.auth.me()
-        setUser(val)
+        ctx.dispatch({ type: actions.SET_USER, payload: val })
       } catch (e) {}
     })()
   }, [])
 
-  console.log(user)
+  console.log(ctx.state.user)
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
@@ -37,7 +41,7 @@ const App = () => {
       >
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationContainer>
-            <AppNavigator isAuthenticated={user != null} />
+            <AppNavigator isAuthenticated={ctx.state.user != null} />
           </NavigationContainer>
         </SafeAreaView>
       </ApplicationProvider>
@@ -45,4 +49,8 @@ const App = () => {
   )
 }
 
-export default App
+export default () => (
+  <ContextProvider>
+    <App />
+  </ContextProvider>
+)
