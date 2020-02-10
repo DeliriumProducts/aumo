@@ -41,5 +41,7 @@ func (ss *service) Owners(id uint) ([]aumo.User, error) {
 		return nil, err
 	}
 
-	return shop, nil
+	owners := shop.Owners
+
+	return owners, nil
 }
