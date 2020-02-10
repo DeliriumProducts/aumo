@@ -170,11 +170,11 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.Select("shops.*").
-	From("shop_owners").
-	Join("shops as s").On("shop_owners.shop_id = s.shop_id").
-	Join("users as u").On("u.id = shop_owners.user_id").
-	where(where, args).
-	All(&shops)
+		From("shop_owners").
+		Join("shops as s").On("shop_owners.shop_id = s.shop_id").
+		Join("users as u").On("u.id = shop_owners.user_id").
+		where(where, args).
+		All(&shops)
 	if err != nil {
 		return nil. err
 	}
