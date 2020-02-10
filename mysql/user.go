@@ -173,10 +173,10 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		From("shop_owners").
 		Join("shops as s").On("shop_owners.shop_id = s.shop_id").
 		Join("users as u").On("u.id = shop_owners.user_id").
-		where(where, args).
+		Where(where, args).
 		All(&shops)
 	if err != nil {
-		return nil. err
+		return nil, err
 	}
 
 	user.Orders = []aumo.Order{}
