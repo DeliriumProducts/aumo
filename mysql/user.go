@@ -122,6 +122,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
 	var err error
 	user := &aumo.User{}
+	shops := []aumo.Shop{}
 
 	type (
 		UserReceipt struct {
@@ -168,8 +169,19 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
+	err = tx.Select("shops.*").
+	From("shop_owners").
+	Join("shops as s").On("shop_owners.shop_id = s.shop_id").
+	Join("users as u").On("u.id = shop_owners.user_id").
+	where(where, args).
+	All(&shops)
+	if err != nil {
+		return nil. err
+	}
+
 	user.Orders = []aumo.Order{}
 	user.Receipts = []aumo.Receipt{}
+	user.Shops = shops
 
 	for i := range orders {
 		order := orders[i].Order
