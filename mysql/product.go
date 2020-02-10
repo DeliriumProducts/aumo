@@ -30,6 +30,7 @@ func (p *productStore) DB() sqlbuilder.Database {
 func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 	var err error
 	product := &aumo.Product{}
+	shop := &aumo.Shop{}
 
 	if tx == nil {
 		tx, err = p.db.NewTx(context.Background())
@@ -64,7 +65,17 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 		return nil, err
 	}
 
-	return product, err
+	err = tx.Select("shops.*").
+		From("shops").
+		Join("products as p").On("p.shop_id = shops.shop_id").
+		Where("p.shop_id = ? ", id)
+	if err != nil {
+		return nil, err
+	}
+
+	product.Shop = shop
+
+	return product, nil
 }
 
 func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {
