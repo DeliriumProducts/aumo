@@ -1,7 +1,7 @@
-import { Button, Icon, Input, Spinner } from "@ui-kitten/components"
+import { Button, Icon, Input, Spinner, Text } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Image, ScrollView, StyleSheet, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
@@ -11,6 +11,7 @@ export default function LoginScreen(props) {
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [passwordVisible, setPasswordVisible] = React.useState(false)
+  const [err, setErr] = React.useState("")
   const [loading, setLoading] = React.useState(false)
   const ctx = React.useContext(Context)
 
@@ -24,7 +25,17 @@ export default function LoginScreen(props) {
 
       ctx.dispatch({ type: actions.SET_USER, payload: response })
     } catch (error) {
-      console.log(error)
+      switch (error.response.status) {
+        case 400:
+          setErr("Bad Request")
+          break
+        case 401:
+          setErr("Invalid username or password")
+          break
+        case 500:
+          setErr("Internal server error")
+          break
+      }
     } finally {
       setLoading(false)
     }
@@ -88,6 +99,11 @@ export default function LoginScreen(props) {
               Forgot password?
             </Text>
           </TouchableOpacity>
+          {err != "" && (
+            <View style={styles.errorContainer}>
+              <Text style={{ color: "white" }}>{err}</Text>
+            </View>
+          )}
         </View>
       </View>
       <View
@@ -157,5 +173,11 @@ const styles = StyleSheet.create({
   },
   emailInput: {
     marginBottom: 10
+  },
+  errorContainer: {
+    borderRadius: 4,
+    padding: 15,
+    width: "100%",
+    backgroundColor: "#e9453b"
   }
 })
