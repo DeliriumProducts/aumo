@@ -61,7 +61,7 @@ export default () => {
         options={{
           tabBarLabel: "My Profile",
           tabBarIcon: ({ focused, color }) => (
-            <Avatar source={{ uri: ctx?.state?.user.avatar }} />
+            <Avatar source={{ uri: ctx?.state?.user?.avatar }} />
           )
         }}
       />
