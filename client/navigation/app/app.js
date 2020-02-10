@@ -3,6 +3,7 @@ import { Avatar, Icon } from "@ui-kitten/components"
 import React from "react"
 import { TabBar } from "react-native-animated-nav-tab-bar"
 import { Context } from "../../context/context"
+import theme from "../../theme"
 import Routes from "../routes"
 import HomeStack from "./home"
 import ShopStack from "./shop"
@@ -16,13 +17,13 @@ export default () => {
     <Tab.Navigator
       initialRouteName={Routes.Home}
       tabBarOptions={{
-        activeTintColor: "#083aa4",
+        activeTintColor: theme["color-primary-500"],
         inactiveTintColor: "#222222"
       }}
       tabBar={props => (
         <TabBar
-          activeColors={"#083aa4"}
-          activeTabBackgrounds={"#cae0fa"}
+          activeColors={theme["color-primary-500"]}
+          activeTabBackgrounds={theme["color-primary-100"]}
           {...props}
         />
       )}
@@ -59,7 +60,7 @@ export default () => {
         name={Routes.User}
         component={UserStack}
         options={{
-          tabBarLabel: "My Profile",
+          tabBarLabel: "Profile",
           tabBarIcon: ({ focused, color }) => (
             <Avatar source={{ uri: ctx?.state?.user?.avatar }} />
           )

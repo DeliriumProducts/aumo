@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
 import Routes from "../../navigation/routes"
+import theme from "../../theme"
 
 export default function LoginScreen(props) {
   const [email, setEmail] = React.useState("")
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
   },
   subheading: {
     fontSize: 17,
-    color: "#083AA4",
+    color: theme["color-primary-500"],
     // lineHeight: 24,
     marginBottom: 20,
     textAlign: "center"
@@ -178,6 +179,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 15,
     width: "100%",
-    backgroundColor: "#e9453b"
+    backgroundColor: theme["color-danger-500"]
   }
 })
