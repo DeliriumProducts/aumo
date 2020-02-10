@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   errorContainer: {
-    borderRadius: 4,
+    borderRadius: 8,
     padding: 15,
     width: "100%",
     backgroundColor: "#e9453b"
