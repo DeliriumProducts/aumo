@@ -143,7 +143,7 @@ LoginScreen.navigationOptions = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F7F9FC",
+    backgroundColor: theme["color-background-main"],
     flex: 1
   },
   contentContainer: {
