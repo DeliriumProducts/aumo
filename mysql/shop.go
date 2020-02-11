@@ -55,7 +55,7 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.Shop, e
 		shop, err = s.shopRelations(tx, "shops.shop_id = ?", id)
 	} else {
 		err = tx.Collection(ShopTable).Find("id", id).One(shop)
-		shop.Owners= []aumo.User{}
+		shop.Owners = []aumo.User{}
 	}
 
 	return shop, err
