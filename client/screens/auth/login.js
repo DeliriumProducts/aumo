@@ -31,7 +31,7 @@ export default function LoginScreen(props) {
           setErr("Bad Request")
           break
         case 401:
-          setErr("Invalid username or password")
+          setErr("Invalid email or password")
           break
         case 500:
           setErr("Internal server error")
