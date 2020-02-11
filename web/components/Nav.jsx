@@ -4,6 +4,7 @@ import Link from "next/link"
 import Router from "next/router"
 import React, { useContext, useState } from "react"
 import styled from "styled-components"
+import { THEME_VARIABLES } from "../config/env"
 import { Context } from "../context/context"
 import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
@@ -172,7 +173,7 @@ const Welcome = styled.div`
     text-align: left;
     font-weight: bold;
     font-family: "Montserrat";
-    color: #083aa4;
+    color: ${THEME_VARIABLES["@primary-color"]};
     font-size: 1rem;
     text-decoration: none;
   }
@@ -224,8 +225,10 @@ const LinkList = styled.ul`
 
 const LinkItem = styled.a`
   font-family: "Montserrat";
-  color: ${props => (props.isSelected ? "#fff" : "#083aa4")};
-  background-color: ${props => (props.isSelected ? "#083aa4" : "")};
+  color: ${props =>
+    props.isSelected ? "#fff" : THEME_VARIABLES["@primary-color"]};
+  background-color: ${props =>
+    props.isSelected ? THEME_VARIABLES["@primary-color"] : ""};
   font-size: 1rem;
   font-weight: 500;
   display: flex;
