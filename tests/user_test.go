@@ -33,7 +33,7 @@ func TestUserPlaceOrder(t *testing.T) {
 		u, err := aumo.NewUser("Gosho", "gosho@abv.bg", "123456", "pesho.com/gosho.png")
 		require.Nil(t, err, "shouldn't return an err")
 
-		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
+		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2, 8)
 		p.ID = 1
 
 		o := aumo.NewOrder(u, p)
@@ -48,7 +48,7 @@ func TestUserPlaceOrder(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an err")
 		u.Points = 0
 
-		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2)
+		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 2, 23)
 		p.ID = 1
 
 		o := aumo.NewOrder(u, p)
@@ -62,7 +62,7 @@ func TestUserPlaceOrder(t *testing.T) {
 		u, err := aumo.NewUser("Gosho", "gosho@abv.bg", "123456", "pesho.com/gosho.png")
 		assert.Nil(t, err, "shouldn't return an err")
 
-		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0)
+		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0, 33)
 		p.ID = 1
 
 		o := aumo.NewOrder(u, p)
@@ -77,7 +77,7 @@ func TestUserPlaceOrder(t *testing.T) {
 		assert.Nil(t, err, "shouldn't return an err")
 		u.Points = 0
 
-		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0)
+		p := aumo.NewProduct("Phone", 99, "image.com", "it's a good phone", 0, 3)
 		p.ID = 1
 
 		o := aumo.NewOrder(u, p)
