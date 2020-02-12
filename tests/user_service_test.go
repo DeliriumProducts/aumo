@@ -74,7 +74,7 @@ func TestUserService(t *testing.T) {
 				"one_order",
 				user(t),
 				[]aumo.Receipt{},
-				[]aumo.Product{*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5)},
+				[]aumo.Product{*createProduct(t, pstore, sstore, 500, 5)},
 				true,
 			},
 			{
@@ -89,8 +89,9 @@ func TestUserService(t *testing.T) {
 				user(t),
 				[]aumo.Receipt{},
 				[]aumo.Product{
-					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 5),
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 9),
+					*createProduct(t, pstore, sstore, 250, 5),
+					*createProduct(t, pstore, sstore, 1000, 1),
+					*createProduct(t, pstore, sstore, 300, 8),
 				},
 				true,
 			},
@@ -112,8 +113,9 @@ func TestUserService(t *testing.T) {
 					*createReceipt(t, rstore, sstore),
 				},
 				[]aumo.Product{
-					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 5),
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 9),
+					*createProduct(t, pstore, sstore, 100, 5),
+					*createProduct(t, pstore, sstore, 500, 1),
+					*createProduct(t, pstore, sstore, 75, 8),
 				},
 				true,
 			},
