@@ -20,11 +20,24 @@ func createUser(t *testing.T, us aumo.UserStore) *aumo.User {
 	return u
 }
 
-func createReceipt(t *testing.T, rs aumo.ReceiptStore) *aumo.Receipt {
-	r := aumo.NewReceipt(faker.AmountWithCurrency())
+func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
+	s := aumo.NewShop("Paconi")
+
+	err := ss.Save(nil, s)
+	require.Nil(t, err, "shouldn't return an error")
+
+	return s
+}
+
+func createReceipt(t *testing.T, rs aumo.ReceiptStore, ss aumo.ShopStore) *aumo.Receipt {
+	s := createShop(t, ss)
+	r := aumo.NewReceipt(faker.AmountWithCurrency(), s.ID)
 
 	err := rs.Save(nil, r)
 	require.Nil(t, err, "shouldn't return an error")
+
+	r.ShopID = s.ID
+	r.Shop = s
 
 	return r
 }

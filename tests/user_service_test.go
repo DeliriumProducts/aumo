@@ -28,6 +28,7 @@ func TestUserService(t *testing.T) {
 	ustore := mysql.NewUserStore(sess)
 	ostore := mysql.NewOrderStore(sess)
 	rstore := mysql.NewReceiptStore(sess)
+	sstore := mysql.NewShopStore(sess)
 
 	os := ordering.New(ostore, pstore, ustore)
 	us := users.New(ustore)
@@ -79,7 +80,7 @@ func TestUserService(t *testing.T) {
 			{
 				"one_receipt",
 				user(t),
-				[]aumo.Receipt{*aumo.NewReceipt(faker.AmountWithCurrency())},
+				[]aumo.Receipt{*createReceipt(t, rstore, sstore)},
 				[]aumo.Product{},
 				true,
 			},
@@ -97,8 +98,8 @@ func TestUserService(t *testing.T) {
 				"many_receipts",
 				user(t),
 				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency()),
-					*aumo.NewReceipt(faker.AmountWithCurrency()),
+					*createReceipt(t, rstore, sstore),
+					*createReceipt(t, rstore, sstore),
 				},
 				[]aumo.Product{},
 				true,
@@ -107,8 +108,8 @@ func TestUserService(t *testing.T) {
 				"many_orders_many_receipts",
 				user(t),
 				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency()),
-					*aumo.NewReceipt(faker.AmountWithCurrency()),
+					*createReceipt(t, rstore, sstore),
+					*createReceipt(t, rstore, sstore),
 				},
 				[]aumo.Product{
 					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 5),
