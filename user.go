@@ -85,6 +85,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 		Role:       Customer,
 		Orders:     []Order{},
 		Receipts:   []Receipt{},
+		Shops:      []Shop{},
 		IsVerified: false,
 	}, nil
 }

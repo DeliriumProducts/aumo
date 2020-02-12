@@ -59,6 +59,7 @@ func (u *userStore) FindByID(tx aumo.Tx, id string, relations bool) (*aumo.User,
 		err = tx.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
+		user.Shops = []aumo.Shop{}
 	}
 
 	switch {

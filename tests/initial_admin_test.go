@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/users"
@@ -55,6 +56,7 @@ func TestInitialAdmin(t *testing.T) {
 
 			// Act
 			user1, err := users.InitialAdmin(ustore, password, email)
+			spew.Dump(user, user1)
 			require.Nil(t, err, "shouldn't return an error")
 			require.NotNil(t, user, "should not be nil")
 			require.Equal(t, user, user1, "should be equal")
