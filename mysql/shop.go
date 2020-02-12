@@ -7,7 +7,7 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
-// ShopTable is the MySQL table for holding orders
+// ShopTable is the MySQL table for holding shops
 const ShopTable = "shops"
 
 type shopStore struct {
@@ -115,7 +115,7 @@ func (s *shopStore) Save(tx aumo.Tx, ss *aumo.Shop) error {
 		}()
 	}
 
-	return tx.Collection(OrderTable).InsertReturning(ss)
+	return tx.Collection(ShopTable).InsertReturning(ss)
 }
 
 func (s *shopStore) Update(tx aumo.Tx, id uint, sp *aumo.Shop) error {
@@ -143,7 +143,7 @@ func (s *shopStore) Update(tx aumo.Tx, id uint, sp *aumo.Shop) error {
 		}()
 	}
 
-	return tx.Collection(OrderTable).Find("id", id).Update(sp)
+	return tx.Collection(ShopTable).Find("id", id).Update(sp)
 }
 
 func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
@@ -171,7 +171,7 @@ func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
 		}()
 	}
 
-	return tx.Collection(OrderTable).Find("id", id).Delete()
+	return tx.Collection(ShopTable).Find("id", id).Delete()
 }
 
 func (s *shopStore) shopRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.Shop, error) {
