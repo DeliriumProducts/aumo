@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS products (
   description varchar(255) DEFAULT NULL,
   stock int(10) unsigned DEFAULT NULL,
   shop_id int(10) unsigned NOT NULL,
-  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS orders (
   user_id varchar(36) NOT NULL,
   product_id int(10) unsigned NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS receipts (
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS receipts (
   content TEXT NOT NULL,
   user_id varchar(36) NULL,
   shop_id int(10) unsigned NOT NULL,
-  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 `

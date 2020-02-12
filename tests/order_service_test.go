@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/ordering"
@@ -36,6 +37,7 @@ func TestOrderService(t *testing.T) {
 
 		var price float64 = 500
 		product := createProduct(t, pstore, createShop(t, sstore), price, 1)
+		product.Shop = nil
 
 		t.Run("valid", func(t *testing.T) {
 			// Place order
@@ -52,6 +54,8 @@ func TestOrderService(t *testing.T) {
 			gotProduct, err := pstore.FindByID(nil, product.ID)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, product.Stock, gotProduct.Stock, "should've decremented stock")
+
+			spew.Dump(order)
 
 			// Get User
 			gotUser, err := ustore.FindByID(nil, user.ID.String(), true)
