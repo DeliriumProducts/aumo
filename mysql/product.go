@@ -74,6 +74,7 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 		return nil, err
 	}
 
+	shop.Owners = []aumo.User{}
 	product.Shop = shop
 
 	return product, nil
