@@ -157,7 +157,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
+		Select("o.*", "p.*").
 		From(UserTable).
 		Join("orders as o").On("users.id = o.user_id").
 		Join("products as p").On("o.product_id = p.id").
