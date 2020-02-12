@@ -61,11 +61,6 @@ func TestReceiptService(t *testing.T) {
 			*createReceipt(t, rstore, sstore),
 		}
 
-		for _, receipt := range receipts {
-			err := rstore.Save(nil, &receipt)
-			require.Nil(t, err, "shouldn't return an error")
-		}
-
 		gotReceipts, err := rs.Receipts()
 		require.Nil(t, err, "shouldn't return an error")
 		require.ElementsMatch(t, gotReceipts, receipts, "should be equal")
