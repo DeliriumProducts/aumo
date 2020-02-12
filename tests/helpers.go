@@ -21,7 +21,7 @@ func createUser(t *testing.T, us aumo.UserStore) *aumo.User {
 }
 
 func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
-	s := aumo.NewShop("Paconi")
+	s := aumo.NewShop(faker.Name())
 
 	err := ss.Save(nil, s)
 	require.Nil(t, err, "shouldn't return an error")
@@ -41,8 +41,9 @@ func createReceipt(t *testing.T, rs aumo.ReceiptStore, ss aumo.ShopStore) *aumo.
 	return r
 }
 
-func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint) *aumo.Product {
-	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock)
+func createProduct(t *testing.T, ps aumo.ProductStore, ss aumo.ShopStore, price float64, stock uint) *aumo.Product {
+	s := createShop(t, ss)
+	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock, s.ID)
 
 	err := ps.Save(nil, p)
 	require.Nil(t, err, "shouldn't return an error")

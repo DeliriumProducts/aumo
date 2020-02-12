@@ -23,12 +23,14 @@ func TestProductService(t *testing.T) {
 	}()
 
 	pstore := mysql.NewProductStore(sess)
+	sstore := mysql.NewShopStore(sess)
 	ps := products.New(pstore)
 
 	t.Run("create_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5)
+		s := createShop(t, sstore)
+		product := aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 50, s.ID)
 
 		err := ps.Create(product)
 		require.Nil(t, err, "shouldn't return an error")
@@ -41,7 +43,7 @@ func TestProductService(t *testing.T) {
 	t.Run("get_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, 500, 5)
+		product := createProduct(t, pstore, sstore, 500, 5)
 
 		gotProduct, err := ps.Product(product.ID)
 		require.Nil(t, err, "shouldn't return an error")
@@ -52,14 +54,9 @@ func TestProductService(t *testing.T) {
 		defer TidyDB(sess)
 
 		products := []*aumo.Product{
-			aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 99),
-			aumo.NewProduct(faker.Word(), 20, faker.URL(), faker.Sentence(), 10),
-			aumo.NewProduct(faker.Word(), 5000, faker.URL(), faker.Sentence(), 2),
-		}
-
-		for _, product := range products {
-			err := pstore.Save(nil, product)
-			require.Nil(t, err, "shouldn't return an error")
+			createProduct(t, pstore, sstore, 50, 18),
+			createProduct(t, pstore, sstore, 34, 9),
+			createProduct(t, pstore, sstore, 234, 20),
 		}
 
 		gotProducts, err := ps.Products()
@@ -74,7 +71,7 @@ func TestProductService(t *testing.T) {
 	t.Run("update_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, 500, 5)
+		product := createProduct(t, pstore, sstore, 500, 5)
 		product.Name = "not a computer"
 
 		err = ps.Update(product.ID, product)
@@ -88,7 +85,7 @@ func TestProductService(t *testing.T) {
 	t.Run("delete_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, 500, 5)
+		product := createProduct(t, pstore, sstore, 500, 5)
 
 		err = ps.Delete(product.ID)
 		require.Nil(t, err, "shouldn't return an error")
