@@ -35,7 +35,7 @@ func TestOrderService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		var price float64 = 500
-		product := createProduct(t, pstore, sstore, price, 1)
+		product := createProduct(t, pstore, createShop(t, sstore), price, 1)
 
 		t.Run("valid", func(t *testing.T) {
 			// Place order

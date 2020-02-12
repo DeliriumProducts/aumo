@@ -44,7 +44,7 @@ func TestProductService(t *testing.T) {
 	t.Run("get_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, sstore, 500, 5)
+		product := createProduct(t, pstore, createShop(t, sstore), 500, 5)
 
 		gotProduct, err := ps.Product(product.ID)
 		require.Nil(t, err, "shouldn't return an error")
@@ -55,14 +55,14 @@ func TestProductService(t *testing.T) {
 		defer TidyDB(sess)
 
 		products := []*aumo.Product{
-			createProduct(t, pstore, sstore, 50, 18),
-			createProduct(t, pstore, sstore, 34, 9),
-			createProduct(t, pstore, sstore, 234, 20),
+			createProduct(t, pstore, createShop(t, sstore), 50, 18),
+			createProduct(t, pstore, createShop(t, sstore), 34, 9),
+			createProduct(t, pstore, createShop(t, sstore), 234, 20),
 		}
 
 		gotProducts, err := ps.Products()
 		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, len(gotProducts), len(products), "should have equal length")
+		require.Equal(t, len(products), len(gotProducts), "should have equal length")
 
 		for i := 0; i < len(gotProducts); i++ {
 			require.Equal(t, *products[i], gotProducts[i], "should be equal")
@@ -72,7 +72,7 @@ func TestProductService(t *testing.T) {
 	t.Run("update_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, sstore, 500, 5)
+		product := createProduct(t, pstore, createShop(t, sstore), 500, 5)
 		product.Name = "not a computer"
 
 		err = ps.Update(product.ID, product)
@@ -86,7 +86,7 @@ func TestProductService(t *testing.T) {
 	t.Run("delete_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, sstore, 500, 5)
+		product := createProduct(t, pstore, createShop(t, sstore), 500, 5)
 
 		err = ps.Delete(product.ID)
 		require.Nil(t, err, "shouldn't return an error")

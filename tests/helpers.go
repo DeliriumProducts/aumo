@@ -29,20 +29,16 @@ func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
 	return s
 }
 
-func createReceipt(t *testing.T, rs aumo.ReceiptStore, ss aumo.ShopStore) *aumo.Receipt {
-	s := createShop(t, ss)
+func createReceipt(t *testing.T, rs aumo.ReceiptStore, s *aumo.Shop) *aumo.Receipt {
 	r := aumo.NewReceipt(faker.AmountWithCurrency(), s.ID)
 
 	err := rs.Save(nil, r)
 	require.Nil(t, err, "shouldn't return an error")
 
-	r.ShopID = s.ID
-
 	return r
 }
 
-func createProduct(t *testing.T, ps aumo.ProductStore, ss aumo.ShopStore, price float64, stock uint) *aumo.Product {
-	s := createShop(t, ss)
+func createProduct(t *testing.T, ps aumo.ProductStore, s *aumo.Shop, price float64, stock uint) *aumo.Product {
 	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock, s.ID)
 
 	err := ps.Save(nil, p)

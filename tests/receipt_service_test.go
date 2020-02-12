@@ -44,7 +44,7 @@ func TestReceiptService(t *testing.T) {
 	t.Run("get_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore, sstore)
+		receipt := createReceipt(t, rstore, createShop(t, sstore))
 
 		gotReceipt, err := rs.Receipt(receipt.ReceiptID.String())
 
@@ -56,20 +56,20 @@ func TestReceiptService(t *testing.T) {
 		defer TidyDB(sess)
 
 		receipts := []aumo.Receipt{
-			*createReceipt(t, rstore, sstore),
-			*createReceipt(t, rstore, sstore),
-			*createReceipt(t, rstore, sstore),
+			*createReceipt(t, rstore, createShop(t, sstore)),
+			*createReceipt(t, rstore, createShop(t, sstore)),
+			*createReceipt(t, rstore, createShop(t, sstore)),
 		}
 
 		gotReceipts, err := rs.Receipts()
 		require.Nil(t, err, "shouldn't return an error")
-		require.ElementsMatch(t, gotReceipts, receipts, "should be equal")
+		require.ElementsMatch(t, receipts, gotReceipts, "should be equal")
 	})
 
 	t.Run("delete_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore, sstore)
+		receipt := createReceipt(t, rstore, createShop(t, sstore))
 
 		err = rs.Delete(receipt.ReceiptID.String())
 		require.Nil(t, err, "shouldn't return an error")
@@ -81,7 +81,7 @@ func TestReceiptService(t *testing.T) {
 	t.Run("update_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore, sstore)
+		receipt := createReceipt(t, rstore, createShop(t, sstore))
 		receipt.Content = "Kaufland 23233232323"
 
 		err = rs.Update(receipt.ReceiptID.String(), receipt)
@@ -98,7 +98,7 @@ func TestReceiptService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		t.Run("valid", func(t *testing.T) {
-			receipt := createReceipt(t, rstore, sstore)
+			receipt := createReceipt(t, rstore, createShop(t, sstore))
 			require.Equal(t, false, receipt.IsClaimed())
 
 			var err error
