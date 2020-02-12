@@ -31,6 +31,7 @@ func TestProductService(t *testing.T) {
 
 		s := createShop(t, sstore)
 		product := aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 50, s.ID)
+		product.Shop = s
 
 		err := ps.Create(product)
 		require.Nil(t, err, "shouldn't return an error")
