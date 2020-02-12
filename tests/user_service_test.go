@@ -54,6 +54,7 @@ func TestUserService(t *testing.T) {
 		// helper func for require.Nil() on the err
 		user := func(t *testing.T) *aumo.User {
 			u, err := aumo.NewUser(faker.FirstName(), faker.Email(), faker.Password(), faker.URL())
+			u.Role = aumo.Admin
 			require.Nil(t, err, "shouldn't return an err")
 			return u
 		}
@@ -72,72 +73,72 @@ func TestUserService(t *testing.T) {
 			shop      aumo.Shop
 			relations bool
 		}{
-			{
-				"no_relations",
-				user(t),
-				[]aumo.Receipt{},
-				[]aumo.Product{},
-				*shop(t, 2),
-				false,
-			},
+			// {
+			// 	"no_relations",
+			// 	user(t),
+			// 	[]aumo.Receipt{},
+			// 	[]aumo.Product{},
+			// 	*shop(t, 2),
+			// 	false,
+			// },
 			{
 				"one_order",
 				user(t),
 				[]aumo.Receipt{},
 				[]aumo.Product{
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5, 69),
+					*aumo.NewProduct(faker.Word(), 200, faker.URL(), faker.Sentence(), 5, 69),
 				},
 				*shop(t, 69),
 				true,
 			},
-			{
-				"one_receipt",
-				user(t),
-				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 420),
-				},
-				[]aumo.Product{},
-				*shop(t, 420),
-				true,
-			},
-			{
-				"many_orders",
-				user(t),
-				[]aumo.Receipt{},
-				[]aumo.Product{
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5, 1337),
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5, 1337),
-					*aumo.NewProduct(faker.Word(), 500, faker.URL(), faker.Sentence(), 5, 1337),
-				},
-				*shop(t, 1337),
-				true,
-			},
-			{
-				"many_receipts",
-				user(t),
-				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
-				},
-				[]aumo.Product{},
-				*shop(t, 14),
-				true,
-			},
-			{
-				"many_orders_many_receipts",
-				user(t),
-				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
-				},
-				[]aumo.Product{
-					*aumo.NewProduct(faker.Word(), 80, faker.URL(), faker.Sentence(), 2, 44),
-					*aumo.NewProduct(faker.Word(), 120, faker.URL(), faker.Sentence(), 4, 44),
-					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 8, 44),
-				},
-				*shop(t, 44),
-				true,
-			},
+			// {
+			// 	"one_receipt",
+			// 	user(t),
+			// 	[]aumo.Receipt{
+			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 420),
+			// 	},
+			// 	[]aumo.Product{},
+			// 	*shop(t, 420),
+			// 	true,
+			// },
+			// {
+			// 	"many_orders",
+			// 	user(t),
+			// 	[]aumo.Receipt{},
+			// 	[]aumo.Product{
+			// 		*aumo.NewProduct(faker.Word(), 100, faker.URL(), faker.Sentence(), 5, 1337),
+			// 		*aumo.NewProduct(faker.Word(), 200, faker.URL(), faker.Sentence(), 5, 1337),
+			// 		*aumo.NewProduct(faker.Word(), 300, faker.URL(), faker.Sentence(), 5, 1337),
+			// 	},
+			// 	*shop(t, 1337),
+			// 	true,
+			// },
+			// {
+			// 	"many_receipts",
+			// 	user(t),
+			// 	[]aumo.Receipt{
+			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
+			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
+			// 	},
+			// 	[]aumo.Product{},
+			// 	*shop(t, 14),
+			// 	true,
+			// },
+			// {
+			// 	"many_orders_many_receipts",
+			// 	user(t),
+			// 	[]aumo.Receipt{
+			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
+			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
+			// 	},
+			// 	[]aumo.Product{
+			// 		*aumo.NewProduct(faker.Word(), 80, faker.URL(), faker.Sentence(), 2, 44),
+			// 		*aumo.NewProduct(faker.Word(), 120, faker.URL(), faker.Sentence(), 4, 44),
+			// 		*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 8, 44),
+			// 	},
+			// 	*shop(t, 44),
+			// 	true,
+			// },
 		}
 
 		for _, tt := range tests {
@@ -150,12 +151,8 @@ func TestUserService(t *testing.T) {
 
 				// Create shop
 				s := tt.shop
-				s.Owners = []aumo.User{*tt.user}
 				err = ss.Create(&s)
 				require.Nil(t, err, "shouldn't return an error")
-
-				// Add user as owner
-				tt.user.Shops = []aumo.Shop{s}
 
 				for _, receipt := range tt.receipts {
 					r := receipt
@@ -179,7 +176,7 @@ func TestUserService(t *testing.T) {
 					order, err := os.PlaceOrder(tt.user.ID.String(), p.ID)
 					require.Nil(t, err, "shouldn't return an error")
 
-					order.Product = &p
+					order.Product.Shop = nil
 
 					tt.user.Points -= p.Price
 					tt.user.Orders = append(tt.user.Orders, *order)
@@ -190,15 +187,12 @@ func TestUserService(t *testing.T) {
 				require.Nil(t, err, "shouldn't return an error")
 				require.ElementsMatch(t, gotUser.Receipts, tt.user.Receipts, "should be equal")
 				require.ElementsMatch(t, gotUser.Orders, tt.user.Orders, "should be equal")
-				require.ElementsMatch(t, gotUser.Shops, tt.user.Shops, "should be equal")
 
 				tt.user.Receipts = []aumo.Receipt{}
 				tt.user.Orders = []aumo.Order{}
-				tt.user.Shops = []aumo.Shop{}
 
 				gotUser.Receipts = []aumo.Receipt{}
 				gotUser.Orders = []aumo.Order{}
-				gotUser.Shops = []aumo.Shop{}
 
 				require.Equal(t, gotUser, tt.user, "should be equal")
 			})
