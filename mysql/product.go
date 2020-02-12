@@ -68,7 +68,7 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 	err = tx.Select("shops.*").
 		From("shops").
 		Join("products as p").On("p.shop_id = shops.shop_id").
-		Where("p.shop_id = ? ", id).
+		Where("p.id = ? ", id).
 		One(shop)
 	if err != nil {
 		return nil, err
