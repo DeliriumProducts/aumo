@@ -10,15 +10,16 @@ type Receipt struct {
 	ReceiptID uuid.UUID  `json:"receipt_id" db:"receipt_id"`
 	Content   string     `json:"content" db:"content"`
 	UserID    *uuid.UUID `json:"-" db:"user_id,omitempty"`
+	ShopID    uint       `json:"shop_id" db:"shop_id"`
 	Shop      *Shop      `json:"shop" db:"-"`
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
-func NewReceipt(content string) *Receipt {
+func NewReceipt(content string, sID uint) *Receipt {
 	return &Receipt{
 		ReceiptID: uuid.New(),
 		Content:   content,
-		UserID:    nil,
+		ShopID:    sID,
 	}
 }
 
