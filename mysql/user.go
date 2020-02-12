@@ -105,6 +105,7 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
+		user.Shops = []aumo.Shop{}
 	}
 
 	switch {
@@ -122,21 +123,17 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.User, error) {
 	var err error
 	user := &aumo.User{}
-	shops := []aumo.Shop{}
 
 	type (
-		UserReceipt struct {
-			aumo.User    `db:",inline"`
-			aumo.Receipt `db:",inline"`
-		}
 		OrderProduct struct {
 			aumo.Order   `db:",inline"`
 			aumo.Product `db:",inline"`
 		}
 	)
 	var (
-		receipts = []UserReceipt{}
 		orders   = []OrderProduct{}
+		shops    = []aumo.Shop{}
+		receipts = []aumo.Receipt{}
 	)
 
 	err = tx.
@@ -149,7 +146,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("r.receipt_id", "r.content", "r.user_id").
+		Select("r.*").
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
 		Where(where, args).
@@ -169,28 +166,27 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
-	err = tx.Select("shops.*").
-		From("shop_owners").
-		Join("shops as s").On("shop_owners.shop_id = s.shop_id").
-		Join("users as u").On("u.id = shop_owners.user_id").
-		Where(where, args).
-		All(&shops)
-	if err != nil {
-		return nil, err
+	// Get shops only if the user is an admin or a shop owner
+	if user.Role != aumo.Customer {
+		err = tx.Select("s.*").
+			From("shop_owners").
+			Join("shops as s").On("shop_owners.shop_id = s.shop_id").
+			Join("users").On("users.id = shop_owners.user_id").
+			Where(where, args).
+			All(&shops)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	user.Orders = []aumo.Order{}
-	user.Receipts = []aumo.Receipt{}
+	user.Receipts = receipts
 	user.Shops = shops
 
 	for i := range orders {
 		order := orders[i].Order
 		order.Product = &orders[i].Product
 		user.Orders = append(user.Orders, order)
-	}
-
-	for i := range receipts {
-		user.Receipts = append(user.Receipts, receipts[i].Receipt)
 	}
 
 	return user, nil
