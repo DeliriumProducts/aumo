@@ -37,7 +37,6 @@ func createReceipt(t *testing.T, rs aumo.ReceiptStore, ss aumo.ShopStore) *aumo.
 	require.Nil(t, err, "shouldn't return an error")
 
 	r.ShopID = s.ID
-	r.Shop = s
 
 	return r
 }
