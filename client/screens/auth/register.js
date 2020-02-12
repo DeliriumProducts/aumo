@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     fontSize: 17,
-    color: "#083AA4",
+    color: theme["color-primary-500"],
     marginBottom: 20,
     textAlign: "center"
   },
