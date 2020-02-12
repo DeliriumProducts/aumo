@@ -137,10 +137,6 @@ export default function LoginScreen(props) {
   )
 }
 
-LoginScreen.navigationOptions = {
-  headerShown: false
-}
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme["color-background-main"],
