@@ -43,8 +43,9 @@ func TestProductService(t *testing.T) {
 
 	t.Run("get_product", func(t *testing.T) {
 		defer TidyDB(sess)
-
-		product := createProduct(t, pstore, createShop(t, sstore), 500, 5)
+		s := createShop(t, sstore)
+		product := createProduct(t, pstore, s, 500, 5)
+		product.Shop = s
 
 		gotProduct, err := ps.Product(product.ID)
 		require.Nil(t, err, "shouldn't return an error")
@@ -72,7 +73,9 @@ func TestProductService(t *testing.T) {
 	t.Run("update_product", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		product := createProduct(t, pstore, createShop(t, sstore), 500, 5)
+		s := createShop(t, sstore)
+		product := createProduct(t, pstore, s, 500, 5)
+		product.Shop = s
 		product.Name = "not a computer"
 
 		err = ps.Update(product.ID, product)
