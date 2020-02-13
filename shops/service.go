@@ -5,38 +5,40 @@ import (
 )
 
 type service struct {
-	store aumo.ShopStore
+	shopStore       aumo.ShopStore
+	shopOwnersStore aumo.ShopOwnersStore
 }
 
 //New returns an instance of `aumo.ShopService`
-func New(store aumo.ShopStore) aumo.ShopService {
+func New(shopStore aumo.ShopStore, shopOwnersStore aumo.ShopOwnersStore) aumo.ShopService {
 	return &service{
-		store: store,
+		shopStore:       shopStore,
+		shopOwnersStore: shopOwnersStore,
 	}
 }
 
 func (ss *service) Shop(id uint) (*aumo.Shop, error) {
-	return ss.store.FindByID(nil, id, false)
+	return ss.shopStore.FindByID(nil, id, false)
 }
 
 func (ss *service) Shops() ([]aumo.Shop, error) {
-	return ss.store.FindAll(nil)
+	return ss.shopStore.FindAll(nil)
 }
 
 func (ss *service) Create(s *aumo.Shop) error {
-	return ss.store.Save(nil, s)
+	return ss.shopStore.Save(nil, s)
 }
 
 func (ss *service) Update(id uint, s *aumo.Shop) error {
-	return ss.store.Update(nil, id, s)
+	return ss.shopStore.Update(nil, id, s)
 }
 
 func (ss *service) Delete(id uint) error {
-	return ss.store.Delete(nil, id)
+	return ss.shopStore.Delete(nil, id)
 }
 
 func (ss *service) Owners(id uint) ([]aumo.User, error) {
-	shop, err := ss.store.FindByID(nil, id, true)
+	shop, err := ss.shopStore.FindByID(nil, id, true)
 	if err != nil {
 		return nil, err
 	}
@@ -44,4 +46,8 @@ func (ss *service) Owners(id uint) ([]aumo.User, error) {
 	owners := shop.Owners
 
 	return owners, nil
+}
+
+func (ss *service) AddOwner(sID uint, uID string) error {
+	return ss.shopOwnersStore.Save(nil, sID, uID)
 }
