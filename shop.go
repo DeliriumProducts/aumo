@@ -37,7 +37,7 @@ type ShopService interface {
 	Shop(id uint) (*Shop, error)
 	Shops() ([]Shop, error)
 	Owners(id uint) ([]User, error)
-	AddOwner(sID uint, uID string) error
+	AddOwner(*ShopOwners) error
 	RemoveOwner(sID uint, uID string) error
 	Update(id uint, o *Shop) error
 	Delete(id uint) error
