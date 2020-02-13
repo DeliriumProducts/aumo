@@ -46,6 +46,7 @@ type ProductService interface {
 	Create(*Product) error
 	Update(id uint, p *Product) error
 	Delete(id uint) error
+	ProductsByShopID(sID uint, uID string) error
 }
 
 // ProductStore contains all `Product`
