@@ -48,6 +48,10 @@ func (ss *service) Owners(id uint) ([]aumo.User, error) {
 	return owners, nil
 }
 
-func (ss *service) AddOwner(sID uint, uID string) error {
-	return ss.shopOwnersStore.Save(nil, sID, uID)
+func (ss *service) AddOwner(so *aumo.ShopOwners) error {
+	return ss.shopOwnersStore.Save(nil, so)
+}
+
+func (ss *service) RemoveOwner(so *aumo.ShopOwners) error {
+	return ss.shopOwnersStore.Delete(nil, so)
 }
