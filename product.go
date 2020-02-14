@@ -46,7 +46,7 @@ type ProductService interface {
 	Create(*Product) error
 	Update(id uint, p *Product) error
 	Delete(id uint) error
-	ProductsByShopID(sID uint, uID string) error
+	ProductsByShopID(sID uint) ([]Product, error)
 }
 
 // ProductStore contains all `Product`
@@ -54,6 +54,7 @@ type ProductService interface {
 type ProductStore interface {
 	DB() sqlbuilder.Database
 	FindByID(tx Tx, id uint) (*Product, error)
+	FindByShopID(tx Tx, shopID uint) ([]Product, error)
 	FindAll(tx Tx) ([]Product, error)
 	Save(tx Tx, p *Product) error
 	Update(tx Tx, id uint, p *Product) error

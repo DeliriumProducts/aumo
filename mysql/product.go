@@ -80,6 +80,35 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 	return product, nil
 }
 
+func (p *productStore) FindByShopID(tx aumo.Tx, shopID uint) ([]aumo.Product, error) {
+	var err error
+	products := []aumo.Product{}
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return products, tx.Collection(ProductTable).Find().Where("shop_id", shopID).All(&products)
+}
+
 func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {
 	var err error
 	products := []aumo.Product{}
