@@ -1,4 +1,7 @@
-import { createStackNavigator } from "@react-navigation/stack"
+import {
+  createStackNavigator,
+  TransitionPresets
+} from "@react-navigation/stack"
 import React from "react"
 import HomeScreen from "../../screens/app/home"
 import theme from "../../theme"
@@ -8,11 +11,12 @@ const Stack = createStackNavigator()
 
 export default () => (
   <Stack.Navigator
-    headerMode="none"
+    headerMode="screen"
     screenOptions={{
       cardStyle: {
         backgroundColor: theme["color-background-main"]
-      }
+      },
+      ...TransitionPresets.SlideFromRightIOS
     }}
   >
     <Stack.Screen name={Routes.Home} component={HomeScreen} />

@@ -1,6 +1,6 @@
-import { Text } from "react-native"
+import { Text } from "@ui-kitten/components"
 import React from "react"
 
 export default () => {
-  return <Text>Home!</Text>
+  return <Text>ok!</Text>
 }

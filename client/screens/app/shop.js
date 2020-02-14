@@ -1,4 +1,4 @@
-import { Text } from "react-native"
+import { Text } from "@ui-kitten/components"
 import React from "react"
 
 export default () => {

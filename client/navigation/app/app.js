@@ -1,5 +1,6 @@
 import { TabBar } from "@deliriumproducts/react-native-animated-nav-tab-bar"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { TransitionPresets } from "@react-navigation/stack"
 import { Avatar, Icon } from "@ui-kitten/components"
 import React from "react"
 import { Context } from "../../context/context"
@@ -15,6 +16,9 @@ export default () => {
   const ctx = React.useContext(Context)
   return (
     <Tab.Navigator
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS
+      }}
       initialRouteName={Routes.Home}
       tabBarOptions={{
         activeTintColor: theme["color-primary-500"],
