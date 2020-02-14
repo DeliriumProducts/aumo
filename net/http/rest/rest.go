@@ -24,6 +24,7 @@ type Config struct {
 	ReceiptService aumo.ReceiptService
 	OrderService   aumo.OrderService
 	ProductService aumo.ProductService
+	ShopService    aumo.ShopService
 	Auth           *auth.Authenticator
 	Verifier       *verifications.Verifier
 	MountRoute     string
@@ -37,6 +38,7 @@ type Rest struct {
 	receiptService aumo.ReceiptService
 	orderService   aumo.OrderService
 	productService aumo.ProductService
+	shopService    aumo.ShopService
 	auth           *auth.Authenticator
 	validator      *validator.Validate
 	verifier       *verifications.Verifier
@@ -56,6 +58,8 @@ func New(c *Config) *Rest {
 		panic("rest: OrderService not provided")
 	case c.ProductService == nil:
 		panic("rest: ProductService not provided")
+	case c.ShopService == nil:
+		panic("rest: ShopService not provided")
 	case c.Auth == nil:
 		panic("rest: Authenticator not provided")
 	}
@@ -82,6 +86,7 @@ func New(c *Config) *Rest {
 		receiptService: c.ReceiptService,
 		orderService:   c.OrderService,
 		productService: c.ProductService,
+		shopService:    c.ShopService,
 		auth:           c.Auth,
 		verifier:       c.Verifier,
 		backendURL:     c.BackendURL,
