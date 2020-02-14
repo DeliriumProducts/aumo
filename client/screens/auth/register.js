@@ -16,6 +16,7 @@ export default function RegisterScreen(props) {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
+  const [passwordVisible, setPasswordVisible] = React.useState(false)
   const [err, setErr] = React.useState("")
   const [showModal, setShowModal] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
@@ -45,6 +46,10 @@ export default function RegisterScreen(props) {
     } finally {
       setLoading(false)
     }
+  }
+
+  const onPasswordIconPress = () => {
+    setPasswordVisible(!passwordVisible)
   }
 
   return (
@@ -79,9 +84,14 @@ export default function RegisterScreen(props) {
           />
           <Input
             placeholder="Password"
-            size="medium"
-            secureTextEntry={true}
-            icon={style => <Icon {...style} name="lock-outline" />}
+            secureTextEntry={!passwordVisible}
+            icon={style => (
+              <Icon
+                {...style}
+                name={passwordVisible ? "eye-outline" : "eye-off-outline"}
+              />
+            )}
+            onIconPress={onPasswordIconPress}
             value={password}
             style={{ borderRadius: 10 }}
             onChangeText={setPassword}
