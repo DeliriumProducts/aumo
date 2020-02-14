@@ -936,6 +936,14 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@deliriumproducts/react-native-animated-nav-tab-bar@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@deliriumproducts/react-native-animated-nav-tab-bar/-/react-native-animated-nav-tab-bar-2.0.1.tgz#c22f490c7a6cd28979fc3977dbcf28bc2a25ca06"
+  integrity sha512-ZlrHW5l1q5xRu/svMwXllpZBqWBSZ3PTKR3T2cGWzi2f8nEYxu2tb0mzWhorghcqbM5QMNFDZGBVBNERLjDKTw==
+  dependencies:
+    prop-types "^15.7.2"
+    styled-components "^4.3.2"
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -5612,14 +5620,6 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-i
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
-
-react-native-animated-nav-tab-bar@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-animated-nav-tab-bar/-/react-native-animated-nav-tab-bar-1.0.4.tgz#b20878708bed5504921ebae2d1e1f9bf492cf58d"
-  integrity sha512-/fxVo9QyCJxgRMvsY6DqkIyIX2jQoERWQn0mrmHGFiI7aqXBN15d/oPWK64HqYKjw11+1/6FqAtVRkOSVZulwA==
-  dependencies:
-    prop-types "^15.7.2"
-    styled-components "^4.3.2"
 
 react-native-eva-icons@1.1.0:
   version "1.1.0"
