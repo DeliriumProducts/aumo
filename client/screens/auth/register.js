@@ -35,6 +35,9 @@ export default function RegisterScreen(props) {
         case 400:
           setErr("Bad Request")
           break
+        case 422:
+          setErr("Email already exists")
+          break
         case 500:
           setErr("Internal server error")
           break
