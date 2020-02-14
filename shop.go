@@ -11,8 +11,8 @@ type Shop struct {
 
 // ShopOwners is a relation between users and shops in aumo
 type ShopOwners struct {
-	ShopID uint   `json:"shopId" db:"shop_id,omitempty"`
-	UserID string `json:"userId" db:"user_id,omitempty"`
+	ShopID uint   `json:"shop_id" db:"shop_id,omitempty"`
+	UserID string `json:"user_id" db:"user_id,omitempty"`
 }
 
 // NewShop is a constructor for `Shop`
