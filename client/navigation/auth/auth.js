@@ -5,6 +5,7 @@ import {
 import React from "react"
 import LoginScreen from "../../screens/auth/login"
 import RegisterScreen from "../../screens/auth/register"
+import theme from "../../theme"
 import Routes from "../routes"
 
 const Stack = createStackNavigator()
