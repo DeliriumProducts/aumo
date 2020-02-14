@@ -17,6 +17,10 @@ func (ps *service) Product(id uint) (*aumo.Product, error) {
 	return ps.store.FindByID(nil, id)
 }
 
+func (ps *service) ProductsByShopID(shopID uint) ([]aumo.Product, error) {
+	return ps.store.FindByShopID(nil, shopID)
+}
+
 func (ps *service) Products() ([]aumo.Product, error) {
 	return ps.store.FindAll(nil)
 }
