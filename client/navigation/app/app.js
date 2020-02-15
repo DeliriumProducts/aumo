@@ -1,8 +1,9 @@
 import { TabBar } from "@deliriumproducts/react-native-animated-nav-tab-bar"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TransitionPresets } from "@react-navigation/stack"
-import { Avatar, Icon } from "@ui-kitten/components"
+import { Icon } from "@ui-kitten/components"
 import React from "react"
+import Avatar from "../../components/Avatar"
 import { Context } from "../../context/context"
 import theme from "../../theme"
 import Routes from "../routes"
@@ -65,7 +66,12 @@ export default () => {
         component={UserStack}
         options={{
           tabBarLabel: "Profile",
-          tabBarIcon: _ => <Avatar source={{ uri: ctx?.state?.user?.avatar }} />
+          tabBarIcon: _ => (
+            <Avatar
+              source={{ uri: ctx?.state?.user?.avatar }}
+              fallbackSource={require("../../assets/Avatar.png")}
+            />
+          )
         }}
       />
     </Tab.Navigator>
