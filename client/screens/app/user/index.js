@@ -139,5 +139,7 @@ const EditButton = styled(Button)`
 
 const StatContainer = styled(View)`
   align-items: center;
+  width: 100%;
+  justify-content: center;
   flex: 1;
 `
