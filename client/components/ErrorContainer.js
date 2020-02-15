@@ -11,8 +11,8 @@ export default ({ error }) => (
 )
 
 const ErrorContainer = styled(View)`
-  border-radius: 8;
-  padding: 15;
-  width: "100%";
+  border-radius: 8px;
+  padding: 15px;
+  width: 100%;
   background-color: ${theme["color-danger-500"]};
 `

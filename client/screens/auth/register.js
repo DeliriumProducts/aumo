@@ -1,7 +1,6 @@
 import {
   Button,
   Icon,
-  Input,
   Layout,
   Modal,
   Spinner,
@@ -9,8 +8,17 @@ import {
 } from "@ui-kitten/components"
 import aumo from "aumo"
 import React, { useState } from "react"
-import { Image, ScrollView, StyleSheet, View } from "react-native"
-import theme from "../../theme"
+import { StyleSheet, View } from "react-native"
+import styled from "styled-components/native"
+import ErrorContainer from "../../components/ErrorContainer"
+import {
+  Aumo,
+  Container,
+  Form,
+  FormInput,
+  MainContainer,
+  Subheading
+} from "./components"
 
 export default function RegisterScreen(props) {
   const [email, setEmail] = useState("")
@@ -21,7 +29,7 @@ export default function RegisterScreen(props) {
   const [showModal, setShowModal] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
-  const register = async props => {
+  const register = async () => {
     try {
       setLoading(true)
       await aumo.auth.register({
@@ -53,36 +61,30 @@ export default function RegisterScreen(props) {
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
+    <Container enabled behavior="padding">
       <View>
-        <View style={styles.mainContainer}>
-          <Image
-            source={require("../../assets/AumoLogo.png")}
-            style={styles.aumo}
-          />
-          <Text style={styles.subHeading}>The future of receipts.</Text>
-        </View>
-        <View style={styles.inputform}>
-          <Input
+        <MainContainer>
+          <Aumo source={require("../../assets/AumoLogo.png")} />
+          <Subheading>The future of receipts.</Subheading>
+        </MainContainer>
+        <Form>
+          <FormInput
             placeholder="Name"
             size="medium"
             icon={style => <Icon {...style} name="person-outline" />}
             value={name}
             onChangeText={setName}
-            style={[styles.emailInput, { borderRadius: 10 }]}
+            style={{ marginBottom: 10 }}
           />
-          <Input
+          <FormInput
             placeholder="Email"
             size="medium"
             icon={style => <Icon {...style} name="email-outline" />}
             value={email}
             onChangeText={setEmail}
-            style={[styles.emailInput, { borderRadius: 10 }]}
+            style={{ marginBottom: 10 }}
           />
-          <Input
+          <FormInput
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             icon={style => (
@@ -92,16 +94,12 @@ export default function RegisterScreen(props) {
               />
             )}
             onIconPress={onPasswordIconPress}
+            style={{ marginBottom: 10 }}
             value={password}
-            style={{ borderRadius: 10 }}
             onChangeText={setPassword}
           />
-          {err != "" && (
-            <View style={styles.errorContainer}>
-              <Text style={{ color: "white" }}>{err}</Text>
-            </View>
-          )}
-        </View>
+          {err != "" && <ErrorContainer error={err} />}
+        </Form>
       </View>
       <Modal
         visible={showModal}
@@ -111,7 +109,7 @@ export default function RegisterScreen(props) {
           props.navigation.popToTop()
         }}
       >
-        <Layout level="3" style={styles.modalContainer}>
+        <ModalContainer level="3">
           <Text>
             Confirmation email has been sent! Check your email to verify your
             account!
@@ -129,11 +127,9 @@ export default function RegisterScreen(props) {
           >
             DISMISS
           </Button>
-        </Layout>
+        </ModalContainer>
       </Modal>
-      <View
-        style={[styles.mainContainer, { paddingRight: 32, paddingLeft: 32 }]}
-      >
+      <MainContainer style={{ paddingRight: 32, paddingLeft: 32 }}>
         <View style={{ marginBottom: 15 }}>
           {loading && <Spinner size="giant" />}
         </View>
@@ -146,63 +142,21 @@ export default function RegisterScreen(props) {
         >
           Register
         </Button>
-      </View>
-    </ScrollView>
+      </MainContainer>
+    </Container>
   )
 }
 
+const ModalContainer = styled(Layout)`
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  width: 256px;
+  padding: 16px;
+`
+
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme["color-background-main"],
-    flex: 1
-  },
-  contentContainer: {
-    justifyContent: "space-between",
-    height: "100%",
-    paddingTop: 30
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
-    width: 256,
-    padding: 16
-  },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)"
-  },
-  mainContainer: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20
-  },
-  aumo: {
-    width: 220,
-    resizeMode: "contain",
-    marginBottom: -20
-  },
-  getStartedContainer: {
-    alignItems: "center",
-    marginHorizontal: 50
-  },
-  subHeading: {
-    fontSize: 17,
-    color: theme["color-primary-500"],
-    marginBottom: 20,
-    textAlign: "center"
-  },
-  inputform: {
-    paddingRight: 32,
-    paddingLeft: 32
-  },
-  emailInput: {
-    marginBottom: 10
-  },
-  errorContainer: {
-    marginTop: 20,
-    borderRadius: 8,
-    padding: 15,
-    width: "100%",
-    backgroundColor: theme["color-danger-500"]
   }
 })

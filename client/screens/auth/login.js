@@ -1,14 +1,20 @@
-import { Button, Icon, Input, Spinner, Text } from "@ui-kitten/components"
+import { Button, Icon, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Image, KeyboardAvoidingView, View } from "react-native"
+import { View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import styled from "styled-components/native"
 import ErrorContainer from "../../components/ErrorContainer"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
 import Routes from "../../navigation/routes"
-import theme from "../../theme"
+import {
+  Aumo,
+  Container,
+  Form,
+  FormInput,
+  MainContainer,
+  Subheading
+} from "./components"
 
 export default function LoginScreen(props) {
   const [email, setEmail] = React.useState("")
@@ -122,37 +128,3 @@ export default function LoginScreen(props) {
     </Container>
   )
 }
-
-const Container = styled(KeyboardAvoidingView)`
-  background-color: ${theme["color-background-main"]};
-  flex: 1;
-  height: 100%;
-  justify-content: space-between;
-`
-
-const MainContainer = styled(View)`
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-`
-
-const Form = styled(View)`
-  padding-horizontal: 32px;
-`
-
-const Aumo = styled(Image)`
-  width: 220px;
-  resize-mode: contain;
-  margin-bottom: -20px;
-`
-
-const Subheading = styled(Text)`
-  font-size: 17px;
-  color: ${theme["color-primary-500"]};
-  margin-bottom: 20px;
-  text-align: center;
-`
-
-const FormInput = styled(Input)`
-  border-radius: 10px;
-`
