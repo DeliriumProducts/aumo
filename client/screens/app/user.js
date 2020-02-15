@@ -1,22 +1,26 @@
-import { Avatar, Button, Icon, Layout, Text } from "@ui-kitten/components"
+import {
+  Avatar as KAvatar,
+  Button,
+  Icon,
+  Layout as KLayout,
+  Text
+} from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { View } from "react-native"
+import styled from "styled-components/native"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
+
 export default () => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
   return (
     <>
-      <Layout style={styles.header} level="1">
-        <Avatar
-          style={styles.profileAvatar}
-          size="giant"
-          source={{ uri: ctx?.state?.user?.avatar }}
-        />
-        <View style={styles.profileDetailsContainer}>
-          <View
+      <Layout level="1">
+        <Avatar size="giant" source={{ uri: ctx?.state?.user?.avatar }} />
+        <ProfileContainer>
+          <MainContainer
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <View>
@@ -43,102 +47,67 @@ export default () => {
                 }
               }}
             />
-          </View>
-          <View style={styles.profileSocialsContainer}>
-            <ProfileSocial
-              style={styles.profileSocialContainer}
-              hint="Receipts"
-              value={ctx?.state?.user?.receipts?.length}
-            />
-            <ProfileSocial
-              style={styles.profileSocialContainer}
-              hint="Orders"
-              value={ctx?.state?.user?.orders?.length}
-            />
-            <ProfileSocial
-              style={styles.profileSocialContainer}
-              hint="Points"
-              value={ctx?.state?.user?.points}
-            />
-          </View>
-          <Button
+          </MainContainer>
+          <Stats>
+            <Stat hint="Receipts" value={ctx?.state?.user?.receipts?.length} />
+            <Stat hint="Orders" value={ctx?.state?.user?.orders?.length} />
+            <Stat hint="Points" value={ctx?.state?.user?.points} />
+          </Stats>
+          <EditButton
             icon={style => <Icon name="edit-outline" {...style} />}
-            style={styles.followButton}
             // onPress={onFollowButtonPress}>
           >
             EDIT PROFILE
-          </Button>
-        </View>
+          </EditButton>
+        </ProfileContainer>
       </Layout>
     </>
   )
 }
 
-const ProfileSocial = props => {
-  const { style, hint, value, ...viewProps } = props
-
+const Stat = ({ hint, value }) => {
   return (
-    <View {...viewProps} style={[styles.container, style]}>
+    <StatContainer>
       <Text category="s2">{value}</Text>
       <Text appearance="hint" category="c2">
-        {props.hint}
+        {hint}
       </Text>
-    </View>
+    </StatContainer>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center"
-  },
-  list: {
-    flex: 1
-  },
-  listContent: {
-    paddingHorizontal: 8,
-    paddingBottom: 8
-  },
-  header: {
-    flexDirection: "row",
-    marginHorizontal: -16,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    marginBottom: 8
-  },
-  profileAvatar: {
-    marginHorizontal: 8
-  },
-  profileDetailsContainer: {
-    flex: 1,
-    marginHorizontal: 8
-  },
-  profileSocialsContainer: {
-    flexDirection: "row",
-    marginTop: 24
-  },
-  profileSocialContainer: {
-    flex: 1
-  },
-  followButton: {
-    marginVertical: 16
-  },
-  post: {
-    margin: 8
-  },
-  postHeader: {
-    height: 220
-  },
-  postBody: {
-    flexDirection: "row",
-    marginHorizontal: -8
-  },
-  postAuthorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 16
-  },
-  iconButton: {
-    flexDirection: "row-reverse",
-    paddingHorizontal: 0
-  }
-})
+const Layout = styled(KLayout)`
+  flex-direction: row;
+  margin-horizontal: -16px;
+  padding-horizontal: 16px;
+  padding-top: 16px;
+  margin-bottom: 8px;
+`
+
+const ProfileContainer = styled(View)`
+  flex: 1;
+  margin-horizontal: 8px;
+`
+
+const MainContainer = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const Stats = styled(View)`
+  flex-direction: row;
+  margin-top: 24px;
+`
+
+const Avatar = styled(KAvatar)`
+  margin-horizontal: 8px;
+`
+
+const EditButton = styled(Button)`
+  margin-vertical: 16px;
+`
+
+const StatContainer = styled(View)`
+  align-items: center;
+  flex: 1;
+`
