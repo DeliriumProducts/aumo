@@ -5,5 +5,6 @@ export default {
   Register: "Register",
   Home: "Home",
   Shop: "Shop",
-  User: "My Profile"
+  User: "My Profile",
+  UserEdit: "Edit Profile"
 }

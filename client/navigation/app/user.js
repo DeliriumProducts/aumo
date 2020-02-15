@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/stack"
 import React from "react"
 import UserScreen from "../../screens/app/user"
+import EditUserScreen from "../../screens/app/user/edit"
 import theme from "../../theme"
 import Routes from "../routes"
 
@@ -20,5 +21,6 @@ export default () => (
     }}
   >
     <Stack.Screen name={Routes.User} component={UserScreen} />
+    <Stack.Screen name={Routes.UserEdit} component={EditUserScreen} />
   </Stack.Navigator>
 )

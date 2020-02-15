@@ -11,10 +11,11 @@ import aumo from "aumo"
 import React from "react"
 import { View } from "react-native"
 import styled from "styled-components/native"
-import { Context } from "../../context/context"
-import { actions } from "../../context/providers/provider"
+import { Context } from "../../../context/context"
+import { actions } from "../../../context/providers/provider"
+import Routes from "../../../navigation/routes"
 
-export default () => {
+export default ({ navigation }) => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
 
@@ -60,7 +61,9 @@ export default () => {
           </Stats>
           <EditButton
             icon={style => <Icon name="edit-outline" {...style} />}
-            // onPress={onFollowButtonPress}>
+            onPress={() => {
+              navigation.push(Routes.UserEdit)
+            }}
           >
             EDIT PROFILE
           </EditButton>
