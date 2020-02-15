@@ -61,7 +61,7 @@ export default function RegisterScreen(props) {
   }
 
   return (
-    <Container enabled behavior="padding">
+    <Container>
       <View>
         <MainContainer>
           <Aumo source={require("../../assets/AumoLogo.png")} />

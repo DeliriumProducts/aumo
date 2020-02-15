@@ -17,6 +17,8 @@ import {
 } from "./components"
 
 export default function LoginScreen(props) {
+  const { register, handleSubmit, errors } = useForm()
+
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [passwordVisible, setPasswordVisible] = React.useState(false)
@@ -59,7 +61,7 @@ export default function LoginScreen(props) {
   }
 
   return (
-    <Container enabled behavior="padding">
+    <Container>
       <View>
         <MainContainer>
           <Aumo source={require("../../assets/AumoLogo.png")} />

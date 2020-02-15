@@ -1,9 +1,9 @@
 import { Input, Text } from "@ui-kitten/components"
-import { Image, KeyboardAvoidingView, View } from "react-native"
+import { Image, View } from "react-native"
 import styled from "styled-components/native"
 import theme from "../../theme"
 
-export const Container = styled(KeyboardAvoidingView)`
+export const Container = styled(View)`
   background-color: ${theme["color-background-main"]};
   flex: 1;
   height: 100%;
