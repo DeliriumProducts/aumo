@@ -1,5 +1,4 @@
 import {
-  Avatar as KAvatar,
   Button,
   Icon,
   Layout,
@@ -11,6 +10,7 @@ import aumo from "aumo"
 import React from "react"
 import { View } from "react-native"
 import styled from "styled-components/native"
+import PAvatar from "../../../components/Avatar"
 import { Context } from "../../../context/context"
 import { actions } from "../../../context/providers/provider"
 import Routes from "../../../navigation/routes"
@@ -34,7 +34,11 @@ export default ({ navigation }) => {
   return (
     <>
       <MainLayout level="1">
-        <Avatar size="giant" source={{ uri: ctx?.state?.user?.avatar }} />
+        <Avatar
+          size="giant"
+          source={{ uri: ctx?.state?.user?.avatar }}
+          fallbackSource={require("../../../assets/Avatar.png")}
+        />
         <ProfileContainer>
           <MainContainer
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -125,7 +129,7 @@ const Stats = styled(View)`
   margin-top: 24px;
 `
 
-const Avatar = styled(KAvatar)`
+const Avatar = styled(PAvatar)`
   margin-horizontal: 8px;
 `
 

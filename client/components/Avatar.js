@@ -8,6 +8,7 @@ const AnimatedAvatar = Animated.createAnimatedComponent(Avatar)
 export default ({ fallbackSource, source, style, ...rest }) => {
   const [fallback] = React.useState(() => new Animated.Value(0))
   const [image] = React.useState(() => new Animated.Value(0))
+  const [loading, setLoading] = React.useState(true)
 
   const handleFallbackLoad = () => {
     Animated.timing(fallback, {
@@ -23,28 +24,35 @@ export default ({ fallbackSource, source, style, ...rest }) => {
 
   return (
     <Container>
-      <AnimatedAvatar
-        {...rest}
-        source={fallbackSource}
-        style={[style, { opacity: fallback }]}
-        onLoad={handleFallbackLoad}
-        blurRadius={1}
-      />
+      {loading && (
+        <AnimatedAvatar
+          {...rest}
+          source={fallbackSource}
+          style={[style, { opacity: fallback }]}
+          onLoad={handleFallbackLoad}
+          blurRadius={1}
+        />
+      )}
       <AnimatedAvatar
         {...rest}
         source={source}
         style={[
-          {
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            top: 0,
-            opacity: image
-          },
+          loading
+            ? {
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                opacity: image
+              }
+            : { opacity: image },
           style
         ]}
         onLoad={handleSourceLoad}
+        onLoadEnd={() => {
+          setLoading(false)
+        }}
       />
     </Container>
   )
