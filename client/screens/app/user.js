@@ -2,7 +2,7 @@ import {
   Avatar as KAvatar,
   Button,
   Icon,
-  Layout as KLayout,
+  Layout,
   Modal,
   Spinner,
   Text
@@ -14,6 +14,8 @@ import styled from "styled-components/native"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
 
+const sleep = m => new Promise(r => setTimeout(r, m))
+
 export default () => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
@@ -22,6 +24,7 @@ export default () => {
     try {
       setLoading(true)
       await aumo.auth.logout()
+      await sleep(3000)
       setLoading(false)
       ctx.dispatch({ type: actions.SET_USER, payload: null })
     } catch (error) {
@@ -32,7 +35,7 @@ export default () => {
 
   return (
     <>
-      <Layout level="1">
+      <MainLayout level="1">
         <Avatar size="giant" source={{ uri: ctx?.state?.user?.avatar }} />
         <ProfileContainer>
           <MainContainer
@@ -72,9 +75,11 @@ export default () => {
           onBackdropPress={() => {}}
           visible={loading}
         >
-          {loading && <Spinner size="giant" />}
+          <ModalContainer level="1">
+            {loading && <Spinner size="giant" />}
+          </ModalContainer>
         </Modal>
-      </Layout>
+      </MainLayout>
     </>
   )
 }
@@ -90,12 +95,19 @@ const Stat = ({ hint, value }) => {
   )
 }
 
-const Layout = styled(KLayout)`
+const MainLayout = styled(Layout)`
   flex-direction: row;
   margin-horizontal: -16px;
   padding-horizontal: 16px;
   padding-top: 16px;
   margin-bottom: 8px;
+`
+
+const ModalContainer = styled(Layout)`
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 16px;
 `
 
 const ProfileContainer = styled(View)`
