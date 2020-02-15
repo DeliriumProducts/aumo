@@ -3,6 +3,8 @@ import {
   Button,
   Icon,
   Layout as KLayout,
+  Modal,
+  Spinner,
   Text
 } from "@ui-kitten/components"
 import aumo from "aumo"
@@ -15,6 +17,19 @@ import { actions } from "../../context/providers/provider"
 export default () => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
+
+  const logout = async () => {
+    try {
+      setLoading(true)
+      await aumo.auth.logout()
+      setLoading(false)
+      ctx.dispatch({ type: actions.SET_USER, payload: null })
+    } catch (error) {
+      console.warn(error)
+      setLoading(false)
+    }
+  }
+
   return (
     <>
       <Layout level="1">
@@ -24,7 +39,7 @@ export default () => {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <View>
-              <Text category="h2">{ctx.state.user.name}</Text>
+              <Text category="h2">{ctx?.state?.user?.name}</Text>
               <Text appearance="hint" category="s1">
                 {ctx?.state?.user?.email}
               </Text>
@@ -35,17 +50,7 @@ export default () => {
               status="basic"
               appearance="ghost"
               icon={style => <Icon name="log-out-outline" {...style} />}
-              onPress={async () => {
-                try {
-                  setLoading(true)
-                  await aumo.auth.logout()
-                  ctx.dispatch({ type: actions.SET_USER, payload: null })
-                } catch (error) {
-                  console.warn(error)
-                } finally {
-                  setLoading(false)
-                }
-              }}
+              onPress={logout}
             />
           </MainContainer>
           <Stats>
@@ -60,6 +65,15 @@ export default () => {
             EDIT PROFILE
           </EditButton>
         </ProfileContainer>
+        <Modal
+          backdropStyle={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)"
+          }}
+          onBackdropPress={() => {}}
+          visible={loading}
+        >
+          {loading && <Spinner size="giant" />}
+        </Modal>
       </Layout>
     </>
   )
