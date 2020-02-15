@@ -71,7 +71,7 @@ export default function LoginScreen(props) {
             placeholder="Email"
             icon={style => <Icon {...style} name="email-outline" />}
             ref={register("email", {
-              required: "Email is required",
+              required: "Required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                 message: "Must be an email"
@@ -96,7 +96,7 @@ export default function LoginScreen(props) {
                 name={passwordVisible ? "eye-outline" : "eye-off-outline"}
               />
             )}
-            ref={register("password", { required: "Password is required" })}
+            ref={register("password", { required: "Required" })}
             onChangeText={val => setValue("password", val)}
           />
           {errors.password && (
