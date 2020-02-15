@@ -65,9 +65,7 @@ export default () => {
         component={UserStack}
         options={{
           tabBarLabel: "Profile",
-          tabBarIcon: ({ focused, color }) => (
-            <Avatar source={{ uri: ctx?.state?.user?.avatar }} />
-          )
+          tabBarIcon: _ => <Avatar source={{ uri: ctx?.state?.user?.avatar }} />
         }}
       />
     </Tab.Navigator>
