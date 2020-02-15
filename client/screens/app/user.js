@@ -14,8 +14,6 @@ import styled from "styled-components/native"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
 
-const sleep = m => new Promise(r => setTimeout(r, m))
-
 export default () => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
@@ -24,7 +22,6 @@ export default () => {
     try {
       setLoading(true)
       await aumo.auth.logout()
-      await sleep(3000)
       setLoading(false)
       ctx.dispatch({ type: actions.SET_USER, payload: null })
     } catch (error) {
