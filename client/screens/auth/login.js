@@ -1,6 +1,7 @@
 import { Button, Icon, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
+import { useForm } from "react-hook-form"
 import { View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import ErrorContainer from "../../components/ErrorContainer"
@@ -17,21 +18,19 @@ import {
 } from "./components"
 
 export default function LoginScreen(props) {
-  const { register, handleSubmit, errors } = useForm()
-
-  const [email, setEmail] = React.useState("")
-  const [password, setPassword] = React.useState("")
+  const { register, handleSubmit, errors, setValue } = useForm()
   const [passwordVisible, setPasswordVisible] = React.useState(false)
   const [err, setErr] = React.useState("")
   const [loading, setLoading] = React.useState(false)
   const ctx = React.useContext(Context)
 
-  const handleLogin = async () => {
+  const handleLogin = async data => {
+    console.log("uh ok")
     try {
       setLoading(true)
       const response = await aumo.auth.login({
-        email: email.trim(),
-        password: password.trim()
+        email: data.email.trim(),
+        password: data.password.trim()
       })
 
       ctx.dispatch({ type: actions.SET_USER, payload: response })
@@ -71,23 +70,41 @@ export default function LoginScreen(props) {
           <FormInput
             placeholder="Email"
             icon={style => <Icon {...style} name="email-outline" />}
-            value={email}
-            onChangeText={setEmail}
+            ref={register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: "Must be an email"
+              }
+            })}
+            onChangeText={val => setValue("email", val)}
             style={{ marginBottom: 10 }}
           />
+          {errors.email && (
+            <ErrorContainer
+              error={errors.email.message}
+              style={{ marginBottom: 10 }}
+            />
+          )}
           <FormInput
             placeholder="Password"
             secureTextEntry={!passwordVisible}
+            onIconPress={onPasswordIconPress}
             icon={style => (
               <Icon
                 {...style}
                 name={passwordVisible ? "eye-outline" : "eye-off-outline"}
               />
             )}
-            onIconPress={onPasswordIconPress}
-            value={password}
-            onChangeText={setPassword}
+            ref={register("password", { required: "Password is required" })}
+            onChangeText={val => setValue("password", val)}
           />
+          {errors.password && (
+            <ErrorContainer
+              error={errors.password.message}
+              style={{ marginTop: 10 }}
+            />
+          )}
           <TouchableOpacity onPress={goToRegister}>
             <Subheading
               style={{
@@ -112,7 +129,7 @@ export default function LoginScreen(props) {
           icon={style => <Icon name="log-in-outline" {...style} />}
           style={{ width: "100%", marginBottom: 10, borderRadius: 10 }}
           size="large"
-          onPress={handleLogin}
+          onPress={handleSubmit(handleLogin)}
         >
           Login
         </Button>

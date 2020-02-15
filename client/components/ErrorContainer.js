@@ -4,8 +4,8 @@ import { View } from "react-native"
 import styled from "styled-components/native"
 import theme from "../theme"
 
-export default ({ error }) => (
-  <ErrorContainer>
+export default ({ error, style }) => (
+  <ErrorContainer style={style}>
     <Text style={{ color: "white" }}>{error}</Text>
   </ErrorContainer>
 )
