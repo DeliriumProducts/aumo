@@ -5,17 +5,11 @@ import { useForm } from "react-hook-form"
 import { View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import ErrorContainer from "../../components/ErrorContainer"
+import FormInput from "../../components/FormInput"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/provider"
 import Routes from "../../navigation/routes"
-import {
-  Aumo,
-  Container,
-  Form,
-  FormInput,
-  MainContainer,
-  Subheading
-} from "./components"
+import { Aumo, Container, Form, MainContainer, Subheading } from "./components"
 
 export default function LoginScreen(props) {
   const { register, handleSubmit, errors, setValue } = useForm()
@@ -78,20 +72,15 @@ export default function LoginScreen(props) {
                 message: "Must be an email"
               }
             })}
+            caption={errors.email && errors.email.message}
             onChangeText={val => setValue("email", val)}
-            style={{ marginBottom: 10 }}
           />
-          {errors.email && (
-            <ErrorContainer
-              error={errors.email.message}
-              style={{ marginBottom: 10 }}
-            />
-          )}
           <FormInput
             status={errors.password ? "danger" : "basic"}
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             onIconPress={onPasswordIconPress}
+            style={{ marginTop: 8 }}
             icon={style => (
               <Icon
                 {...style}
@@ -100,13 +89,8 @@ export default function LoginScreen(props) {
             )}
             ref={register("password", { required: "Required" })}
             onChangeText={val => setValue("password", val)}
+            caption={errors.password && errors.password.message}
           />
-          {errors.password && (
-            <ErrorContainer
-              error={errors.password.message}
-              style={{ marginTop: 10 }}
-            />
-          )}
           <TouchableOpacity onPress={goToRegister}>
             <Subheading
               style={{
