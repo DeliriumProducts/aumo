@@ -12,14 +12,8 @@ import { useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
 import styled from "styled-components/native"
 import ErrorContainer from "../../components/ErrorContainer"
-import {
-  Aumo,
-  Container,
-  Form,
-  FormInput,
-  MainContainer,
-  Subheading
-} from "./components"
+import FormInput from "../../components/FormInput"
+import { Aumo, Container, Form, MainContainer, Subheading } from "./components"
 
 export default function RegisterScreen(props) {
   const { register, handleSubmit, errors, setValue } = useForm()
@@ -74,14 +68,8 @@ export default function RegisterScreen(props) {
             icon={style => <Icon {...style} name="person-outline" />}
             ref={register("name", { required: "Required" })}
             onChangeText={val => setValue("name", val)}
-            style={{ marginBottom: 10 }}
+            caption={errors.name?.message}
           />
-          {errors.name && (
-            <ErrorContainer
-              error={errors.name.message}
-              style={{ marginBottom: 10 }}
-            />
-          )}
           <FormInput
             status={errors.email ? "danger" : "basic"}
             placeholder="Email"
@@ -94,15 +82,10 @@ export default function RegisterScreen(props) {
                 message: "Must be an email"
               }
             })}
-            style={{ marginBottom: 10 }}
+            style={{ marginTop: 8 }}
             onChangeText={val => setValue("email", val)}
+            caption={errors.email?.message}
           />
-          {errors.email && (
-            <ErrorContainer
-              error={errors.email.message}
-              style={{ marginBottom: 10 }}
-            />
-          )}
           <FormInput
             status={errors.password ? "danger" : "basic"}
             placeholder="Password"
@@ -125,12 +108,10 @@ export default function RegisterScreen(props) {
               }
             })}
             onIconPress={onPasswordIconPress}
-            style={{ marginBottom: 10 }}
+            style={{ marginTop: 8 }}
             onChangeText={val => setValue("password", val)}
+            caption={errors.password?.message}
           />
-          {errors.password && (
-            <ErrorContainer error={errors.password.message} />
-          )}
           {err != "" && <ErrorContainer error={err} />}
         </Form>
       </View>
