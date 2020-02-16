@@ -68,6 +68,7 @@ export default function RegisterScreen(props) {
         </MainContainer>
         <Form>
           <FormInput
+            status={errors.name ? "danger" : "basic"}
             placeholder="Name"
             size="medium"
             icon={style => <Icon {...style} name="person-outline" />}
@@ -82,6 +83,7 @@ export default function RegisterScreen(props) {
             />
           )}
           <FormInput
+            status={errors.email ? "danger" : "basic"}
             placeholder="Email"
             size="medium"
             icon={style => <Icon {...style} name="email-outline" />}
@@ -102,6 +104,7 @@ export default function RegisterScreen(props) {
             />
           )}
           <FormInput
+            status={errors.password ? "danger" : "basic"}
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             icon={style => (
