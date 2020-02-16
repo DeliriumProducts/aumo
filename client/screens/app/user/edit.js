@@ -11,14 +11,13 @@ import theme from "../../../theme"
 
 export default () => {
   const ctx = React.useContext(Context)
-  const { register, handleSubmit, setValue, errors } = useForm()
+  const { register, handleSubmit, setValue, errors } = useForm({
+    defaultValues: {
+      name: ctx.state.user?.name
+    }
+  })
   const [loading, setLoading] = React.useState(false)
-  const [passwordVisible, setPasswordVisible] = React.useState(false)
   const [err, setErr] = React.useState("")
-
-  const onPasswordIconPress = () => {
-    setPasswordVisible(!passwordVisible)
-  }
 
   const handleEdit = async () => {}
 
