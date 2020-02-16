@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.6.0",
+    "@bam.tech/react-native-make": "^1.0.3",
     "babel-jest": "~24.9.0",
     "jest": "~24.9.0",
     "metro-react-native-babel-preset": "~0.56.0",
