@@ -30,7 +30,6 @@ export default ({ fallbackSource, source, style, ...rest }) => {
           source={fallbackSource}
           style={[style, { opacity: fallback }]}
           onLoad={handleFallbackLoad}
-          blurRadius={1}
         />
       )}
       <AnimatedAvatar
