@@ -1,4 +1,4 @@
-import { Input, Text } from "@ui-kitten/components"
+import { Text } from "@ui-kitten/components"
 import { Image, View } from "react-native"
 import styled from "styled-components/native"
 import theme from "../../theme"
@@ -31,8 +31,4 @@ export const Subheading = styled(Text)`
   color: ${theme["color-primary-500"]};
   margin-bottom: 20px;
   text-align: center;
-`
-
-export const FormInput = styled(Input)`
-  border-radius: 10px;
 `

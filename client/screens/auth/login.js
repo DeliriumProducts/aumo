@@ -72,7 +72,7 @@ export default function LoginScreen(props) {
                 message: "Must be an email"
               }
             })}
-            caption={errors.email && errors.email.message}
+            caption={errors.email?.message}
             onChangeText={val => setValue("email", val)}
           />
           <FormInput
@@ -89,7 +89,7 @@ export default function LoginScreen(props) {
             )}
             ref={register("password", { required: "Required" })}
             onChangeText={val => setValue("password", val)}
-            caption={errors.password && errors.password.message}
+            caption={errors.password?.message}
           />
           <TouchableOpacity onPress={goToRegister}>
             <Subheading
