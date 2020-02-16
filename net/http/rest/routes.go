@@ -14,6 +14,7 @@ func (rest *Rest) mount(mnt string) {
 			r.Use(rest.WithAuth())
 			r.Get("/logout", rest.userLogout)
 			r.Get("/me", rest.userGetCurrent)
+			r.Put("/me", rest.userEdit)
 		})
 
 		r.Route("/users", func(r chi.Router) {

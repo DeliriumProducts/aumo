@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/deliriumproducts/aumo/auth"
 )
 
 func (rest *Rest) userGetAll(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +48,32 @@ func (rest *Rest) userEditRole(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.JSON(w, Message{"User role successfully edited!"}, http.StatusOK)
+}
+
+func (rest *Rest) userEdit(w http.ResponseWriter, r *http.Request) {
+	type request struct {
+		Name string `form:"name" validate:"required" json:"name"`
+	}
+
+	var ur request
+	if ok := rest.Form(w, r, &ur); !ok {
+		return
+	}
+
+	user, err := auth.CurrentUser(r.Context())
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	user.Name = ur.Name
+	err = rest.userService.Update(user.ID.String(), &user)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	rest.JSON(w, user, http.StatusOK)
 }
 
 func (rest *Rest) userAddPoints(w http.ResponseWriter, r *http.Request) {
