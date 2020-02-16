@@ -26,6 +26,15 @@ export async function setRole(
   ).data;
 }
 
+export async function editName(
+  name: string,
+  cookie?: string
+): Promise<MessageResponse> {
+  return (
+    await axios.put(`${options.Backend}/me`, { name: name }, withAuth(cookie))
+  ).data;
+}
+
 export async function addPoints(
   id: string,
   points: number,
