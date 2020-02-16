@@ -68,6 +68,7 @@ export default function LoginScreen(props) {
         </MainContainer>
         <Form>
           <FormInput
+            status={errors.email ? "danger" : "basic"}
             placeholder="Email"
             icon={style => <Icon {...style} name="email-outline" />}
             ref={register("email", {
@@ -87,6 +88,7 @@ export default function LoginScreen(props) {
             />
           )}
           <FormInput
+            status={errors.password ? "danger" : "basic"}
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             onIconPress={onPasswordIconPress}
