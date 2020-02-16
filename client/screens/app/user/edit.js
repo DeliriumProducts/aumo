@@ -10,8 +10,8 @@ import { Context } from "../../../context/context"
 import theme from "../../../theme"
 
 export default () => {
-  const { register, handleSubmit, setValue, errors } = useForm()
   const ctx = React.useContext(Context)
+  const { register, handleSubmit, setValue, errors } = useForm()
   const [loading, setLoading] = React.useState(false)
   const [passwordVisible, setPasswordVisible] = React.useState(false)
   const [err, setErr] = React.useState("")
@@ -37,26 +37,11 @@ export default () => {
           status={errors.name ? "danger" : "basic"}
           placeholder="Name"
           size="medium"
+          defaultValue={ctx.state.user?.name}
           icon={style => <Icon {...style} name="person-outline" />}
           ref={register("name", { required: "Required" })}
           onChangeText={val => setValue("name", val)}
           caption={errors.name?.message}
-        />
-        <FormInput
-          status={errors.password ? "danger" : "basic"}
-          placeholder="Password"
-          secureTextEntry={!passwordVisible}
-          onIconPress={onPasswordIconPress}
-          icon={style => (
-            <Icon
-              {...style}
-              name={passwordVisible ? "eye-outline" : "eye-off-outline"}
-            />
-          )}
-          ref={register("password", { required: "Required" })}
-          style={{ marginTop: 8 }}
-          onChangeText={val => setValue("password", val)}
-          caption={errors.password?.message}
         />
         {err != "" && <ErrorContainer error={err} />}
       </Layout>
