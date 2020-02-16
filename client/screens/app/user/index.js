@@ -34,20 +34,22 @@ export default ({ navigation }) => {
   return (
     <>
       <MainLayout level="1">
-        <Avatar
-          size="giant"
-          source={{ uri: ctx?.state?.user?.avatar }}
-          fallbackSource={require("../../../assets/Avatar.png")}
-        />
         <ProfileContainer>
           <MainContainer
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <View>
-              <Text category="h2">{ctx?.state?.user?.name}</Text>
-              <Text appearance="hint" category="s1">
-                {ctx?.state?.user?.email}
-              </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Avatar
+                size="giant"
+                source={{ uri: ctx?.state?.user?.avatar }}
+                fallbackSource={require("../../../assets/Avatar.png")}
+              />
+              <View style={{ marginLeft: 10 }}>
+                <Text category="h2">{ctx?.state?.user?.name}</Text>
+                <Text appearance="hint" category="s1">
+                  {ctx?.state?.user?.email}
+                </Text>
+              </View>
             </View>
             <Button
               disabled={loading}
@@ -58,19 +60,24 @@ export default ({ navigation }) => {
               onPress={logout}
             />
           </MainContainer>
-          <Stats>
-            <Stat hint="Receipts" value={ctx?.state?.user?.receipts?.length} />
-            <Stat hint="Orders" value={ctx?.state?.user?.orders?.length} />
-            <Stat hint="Points" value={ctx?.state?.user?.points} />
-          </Stats>
-          <EditButton
-            icon={style => <Icon name="edit-outline" {...style} />}
-            onPress={() => {
-              navigation.push(Routes.UserEdit)
-            }}
-          >
-            EDIT PROFILE
-          </EditButton>
+          <View style={{ width: "90%", alignSelf: "center" }}>
+            <Stats>
+              <Stat
+                hint="Receipts"
+                value={ctx?.state?.user?.receipts?.length}
+              />
+              <Stat hint="Orders" value={ctx?.state?.user?.orders?.length} />
+              <Stat hint="Points" value={ctx?.state?.user?.points} />
+            </Stats>
+            <EditButton
+              icon={style => <Icon name="edit-outline" {...style} />}
+              onPress={() => {
+                navigation.push(Routes.UserEdit)
+              }}
+            >
+              EDIT PROFILE
+            </EditButton>
+          </View>
         </ProfileContainer>
         <Modal
           backdropStyle={{
@@ -135,6 +142,7 @@ const Avatar = styled(PAvatar)`
 
 const EditButton = styled(Button)`
   margin-vertical: 16px;
+  border-radius: 10px;
 `
 
 const StatContainer = styled(View)`
