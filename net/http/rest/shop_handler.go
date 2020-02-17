@@ -105,7 +105,7 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 	rest.JSON(w, Message{"Owner successfully added!"}, http.StatusOK)
 }
 
-func (rest *Rest) shopRemoveOwner(w http.ReponseWriter, r *http.Rquest) {
+func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "id")
 
 	type request struct {
