@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/go-sql-driver/mysql"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -242,7 +243,14 @@ func (s *shopOwnersStore) Save(tx aumo.Tx, so *aumo.ShopOwners) error {
 		}()
 	}
 
-	return tx.Collection(ShopOwnersTable).InsertReturning(so)
+	err = tx.Collection(ShopOwnersTable).InsertReturning(so)
+	if mysqlError, ok := err.(*mysql.MySQLError); ok {
+		if mysqlError.Number == ErrBadRef {
+			return aumo.ErrUserNotFound
+		}
+	}
+
+	return err
 }
 
 func (s *shopOwnersStore) Delete(tx aumo.Tx, so *aumo.ShopOwners) error {

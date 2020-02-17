@@ -29,4 +29,6 @@ var (
 	ErrOrderUserNotFound = errors.New("aumo: can't place an order for a user that doesn't exist")
 	// ErrOrderNotFound when a receipt isn't found
 	ErrOrderNotFound = errors.New("aumo: order not found")
+	// ErrShopOwnerUserNotFound is an error for when a user doesn't exist when using him as a shop owner
+	ErrShopOwnerUserNotFound = errors.New("aumo: can't use a non-existing user as a shop owner")
 )

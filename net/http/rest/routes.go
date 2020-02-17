@@ -31,6 +31,7 @@ func (rest *Rest) mount(mnt string) {
 			r.Get("/{id}", rest.shopGet)
 			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.shopCreate)
 			r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.shopEdit)
+			r.With(rest.WithAuth(aumo.Admin)).Post("/{id}/add-owner", rest.shopAddOwner)
 		})
 
 		r.Route("/receipts", func(r chi.Router) {

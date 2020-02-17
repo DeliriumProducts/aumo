@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS shops (
 CREATE TABLE IF NOT EXISTS shop_owners (
   shop_id int(10) unsigned NOT NULL,
   user_id varchar(36) NOT NULL,
+  PRIMARY KEY (shop_id, user_id),
   FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE ON UPDATE NO ACTION,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
