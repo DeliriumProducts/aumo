@@ -30,7 +30,7 @@ func NewShopStore(db sqlbuilder.Database) aumo.ShopStore {
 }
 
 // NewShopOwnersStore returns a mysql instance of `aumo.ShopOwnersStore`
-func newShopOwnersStore(db sqlbuilder.Database) aumo.ShopOwnersStore {
+func NewShopOwnersStore(db sqlbuilder.Database) aumo.ShopOwnersStore {
 	return &shopOwnersStore{
 		db: db,
 	}
