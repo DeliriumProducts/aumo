@@ -2,6 +2,7 @@ import {
   Button,
   Icon,
   Layout,
+  List,
   Modal,
   Spinner,
   Tab,
@@ -83,11 +84,12 @@ export default ({ navigation }) => {
               title="Orders"
               icon={style => <Icon {...style} name="bell-outline" />}
             >
-              <Layout>
-                {ctx.state.user?.orders.map(a => (
-                  <Order product={a.product} key={a.order_id} />
-                ))}
-              </Layout>
+              <List
+                data={ctx.state.user.orders}
+                renderItem={({ item: order }) => (
+                  <Order product={order.product} key={order.order_id} />
+                )}
+              />
             </Tab>
             <Tab
               title="Receipts"

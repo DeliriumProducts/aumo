@@ -6,7 +6,7 @@ export default ({ product }) => (
   <Card
     header={() => (
       <>
-        <Image source={{ uri: product.image }} style={{ height: 100 }} />
+        <Image source={{ uri: product.image }} style={{ height: 400 }} />
         <Text
           category="h6"
           style={{ marginHorizontal: 24, marginVertical: 16 }}
