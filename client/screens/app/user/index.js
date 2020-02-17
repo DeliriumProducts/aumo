@@ -62,11 +62,8 @@ export default ({ navigation }) => {
           </MainContainer>
           <View style={{ width: "90%", alignSelf: "center" }}>
             <Stats>
-              <Stat
-                hint="Receipts"
-                value={ctx?.state?.user?.receipts?.length}
-              />
-              <Stat hint="Orders" value={ctx?.state?.user?.orders?.length} />
+              <Stat hint="Receipts" value={ctx?.state?.user?.receipts.length} />
+              <Stat hint="Orders" value={ctx?.state?.user?.orders.length} />
               <Stat hint="Points" value={ctx?.state?.user?.points} />
             </Stats>
             <EditButton
