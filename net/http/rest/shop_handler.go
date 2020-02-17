@@ -104,3 +104,32 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 
 	rest.JSON(w, Message{"Owner successfully added!"}, http.StatusOK)
 }
+
+func (rest *Rest) shopRemoveOwner(w http.ReponseWriter, r *http.Rquest) {
+	sID := rest.ParamNumber(w, r, "id")
+
+	type request struct {
+		UserID string `form:"user_id" validate:"required" json:"user_id"`
+	}
+
+	var um request
+	if ok := rest.Form(w, r, &um); !ok {
+		return
+	}
+
+	so := aumo.NewShopOwners(sID, um.UserID)
+	err := rest.shopService.RemoveOwner(so)
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrShopOwnerUserNotFound):
+		rest.JSONError(w, err, http.StatusNotFound)
+		return
+	default:
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"Owner successfully removed!"}, http.StatusOK)
+}
