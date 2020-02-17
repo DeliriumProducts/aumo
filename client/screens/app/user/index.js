@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native"
 import {
   Button,
   Icon,
@@ -20,9 +21,31 @@ import { actions } from "../../../context/providers/provider"
 import Routes from "../../../navigation/routes"
 
 export default ({ navigation }) => {
+  const isFocused = useIsFocused()
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
   const [tabIdx, setTabIdx] = React.useState(0)
+
+  React.useEffect(() => {
+    if (isFocused) {
+      ;(async () => {
+        try {
+          const me = await aumo.auth.me()
+          ctx.dispatch({ type: actions.SET_USER, payload: me })
+        } catch (error) {
+          switch (error.response.status) {
+            case 400:
+            case 401:
+            case 500:
+              ctx.dispatch({ type: actions.SET_USER, payload: null })
+              break
+          }
+        } finally {
+          setLoading(false)
+        }
+      })()
+    }
+  }, [isFocused])
 
   const logout = async () => {
     try {
@@ -44,13 +67,13 @@ export default ({ navigation }) => {
           <View style={{ flexDirection: "row" }}>
             <Avatar
               size="giant"
-              source={{ uri: ctx?.state?.user?.avatar }}
+              source={{ uri: ctx.state.user?.avatar }}
               fallbackSource={require("../../../assets/Avatar.png")}
             />
             <View style={{ marginLeft: 10 }}>
-              <Text category="h2">{ctx?.state?.user?.name}</Text>
+              <Text category="h2">{ctx.state.user?.name}</Text>
               <Text appearance="hint" category="s1">
-                {ctx?.state?.user?.email}
+                {ctx.state.user?.email}
               </Text>
             </View>
           </View>
@@ -65,9 +88,9 @@ export default ({ navigation }) => {
         </ProfileContainer>
         <View style={{ width: "90%", alignSelf: "center" }}>
           <Stats>
-            <Stat hint="Receipts" value={ctx?.state?.user?.receipts.length} />
-            <Stat hint="Orders" value={ctx?.state?.user?.orders.length} />
-            <Stat hint="Points" value={ctx?.state?.user?.points} />
+            <Stat hint="Receipts" value={ctx.state.user?.receipts.length} />
+            <Stat hint="Orders" value={ctx.state.user?.orders.length} />
+            <Stat hint="Points" value={ctx.state.user?.points} />
           </Stats>
           <EditButton
             icon={style => <Icon name="edit-outline" {...style} />}
@@ -96,7 +119,7 @@ export default ({ navigation }) => {
           icon={style => <Icon {...style} name="bell-outline" />}
         >
           <List
-            data={ctx.state.user.orders}
+            data={ctx.state.user?.orders}
             renderItem={({ item: order }) => (
               <View style={{ margin: 30 }}>
                 <Order product={order.product} key={order.order_id} />

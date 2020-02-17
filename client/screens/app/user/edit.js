@@ -8,7 +8,6 @@ import Avatar from "../../../components/Avatar"
 import ErrorContainer from "../../../components/ErrorContainer"
 import FormInput from "../../../components/FormInput"
 import { Context } from "../../../context/context"
-import { actions } from "../../../context/providers/provider"
 import theme from "../../../theme"
 
 export default () => {
@@ -24,19 +23,8 @@ export default () => {
   const handleEdit = async data => {
     try {
       setLoading(true)
-      const response = await aumo.user.edit(data)
-      const { receipts, orders } = ctx.state.user
-
-      ctx.dispatch({
-        type: actions.SET_USER,
-        payload: {
-          ...response,
-          receipts,
-          orders
-        }
-      })
+      await aumo.user.edit(data)
     } catch (error) {
-      console.log(error)
       switch (error.response.status) {
         case 400:
           setErr("Bad Request")

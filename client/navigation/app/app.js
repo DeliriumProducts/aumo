@@ -68,7 +68,7 @@ export default () => {
           tabBarLabel: "Profile",
           tabBarIcon: _ => (
             <Avatar
-              source={{ uri: ctx?.state?.user?.avatar }}
+              source={{ uri: ctx.state.user?.avatar }}
               fallbackSource={require("../../assets/Avatar.png")}
             />
           )
