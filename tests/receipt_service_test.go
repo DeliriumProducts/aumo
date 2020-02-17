@@ -116,7 +116,6 @@ func TestReceiptService(t *testing.T) {
 			user.Points += aumo.UserPointsPerReceipt
 
 			gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID.String())
-			gotReceipt.Shop = ni
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, gotReceipt.IsClaimed())
 

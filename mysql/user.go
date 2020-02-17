@@ -130,11 +130,16 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 			aumo.Order   `db:",inline"`
 			aumo.Product `db:",inline"`
 		}
+
+		ReceiptShop struct {
+			aumo.Receipt `db:",inline`
+			aumo.Shop    `db:",inline`
+		}
 	)
 	var (
 		orders   = []OrderProduct{}
+		receipts = []ReceiptShop{}
 		shops    = []aumo.Shop{}
-		receipts = []aumo.Receipt{}
 	)
 
 	err = tx.
@@ -150,6 +155,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		Select("r.*").
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
+		Join("shops as s").On("r.shop_id = s.shop_id").
 		Where(where, args).
 		All(&receipts)
 	if err != nil {
@@ -181,8 +187,14 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	user.Orders = []aumo.Order{}
-	user.Receipts = receipts
+	user.Receipts = []aumo.Receipt{}
 	user.Shops = shops
+
+	for i := range recepits {
+		recepit := receipts[i].Receipt
+		receipt.Shop = &receipts[i].Shop
+		user.Receipts = append(user.Receipts, recepit)
+	}
 
 	for i := range orders {
 		order := orders[i].Order
