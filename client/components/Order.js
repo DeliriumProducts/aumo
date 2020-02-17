@@ -4,6 +4,8 @@ import { Image } from "react-native"
 
 export default ({ product }) => (
   <Card
+    appearance="filled"
+    style={{ borderRadius: 32 }}
     header={() => (
       <>
         <Image source={{ uri: product.image }} style={{ height: 400 }} />

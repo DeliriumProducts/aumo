@@ -98,7 +98,9 @@ export default ({ navigation }) => {
           <List
             data={ctx.state.user.orders}
             renderItem={({ item: order }) => (
-              <Order product={order.product} key={order.order_id} />
+              <View style={{ margin: 10 }}>
+                <Order product={order.product} key={order.order_id} />
+              </View>
             )}
           />
         </Tab>
