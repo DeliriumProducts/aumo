@@ -38,71 +38,46 @@ export default ({ navigation }) => {
   return (
     <>
       <MainLayout level="1">
-        <ProfileContainer>
-          <MainContainer
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                size="giant"
-                source={{ uri: ctx?.state?.user?.avatar }}
-                fallbackSource={require("../../../assets/Avatar.png")}
-              />
-              <View style={{ marginLeft: 10 }}>
-                <Text category="h2">{ctx?.state?.user?.name}</Text>
-                <Text appearance="hint" category="s1">
-                  {ctx?.state?.user?.email}
-                </Text>
-              </View>
-            </View>
-            <Button
-              disabled={loading}
-              size="medium"
-              status="basic"
-              appearance="ghost"
-              icon={style => <Icon name="log-out-outline" {...style} />}
-              onPress={logout}
+        <ProfileContainer
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <Avatar
+              size="giant"
+              source={{ uri: ctx?.state?.user?.avatar }}
+              fallbackSource={require("../../../assets/Avatar.png")}
             />
-          </MainContainer>
-          <View style={{ width: "90%", alignSelf: "center" }}>
-            <Stats>
-              <Stat hint="Receipts" value={ctx?.state?.user?.receipts.length} />
-              <Stat hint="Orders" value={ctx?.state?.user?.orders.length} />
-              <Stat hint="Points" value={ctx?.state?.user?.points} />
-            </Stats>
-            <EditButton
-              icon={style => <Icon name="edit-outline" {...style} />}
-              onPress={() => {
-                navigation.push(Routes.UserEdit)
-              }}
-            >
-              EDIT PROFILE
-            </EditButton>
+            <View style={{ marginLeft: 10 }}>
+              <Text category="h2">{ctx?.state?.user?.name}</Text>
+              <Text appearance="hint" category="s1">
+                {ctx?.state?.user?.email}
+              </Text>
+            </View>
           </View>
-          <TabView selectedIndex={tabIdx} onSelect={setTabIdx}>
-            <Tab
-              title="Orders"
-              icon={style => <Icon {...style} name="bell-outline" />}
-            >
-              <List
-                data={ctx.state.user.orders}
-                renderItem={({ item: order }) => (
-                  <Order product={order.product} key={order.order_id} />
-                )}
-              />
-            </Tab>
-            <Tab
-              title="Receipts"
-              icon={style => <Icon {...style} name="file-text-outline" />}
-            >
-              <Layout>
-                {ctx.state.user?.receipts.map(a => (
-                  <Text key={a.receipt_id}>{a.receipt_id}</Text>
-                ))}
-              </Layout>
-            </Tab>
-          </TabView>
+          <Button
+            disabled={loading}
+            size="medium"
+            status="basic"
+            appearance="ghost"
+            icon={style => <Icon name="log-out-outline" {...style} />}
+            onPress={logout}
+          />
         </ProfileContainer>
+        <View style={{ width: "90%", alignSelf: "center" }}>
+          <Stats>
+            <Stat hint="Receipts" value={ctx?.state?.user?.receipts.length} />
+            <Stat hint="Orders" value={ctx?.state?.user?.orders.length} />
+            <Stat hint="Points" value={ctx?.state?.user?.points} />
+          </Stats>
+          <EditButton
+            icon={style => <Icon name="edit-outline" {...style} />}
+            onPress={() => {
+              navigation.push(Routes.UserEdit)
+            }}
+          >
+            EDIT PROFILE
+          </EditButton>
+        </View>
         <Modal
           backdropStyle={{
             backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -115,6 +90,29 @@ export default ({ navigation }) => {
           </ModalContainer>
         </Modal>
       </MainLayout>
+      <TabView selectedIndex={tabIdx} onSelect={setTabIdx} style={{ flex: 1 }}>
+        <Tab
+          title="Orders"
+          icon={style => <Icon {...style} name="bell-outline" />}
+        >
+          <List
+            data={ctx.state.user.orders}
+            renderItem={({ item: order }) => (
+              <Order product={order.product} key={order.order_id} />
+            )}
+          />
+        </Tab>
+        <Tab
+          title="Receipts"
+          icon={style => <Icon {...style} name="file-text-outline" />}
+        >
+          <Layout>
+            {ctx.state.user?.receipts.map(a => (
+              <Text key={a.receipt_id}>{a.receipt_id}</Text>
+            ))}
+          </Layout>
+        </Tab>
+      </TabView>
     </>
   )
 }
@@ -131,11 +129,9 @@ const Stat = ({ hint, value }) => {
 }
 
 const MainLayout = styled(Layout)`
-  flex-direction: row;
   margin-horizontal: -16px;
   padding-horizontal: 16px;
   padding-top: 16px;
-  margin-bottom: 8px;
 `
 
 const ModalContainer = styled(Layout)`
@@ -146,11 +142,6 @@ const ModalContainer = styled(Layout)`
 `
 
 const ProfileContainer = styled(View)`
-  flex: 1;
-  margin-horizontal: 8px;
-`
-
-const MainContainer = styled(View)`
   flex-direction: row;
   justify-content: space-between;
 `
