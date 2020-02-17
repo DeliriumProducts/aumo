@@ -1,6 +1,7 @@
 import { Icon } from "@ui-kitten/components"
 import React from "react"
-import { Image, TouchableWithoutFeedback, View } from "react-native"
+import { Image, View } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import { NeomorphBox } from "react-native-neomorph-shadows"
 import NfcManager, { NdefParser, NfcEvents } from "react-native-nfc-manager"
 import theme from "../../theme"
@@ -9,6 +10,7 @@ export default () => {
   React.useEffect(() => {
     NfcManager.start()
     NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+      console.log(tag)
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
       console.warn(msgs)
     })
@@ -28,7 +30,7 @@ export default () => {
           resizeMode: "contain"
         }}
       />
-      <TouchableWithoutFeedback
+      <TouchableOpacity
         onPress={async () => {
           try {
             await NfcManager.registerTagEvent()
@@ -81,7 +83,7 @@ export default () => {
             </NeomorphBox>
           </NeomorphBox>
         </NeomorphBox>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     </View>
   )
 }
