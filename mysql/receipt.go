@@ -59,7 +59,7 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id string) (*aumo.Receipt, error) {
 	err = tx.Select("shops.*").
 		From("shops").
 		Join("receipts as r").On("r.shop_id = shops.shop_id").
-		Where("r.id = ? ", id).
+		Where("r.receipt_id = ? ", id).
 		One(shop)
 
 	switch {
