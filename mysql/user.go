@@ -190,10 +190,10 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	user.Receipts = []aumo.Receipt{}
 	user.Shops = shops
 
-	for i := range recepits {
-		recepit := receipts[i].Receipt
+	for i := range receipts {
+		receipt := receipts[i].Receipt
 		receipt.Shop = &receipts[i].Shop
-		user.Receipts = append(user.Receipts, recepit)
+		user.Receipts = append(user.Receipts, receipt)
 	}
 
 	for i := range orders {
