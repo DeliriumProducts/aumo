@@ -26,6 +26,11 @@ func (rest *Rest) mount(mnt string) {
 			r.Delete("/{id}", rest.userDelete)
 		})
 
+		r.Route("/shops", func(r chi.Router) {
+			r.Get("/", rest.shopGetAll)
+			r.Get("/{id}", rest.shopGet)
+		})
+
 		r.Route("/receipts", func(r chi.Router) {
 			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.receiptCreate)
 			r.With(rest.WithAuth(aumo.Customer)).Get("/{id}", rest.receiptClaim)
