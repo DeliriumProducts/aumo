@@ -30,11 +30,12 @@ func TestUserService(t *testing.T) {
 	ostore := mysql.NewOrderStore(sess)
 	rstore := mysql.NewReceiptStore(sess)
 	sstore := mysql.NewShopStore(sess)
+	sostore := mysql.NewShopOwnersStore(sess)
 
 	os := ordering.New(ostore, pstore, ustore)
 	us := users.New(ustore)
 	rs := receipt.New(rstore, ustore)
-	ss := shops.New(sstore)
+	ss := shops.New(sstore, sostore)
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
