@@ -32,6 +32,7 @@ func TestReceiptService(t *testing.T) {
 
 		s := createShop(t, sstore)
 		receipt := aumo.NewReceipt("Paconi: 230", s.ID)
+		receipt.Shop = s
 
 		err = rs.Create(receipt)
 		require.Nil(t, err, "shouldn't return an error")
@@ -44,7 +45,9 @@ func TestReceiptService(t *testing.T) {
 	t.Run("get_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore, createShop(t, sstore))
+		s := createShop(t, sstore)
+		receipt := createReceipt(t, rstore, s)
+		receipt.Shop = s
 
 		gotReceipt, err := rs.Receipt(receipt.ReceiptID.String())
 
@@ -80,9 +83,10 @@ func TestReceiptService(t *testing.T) {
 
 	t.Run("update_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
-
-		receipt := createReceipt(t, rstore, createShop(t, sstore))
+		s := createShop(t, sstore)
+		receipt := createReceipt(t, rstore, s)
 		receipt.Content = "Kaufland 23233232323"
+		receipt.Shop = s
 
 		err = rs.Update(receipt.ReceiptID.String(), receipt)
 		require.Nil(t, err, "shouldn't return an error")
@@ -98,17 +102,21 @@ func TestReceiptService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		t.Run("valid", func(t *testing.T) {
-			receipt := createReceipt(t, rstore, createShop(t, sstore))
+			s := createShop(t, sstore)
+			receipt := createReceipt(t, rstore, s)
+			receipt.Shop = s
 			require.Equal(t, false, receipt.IsClaimed())
 
 			var err error
 			receipt, err = rs.ClaimReceipt(user.ID.String(), receipt.ReceiptID.String())
+			receipt.Shop = s
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, receipt.IsClaimed())
 
 			user.Points += aumo.UserPointsPerReceipt
 
 			gotReceipt, err := rstore.FindByID(nil, receipt.ReceiptID.String())
+			gotReceipt.Shop = ni
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, gotReceipt.IsClaimed())
 
