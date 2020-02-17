@@ -132,8 +132,8 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		}
 
 		ReceiptShop struct {
-			aumo.Receipt `db:",inline`
-			aumo.Shop    `db:",inline`
+			aumo.Receipt `db:",inline"`
+			aumo.Shop    `db:",inline"`
 		}
 	)
 	var (
