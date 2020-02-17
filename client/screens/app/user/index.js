@@ -13,6 +13,7 @@ import React from "react"
 import { View } from "react-native"
 import styled from "styled-components/native"
 import PAvatar from "../../../components/Avatar"
+import Order from "../../../components/Order"
 import { Context } from "../../../context/context"
 import { actions } from "../../../context/providers/provider"
 import Routes from "../../../navigation/routes"
@@ -84,7 +85,7 @@ export default ({ navigation }) => {
             >
               <Layout>
                 {ctx.state.user?.orders.map(a => (
-                  <Text key={a.order_id}>{a.order_id}</Text>
+                  <Order product={a.product} key={a.order_id} />
                 ))}
               </Layout>
             </Tab>
