@@ -132,7 +132,6 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		}
 
 		ReceiptShop struct {
-			ShopID       uint `json:"shopID" db:"shopID"`
 			aumo.Receipt `db:",inline"`
 			aumo.Shop    `db:",inline"`
 		}
@@ -153,7 +152,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("receipts.shop_id as shopID", "*").
+		Select("*").
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
 		Join("shops as s").On("r.shop_id = s.shop_id").
@@ -194,8 +193,6 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	for i := range receipts {
 		receipt := receipts[i].Receipt
 		receipt.Shop = &receipts[i].Shop
-		receipt.Shop.ID = receipts[i].ShopID
-		receipt.ShopID = receipts[i].ShopID
 		user.Receipts = append(user.Receipts, receipt)
 	}
 

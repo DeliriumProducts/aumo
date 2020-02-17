@@ -4,7 +4,7 @@ import "upper.io/db.v3/lib/sqlbuilder"
 
 // Shop is a shop in aumo
 type Shop struct {
-	ID     uint   `json:"shop_id" db:"shop_id,omitempty"`
+	ID     uint   `json:"id" db:"shop_id,omitempty"`
 	Name   string `json:"name" db:"name"`
 	Image  string `json:"image" db:"image"`
 	Owners []User `json:"owners" db:"-"`
