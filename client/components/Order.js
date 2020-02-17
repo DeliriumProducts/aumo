@@ -1,6 +1,6 @@
-import { Card, Text } from "@ui-kitten/components"
+import { Card, Icon, Text } from "@ui-kitten/components"
 import React from "react"
-import { Image } from "react-native"
+import { Image, View } from "react-native"
 
 export default ({ product }) => (
   <Card
@@ -9,15 +9,32 @@ export default ({ product }) => (
     header={() => (
       <>
         <Image source={{ uri: product.image }} style={{ height: 400 }} />
-        <Text
-          category="h6"
-          style={{ marginHorizontal: 24, marginVertical: 16 }}
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 20
+          }}
         >
-          {product.name}
-        </Text>
+          <Text category="h6">{product.name}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Icon name="award-outline" width={17} height={17} />
+            <Text category="h6" style={{ fontWeight: "bold", marginLeft: 3 }}>
+              {product.price}
+            </Text>
+          </View>
+        </View>
       </>
     )}
   >
-    <Text>{product.description}</Text>
+    <Text appearance="hint">{product.description}</Text>
   </Card>
 )
