@@ -83,7 +83,9 @@ export default ({ navigation }) => {
               icon={style => <Icon {...style} name="bell-outline" />}
             >
               <Layout>
-                <Text>List of orders.</Text>
+                {ctx.state.user?.orders.map(a => (
+                  <Text key={a.order_id}>{a.order_id}</Text>
+                ))}
               </Layout>
             </Tab>
             <Tab
@@ -91,7 +93,9 @@ export default ({ navigation }) => {
               icon={style => <Icon {...style} name="file-text-outline" />}
             >
               <Layout>
-                <Text>List of users.</Text>
+                {ctx.state.user?.receipts.map(a => (
+                  <Text key={a.receipt_id}>{a.receipt_id}</Text>
+                ))}
               </Layout>
             </Tab>
           </TabView>
