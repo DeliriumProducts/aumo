@@ -68,10 +68,12 @@ export default function RegisterScreen(props) {
             icon={style => <Icon {...style} name="person-outline" />}
             ref={register("name", { required: "Required" })}
             onChangeText={val => setValue("name", val)}
+            disabled={loading}
             caption={errors.name?.message}
           />
           <FormInput
             status={errors.email ? "danger" : "basic"}
+            disabled={loading}
             placeholder="Email"
             size="medium"
             icon={style => <Icon {...style} name="email-outline" />}
@@ -90,6 +92,7 @@ export default function RegisterScreen(props) {
             status={errors.password ? "danger" : "basic"}
             placeholder="Password"
             secureTextEntry={!passwordVisible}
+            disabled={loading}
             icon={style => (
               <Icon
                 {...style}

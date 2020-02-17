@@ -67,6 +67,7 @@ export default function LoginScreen(props) {
             status={errors.email ? "danger" : "basic"}
             placeholder="Email"
             icon={style => <Icon {...style} name="email-outline" />}
+            disabled={loading}
             ref={register("email", {
               required: "Required",
               pattern: {
@@ -81,6 +82,7 @@ export default function LoginScreen(props) {
             status={errors.password ? "danger" : "basic"}
             placeholder="Password"
             secureTextEntry={!passwordVisible}
+            disabled={loading}
             onIconPress={onPasswordIconPress}
             style={{ marginTop: 8 }}
             icon={style => (
