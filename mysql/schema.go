@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS shops (
   shop_id int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name varchar(255) NOT NULL
+  name varchar(255) NOT NULL,
   image varchar(255) NOT NULL
 );
 
