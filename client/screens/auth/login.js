@@ -19,7 +19,6 @@ export default function LoginScreen(props) {
   const ctx = React.useContext(Context)
 
   const handleLogin = async data => {
-    console.log("uh ok")
     try {
       setLoading(true)
       const response = await aumo.auth.login({

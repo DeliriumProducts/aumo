@@ -26,7 +26,6 @@ export default ({ navigation }) => {
       setLoading(false)
       ctx.dispatch({ type: actions.SET_USER, payload: null })
     } catch (error) {
-      console.warn(error)
       setLoading(false)
     }
   }

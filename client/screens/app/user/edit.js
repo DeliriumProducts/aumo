@@ -1,4 +1,5 @@
-import { Button, Icon, Layout } from "@ui-kitten/components"
+import { Button, Icon, Layout, Spinner } from "@ui-kitten/components"
+import aumo from "aumo"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { View } from "react-native"
@@ -7,6 +8,7 @@ import Avatar from "../../../components/Avatar"
 import ErrorContainer from "../../../components/ErrorContainer"
 import FormInput from "../../../components/FormInput"
 import { Context } from "../../../context/context"
+import { actions } from "../../../context/providers/provider"
 import theme from "../../../theme"
 
 export default () => {
@@ -19,7 +21,34 @@ export default () => {
   const [loading, setLoading] = React.useState(false)
   const [err, setErr] = React.useState("")
 
-  const handleEdit = async () => {}
+  const handleEdit = async data => {
+    try {
+      setLoading(true)
+      const response = await aumo.user.edit(data)
+      const { receipts, orders } = ctx.state.user
+
+      ctx.dispatch({
+        type: actions.SET_USER,
+        payload: {
+          ...response,
+          receipts,
+          orders
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      switch (error.response.status) {
+        case 400:
+          setErr("Bad Request")
+          break
+        case 500:
+          setErr("Internal server error")
+          break
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Container>
@@ -36,6 +65,7 @@ export default () => {
           status={errors.name ? "danger" : "basic"}
           placeholder="Name"
           size="medium"
+          disabled={loading}
           defaultValue={ctx.state.user?.name}
           icon={style => <Icon {...style} name="person-outline" />}
           ref={register("name", { required: "Required" })}
@@ -44,7 +74,13 @@ export default () => {
         />
         {err != "" && <ErrorContainer error={err} />}
       </Layout>
-      <View style={{ paddingHorizontal: 25 }}>
+      <View
+        style={{
+          paddingHorizontal: 25,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
         <Button
           disabled={loading}
           icon={style => <Icon name="edit-outline" {...style} />}
@@ -54,6 +90,9 @@ export default () => {
         >
           DONE
         </Button>
+        <View style={{ marginTop: 10 }}>
+          {loading && <Spinner size="giant" />}
+        </View>
       </View>
     </Container>
   )
