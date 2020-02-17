@@ -29,6 +29,8 @@ func (rest *Rest) mount(mnt string) {
 		r.Route("/shops", func(r chi.Router) {
 			r.Get("/", rest.shopGetAll)
 			r.Get("/{id}", rest.shopGet)
+			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.shopCreate)
+			r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.shopEdit)
 		})
 
 		r.Route("/receipts", func(r chi.Router) {
