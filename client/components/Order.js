@@ -13,6 +13,7 @@ export default ({ product }) => (
           style={{
             width: "100%",
             flexDirection: "row",
+            flexWrap: "wrap",
             justifyContent: "space-between",
             alignItems: "center",
             padding: 20
@@ -26,8 +27,14 @@ export default ({ product }) => (
               alignItems: "center"
             }}
           >
-            <Icon name="award-outline" width={17} height={17} />
-            <Text category="h6" style={{ fontWeight: "bold", marginLeft: 3 }}>
+            <Icon name="award-outline" width={17} height={17} fill="#222" />
+            <Text
+              category="h6"
+              style={{
+                fontWeight: "bold",
+                marginLeft: 3
+              }}
+            >
               {product.price}
             </Text>
           </View>
