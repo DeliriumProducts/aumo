@@ -4,6 +4,8 @@ import {
   Layout,
   Modal,
   Spinner,
+  Tab,
+  TabView,
   Text
 } from "@ui-kitten/components"
 import aumo from "aumo"
@@ -18,6 +20,7 @@ import Routes from "../../../navigation/routes"
 export default ({ navigation }) => {
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
+  const [tabIdx, setTabIdx] = React.useState(0)
 
   const logout = async () => {
     try {
@@ -74,6 +77,24 @@ export default ({ navigation }) => {
               EDIT PROFILE
             </EditButton>
           </View>
+          <TabView selectedIndex={tabIdx} onSelect={setTabIdx}>
+            <Tab
+              title="Orders"
+              icon={style => <Icon {...style} name="bell-outline" />}
+            >
+              <Layout>
+                <Text>List of orders.</Text>
+              </Layout>
+            </Tab>
+            <Tab
+              title="Receipts"
+              icon={style => <Icon {...style} name="file-text-outline" />}
+            >
+              <Layout>
+                <Text>List of users.</Text>
+              </Layout>
+            </Tab>
+          </TabView>
         </ProfileContainer>
         <Modal
           backdropStyle={{
