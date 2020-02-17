@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.1.1 (2020-02-17)
+
+
+
 ### [2.0.15](https://github.com/deliriumproducts/aumo/compare/v2.0.13...v2.0.15) (2020-02-16)
 
 
