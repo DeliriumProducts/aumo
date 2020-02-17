@@ -3,8 +3,8 @@ INSERT INTO `users` VALUES  -- all user's passwords are 123456
     ('19274de1-ac2b-4dd9-adee-20f4ab69e920','Pesho','pesho@me.com','$2y$12$YRKTtih7Cy1kN9ZayAW9Fe.AOfZypr40io8byn4ghfJWWH.aZf2ca','https://github.com/pesho.png', 5000, "Customer", 1),
     ('1cd005fe-213f-4c96-9966-49306b00ca90','Lyubo','lyubo@me.com','$2y$12$w5Bs/vKa0D1uEKlo6AH8QexQujTjtSRIecBEwkSyo/nRzkR4KOdHO','https://github.com/impzero.png', 5000, "Admin", 1);
 INSERT INTO `shops` VALUES
-    (1, "Paconi"),
-    (2, "Lidl");
+    (1, "Paconi", "https://paconi.net/wp-content/uploads/2014/07/fav.png"),
+    (2, "Lidl", "https://angliya.com/wp-content/uploads/2019/10/81093392_l-1024x683.jpg");
 INSERT INTO `shop_owners` VALUES
     (1, '24a2068c-a43d-43ae-b967-858953686189'),
     (2, '1cd005fe-213f-4c96-9966-49306b00ca90');

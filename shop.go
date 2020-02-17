@@ -6,6 +6,7 @@ import "upper.io/db.v3/lib/sqlbuilder"
 type Shop struct {
 	ID     uint   `json:"shop_id" db:"shop_id,omitempty"`
 	Name   string `json:"name" db:"name"`
+	Image  string `json:"image" db:"image"`
 	Owners []User `json:"owners" db:"-"`
 }
 
@@ -16,9 +17,10 @@ type ShopOwners struct {
 }
 
 // NewShop is a constructor for `Shop`
-func NewShop(name string) *Shop {
+func NewShop(name, image string) *Shop {
 	return &Shop{
 		Name:   name,
+		Image:  image,
 		Owners: []User{},
 	}
 }
