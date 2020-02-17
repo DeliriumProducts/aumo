@@ -152,7 +152,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("r.*").
+		Select("r.*", "s.*").
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
 		Join("shops as s").On("r.shop_id = s.shop_id").
