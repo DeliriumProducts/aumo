@@ -1,4 +1,4 @@
-import { Icon } from "@ui-kitten/components"
+import { Icon, Text } from "@ui-kitten/components"
 import React from "react"
 import { Image, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -22,7 +22,13 @@ export default () => {
   }, [])
 
   return (
-    <View style={{ justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "100%"
+      }}
+    >
       <Image
         source={require("../../assets/AumoLogo.png")}
         style={{
@@ -84,6 +90,25 @@ export default () => {
           </NeomorphBox>
         </NeomorphBox>
       </TouchableOpacity>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 40,
+          padding: 20
+        }}
+      >
+        <Text
+          category="h5"
+          style={{
+            color: theme["color-primary-500"],
+            fontWeight: "bold",
+            textAlign: "center"
+          }}
+        >
+          Approach your phone near an Aumo device to claim your digital receipt!
+        </Text>
+      </View>
     </View>
   )
 }
