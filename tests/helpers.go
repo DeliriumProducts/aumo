@@ -21,7 +21,7 @@ func createUser(t *testing.T, us aumo.UserStore) *aumo.User {
 }
 
 func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
-	s := aumo.NewShop(faker.Name())
+	s := aumo.NewShop(faker.Name(), faker.URL())
 
 	err := ss.Save(nil, s)
 	require.Nil(t, err, "shouldn't return an error")

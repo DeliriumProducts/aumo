@@ -61,7 +61,7 @@ func TestUserService(t *testing.T) {
 		}
 
 		shop := func(t *testing.T, id uint) *aumo.Shop {
-			s := aumo.NewShop(faker.Name())
+			s := aumo.NewShop(faker.Name(), faker.URL())
 			s.ID = id
 			return s
 		}
