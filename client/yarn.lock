@@ -1478,7 +1478,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@ui-kitten/components@^4.3.2":
+"@ui-kitten/components@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@ui-kitten/components/-/components-4.4.0.tgz#fac1e3386fa4acd25db97018f4df950646e0560d"
   integrity sha512-lB8L5L3usvZoSbaRehhxEwSQWyZU9apIZibBATkcpNBoIxNz/Sz8EIeU9iw2KJiuWtv722LBoh1XWiGlL3L+1g==
