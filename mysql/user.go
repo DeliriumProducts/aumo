@@ -194,6 +194,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		receipt := receipts[i].Receipt
 		receipt.Shop = &receipts[i].Shop
 		receipt.ShopID = receipts[i].Shop.ID
+		receipt.Shop.Owners = []aumo.User{}
 		user.Receipts = append(user.Receipts, receipt)
 	}
 
