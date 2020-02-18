@@ -101,7 +101,6 @@ func (rest *Rest) shopEdit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.JSON(w, shop, http.StatusOK)
-
 }
 
 func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
@@ -160,4 +159,16 @@ func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.JSON(w, Message{"Owner successfully removed!"}, http.StatusOK)
+}
+
+func (rest *Rest) shopDelete(w http.ResponseWriter, r *http.Request) {
+	sID := rest.ParamNumber(w, r, "id")
+	err := rest.shopService.Delete(sID)
+
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"Shop successfully deleted!"}, http.StatusOK)
 }
