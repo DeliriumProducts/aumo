@@ -42,9 +42,16 @@ func (rest *Rest) shopGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	shop, err := rest.shopService.Shop(sID, user.Role != aumo.Customer && withOwners) // only get the owners if the user is not a customer
-	if err != nil {
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrShopNotFound):
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
+	default:
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+
 	}
 
 	rest.JSON(w, shop, http.StatusOK)

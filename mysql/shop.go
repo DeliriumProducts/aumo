@@ -2,9 +2,11 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/go-sql-driver/mysql"
+	"upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -70,11 +72,14 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint, withOwners bool) (*aumo.Shop, 
 	}
 
 	err = tx.Collection(ShopTable).Find("shop_id", id).One(shop)
+	if errors.Is(err, db.ErrNoMoreRows) {
+		return nil, aumo.ErrShopNotFound
+	}
 
 	if withOwners {
 		err = tx.Select("u.*").
 			From("shop_owners").
-			Join("users as u").On("shops_owners.user_id = u.user_id").
+			Join("users as u").On("shop_owners.user_id = u.id").
 			Where("shop_owners.shop_id", id).
 			All(&owners)
 
