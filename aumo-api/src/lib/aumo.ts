@@ -38,7 +38,7 @@ export interface Order {
 }
 
 export interface Shop {
-  shop_id: number;
+  id: number;
   name: string;
   image: string;
   owners: User[];

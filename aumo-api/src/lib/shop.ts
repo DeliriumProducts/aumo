@@ -15,7 +15,7 @@ export async function getShop(id: number, cookie?: string): Promise<Shop> {
 export async function editShop(shop: Shop, cookie?: string): Promise<Shop> {
   return (
     await axios.put(
-      `${options.Backend}/shops/${shop.shop_id}`,
+      `${options.Backend}/shops/${shop.id}`,
       shop,
       withAuth(cookie)
     )
