@@ -8,7 +8,7 @@ import { Context } from "../../context/context"
 import theme from "../../theme"
 import Routes from "../routes"
 import HomeStack from "./home"
-import ShopStack from "./shop"
+import StoreStack from "./store"
 import UserStack from "./user"
 
 const Tab = createBottomTabNavigator()
@@ -48,8 +48,8 @@ export default () => {
         }}
       />
       <Tab.Screen
-        name={Routes.Shop}
-        component={ShopStack}
+        name={Routes.Store}
+        component={StoreStack}
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Icon

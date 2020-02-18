@@ -3,7 +3,7 @@ import {
   TransitionPresets
 } from "@react-navigation/stack"
 import React from "react"
-import ShopScreen from "../../screens/app/shop"
+import StoreScreen from "../../screens/app/store.js"
 import theme from "../../theme"
 import Routes from "../routes"
 
@@ -19,6 +19,11 @@ export default () => (
       ...TransitionPresets.SlideFromRightIOS
     }}
   >
-    <Stack.Screen name={Routes.Shop} component={ShopScreen} />
+    <Stack.Screen name={Routes.Store} component={StoreScreen} />
+    <Stack.Screen
+      name={Routes.StoreShop}
+      component={StoreScreen}
+      options={({ route }) => ({ title: `${route.params.name}'s store` })}
+    />
   </Stack.Navigator>
 )

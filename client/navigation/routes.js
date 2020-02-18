@@ -4,7 +4,8 @@ export default {
   Login: "Login",
   Register: "Register",
   Home: "Home",
-  Shop: "Shop",
+  Store: "Store",
+  StoreShop: "Store Shop",
   User: "My Profile",
   UserEdit: "Edit Profile"
 }
