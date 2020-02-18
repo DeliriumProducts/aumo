@@ -7,7 +7,7 @@ type Shop struct {
 	ID     uint   `json:"id" db:"shop_id,omitempty"`
 	Name   string `json:"name" db:"name"`
 	Image  string `json:"image" db:"image"`
-	Owners []User `json:"owners" db:"-"`
+	Owners []User `json:"owners,omitempty" db:"-"`
 }
 
 // ShopOwners is a relation between users and shops in aumo

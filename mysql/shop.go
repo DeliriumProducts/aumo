@@ -70,7 +70,7 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.Shop, e
 	if relations {
 		shop, err = s.shopRelations(tx, "shops.shop_id = ?", id)
 	} else {
-		err = tx.Collection(ShopTable).Find("id", id).One(shop)
+		err = tx.Collection(ShopTable).Find("shop_id", id).One(shop)
 		shop.Owners = []aumo.User{}
 	}
 
@@ -159,7 +159,7 @@ func (s *shopStore) Update(tx aumo.Tx, id uint, sp *aumo.Shop) error {
 		}()
 	}
 
-	return tx.Collection(ShopTable).Find("id", id).Update(sp)
+	return tx.Collection(ShopTable).Find("shop_id", id).Update(sp)
 }
 
 func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
@@ -187,7 +187,7 @@ func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
 		}()
 	}
 
-	return tx.Collection(ShopTable).Find("id", id).Delete()
+	return tx.Collection(ShopTable).Find("shop_id", id).Delete()
 }
 
 func (s *shopStore) shopRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.Shop, error) {
