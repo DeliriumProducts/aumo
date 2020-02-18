@@ -8,7 +8,11 @@ export default ({ product }) => (
     style={{ borderRadius: 32 }}
     header={() => (
       <>
-        <Image source={{ uri: product.image }} style={{ height: 400 }} />
+        <Image
+          source={{ uri: product.image }}
+          style={{ height: 400 }}
+          resizeMode="contain"
+        />
         <View
           style={{
             width: "100%",
