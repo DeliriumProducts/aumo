@@ -13,6 +13,7 @@ export default ({
         margin: 3,
         borderRadius: 16,
         maxWidth: Dimensions.get("window").width / 2 - 24,
+        alignSelf: "center",
         padding: 10,
         minHeight: 250
       }}
@@ -20,7 +21,6 @@ export default ({
     >
       <View
         style={{
-          height: "100%",
           backgroundColor: "#fff",
           borderRadius: 16,
           padding: 6
