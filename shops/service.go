@@ -17,8 +17,8 @@ func New(shopStore aumo.ShopStore, shopOwnersStore aumo.ShopOwnersStore) aumo.Sh
 	}
 }
 
-func (ss *service) Shop(id uint) (*aumo.Shop, error) {
-	return ss.shopStore.FindByID(nil, id, false)
+func (ss *service) Shop(id uint, withOwners bool) (*aumo.Shop, error) {
+	return ss.shopStore.FindByID(nil, id, withOwners)
 }
 
 func (ss *service) Shops() ([]aumo.Shop, error) {
@@ -35,17 +35,6 @@ func (ss *service) Update(id uint, s *aumo.Shop) error {
 
 func (ss *service) Delete(id uint) error {
 	return ss.shopStore.Delete(nil, id)
-}
-
-func (ss *service) Owners(id uint) ([]aumo.User, error) {
-	shop, err := ss.shopStore.FindByID(nil, id, true)
-	if err != nil {
-		return nil, err
-	}
-
-	owners := shop.Owners
-
-	return owners, nil
 }
 
 func (ss *service) AddOwner(so *aumo.ShopOwners) error {

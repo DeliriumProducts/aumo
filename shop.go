@@ -37,9 +37,8 @@ func NewShopOwners(shopID uint, userID string) *ShopOwners {
 // ShopService contains all `Shop`
 // related business logic
 type ShopService interface {
-	Shop(id uint) (*Shop, error)
+	Shop(id uint, withOwners bool) (*Shop, error)
 	Shops() ([]Shop, error)
-	Owners(id uint) ([]User, error)
 	AddOwner(*ShopOwners) error
 	RemoveOwner(*ShopOwners) error
 	Update(id uint, o *Shop) error
