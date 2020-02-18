@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/deliriumproducts/aumo"
+	"github.com/deliriumproducts/aumo/auth"
 )
 
 func (rest *Rest) shopGetAll(w http.ResponseWriter, r *http.Request) {
@@ -19,8 +20,13 @@ func (rest *Rest) shopGetAll(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) shopGet(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "id")
+	user, err := auth.CurrentUser(r.Context())
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
 
-	shop, err := rest.shopService.Shop(sID)
+	shop, err := rest.shopService.Shop(sID, user.Role != aumo.Customer) // only get the owners if the user is not a customer
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
