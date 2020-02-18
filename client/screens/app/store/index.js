@@ -1,41 +1,35 @@
-import { Layout, List } from "@ui-kitten/components"
+import { Layout, List, Spinner } from "@ui-kitten/components"
+import aumo from "aumo"
 import React from "react"
+import styled from "styled-components/native"
 import Shop from "../../../components/Shop"
 import { Context } from "../../../context/context"
 import Routes from "../../../navigation/routes"
 
-const shops = [
-  {
-    id: "asd;flkajs;df",
-    name: "Lidl",
-    image:
-      "https://www.retaildetail.eu/sites/default/files/news/shutterstock_1367384339.jpg"
-  },
-  {
-    id: "asldf;ljas;dlfkjasdf",
-    name: "Paconi",
-    image: "https://paconi.net/wp-content/uploads/2014/07/20141215_093143.jpg"
-  },
-  {
-    id: "alsdjf;alksdj",
-    name: "Penny Market",
-    image: "https://www.capital.bg/shimg/zx620y348_2611418.jpg"
-  },
-  {
-    id: "a;lskdjflasdjfklasd",
-    name: "Billa",
-    image:
-      "https://www.alpbachtal.at/deskline/infrastruktur/objekte/billa-supermarkt_141846/billa-ag_141849.png"
-  }
-]
-
 export default ({ navigation }) => {
   const ctx = React.useContext(Context)
-  const [loading, setLoading] = React.useState()
+  const [loading, setLoading] = React.useState(true)
+  const [shops, setShops] = React.useState([])
+
+  React.useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await aumo.shop.getAllShops()
+        setShops(response)
+      } catch (error) {
+        console.warn(error)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
 
   return (
-    <Layout style={{ height: "100%", padding: 10 }}>
+    <Layout style={{ height: "100%" }} level="2">
       <List
+        style={{
+          padding: 20
+        }}
         data={shops}
         renderItem={({ item: i }) => (
           <Shop
@@ -55,6 +49,29 @@ export default ({ navigation }) => {
           />
         )}
       />
+      {loading && (
+        <Layout
+          level="2"
+          style={{
+            height: "100%",
+            width: "100%",
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ModalContainer level="1">
+            <Spinner size="giant" />
+          </ModalContainer>
+        </Layout>
+      )}
     </Layout>
   )
 }
+
+const ModalContainer = styled(Layout)`
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 16px;
+`
