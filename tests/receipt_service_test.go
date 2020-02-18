@@ -3,7 +3,6 @@ package tests
 import (
 	"testing"
 
-	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/mysql"
 	"github.com/deliriumproducts/aumo/receipt"
@@ -23,6 +22,7 @@ func TestReceiptService(t *testing.T) {
 	}()
 
 	ustore := mysql.NewUserStore(sess)
+	sstore := mysql.NewShopStore(sess)
 	rstore := mysql.NewReceiptStore(sess)
 
 	rs := receipt.New(rstore, ustore)
@@ -30,7 +30,9 @@ func TestReceiptService(t *testing.T) {
 	t.Run("create_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := aumo.NewReceipt("Paconi: 230")
+		s := createShop(t, sstore)
+		receipt := aumo.NewReceipt("Paconi: 230", s.ID)
+		receipt.Shop = s
 
 		err = rs.Create(receipt)
 		require.Nil(t, err, "shouldn't return an error")
@@ -43,7 +45,9 @@ func TestReceiptService(t *testing.T) {
 	t.Run("get_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore)
+		s := createShop(t, sstore)
+		receipt := createReceipt(t, rstore, s)
+		receipt.Shop = s
 
 		gotReceipt, err := rs.Receipt(receipt.ReceiptID.String())
 
@@ -55,25 +59,20 @@ func TestReceiptService(t *testing.T) {
 		defer TidyDB(sess)
 
 		receipts := []aumo.Receipt{
-			*aumo.NewReceipt(faker.AmountWithCurrency()),
-			*aumo.NewReceipt(faker.AmountWithCurrency()),
-			*aumo.NewReceipt(faker.AmountWithCurrency()),
-		}
-
-		for _, receipt := range receipts {
-			err := rstore.Save(nil, &receipt)
-			require.Nil(t, err, "shouldn't return an error")
+			*createReceipt(t, rstore, createShop(t, sstore)),
+			*createReceipt(t, rstore, createShop(t, sstore)),
+			*createReceipt(t, rstore, createShop(t, sstore)),
 		}
 
 		gotReceipts, err := rs.Receipts()
 		require.Nil(t, err, "shouldn't return an error")
-		require.ElementsMatch(t, gotReceipts, receipts, "should be equal")
+		require.ElementsMatch(t, receipts, gotReceipts, "should be equal")
 	})
 
 	t.Run("delete_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
 
-		receipt := createReceipt(t, rstore)
+		receipt := createReceipt(t, rstore, createShop(t, sstore))
 
 		err = rs.Delete(receipt.ReceiptID.String())
 		require.Nil(t, err, "shouldn't return an error")
@@ -84,9 +83,10 @@ func TestReceiptService(t *testing.T) {
 
 	t.Run("update_receipt", func(t *testing.T) {
 		defer TidyDB(sess)
-
-		receipt := createReceipt(t, rstore)
+		s := createShop(t, sstore)
+		receipt := createReceipt(t, rstore, s)
 		receipt.Content = "Kaufland 23233232323"
+		receipt.Shop = s
 
 		err = rs.Update(receipt.ReceiptID.String(), receipt)
 		require.Nil(t, err, "shouldn't return an error")
@@ -102,11 +102,14 @@ func TestReceiptService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		t.Run("valid", func(t *testing.T) {
-			receipt := createReceipt(t, rstore)
+			s := createShop(t, sstore)
+			receipt := createReceipt(t, rstore, s)
+			receipt.Shop = s
 			require.Equal(t, false, receipt.IsClaimed())
 
 			var err error
 			receipt, err = rs.ClaimReceipt(user.ID.String(), receipt.ReceiptID.String())
+			receipt.Shop = s
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, true, receipt.IsClaimed())
 

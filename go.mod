@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/bxcodec/faker/v3 v3.2.0
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.1
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-chi/cors v1.0.0
@@ -20,6 +20,7 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20200109152110-61a87790db17
+	golang.org/x/net v0.0.0-20190923162816-aa69164e4478
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect

@@ -30,6 +30,7 @@ func (p *productStore) DB() sqlbuilder.Database {
 func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 	var err error
 	product := &aumo.Product{}
+	shop := &aumo.Shop{}
 
 	if tx == nil {
 		tx, err = p.db.NewTx(context.Background())
@@ -64,7 +65,48 @@ func (p *productStore) FindByID(tx aumo.Tx, id uint) (*aumo.Product, error) {
 		return nil, err
 	}
 
-	return product, err
+	err = tx.Select("shops.*").
+		From("shops").
+		Join("products as p").On("p.shop_id = shops.shop_id").
+		Where("p.id = ? ", id).
+		One(shop)
+	if err != nil {
+		return nil, err
+	}
+
+	shop.Owners = []aumo.User{}
+	product.Shop = shop
+
+	return product, nil
+}
+
+func (p *productStore) FindByShopID(tx aumo.Tx, shopID uint) ([]aumo.Product, error) {
+	var err error
+	products := []aumo.Product{}
+
+	if tx == nil {
+		tx, err = p.db.NewTx(context.Background())
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	return products, tx.Collection(ProductTable).Find().Where("shop_id", shopID).All(&products)
 }
 
 func (p *productStore) FindAll(tx aumo.Tx) ([]aumo.Product, error) {

@@ -23,6 +23,7 @@ func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 		Price       float64 `form:"price" validate:"required,numeric" json:"price"`
 		Description string  `form:"description" validate:"required" json:"description"`
 		Stock       uint    `form:"stock" validate:"required,numeric" json:"stock"`
+		ShopID      uint    `form:"shop_id" validate:"required,numeric" json:"shop_id"`
 	}
 
 	var npf request
@@ -30,7 +31,7 @@ func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock)
+	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock, npf.ShopID)
 
 	err := rest.productService.Create(product)
 	if err != nil {
@@ -60,6 +61,7 @@ func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
 		Price       float64 `form:"price" validate:"required,numeric" json:"price"`
 		Description string  `form:"description" validate:"required" json:"description"`
 		Stock       uint    `form:"stock" validate:"required,numeric" json:"stock"`
+		ShopID      uint    `form:"shop_id" validate:"required,numeric" json:"shop_id"`
 	}
 
 	pID := rest.ParamNumber(w, r, "id")
@@ -69,7 +71,7 @@ func (rest *Rest) productEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock)
+	product := aumo.NewProduct(npf.Name, npf.Price, npf.Image, npf.Description, npf.Stock, npf.ShopID)
 
 	err := rest.productService.Update(pID, product)
 	if err != nil {

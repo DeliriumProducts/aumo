@@ -30,6 +30,7 @@ func (r *receiptStore) DB() sqlbuilder.Database {
 func (r *receiptStore) FindByID(tx aumo.Tx, id string) (*aumo.Receipt, error) {
 	var err error
 	receipt := &aumo.Receipt{}
+	shop := &aumo.Shop{}
 
 	if tx == nil {
 		tx, err = r.db.NewTx(context.Background())
@@ -55,6 +56,12 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id string) (*aumo.Receipt, error) {
 
 	err = tx.Collection(ReceiptTable).Find("receipt_id", id).One(receipt)
 
+	err = tx.Select("shops.*").
+		From("shops").
+		Join("receipts as r").On("r.shop_id = shops.shop_id").
+		Where("r.receipt_id = ? ", id).
+		One(shop)
+
 	switch {
 	case err == nil:
 		break
@@ -63,6 +70,9 @@ func (r *receiptStore) FindByID(tx aumo.Tx, id string) (*aumo.Receipt, error) {
 	default:
 		return nil, err
 	}
+
+	shop.Owners = []aumo.User{}
+	receipt.Shop = shop
 
 	return receipt, err
 }

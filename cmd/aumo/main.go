@@ -15,6 +15,7 @@ import (
 	"github.com/deliriumproducts/aumo/ordering"
 	"github.com/deliriumproducts/aumo/products"
 	"github.com/deliriumproducts/aumo/receipt"
+	"github.com/deliriumproducts/aumo/shops"
 	"github.com/deliriumproducts/aumo/users"
 	"github.com/deliriumproducts/aumo/verifications"
 	"github.com/go-redis/redis/v7"
@@ -94,6 +95,9 @@ func main() {
 	os := mysql.NewOrderStore(db)
 	rs := mysql.NewReceiptStore(db)
 	us := mysql.NewUserStore(db)
+	ss := mysql.NewShopStore(db)
+	so := mysql.NewShopOwnersStore(db)
+
 	auth := auth.New(conn, us, FrontendURL, "/", time.Hour*24)
 
 	_, err = users.InitialAdmin(us, InitialAdminPassword, "admin@deliriumproducts.me")
@@ -106,6 +110,7 @@ func main() {
 		ReceiptService: receipt.New(rs, us),
 		OrderService:   ordering.New(os, ps, us),
 		ProductService: products.New(ps),
+		ShopService:    shops.New(ss, so, us),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
 		BackendURL:     BackendURL,

@@ -27,6 +27,7 @@ type User struct {
 	Orders     []Order   `json:"orders" db:"-"`
 	Receipts   []Receipt `json:"receipts" db:"-"`
 	IsVerified bool      `json:"is_verified" db:"verified"`
+	Shops      []Shop    `json:"shops,omitempty" db:"-"`
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array
@@ -84,6 +85,7 @@ func NewUser(name string, email string, password string, avatar string) (*User, 
 		Role:       Customer,
 		Orders:     []Order{},
 		Receipts:   []Receipt{},
+		Shops:      []Shop{},
 		IsVerified: false,
 	}, nil
 }

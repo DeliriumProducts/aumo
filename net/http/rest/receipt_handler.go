@@ -10,6 +10,7 @@ import (
 func (rest *Rest) receiptCreate(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Content string `form:"content" validate:"required" json:"content"`
+		ShopID  uint   `form:"shop_id" validate:"required,numeric" json:"shop_id"`
 	}
 
 	var re request
@@ -17,7 +18,7 @@ func (rest *Rest) receiptCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	receipt := aumo.NewReceipt(re.Content)
+	receipt := aumo.NewReceipt(re.Content, re.ShopID)
 
 	err := rest.receiptService.Create(receipt)
 	if err != nil {

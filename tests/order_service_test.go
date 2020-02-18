@@ -25,6 +25,7 @@ func TestOrderService(t *testing.T) {
 	pstore := mysql.NewProductStore(sess)
 	ustore := mysql.NewUserStore(sess)
 	ostore := mysql.NewOrderStore(sess)
+	sstore := mysql.NewShopStore(sess)
 
 	os := ordering.New(ostore, pstore, ustore)
 
@@ -34,12 +35,14 @@ func TestOrderService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		var price float64 = 500
-		product := createProduct(t, pstore, price, 1)
+		product := createProduct(t, pstore, createShop(t, sstore), price, 1)
 
 		t.Run("valid", func(t *testing.T) {
 			// Place order
 			order, err := os.PlaceOrder(user.ID.String(), product.ID)
 			assert.Nil(t, err, "shouldn't return an error")
+
+			order.Product.Shop = nil
 
 			// Update stock
 			product.Stock--
