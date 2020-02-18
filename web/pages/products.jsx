@@ -201,7 +201,7 @@ const ProductCard = styled(c)`
 
   & img {
     border-radius: 7px 7px 0 0;
-    object-fit: cover;
+    object-fit: contain;
     /* width: 100%; */
     height: 10rem;
   }

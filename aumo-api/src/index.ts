@@ -12,6 +12,7 @@ import order from './lib/order';
 import product from './lib/product';
 import receipt from './lib/receipt';
 import user from './lib/user';
+import shop from './lib/shop';
 
 export default {
   auth,
@@ -19,5 +20,6 @@ export default {
   order,
   product,
   receipt,
-  user
+  user,
+  shop
 };
