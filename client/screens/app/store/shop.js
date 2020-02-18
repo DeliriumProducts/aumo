@@ -31,6 +31,17 @@ export default ({ route }) => {
         product_id: product.id
       })
       Alert.alert("Successfull!", "You successfully purchased " + product.name)
+      setProducts(products =>
+        products.map(p => {
+          if (p.id == product.id) {
+            return {
+              ...p,
+              stock: p.stock - 1
+            }
+          }
+          return p
+        })
+      )
     } catch (error) {
       Alert.alert("Error!", error.response.data.error)
     } finally {
