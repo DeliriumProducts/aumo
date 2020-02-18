@@ -1,7 +1,11 @@
 import { Button, Card, Icon, List, Text } from "@ui-kitten/components"
 import React from "react"
 import { Dimensions, ImageBackground, View } from "react-native"
-export default ({ navigation, route, onItemPress, onCartPress, products }) => {
+export default ({
+  onItemPress = () => {},
+  onCartPress = () => {},
+  products
+}) => {
   const renderProductItem = ({ item }) => (
     <Card
       style={{
