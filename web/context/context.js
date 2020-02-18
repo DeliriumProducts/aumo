@@ -2,7 +2,8 @@ import React from "react"
 
 export const initialState = {
   user: null,
-  products: []
+  products: [],
+  shops: []
 }
 
 export const Context = React.createContext(initialState)

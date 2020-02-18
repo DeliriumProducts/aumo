@@ -10,7 +10,7 @@ import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
 
 const links = [
-  { href: "/products", label: "Products", icon: <Icon type="shop" /> },
+  { href: "/shops", label: "Shops", icon: <Icon type="shop" /> },
   { href: "/users", label: "Users", icon: <Icon type="user" /> }
 ].map(link => ({
   ...link,

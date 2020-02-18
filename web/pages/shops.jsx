@@ -8,23 +8,23 @@ import { Context } from "../context/context"
 import { actions } from "../context/providers/contextProvider"
 import withAuth from "../hocs/withAuth"
 
-export const Products = () => {
+export const Shops = () => {
   const ctx = useContext(Context)
-  const [curProduct, setCurProduct] = useState(null)
+  const [curShop, setCurShop] = useState(null)
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
   const [formRef, setFormRef] = useState(null)
 
   React.useEffect(() => {
     ;(async () => {
-      const data = await aumo.product.getAllProducts()
-      ctx.dispatch({ type: actions.SET_PRODUCTS, payload: data })
+      const data = await aumo.shop.getAllShops()
+      ctx.dispatch({ type: actions.SET_SHOPS, payload: data })
       setLoading(false)
     })()
   }, [])
 
-  const handleEdit = p => {
-    setCurProduct(p)
+  const handleEdit = s => {
+    setCurShop(s)
     showModal()
   }
 
@@ -41,16 +41,16 @@ export const Products = () => {
       }
 
       try {
-        await aumo.product.editProduct(curProduct.id, {
+        await aumo.product.editProduct(curShop.id, {
           ...product,
           price: Number(product.price),
           stock: Number(product.stock)
         })
         message.success(`Successfully edited product ${product.name}! 🎉`)
-        const prods = ctx.state.products.map(pp => {
-          if (pp.id === curProduct.id) {
+        const prods = ctx.state.shops.map(pp => {
+          if (pp.id === curShop.id) {
             return {
-              id: curProduct.id,
+              id: curShop.id,
               ...product,
               stock: Number(product.stock),
               price: Number(product.price)
@@ -78,8 +78,8 @@ export const Products = () => {
 
   const handleDelete = async p => {
     try {
-      await aumo.product.deleteProduct(p.id)
-      message.success(`Successfully deleted product ${p.name}! 🎉`)
+      await aumo.product.deleteProduct(s.id)
+      message.success(`Successfully deleted product ${s.name}! 🎉`)
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
@@ -92,7 +92,7 @@ export const Products = () => {
       }
       return
     }
-    const prods = ctx.state.products.filter(pp => pp.id !== p.id)
+    const prods = ctx.state.shops.filter(ss => ss.id !== s.id)
     ctx.dispatch({ type: actions.SET_PRODUCTS, payload: prods })
   }
 
@@ -107,22 +107,22 @@ export const Products = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        {loading && ctx.state.products.length < 1 && (
+        {loading && ctx.state.shops.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
 
-        {ctx.state.products &&
-          ctx.state.products.length > 0 &&
-          ctx.state.products.map(p => (
+        {ctx.state.shops &&
+          ctx.state.shops.length > 0 &&
+          ctx.state.shops.map(s => (
             <ProductCard
-              key={p.id}
+              key={s.id}
               hoverable
-              cover={<img alt="Product" src={p.image} />}
+              cover={<img alt="Product" src={s.image} />}
             >
-              <StyledMeta title={p.name} description={<p>{p.description}</p>} />
+              <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
                 <span>
-                  <span className="price">{p.price} </span>pts.
+                  <span className="price">{s.price} </span>pts.
                 </span>
                 <span className="actions-buttons">
                   <Button
@@ -130,13 +130,13 @@ export const Products = () => {
                     type="primary"
                     className="edit-button"
                     icon="edit"
-                    onClick={() => handleEdit(p)}
+                    onClick={() => handleEdit(s)}
                   ></Button>
 
                   <Popconfirm
                     onConfirm={e => {
                       e.stopPropagation()
-                      handleDelete(p)
+                      handleDelete(s)
                     }}
                     title={`Are you sure?`}
                     placement="bottom"
@@ -155,7 +155,7 @@ export const Products = () => {
           visible={visible}
           onCancel={handleCancel}
           onCreate={handleSubmit}
-          product={curProduct}
+          product={curShop}
         />
       </Container>
     </>
@@ -269,4 +269,4 @@ const Container = styled.div`
   }
 `
 
-export default withAuth(Products)
+export default withAuth(Shops)
