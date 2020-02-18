@@ -1,1 +1,1 @@
-export const BACKEND_URL = "http://aumo-api.deliriumproducts.me/api/v1"
+export const BACKEND_URL = "https://aumo-api.deliriumproducts.me/api/v1"
