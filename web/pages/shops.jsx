@@ -58,7 +58,7 @@ export const Shops = () => {
           }
           return pp
         })
-        ctx.dispatch({ type: actions.SET_PRODUCTS, payload: prods })
+        ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -76,10 +76,11 @@ export const Shops = () => {
     })
   }
 
-  const handleDelete = async p => {
+  const handleDelete = async s => {
+    console.log(s)
     try {
-      await aumo.product.deleteProduct(s.id)
-      message.success(`Successfully deleted product ${s.name}! 🎉`)
+      await aumo.shop.deleteShop(s.id)
+      message.success(`Successfully deleted shop ${s.name}! 🎉`)
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
@@ -93,7 +94,7 @@ export const Shops = () => {
       return
     }
     const prods = ctx.state.shops.filter(ss => ss.id !== s.id)
-    ctx.dispatch({ type: actions.SET_PRODUCTS, payload: prods })
+    ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
   }
 
   const saveFormRef = fr => {
@@ -121,9 +122,6 @@ export const Shops = () => {
             >
               <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
-                <span>
-                  <span className="price">{s.price} </span>pts.
-                </span>
                 <span className="actions-buttons">
                   <Button
                     size="small"
@@ -179,6 +177,7 @@ const ProductCard = styled(c)`
     text-align: left;
     & .actions {
       display: flex;
+      flex-direction: row-reverse;
       width: 100%;
       justify-content: space-between;
 
@@ -202,8 +201,7 @@ const ProductCard = styled(c)`
   & img {
     border-radius: 7px 7px 0 0;
     object-fit: contain;
-    /* width: 100%; */
-    height: 10rem;
+    /* height: 10rem; */
   }
 
   .ant-card-actions {
@@ -229,7 +227,7 @@ const StyledMeta = styled(c.Meta)`
   }
   .ant-card-meta-title {
     font-weight: bold;
-    font-size: 15px;
+    font-size: 20px;
     text-align: left;
   }
 
