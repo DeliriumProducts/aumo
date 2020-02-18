@@ -35,7 +35,7 @@ func TestUserService(t *testing.T) {
 	os := ordering.New(ostore, pstore, ustore)
 	us := users.New(ustore)
 	rs := receipt.New(rstore, ustore)
-	ss := shops.New(sstore, sostore)
+	ss := shops.New(sstore, sostore, ustore)
 
 	t.Run("create_user", func(t *testing.T) {
 		defer TidyDB(sess)
