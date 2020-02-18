@@ -1,19 +1,24 @@
 package shops
 
 import (
+	"context"
+
 	"github.com/deliriumproducts/aumo"
+	"upper.io/db.v3/lib/sqlbuilder"
 )
 
 type service struct {
 	shopStore       aumo.ShopStore
+	userStore       aumo.UserStore
 	shopOwnersStore aumo.ShopOwnersStore
 }
 
 //New returns an instance of `aumo.ShopService`
-func New(shopStore aumo.ShopStore, shopOwnersStore aumo.ShopOwnersStore) aumo.ShopService {
+func New(shopStore aumo.ShopStore, shopOwnersStore aumo.ShopOwnersStore, userStore aumo.UserStore) aumo.ShopService {
 	return &service{
 		shopStore:       shopStore,
 		shopOwnersStore: shopOwnersStore,
+		userStore:       userStore,
 	}
 }
 
@@ -38,9 +43,41 @@ func (ss *service) Delete(id uint) error {
 }
 
 func (ss *service) AddOwner(so *aumo.ShopOwners) error {
-	return ss.shopOwnersStore.Save(nil, so)
+	db := ss.store.DB()
+	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
+		user, err := ss.userStore.FindByID(tx, so.UserID, false)
+		if err != nil {
+			return err
+		}
+
+		if user.Role == aumo.Customer {
+			user.Role = aumo.ShopOwner
+			err := ss.userStore.Update(tx, so.UserID, user)
+			if err != nil {
+				return err
+			}
+		}
+
+		return ss.shopOwnersStore.Save(tx, so)
+	})
 }
 
 func (ss *service) RemoveOwner(so *aumo.ShopOwners) error {
-	return ss.shopOwnersStore.Delete(nil, so)
+	db := ss.store.DB()
+	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
+		user, err := ss.userStore.FindByID(tx, so.UserID, true)
+		if err != nil {
+			return err
+		}
+
+		if user.Role == aumo.ShopOwner && len(user.Shops) == 1 {
+			user.Role = aumo.Customer
+			err := ss.userStore.Update(tx, so.UserID, user)
+			if err != nil {
+				return err
+			}
+		}
+
+		return ss.shopOwnersStore.Delete(tx, so)
+	})
 }
