@@ -5,6 +5,8 @@ export interface Product {
   image: string;
   description: string;
   stock: number;
+  shop_id: number;
+  shop: Shop;
 }
 
 export interface User {
@@ -18,6 +20,12 @@ export interface User {
   orders: Order[];
   receipts: Receipt[];
   is_verified: boolean;
+  shops: Shop[];
+}
+
+export interface ShopOwner {
+  user_id: string;
+  shop_id: number;
 }
 
 export type Role = 'Admin' | 'Customer';
@@ -29,9 +37,19 @@ export interface Order {
   product: Product;
 }
 
+export interface Shop {
+  shop_id: number;
+  name: string;
+  image: string;
+  owners: User[];
+  products: Product[];
+}
+
 export interface Receipt {
   receipt_id: string;
   content: string;
+  shop_id: number;
+  shop: Shop;
 }
 
 export interface MessageResponse {
