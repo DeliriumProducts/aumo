@@ -245,6 +245,9 @@ func (s *shopOwnersStore) Save(tx aumo.Tx, so *aumo.ShopOwners) error {
 		if mysqlError.Number == ErrBadRef {
 			return aumo.ErrUserNotFound
 		}
+		if mysqlError.Number == ErrDupEntry {
+			return aumo.ErrUserAlreadyOwnsShop
+		}
 	}
 
 	return err

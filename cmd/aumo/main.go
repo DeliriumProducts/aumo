@@ -110,7 +110,7 @@ func main() {
 		ReceiptService: receipt.New(rs, us),
 		OrderService:   ordering.New(os, ps, us),
 		ProductService: products.New(ps),
-		ShopService:    shops.New(ss, so),
+		ShopService:    shops.New(ss, so, us),
 		Auth:           auth,
 		MountRoute:     "/api/v1",
 		BackendURL:     BackendURL,

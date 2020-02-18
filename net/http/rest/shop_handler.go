@@ -151,8 +151,8 @@ func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case err == nil:
 		break
-	case errors.Is(err, aumo.ErrShopOwnerUserNotFound):
-		rest.JSONError(w, err, http.StatusNotFound)
+	case errors.Is(err, aumo.ErrUserAlreadyOwnsShop):
+		rest.JSONError(w, err, http.StatusUnprocessableEntity)
 		return
 	default:
 		rest.JSONError(w, err, http.StatusInternalServerError)

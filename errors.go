@@ -33,4 +33,6 @@ var (
 	ErrShopOwnerUserNotFound = errors.New("aumo: can't use a non-existing user as a shop owner")
 	// ErrShopNotFound is an error for when a shop wasn't found
 	ErrShopNotFound = errors.New("aumo: shop not found")
+	// ErrUserAlreadyOwnsShop is an error for when a use already owns a shop
+	ErrUserAlreadyOwnsShop = errors.New("aumo: user already owns this shop")
 )

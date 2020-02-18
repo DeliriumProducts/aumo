@@ -43,7 +43,7 @@ func (ss *service) Delete(id uint) error {
 }
 
 func (ss *service) AddOwner(so *aumo.ShopOwners) error {
-	db := ss.store.DB()
+	db := ss.shopStore.DB()
 	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
 		user, err := ss.userStore.FindByID(tx, so.UserID, false)
 		if err != nil {
@@ -63,7 +63,7 @@ func (ss *service) AddOwner(so *aumo.ShopOwners) error {
 }
 
 func (ss *service) RemoveOwner(so *aumo.ShopOwners) error {
-	db := ss.store.DB()
+	db := ss.shopStore.DB()
 	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
 		user, err := ss.userStore.FindByID(tx, so.UserID, true)
 		if err != nil {
