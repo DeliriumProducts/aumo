@@ -27,8 +27,8 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/shops", func(r chi.Router) {
-			r.Get("/", rest.shopGetAll)
-			r.Get("/{id}", rest.shopGet)
+			r.With(rest.WithAuth()).Get("/", rest.shopGetAll)
+			r.With(rest.WithAuth()).Get("/{id}", rest.shopGet)
 			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.shopCreate)
 			r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.shopEdit)
 			r.With(rest.WithAuth(aumo.Admin)).Post("/{id}/add-owner", rest.shopAddOwner)
@@ -41,8 +41,8 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/products", func(r chi.Router) {
-			r.Get("/", rest.productGetAll)
-			r.Get("/{id}", rest.productGet)
+			r.With(rest.WithAuth()).Get("/", rest.productGetAll)
+			r.With(rest.WithAuth()).Get("/{id}", rest.productGet)
 			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.productCreate)
 			r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.productEdit)
 			r.With(rest.WithAuth(aumo.Admin)).Delete("/{id}", rest.productDelete)
