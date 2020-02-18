@@ -41,9 +41,11 @@ func (s *shopStore) DB() sqlbuilder.Database {
 	return s.db
 }
 
-func (s *shopStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.Shop, error) {
+func (s *shopStore) FindByID(tx aumo.Tx, id uint, withOwners bool) (*aumo.Shop, error) {
 	var err error
 	shop := &aumo.Shop{}
+	products := []aumo.Product{}
+	owners := []aumo.User{}
 
 	if tx == nil {
 		tx, err = s.db.NewTx(context.Background())
@@ -67,12 +69,30 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.Shop, e
 		}()
 	}
 
-	if relations {
-		shop, err = s.shopRelations(tx, "shops.shop_id = ?", id)
-	} else {
-		err = tx.Collection(ShopTable).Find("shop_id", id).One(shop)
-		shop.Owners = []aumo.User{}
+	err = tx.Collection(ShopTable).Find("shop_id", id).One(shop)
+
+	if withOwners {
+		err = tx.Select("u.*").
+			From("shop_owners").
+			Join("users as u").On("shops_owners.user_id = u.user_id").
+			Where(where, args).
+			All(&owners)
+
+		if err != nil {
+			return nil, err
+		}
 	}
+
+	err = tx.
+		Collection(ProductTable).
+		Find("shop_id", id).
+		All(&products)
+	if err != nil {
+		return nil, err
+	}
+
+	shop.Owners = owners
+	shop.Products = products
 
 	return shop, err
 }
@@ -188,34 +208,6 @@ func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
 	}
 
 	return tx.Collection(ShopTable).Find("shop_id", id).Delete()
-}
-
-func (s *shopStore) shopRelations(tx aumo.Tx, where string, args ...interface{}) (*aumo.Shop, error) {
-	var err error
-	shop := &aumo.Shop{}
-	owners := []aumo.User{}
-
-	err = tx.
-		Select("*").
-		From(ShopTable).
-		Where(where, args).
-		One(shop)
-	if err != nil {
-		return nil, err
-	}
-
-	err = tx.Select("u.*").
-		From("shop_owners").
-		Join("users as u").On("shops_owners.user_id = u.user_id").
-		Where(where, args).
-		All(&owners)
-	if err != nil {
-		return nil, err
-	}
-
-	shop.Owners = owners
-
-	return shop, nil
 }
 
 func (s *shopOwnersStore) Save(tx aumo.Tx, so *aumo.ShopOwners) error {
