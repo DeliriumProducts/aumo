@@ -72,6 +72,7 @@ export default ({
               </Text>
             </View>
             <Button
+              disabled={item.disabled}
               style={{ paddingHorizontal: 0 }}
               size="small"
               icon={style => <Icon {...style} name="shopping-cart" />}
