@@ -26,7 +26,22 @@ func (rest *Rest) shopGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	shop, err := rest.shopService.Shop(sID, user.Role != aumo.Customer) // only get the owners if the user is not a customer
+	withOwners := false
+	if user.Role == aumo.ShopOwner {
+		for _, shop := range user.Shops {
+			// If the user owns the given shop, they can get the owners
+			if shop.ID == sID {
+				withOwners = true
+				break
+			}
+		}
+	}
+
+	if user.Role == aumo.Admin {
+		withOwners = true
+	}
+
+	shop, err := rest.shopService.Shop(sID, user.Role != aumo.Customer && withOwners) // only get the owners if the user is not a customer
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
