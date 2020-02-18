@@ -5,8 +5,9 @@ import { Alert } from "react-native"
 import styled from "styled-components/native"
 import ProductList from "../../../components/ProductList"
 import { Context } from "../../../context/context"
+import Routes from "../../../navigation/routes"
 
-export default ({ route }) => {
+export default ({ route, navigation }) => {
   const ctx = React.useContext(Context)
   const [products, setProducts] = React.useState([])
   const [loading, setLoading] = React.useState(true)
@@ -56,6 +57,9 @@ export default ({ route }) => {
           ...p,
           disabled: p.stock < 1 || ctx.state.user.points < p.price
         }))}
+        onItemPress={product => {
+          navigation.navigate(Routes.StoreShopProduct, product)
+        }}
         onCartPress={product => {
           Alert.alert(
             "Purchase confirmation",

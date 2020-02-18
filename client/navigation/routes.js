@@ -6,6 +6,7 @@ export default {
   Home: "Home",
   Store: "Store",
   StoreShop: "Store Shop",
+  StoreShopProduct: "Store Shop Product",
   User: "My Profile",
   UserEdit: "Edit Profile"
 }

@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/stack"
 import React from "react"
 import StoreScreen from "../../screens/app/store/index.js"
+import StoreShopProductScreen from "../../screens/app/store/product"
 import StoreShopScreen from "../../screens/app/store/shop.js"
 import theme from "../../theme"
 import Routes from "../routes"
@@ -25,6 +26,11 @@ export default () => (
       name={Routes.StoreShop}
       component={StoreShopScreen}
       options={({ route }) => ({ title: `${route.params.name}'s store` })}
+    />
+    <Stack.Screen
+      name={Routes.StoreShopProduct}
+      component={StoreShopProductScreen}
+      options={({ route }) => ({ title: `${route.params.name}` })}
     />
   </Stack.Navigator>
 )
