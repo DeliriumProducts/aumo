@@ -75,7 +75,7 @@ func (s *shopStore) FindByID(tx aumo.Tx, id uint, withOwners bool) (*aumo.Shop, 
 		err = tx.Select("u.*").
 			From("shop_owners").
 			Join("users as u").On("shops_owners.user_id = u.user_id").
-			Where(where, args).
+			Where("shop_owners.shop_id", id).
 			All(&owners)
 
 		if err != nil {
