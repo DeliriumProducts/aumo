@@ -12,7 +12,7 @@ export async function getShop(id: number, cookie?: string): Promise<Shop> {
     .data;
 }
 
-export async function edit(shop: Shop, cookie?: string): Promise<Shop> {
+export async function editShop(shop: Shop, cookie?: string): Promise<Shop> {
   return (
     await axios.put(
       `${options.Backend}/shops/${shop.shop_id}`,
@@ -22,12 +22,21 @@ export async function edit(shop: Shop, cookie?: string): Promise<Shop> {
   ).data;
 }
 
-export async function create(
+export async function createShop(
   shop: CreateRequest,
   cookie?: string
 ): Promise<Shop> {
   return (await axios.post(`${options.Backend}/shops`, shop, withAuth(cookie)))
     .data;
+}
+
+export async function deleteShop(
+  id: number,
+  cookie?: string
+): Promise<MessageResponse> {
+  return (
+    await axios.delete(`${options.Backend}/shops/${id}`, withAuth(cookie))
+  ).data;
 }
 
 export async function addOwner(
@@ -64,8 +73,9 @@ interface CreateRequest {
 export default {
   getAllShops,
   getShop,
-  edit,
-  create,
+  deleteShop,
+  editShop,
+  createShop,
   addOwner,
   removeOwner
 };
