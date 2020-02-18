@@ -40,6 +40,14 @@ export default ({
         >
           <View>
             <Text category="s1">{item.name}</Text>
+            <Text
+              style={{ marginTop: 5 }}
+              appearance="hint"
+              status={item.stock < 1 ? "danger" : ""}
+              category="c1"
+            >
+              {item.stock} in stock
+            </Text>
           </View>
           <View
             style={{
