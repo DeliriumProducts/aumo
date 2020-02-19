@@ -62,4 +62,5 @@ type ShopStore interface {
 type ShopOwnersStore interface {
 	Save(tx Tx, so *ShopOwners) error
 	Delete(tx Tx, so *ShopOwners) error
+	DeleteByUser(tx Tx, uID string) error
 }
