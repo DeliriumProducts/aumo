@@ -31,7 +31,7 @@ func (rest *Rest) userGet(w http.ResponseWriter, r *http.Request) {
 
 func (rest *Rest) userEditRole(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Role aumo.Role `form:"role" validate:"required,oneof=Admin Customer" json:"role"`
+		Role aumo.Role `form:"role" validate:"required,oneof=Admin Customer 'Shop Owner'" json:"role"`
 	}
 
 	uID := rest.Param(r, "id")
