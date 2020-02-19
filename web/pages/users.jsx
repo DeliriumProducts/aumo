@@ -493,7 +493,6 @@ const NameContainer = styled.div`
     margin: 0;
     text-align: left;
     font-weight: 700;
-    display: inline;
   }
   h2 {
     margin: 0;
