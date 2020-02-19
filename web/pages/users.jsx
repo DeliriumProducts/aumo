@@ -8,7 +8,8 @@ import {
   Modal,
   Popconfirm,
   Radio,
-  Tag
+  Tag,
+  Tooltip
 } from "antd"
 import RadioGroup from "antd/lib/radio/group"
 import aumo from "aumo"
@@ -215,12 +216,41 @@ const UserCard = ({
     >
       <div>
         <Avatar src={user.avatar} size={80} key={user.id} />
+        {user.is_verified ? (
+          <Tooltip title="This user is verified." placement="bottom">
+            <Icon
+              type="check-circle"
+              theme="twoTone"
+              style={{
+                fontSize: 20,
+                position: "absolute",
+                bottom: 30,
+                left: 70
+              }}
+              twoToneColor="#52c41a"
+            />
+          </Tooltip>
+        ) : (
+          <Tooltip title="This user is not verified." placement="bottom">
+            <Icon
+              type="close-circle"
+              theme="twoTone"
+              twoToneColor="#eb2f96"
+              style={{
+                fontSize: 20,
+                position: "absolute",
+                bottom: 30,
+                left: 70
+              }}
+            />
+          </Tooltip>
+        )}
       </div>
       <NameContainer>
-        <Role>
+        <Title>
           <Name>{user.name}</Name>
           <Tag color={colors[user.role]}>{user.role.toUpperCase()}</Tag>
-        </Role>
+        </Title>
         <Email>{user.email}</Email>
       </NameContainer>
       <Filler />
@@ -491,7 +521,7 @@ const NameContainer = styled.div`
   align-items: center;
 `
 
-const Role = styled.div`
+const Title = styled.div`
   width: 100%;
   span {
     margin-top: 5px;
