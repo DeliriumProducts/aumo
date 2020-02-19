@@ -115,7 +115,7 @@ const Nav = props => {
               <Welcome>
                 Welcome back, <span>{props.name}</span>
               </Welcome>
-              {props.route.startsWith("/shops") ? (
+              {props.route.startsWith("/shops") && (
                 <>
                   <Button
                     type="primary"
@@ -127,8 +127,6 @@ const Nav = props => {
                   </Button>
                   <Divider type="vertical" className="btn-divider" />
                 </>
-              ) : (
-                <></>
               )}
               <LinkList>
                 {links.map(({ key, href, label, icon, roles }) => {
