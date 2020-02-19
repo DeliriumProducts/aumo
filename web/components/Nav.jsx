@@ -29,22 +29,27 @@ const Nav = props => {
   const handleCreate = () => {
     const { form } = formRef.props
 
-    form.validateFields(async (err, product) => {
+    form.validateFields(async (err, entity) => {
       if (err) {
         return
       }
 
       try {
-        const prdct = await aumo.product.createProduct({
-          ...product,
-          price: Number(product.price),
-          stock: Number(product.stock)
-        })
-        message.success(`Successfully created product ${product.name}!`)
-        ctx.dispatch({
-          type: actions.SET_PRODUCTS,
-          payload: [...ctx.state.products, prdct]
-        })
+        if (props.route === "/shops") {
+          const shp = await aumo.shop.createShop(entity)
+          message.success(`Successfully created shop ${entity.name}!`)
+          ctx.dispatch({
+            type: actions.SET_SHOPS,
+            payload: [...ctx.state.shops, shp]
+          })
+        } else {
+          const prdct = await aumo.product.createProduct(entity)
+          message.success(`Successfully created shop ${entity.name}!`)
+          ctx.dispatch({
+            type: actions.SET_PRODUCTS,
+            payload: [...ctx.state.products, prdct]
+          })
+        }
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -92,7 +97,7 @@ const Nav = props => {
               <Welcome>
                 Welcome back, <span>{props.name}</span>
               </Welcome>
-              {props.route === "/products" ? (
+              {props.route === "/shops" ? (
                 <>
                   <Button
                     type="primary"
@@ -128,13 +133,24 @@ const Nav = props => {
                   <Icon type="logout" />
                   LOGOUT
                 </Button>
-                <ModalForm
-                  wrappedComponentRef={saveFormRef}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  onCreate={handleCreate}
-                  product={{}}
-                />
+                {props.route === "/shops" ? (
+                  <ModalForm
+                    wrappedComponentRef={saveFormRef}
+                    visible={visible}
+                    onCancel={handleCancel}
+                    onCreate={handleCreate}
+                    entity={{}}
+                  />
+                ) : (
+                  <ModalForm
+                    wrappedComponentRef={saveFormRef}
+                    visible={visible}
+                    onCancel={handleCancel}
+                    onCreate={handleCreate}
+                    entity={{}}
+                    isProduct={true}
+                  />
+                )}
               </LinkList>
             </>
           )
