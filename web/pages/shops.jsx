@@ -35,30 +35,24 @@ export const Shops = () => {
   const handleSubmit = () => {
     const { form } = formRef.props
 
-    form.validateFields(async (err, product) => {
+    form.validateFields(async (err, shop) => {
       if (err) {
         return
       }
 
       try {
-        await aumo.product.editProduct(curShop.id, {
-          ...product,
-          price: Number(product.price),
-          stock: Number(product.stock)
-        })
-        message.success(`Successfully edited product ${product.name}! 🎉`)
-        const prods = ctx.state.shops.map(pp => {
-          if (pp.id === curShop.id) {
+        await aumo.shop.editShop({ id: curShop.id, ...shop })
+        message.success(`Successfully edited shop ${shop.name}! 🎉`)
+        const shops = ctx.state.shops.map(ss => {
+          if (ss.id === curShop.id) {
             return {
               id: curShop.id,
-              ...product,
-              stock: Number(product.stock),
-              price: Number(product.price)
+              ...shop
             }
           }
-          return pp
+          return ss
         })
-        ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
+        ctx.dispatch({ type: actions.SET_SHOPS, payload: shops })
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -153,7 +147,8 @@ export const Shops = () => {
           visible={visible}
           onCancel={handleCancel}
           onCreate={handleSubmit}
-          product={curShop}
+          entity={curShop}
+          isProduct={false}
         />
       </Container>
     </>

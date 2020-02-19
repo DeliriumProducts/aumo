@@ -4,7 +4,14 @@ export default Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, product } = this.props
+      const {
+        visible,
+        onCancel,
+        onCreate,
+        form,
+        entity,
+        isProduct
+      } = this.props
       const { getFieldDecorator } = form
 
       return (
@@ -23,7 +30,7 @@ export default Form.create()(
                     required: true
                   }
                 ],
-                initialValue: product?.name
+                initialValue: entity?.name
               })(<Input />)}
             </Form.Item>
             <Form.Item label="Image">
@@ -33,40 +40,46 @@ export default Form.create()(
                     required: true
                   }
                 ],
-                initialValue: product?.image
+                initialValue: entity?.image
               })(<Input />)}
             </Form.Item>
-            <Form.Item label="Price">
-              {getFieldDecorator("price", {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue: product?.price
-              })(<Input />)}
-            </Form.Item>
-            <Form.Item label="Stock">
-              {getFieldDecorator("stock", {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue: product?.stock
-              })(<Input />)}
-            </Form.Item>
-            <Form.Item label="Description">
-              {getFieldDecorator("description", {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
+            {isProduct ? (
+              <>
+                <Form.Item label="Price">
+                  {getFieldDecorator("price", {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue: entity?.price
+                  })(<Input />)}
+                </Form.Item>
+                <Form.Item label="Stock">
+                  {getFieldDecorator("stock", {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue: entity?.stock
+                  })(<Input />)}
+                </Form.Item>
+                <Form.Item label="Description">
+                  {getFieldDecorator("description", {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
 
-                initialValue: product?.description
-              })(<Input type="textarea" />)}
-            </Form.Item>
+                    initialValue: entity?.description
+                  })(<Input type="textarea" />)}
+                </Form.Item>
+              </>
+            ) : (
+              <></>
+            )}
           </Form>
         </Modal>
       )
