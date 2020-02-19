@@ -1,7 +1,7 @@
 import { Button, Divider, Icon, message } from "antd"
 import aumo from "aumo"
 import Link from "next/link"
-import Router from "next/router"
+import Router, { useRouter } from "next/router"
 import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import { THEME_VARIABLES } from "../config/env"
@@ -21,6 +21,7 @@ const Nav = props => {
   const ctx = useContext(Context)
   const [visible, setVisible] = useState(false)
   const [formRef, setFormRef] = useState(null)
+  const router = useRouter()
 
   const showModal = () => setVisible(true)
 
@@ -43,7 +44,14 @@ const Nav = props => {
             payload: [...ctx.state.shops, shp]
           })
         } else {
-          const prdct = await aumo.product.createProduct(entity)
+          const { shop_id } = router.query
+
+          const prdct = await aumo.product.createProduct({
+            ...entity,
+            shop_id: Number(shop_id),
+            price: Number(entity.price),
+            stock: Number(entity.stock)
+          })
           message.success(`Successfully created shop ${entity.name}!`)
           ctx.dispatch({
             type: actions.SET_PRODUCTS,
@@ -75,7 +83,7 @@ const Nav = props => {
     <nav>
       <Menu>
         <Link href={"/"}>
-          <Logo src="aumo.png" />
+          <Logo src="/aumo.png" />
         </Link>
         {props.route === "/" ? (
           <div>
@@ -97,7 +105,7 @@ const Nav = props => {
               <Welcome>
                 Welcome back, <span>{props.name}</span>
               </Welcome>
-              {props.route === "/shops" ? (
+              {props.route.startsWith("/shops") ? (
                 <>
                   <Button
                     type="primary"
@@ -115,7 +123,7 @@ const Nav = props => {
               <LinkList>
                 {links.map(({ key, href, label, icon }) => (
                   <Link key={key} href={href}>
-                    <LinkItem isSelected={props.route === href}>
+                    <LinkItem isSelected={props.route.startsWith(href)}>
                       {icon}
                       {label}
                     </LinkItem>
