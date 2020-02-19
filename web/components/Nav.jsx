@@ -10,8 +10,18 @@ import { actions } from "../context/providers/contextProvider"
 import ModalForm from "./ModalForm"
 
 const links = [
-  { href: "/shops", label: "Shops", icon: <Icon type="shop" /> },
-  { href: "/users", label: "Users", icon: <Icon type="user" /> }
+  {
+    href: "/shops",
+    label: "Shops",
+    icon: <Icon type="shop" />,
+    roles: ["Shop Owner"]
+  },
+  {
+    href: "/users",
+    label: "Users",
+    icon: <Icon type="user" />,
+    roles: ["Admin"]
+  }
 ].map(link => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`
@@ -121,14 +131,24 @@ const Nav = props => {
                 <></>
               )}
               <LinkList>
-                {links.map(({ key, href, label, icon }) => (
-                  <Link key={key} href={href}>
-                    <LinkItem isSelected={props.route.startsWith(href)}>
-                      {icon}
-                      {label}
-                    </LinkItem>
-                  </Link>
-                ))}
+                {links.map(({ key, href, label, icon, roles }) => {
+                  if (
+                    roles.length &&
+                    ctx.state.user &&
+                    ctx.state.user?.role !== "Admin" &&
+                    !roles.includes(ctx.state.user?.role)
+                  ) {
+                    return
+                  }
+                  return (
+                    <Link key={key} href={href}>
+                      <LinkItem isSelected={props.route.startsWith(href)}>
+                        {icon}
+                        {label}
+                      </LinkItem>
+                    </Link>
+                  )
+                })}
                 <Divider type="vertical" />
                 <Button
                   type="ghost"
