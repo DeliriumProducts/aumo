@@ -557,4 +557,4 @@ const Container = styled.div`
   }
 `
 
-export default withAuth(Users)
+export default withAuth(Users, ["Admin"])

@@ -125,7 +125,7 @@ Login.getInitialProps = async ctx => {
     if (req.headers.cookie) {
       try {
         auth = await aumo.auth.me(req.headers.cookie)
-        if (auth.role === "Admin") {
+        if (auth.role !== "Customer") {
           res.writeHead(302, {
             Location: "/shops"
           })
@@ -136,7 +136,7 @@ Login.getInitialProps = async ctx => {
   } else {
     try {
       auth = await aumo.auth.me()
-      if (auth.role === "Admin") {
+      if (auth.role !== "Customer") {
         Router.replace("/shops")
       }
     } catch (err) {}
