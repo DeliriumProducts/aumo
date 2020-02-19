@@ -48,6 +48,7 @@ export const Products = () => {
         await aumo.product.editProduct(curProduct.id, {
           ...product,
           price: Number(product.price),
+          shop_id: Number(shop_id),
           stock: Number(product.stock)
         })
         message.success(`Successfully edited product ${product.name}! 🎉`)
