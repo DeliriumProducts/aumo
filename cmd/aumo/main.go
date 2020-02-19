@@ -106,7 +106,7 @@ func main() {
 	}
 
 	r := rest.New(&rest.Config{
-		UserService:    users.New(us),
+		UserService:    users.New(us, so),
 		ReceiptService: receipt.New(rs, us),
 		OrderService:   ordering.New(os, ps, us),
 		ProductService: products.New(ps),

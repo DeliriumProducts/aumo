@@ -4,7 +4,7 @@ import React, { Component } from "react"
 import { Context } from "../context/context.js"
 import { actions } from "../context/providers/contextProvider"
 
-export default C =>
+export default (C, roles = []) =>
   class extends Component {
     static contextType = Context
 
@@ -19,7 +19,12 @@ export default C =>
         if (req.headers.cookie) {
           try {
             auth = await aumo.auth.me(req.headers.cookie)
-            if (auth.role !== "Admin") {
+            if (
+              roles.length &&
+              auth &&
+              auth.role !== "Admin" &&
+              !roles.includes(auth.role)
+            ) {
               throw {
                 status: 401
               }
@@ -27,7 +32,7 @@ export default C =>
           } catch (err) {
             if (err.status === 401) {
               res.writeHead(302, {
-                Location: "/login"
+                Location: "/shops"
               })
               res.end()
             }
@@ -41,14 +46,19 @@ export default C =>
       } else {
         try {
           auth = await aumo.auth.me()
-          if (auth.role !== "Admin") {
+          if (
+            roles.length &&
+            auth &&
+            auth.role !== "Admin" &&
+            !roles.includes(auth.role)
+          ) {
             throw {
               status: 401
             }
           }
         } catch (err) {
           if (err.status === 401) {
-            Router.replace("/login")
+            Router.replace("/shops")
           }
         }
       }

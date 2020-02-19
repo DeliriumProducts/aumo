@@ -119,7 +119,7 @@ export const Shops = () => {
               <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
                 <span className="actions-buttons">
-                  <Tooltip placement="bottom" title="Edit this product!">
+                  <Tooltip placement="bottom" title="Edit this shop!">
                     <Button
                       size="small"
                       type="primary"
@@ -128,7 +128,7 @@ export const Shops = () => {
                       onClick={() => handleEdit(s)}
                     ></Button>
                   </Tooltip>
-                  <Tooltip placement="bottom" title="Delete this product!">
+                  <Tooltip placement="bottom" title="Delete this shop!">
                     <Popconfirm
                       onConfirm={e => {
                         e.stopPropagation()

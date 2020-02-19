@@ -24,7 +24,12 @@ const Login = props => {
 
         setLoading(true)
         try {
-          await aumo.auth.login(credentials)
+          const response = await aumo.auth.login(credentials)
+          if (response.role === "Customer") {
+            message.error("You are not privileged to access the admin panel!")
+            await aumo.auth.logout()
+            return
+          }
           message.success("Logged in!", 3, () => Router.replace("/shops"))
         } catch (err) {
           if (!err.response) {
@@ -125,7 +130,7 @@ Login.getInitialProps = async ctx => {
     if (req.headers.cookie) {
       try {
         auth = await aumo.auth.me(req.headers.cookie)
-        if (auth.role === "Admin") {
+        if (auth.role !== "Customer") {
           res.writeHead(302, {
             Location: "/shops"
           })
@@ -136,7 +141,7 @@ Login.getInitialProps = async ctx => {
   } else {
     try {
       auth = await aumo.auth.me()
-      if (auth.role === "Admin") {
+      if (auth.role !== "Customer") {
         Router.replace("/shops")
       }
     } catch (err) {}
