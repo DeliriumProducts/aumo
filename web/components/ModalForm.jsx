@@ -1,4 +1,4 @@
-import { Modal, Form, Input } from "antd"
+import { Form, Input, Modal } from "antd"
 
 export default Form.create()(
   // eslint-disable-next-line
@@ -43,7 +43,7 @@ export default Form.create()(
                 initialValue: entity?.image
               })(<Input />)}
             </Form.Item>
-            {isProduct ? (
+            {isProduct && (
               <>
                 <Form.Item label="Price">
                   {getFieldDecorator("price", {
@@ -77,8 +77,6 @@ export default Form.create()(
                   })(<Input type="textarea" />)}
                 </Form.Item>
               </>
-            ) : (
-              <></>
             )}
           </Form>
         </Modal>
