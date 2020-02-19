@@ -24,7 +24,12 @@ const Login = props => {
 
         setLoading(true)
         try {
-          await aumo.auth.login(credentials)
+          const response = await aumo.auth.login(credentials)
+          if (response.role === "Customer") {
+            message.error("You are not privileged to access the admin panel!")
+            await aumo.auth.logout()
+            return
+          }
           message.success("Logged in!", 3, () => Router.replace("/shops"))
         } catch (err) {
           if (!err.response) {

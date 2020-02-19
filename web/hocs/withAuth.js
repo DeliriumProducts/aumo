@@ -32,7 +32,7 @@ export default (C, roles = []) =>
           } catch (err) {
             if (err.status === 401) {
               res.writeHead(302, {
-                Location: "/login"
+                Location: "/shops"
               })
               res.end()
             }
@@ -58,7 +58,7 @@ export default (C, roles = []) =>
           }
         } catch (err) {
           if (err.status === 401) {
-            Router.replace("/login")
+            Router.replace("/shops")
           }
         }
       }
