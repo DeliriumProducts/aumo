@@ -285,7 +285,7 @@ func (s *shopOwnersStore) Delete(tx aumo.Tx, so *aumo.ShopOwners) error {
 	return err
 }
 
-func (s *shopOwnersStore) DeleteByUserID(tx aumo.Tx, uID string) error {
+func (s *shopOwnersStore) DeleteByUser(tx aumo.Tx, uID string) error {
 	var err error
 
 	if tx == nil {
