@@ -214,7 +214,7 @@ const UserCard = ({
       }}
     >
       <div>
-        <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
+        <Avatar src={user.avatar} size={80} key={user.id} />
       </div>
       <NameContainer>
         <Role>
