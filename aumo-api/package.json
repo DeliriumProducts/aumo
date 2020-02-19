@@ -1,6 +1,6 @@
 {
   "name": "aumo",
-  "version": "2.2.3",
+  "version": "2.2.5",
   "description": "API for the Aumo backend.",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
