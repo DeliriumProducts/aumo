@@ -1,4 +1,4 @@
-import { Button, Card as c, Icon, message, Popconfirm } from "antd"
+import { Button, Card as c, Icon, message, Popconfirm, Tooltip } from "antd"
 import aumo from "aumo"
 import Head from "next/head"
 import React, { useContext, useState } from "react"
@@ -117,27 +117,30 @@ export const Shops = () => {
               <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
                 <span className="actions-buttons">
-                  <Button
-                    size="small"
-                    type="primary"
-                    className="edit-button"
-                    icon="edit"
-                    onClick={() => handleEdit(s)}
-                  ></Button>
-
-                  <Popconfirm
-                    onConfirm={e => {
-                      e.stopPropagation()
-                      handleDelete(s)
-                    }}
-                    title={`Are you sure?`}
-                    placement="bottom"
-                    okText="Yes"
-                    okType="danger"
-                    onCancel={e => e.stopPropagation()}
-                  >
-                    <Button size="small" type="danger" icon="delete"></Button>
-                  </Popconfirm>
+                  <Tooltip placement="bottom" title="Edit this product!">
+                    <Button
+                      size="small"
+                      type="primary"
+                      className="edit-button"
+                      icon="edit"
+                      onClick={() => handleEdit(s)}
+                    ></Button>
+                  </Tooltip>
+                  <Tooltip placement="bottom" title="Delete this product!">
+                    <Popconfirm
+                      onConfirm={e => {
+                        e.stopPropagation()
+                        handleDelete(s)
+                      }}
+                      title={`Are you sure?`}
+                      placement="bottom"
+                      okText="Yes"
+                      okType="danger"
+                      onCancel={e => e.stopPropagation()}
+                    >
+                      <Button size="small" type="danger" icon="delete"></Button>
+                    </Popconfirm>
+                  </Tooltip>
                 </span>
               </span>
             </ProductCard>
