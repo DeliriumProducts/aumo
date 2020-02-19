@@ -20,7 +20,7 @@ import { Context } from "../context/context.js"
 import withAuth from "../hocs/withAuth.js"
 
 const colors = {
-  Waiter: "blue",
+  ["Shop Owner"]: "purple",
   Admin: "magenta"
 }
 
