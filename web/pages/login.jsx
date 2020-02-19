@@ -25,7 +25,7 @@ const Login = props => {
         setLoading(true)
         try {
           await aumo.auth.login(credentials)
-          message.success("Logged in!", 3, () => Router.replace("/products"))
+          message.success("Logged in!", 3, () => Router.replace("/shops"))
         } catch (err) {
           if (!err.response) {
             message.error(`${err}`, 5)
@@ -127,7 +127,7 @@ Login.getInitialProps = async ctx => {
         auth = await aumo.auth.me(req.headers.cookie)
         if (auth.role === "Admin") {
           res.writeHead(302, {
-            Location: "/products"
+            Location: "/shops"
           })
           res.end()
         }
@@ -137,7 +137,7 @@ Login.getInitialProps = async ctx => {
     try {
       auth = await aumo.auth.me()
       if (auth.role === "Admin") {
-        Router.replace("/products")
+        Router.replace("/shops")
       }
     } catch (err) {}
   }
