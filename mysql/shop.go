@@ -284,3 +284,35 @@ func (s *shopOwnersStore) Delete(tx aumo.Tx, so *aumo.ShopOwners) error {
 
 	return err
 }
+
+func (s *shopOwnersStore) DeleteByUser(tx aumo.Tx, uID string) error {
+	var err error
+
+	if tx == nil {
+		tx, err = s.db.NewTx(context.Background())
+
+		if err != nil {
+			return err
+		}
+
+		defer func() {
+			if p := recover(); p != nil {
+				err = tx.Rollback()
+				panic(p)
+			}
+
+			if err != nil {
+				err = tx.Rollback()
+				return
+			}
+
+			err = tx.Commit()
+		}()
+	}
+
+	_, err = tx.DeleteFrom(ShopOwnersTable).
+		Where("shop_owners.user_id", uID).
+		Exec()
+
+	return err
+}

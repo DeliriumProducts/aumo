@@ -42,12 +42,19 @@ func (us *service) Update(id string, u *aumo.User) error {
 
 func (us *service) EditRole(id string, role aumo.Role) error {
 	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
-		user, err := us.store.FindByID(tx, id, false)
+		user, err := us.store.FindByID(tx, id, true)
 		if err != nil {
 			return err
 		}
 
 		user.Role = role
+
+		if len(user.Shops) > 0 {
+			err = us.so.DeleteByUser(tx, user.ID.String())
+			if err != nil {
+				return err
+			}
+		}
 
 		return us.store.Update(tx, id, user)
 	})
