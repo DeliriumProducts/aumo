@@ -148,7 +148,6 @@ export const Shops = () => {
           onCancel={handleCancel}
           onCreate={handleSubmit}
           entity={curShop}
-          isProduct={false}
         />
       </Container>
     </>
@@ -196,7 +195,8 @@ const ProductCard = styled(c)`
   & img {
     border-radius: 7px 7px 0 0;
     object-fit: contain;
-    /* height: 10rem; */
+    max-height: 10rem;
+    overflow: hidden;
   }
 
   .ant-card-actions {
