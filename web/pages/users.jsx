@@ -271,7 +271,8 @@ const UserCard = ({
                   Available Roles
                 </span>
                 <Radio value={"Customer"}>Customer</Radio>
-                <Radio value={"Admin"}> Admin</Radio>
+                <Radio value={"Admin"}>Admin</Radio>
+                <Radio value={"Shop Owner"}>Shop Owner</Radio>
               </RadioGroup>
             </>
           }
@@ -490,9 +491,9 @@ const NameContainer = styled.div`
   align-items: center;
   * h1 {
     margin: 0;
-    width: 100%;
     text-align: left;
     font-weight: 700;
+    display: inline;
   }
   h2 {
     margin: 0;
