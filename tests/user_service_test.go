@@ -33,7 +33,7 @@ func TestUserService(t *testing.T) {
 	sostore := mysql.NewShopOwnersStore(sess)
 
 	os := ordering.New(ostore, pstore, ustore)
-	us := users.New(ustore)
+	us := users.New(ustore, sostore)
 	rs := receipt.New(rstore, ustore)
 	ss := shops.New(sstore, sostore, ustore)
 
@@ -74,14 +74,14 @@ func TestUserService(t *testing.T) {
 			shop      aumo.Shop
 			relations bool
 		}{
-			// {
-			// 	"no_relations",
-			// 	user(t),
-			// 	[]aumo.Receipt{},
-			// 	[]aumo.Product{},
-			// 	*shop(t, 2),
-			// 	false,
-			// },
+			{
+				"no_relations",
+				user(t),
+				[]aumo.Receipt{},
+				[]aumo.Product{},
+				*shop(t, 2),
+				false,
+			},
 			{
 				"one_order",
 				user(t),
@@ -92,54 +92,54 @@ func TestUserService(t *testing.T) {
 				*shop(t, 69),
 				true,
 			},
-			// {
-			// 	"one_receipt",
-			// 	user(t),
-			// 	[]aumo.Receipt{
-			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 420),
-			// 	},
-			// 	[]aumo.Product{},
-			// 	*shop(t, 420),
-			// 	true,
-			// },
-			// {
-			// 	"many_orders",
-			// 	user(t),
-			// 	[]aumo.Receipt{},
-			// 	[]aumo.Product{
-			// 		*aumo.NewProduct(faker.Word(), 100, faker.URL(), faker.Sentence(), 5, 1337),
-			// 		*aumo.NewProduct(faker.Word(), 200, faker.URL(), faker.Sentence(), 5, 1337),
-			// 		*aumo.NewProduct(faker.Word(), 300, faker.URL(), faker.Sentence(), 5, 1337),
-			// 	},
-			// 	*shop(t, 1337),
-			// 	true,
-			// },
-			// {
-			// 	"many_receipts",
-			// 	user(t),
-			// 	[]aumo.Receipt{
-			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
-			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
-			// 	},
-			// 	[]aumo.Product{},
-			// 	*shop(t, 14),
-			// 	true,
-			// },
-			// {
-			// 	"many_orders_many_receipts",
-			// 	user(t),
-			// 	[]aumo.Receipt{
-			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
-			// 		*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
-			// 	},
-			// 	[]aumo.Product{
-			// 		*aumo.NewProduct(faker.Word(), 80, faker.URL(), faker.Sentence(), 2, 44),
-			// 		*aumo.NewProduct(faker.Word(), 120, faker.URL(), faker.Sentence(), 4, 44),
-			// 		*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 8, 44),
-			// 	},
-			// 	*shop(t, 44),
-			// 	true,
-			// },
+			{
+				"one_receipt",
+				user(t),
+				[]aumo.Receipt{
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 420),
+				},
+				[]aumo.Product{},
+				*shop(t, 420),
+				true,
+			},
+			{
+				"many_orders",
+				user(t),
+				[]aumo.Receipt{},
+				[]aumo.Product{
+					*aumo.NewProduct(faker.Word(), 100, faker.URL(), faker.Sentence(), 5, 1337),
+					*aumo.NewProduct(faker.Word(), 200, faker.URL(), faker.Sentence(), 5, 1337),
+					*aumo.NewProduct(faker.Word(), 300, faker.URL(), faker.Sentence(), 5, 1337),
+				},
+				*shop(t, 1337),
+				true,
+			},
+			{
+				"many_receipts",
+				user(t),
+				[]aumo.Receipt{
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
+				},
+				[]aumo.Product{},
+				*shop(t, 14),
+				true,
+			},
+			{
+				"many_orders_many_receipts",
+				user(t),
+				[]aumo.Receipt{
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
+				},
+				[]aumo.Product{
+					*aumo.NewProduct(faker.Word(), 80, faker.URL(), faker.Sentence(), 2, 44),
+					*aumo.NewProduct(faker.Word(), 120, faker.URL(), faker.Sentence(), 4, 44),
+					*aumo.NewProduct(faker.Word(), 1000, faker.URL(), faker.Sentence(), 8, 44),
+				},
+				*shop(t, 44),
+				true,
+			},
 		}
 
 		for _, tt := range tests {
