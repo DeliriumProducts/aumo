@@ -9,12 +9,14 @@ import (
 
 type service struct {
 	store aumo.UserStore
+	so    aumo.ShopOwnersStore
 }
 
 // New returns an instance of `aumo.UserService`
-func New(store aumo.UserStore) aumo.UserService {
+func New(store aumo.UserStore, so aumo.ShopOwnersStore) aumo.UserService {
 	return &service{
 		store: store,
+		so:    so,
 	}
 }
 
