@@ -112,7 +112,7 @@ export const Products = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        {loading && ctx.state.products.length < 1 && (
+        {loading && ctx.state.products?.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
 

@@ -1,7 +1,7 @@
 import { Button, Card as c, Icon, message, Popconfirm, Tooltip } from "antd"
 import aumo from "aumo"
 import Head from "next/head"
-import { useRouter } from "next/router"
+import Router from "next/router"
 import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import ModalForm from "../../components/ModalForm"
@@ -15,7 +15,6 @@ export const Shops = () => {
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
   const [formRef, setFormRef] = useState(null)
-  const router = useRouter()
 
   React.useEffect(() => {
     ;(async () => {
@@ -114,7 +113,9 @@ export const Shops = () => {
               key={s.id}
               hoverable
               cover={<img alt="Product" src={s.image} />}
-              onClick={() => router.push(`/shops/${s.id}`)}
+              onClick={e => {
+                Router.push(`/shops/[shop_id]`, `/shops/${s.id}`)
+              }}
             >
               <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
@@ -198,9 +199,10 @@ const ProductCard = styled(c)`
   }
 
   & img {
+    margin-top: 5px;
     border-radius: 7px 7px 0 0;
     object-fit: contain;
-    max-height: 10rem;
+    height: 10rem;
     overflow: hidden;
   }
 
