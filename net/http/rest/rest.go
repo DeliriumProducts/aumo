@@ -95,7 +95,8 @@ func New(c *Config) *Rest {
 		decoder:        decoder,
 	}
 
-	r.Use(middleware.RequestID,
+	r.Use(
+		middleware.RequestID,
 		middleware.RedirectSlashes,
 		middleware.RealIP,
 		middleware.Logger,
@@ -109,7 +110,8 @@ func New(c *Config) *Rest {
 			ExposedHeaders:   []string{"Link"},
 			AllowCredentials: true,
 		}).Handler,
-		middleware.Heartbeat(c.MountRoute+"/ping"))
+		middleware.Heartbeat(c.MountRoute+"/ping"),
+	)
 
 	rest.mount(c.MountRoute)
 
