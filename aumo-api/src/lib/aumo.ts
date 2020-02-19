@@ -28,7 +28,7 @@ export interface ShopOwner {
   shop_id: number;
 }
 
-export type Role = 'Admin' | 'Customer';
+export type Role = 'Admin' | 'Customer' | 'Shop Owner';
 
 export interface Order {
   order_id: string;
