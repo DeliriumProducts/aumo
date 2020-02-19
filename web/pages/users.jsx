@@ -217,11 +217,11 @@ const UserCard = ({
         <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
       </div>
       <NameContainer>
-        <div className="role">
-          <h1>{user.name}</h1>
+        <Role>
+          <Name>{user.name}</Name>
           <Tag color={colors[user.role]}>{user.role.toUpperCase()}</Tag>
-        </div>
-        <h2>{user.email}</h2>
+        </Role>
+        <Email>{user.email}</Email>
       </NameContainer>
       <Filler />
       <Button
@@ -271,7 +271,8 @@ const UserCard = ({
                   Available Roles
                 </span>
                 <Radio value={"Customer"}>Customer</Radio>
-                <Radio value={"Admin"}> Admin</Radio>
+                <Radio value={"Admin"}>Admin</Radio>
+                <Radio value={"Shop Owner"}>Shop Owner</Radio>
               </RadioGroup>
             </>
           }
@@ -488,25 +489,27 @@ const NameContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  * h1 {
-    margin: 0;
-    width: 100%;
-    text-align: left;
-    font-weight: 700;
-  }
-  h2 {
-    margin: 0;
-    text-align: left;
-    font-weight: 400;
-  }
-  .role {
-    width: 100%;
-  }
-  .role span {
+`
+
+const Role = styled.div`
+  width: 100%;
+  span {
     margin-top: 5px;
     margin-bottom: 5px;
     float: left;
   }
+`
+
+const Name = styled.h1`
+  margin: 0;
+  text-align: left;
+  font-weight: 700;
+`
+
+const Email = styled.h2`
+  margin: 0;
+  text-align: left;
+  font-weight: 400;
 `
 
 const Container = styled.div`
