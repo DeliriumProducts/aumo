@@ -1,6 +1,7 @@
 import { Card, Icon, Text } from "@ui-kitten/components"
 import React from "react"
 import { Image, View } from "react-native"
+import theme from "../theme"
 
 export default ({ product }) => (
   <Card
@@ -31,7 +32,12 @@ export default ({ product }) => (
               alignItems: "center"
             }}
           >
-            <Icon name="award-outline" width={17} height={17} fill="#222" />
+            <Icon
+              name="award-outline"
+              width={17}
+              height={17}
+              fill={theme["color-basic-800"]}
+            />
             <Text
               category="h6"
               style={{

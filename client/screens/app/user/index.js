@@ -3,7 +3,6 @@ import {
   Button,
   Icon,
   Layout,
-  List,
   Modal,
   Spinner,
   Tab,
@@ -15,7 +14,8 @@ import React from "react"
 import { View } from "react-native"
 import styled from "styled-components/native"
 import PAvatar from "../../../components/Avatar"
-import Order from "../../../components/Order"
+import OrderList from "../../../components/OrderList"
+import ReceiptList from "../../../components/ReceiptList"
 import { Context } from "../../../context/context"
 import { actions } from "../../../context/providers/provider"
 import Routes from "../../../navigation/routes"
@@ -118,27 +118,13 @@ export default ({ navigation }) => {
           title="Orders"
           icon={style => <Icon {...style} name="bell-outline" />}
         >
-          <List
-            data={ctx.state.user?.orders}
-            renderItem={({ item: order, index }) => (
-              <View style={{ margin: 30 }}>
-                <Order
-                  product={order.product}
-                  key={`${order.order_id}${index}`}
-                />
-              </View>
-            )}
-          />
+          <OrderList orders={ctx.state.user?.orders} />
         </Tab>
         <Tab
           title="Receipts"
           icon={style => <Icon {...style} name="file-text-outline" />}
         >
-          <Layout>
-            {ctx.state.user?.receipts.map(a => (
-              <Text key={a.receipt_id}>{a.receipt_id}</Text>
-            ))}
-          </Layout>
+          <ReceiptList receipts={ctx.state.user?.receipts} />
         </Tab>
       </TabView>
     </>

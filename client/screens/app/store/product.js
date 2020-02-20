@@ -1,14 +1,39 @@
-import { Button, Icon, Layout, Text } from "@ui-kitten/components"
+import {
+  Button,
+  Icon,
+  Layout,
+  Modal,
+  Spinner,
+  Text
+} from "@ui-kitten/components"
+import aumo from "aumo"
 import React from "react"
-import { ImageBackground, View } from "react-native"
+import { Alert, ImageBackground, ScrollView, View } from "react-native"
 import styled from "styled-components/native"
+import theme from "../../../theme"
 
 export default ({
   route: {
-    params: { product, shop }
+    params: { product: p, shop }
   }
 }) => {
-  const onPress = async () => {}
+  const [product, setProduct] = React.useState(p)
+  const [loading, setLoading] = React.useState(false)
+
+  const onPress = async product => {
+    try {
+      setLoading(true)
+      await aumo.order.placeOrder({
+        product_id: product.id
+      })
+      Alert.alert("Successfull!", "You successfully purchased " + product.name)
+      setProduct(p => ({ ...p, stock: p.stock - 1 }))
+    } catch (error) {
+      Alert.alert("Error!", error.response.data.error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Header>
@@ -22,28 +47,71 @@ export default ({
           }}
         >
           <View>
-            <Text category="h6">{product.name}</Text>
+            <Text category="h4">{product.name}</Text>
             <Shop appearance="hint" category="p2">
-              {shop.name}
+              provided by {shop.name}
             </Shop>
           </View>
-          <Price>
-            <Icon name="award-outline" width={30} height={30} fill="#8f9bb3" />
-            <Text category="h4">{product.price}</Text>
-          </Price>
+          <View style={{ alignItems: "center" }}>
+            <Price>
+              <Icon
+                name="award-outline"
+                width={25}
+                height={25}
+                fill={theme["color-basic-800"]}
+              />
+              <Text category="h4">{product.price}</Text>
+            </Price>
+            <Shop
+              appearance="hint"
+              category="p2"
+              status={product.stock < 1 ? "danger" : ""}
+            >
+              {product.stock} in stock
+            </Shop>
+          </View>
         </View>
         <Description appearance="hint">{product.description}</Description>
         <ActionContainer>
-          <ActionButton size="giant" onPress={onPress}>
+          <ActionButton
+            size="giant"
+            disabled={product.disabled}
+            onPress={() => {
+              Alert.alert(
+                "Purchase confirmation",
+                `Would you want to order ${product.name}?`,
+                [
+                  {
+                    text: "Yes",
+                    onPress: () => onPress(product)
+                  },
+                  {
+                    text: "Cancel",
+                    onPress: () => {},
+                    style: "cancel"
+                  }
+                ],
+                { cancelable: true }
+              )
+            }}
+            icon={style => <Icon {...style} name="shopping-cart" />}
+          >
             BUY
           </ActionButton>
         </ActionContainer>
       </DetailsContainer>
+      {loading && (
+        <Modal onBackdropPress={() => {}} visible={loading}>
+          <ModalContainer level="1">
+            <Spinner size="giant" />
+          </ModalContainer>
+        </Modal>
+      )}
     </Header>
   )
 }
 
-const Header = styled(Layout)`
+const Header = styled(ScrollView)`
   min-height: 100%;
 `
 const ProductImage = styled(ImageBackground)`
@@ -77,4 +145,11 @@ const ActionContainer = styled(View)`
 const ActionButton = styled(Button)`
   flex: 1;
   margin-horizontal: 8px;
+`
+
+const ModalContainer = styled(Layout)`
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 16px;
 `
