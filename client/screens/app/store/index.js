@@ -1,8 +1,8 @@
-import { Layout, List, Spinner } from "@ui-kitten/components"
+import { Layout, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
 import styled from "styled-components/native"
-import Shop from "../../../components/Shop"
+import ShopList from "../../../components/ShopList"
 import { Context } from "../../../context/context"
 import Routes from "../../../navigation/routes"
 
@@ -26,28 +26,14 @@ export default ({ navigation }) => {
 
   return (
     <Layout style={{ height: "100%" }} level="2">
-      <List
-        style={{
-          padding: 20
+      <ShopList
+        shops={shops}
+        onShopPress={shop => {
+          navigation.navigate(Routes.StoreShop, {
+            id: shop.id,
+            name: shop.name
+          })
         }}
-        data={shops}
-        renderItem={({ item: i }) => (
-          <Shop
-            key={i.id}
-            {...i}
-            style={{
-              width: "100%",
-              height: 240,
-              marginVertical: 10
-            }}
-            onPress={() => {
-              navigation.navigate(Routes.StoreShop, {
-                id: i.id,
-                name: i.name
-              })
-            }}
-          />
-        )}
       />
       {loading && (
         <Layout
