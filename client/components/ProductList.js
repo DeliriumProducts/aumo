@@ -6,7 +6,7 @@ export default ({
   onCartPress = () => {},
   products
 }) => {
-  const renderProductItem = ({ item }) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       style={{
         flex: 1,
@@ -100,7 +100,7 @@ export default ({
       }}
       data={(products.length && products) || products}
       numColumns={2}
-      renderItem={renderProductItem}
+      renderItem={renderItem}
     />
   )
 }
