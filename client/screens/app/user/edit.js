@@ -10,7 +10,7 @@ import FormInput from "../../../components/FormInput"
 import { Context } from "../../../context/context"
 import theme from "../../../theme"
 
-export default () => {
+export default ({ navigation }) => {
   const ctx = React.useContext(Context)
   const { register, handleSubmit, setValue, errors } = useForm({
     defaultValues: {
@@ -24,6 +24,7 @@ export default () => {
     try {
       setLoading(true)
       await aumo.user.edit(data)
+      navigation.goBack()
     } catch (error) {
       switch (error.response.status) {
         case 400:
@@ -43,7 +44,7 @@ export default () => {
       <AvatarContainer>
         <Avatar
           size="giant"
-          source={{ uri: ctx?.state?.user?.avatar }}
+          source={{ uri: ctx.state.user?.avatar }}
           fallbackSource={require("../../../assets/Avatar.png")}
           style={{ height: 128, aspectRatio: 1.0, alignSelf: "center" }}
         />
