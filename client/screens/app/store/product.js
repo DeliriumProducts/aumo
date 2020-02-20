@@ -2,6 +2,7 @@ import { Button, Icon, Layout, Text } from "@ui-kitten/components"
 import React from "react"
 import { ImageBackground, View } from "react-native"
 import styled from "styled-components/native"
+import theme from "../../../theme"
 
 export default ({
   route: {
@@ -28,7 +29,12 @@ export default ({
             </Shop>
           </View>
           <Price>
-            <Icon name="award-outline" width={30} height={30} fill="#8f9bb3" />
+            <Icon
+              name="award-outline"
+              width={30}
+              height={30}
+              fill={theme["color-basic-800"]}
+            />
             <Text category="h4">{product.price}</Text>
           </Price>
         </View>
