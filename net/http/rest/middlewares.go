@@ -92,7 +92,18 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 
 func (rest *Rest) WithShopOwnersAndAdmins(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sID := rest.ParamNumber(w, r, "id")
+		type request struct {
+			ShopID uint `form:"shop_id" validate:"required" json:"shop_id"`
+		}
+		var sID uint
+
+		var um request
+		if ok := rest.Form(w, r, &um); !ok {
+			sID = rest.ParamNumber(w, r, "id")
+		} else {
+			sID = um.ShopID
+		}
+
 		user, err := auth.CurrentUser(r.Context())
 		if err != nil {
 			rest.JSONError(w, err, http.StatusInternalServerError)
