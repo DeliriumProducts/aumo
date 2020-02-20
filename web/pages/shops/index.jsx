@@ -126,7 +126,10 @@ export const Shops = () => {
                       type="primary"
                       className="edit-button"
                       icon="edit"
-                      onClick={() => handleEdit(s)}
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleEdit(s)
+                      }}
                     ></Button>
                   </Tooltip>
                   <Tooltip placement="bottom" title="Delete this shop!">
@@ -141,7 +144,14 @@ export const Shops = () => {
                       okType="danger"
                       onCancel={e => e.stopPropagation()}
                     >
-                      <Button size="small" type="danger" icon="delete"></Button>
+                      <Button
+                        size="small"
+                        type="danger"
+                        icon="delete"
+                        onClick={e => {
+                          e.stopPropagation()
+                        }}
+                      ></Button>
                     </Popconfirm>
                   </Tooltip>
                 </span>

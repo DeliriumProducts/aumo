@@ -17,7 +17,7 @@ export default Form.create()(
       return (
         <Modal
           visible={visible}
-          title="Product Form"
+          title={isProduct ? "Product Form" : "Shop Form"}
           okText="Submit"
           onCancel={onCancel}
           onOk={onCreate}
