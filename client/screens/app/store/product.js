@@ -8,7 +8,7 @@ import {
 } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Alert, ImageBackground, View } from "react-native"
+import { Alert, ImageBackground, ScrollView, View } from "react-native"
 import styled from "styled-components/native"
 import theme from "../../../theme"
 
@@ -111,7 +111,7 @@ export default ({
   )
 }
 
-const Header = styled(Layout)`
+const Header = styled(ScrollView)`
   min-height: 100%;
 `
 const ProductImage = styled(ImageBackground)`
