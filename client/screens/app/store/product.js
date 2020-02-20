@@ -28,15 +28,20 @@ export default ({
               provided by {shop.name}
             </Shop>
           </View>
-          <Price>
-            <Icon
-              name="award-outline"
-              width={25}
-              height={25}
-              fill={theme["color-basic-800"]}
-            />
-            <Text category="h5">{product.price}</Text>
-          </Price>
+          <View style={{ alignItems: "center" }}>
+            <Price>
+              <Icon
+                name="award-outline"
+                width={25}
+                height={25}
+                fill={theme["color-basic-800"]}
+              />
+              <Text category="h4">{product.price}</Text>
+            </Price>
+            <Shop appearance="hint" category="p2">
+              {product.stock} in stock
+            </Shop>
+          </View>
         </View>
         <Description appearance="hint">{product.description}</Description>
         <ActionContainer>
