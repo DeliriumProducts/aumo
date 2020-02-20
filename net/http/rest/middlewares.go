@@ -89,3 +89,35 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 		return http.HandlerFunc(middle)
 	}
 }
+
+func (rest *Rest) WithShopOwnersAndAdmins(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sID := rest.ParamNumber(w, r, "id")
+		user, err := auth.CurrentUser(r.Context())
+		if err != nil {
+			rest.JSONError(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		if user.Role == aumo.Admin {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		ownsShop := false
+		for _, shop := range user.Shops {
+			// If the user owns the given shop, they can get the owners
+			if shop.ID == sID {
+				ownsShop = true
+				break
+			}
+		}
+
+		if !ownsShop {
+			rest.JSONError(w, Error{"User doesn't own this shop"}, http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
