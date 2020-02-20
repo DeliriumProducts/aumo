@@ -3,8 +3,7 @@ import { Context, initialState } from "../context.js"
 
 export const actions = {
   SET_USER: "SET_USER",
-  SET_PRODUCTS: "SET_PRODUCTS",
-  SET_SHOPS: "SET_SHOPS"
+  SET_PRODUCTS: "SET_PRODUCTS"
 }
 
 const handlers = {
@@ -18,12 +17,6 @@ const handlers = {
     return {
       ...state,
       products
-    }
-  },
-  [actions.SET_SHOPS]: (state, shops) => {
-    return {
-      ...state,
-      shops
     }
   }
 }

@@ -18,8 +18,8 @@ export const Shops = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      const data = await aumo.shop.getAllShops()
-      ctx.dispatch({ type: actions.SET_SHOPS, payload: data })
+      const data = await aumo.auth.me()
+      ctx.dispatch({ type: actions.SET_USER, payload: data })
       setLoading(false)
     })()
   }, [])
@@ -44,16 +44,12 @@ export const Shops = () => {
       try {
         await aumo.shop.editShop({ id: curShop.id, ...shop })
         message.success(`Successfully edited shop ${shop.name}! 🎉`)
-        const shops = ctx.state.shops.map(ss => {
-          if (ss.id === curShop.id) {
-            return {
-              id: curShop.id,
-              ...shop
-            }
-          }
-          return ss
-        })
-        ctx.dispatch({ type: actions.SET_SHOPS, payload: shops })
+        ;(async () => {
+          setLoading(true)
+          const data = await aumo.auth.me()
+          ctx.dispatch({ type: actions.SET_USER, payload: data })
+          setLoading(false)
+        })()
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -87,7 +83,7 @@ export const Shops = () => {
       }
       return
     }
-    const prods = ctx.state.shops.filter(ss => ss.id !== s.id)
+    const prods = ctx.state.user.shops?.filter(ss => ss.id !== s.id)
     ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
   }
 
@@ -102,13 +98,13 @@ export const Shops = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        {loading && ctx.state.shops.length < 1 && (
+        {loading && ctx.state.user?.shops?.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
 
-        {ctx.state.shops &&
-          ctx.state.shops.length > 0 &&
-          ctx.state.shops.map(s => (
+        {ctx.state.user.shops &&
+          ctx.state.user.shops?.length > 0 &&
+          ctx.state.user.shops?.map(s => (
             <ProductCard
               key={s.id}
               hoverable
