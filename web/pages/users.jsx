@@ -431,7 +431,7 @@ const Order = ({ product }) => (
         src={product.image}
         alt={product.name}
         height={300}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "contain" }}
       />
     }
   >
