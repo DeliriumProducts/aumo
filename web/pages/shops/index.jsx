@@ -83,7 +83,7 @@ export const Shops = () => {
       }
       return
     }
-    const prods = ctx.state.user.shops?.filter(ss => ss.id !== s.id)
+    const prods = ctx.state?.user?.shops?.filter(ss => ss.id !== s.id)
     ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
   }
 
@@ -102,9 +102,9 @@ export const Shops = () => {
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
 
-        {ctx.state.user.shops &&
-          ctx.state.user.shops?.length > 0 &&
-          ctx.state.user.shops?.map(s => (
+        {ctx.state?.user?.shops &&
+          ctx.state?.user?.shops?.length > 0 &&
+          ctx.state?.user?.shops?.map(s => (
             <ProductCard
               key={s.id}
               hoverable
