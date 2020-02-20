@@ -3,11 +3,9 @@ import aumo from "aumo"
 import React from "react"
 import styled from "styled-components/native"
 import ShopList from "../../../components/ShopList"
-import { Context } from "../../../context/context"
 import Routes from "../../../navigation/routes"
 
 export default ({ navigation }) => {
-  const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(true)
   const [shops, setShops] = React.useState([])
 
@@ -29,10 +27,7 @@ export default ({ navigation }) => {
       <ShopList
         shops={shops}
         onShopPress={shop => {
-          navigation.navigate(Routes.StoreShop, {
-            id: shop.id,
-            name: shop.name
-          })
+          navigation.navigate(Routes.StoreShop, shop)
         }}
       />
       {loading && (

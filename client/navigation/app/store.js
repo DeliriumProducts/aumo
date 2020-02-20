@@ -30,7 +30,7 @@ export default () => (
     <Stack.Screen
       name={Routes.StoreShopProduct}
       component={StoreShopProductScreen}
-      options={({ route }) => ({ title: `${route.params.name}` })}
+      options={({ route }) => ({ title: `${route.params.product.name}` })}
     />
   </Stack.Navigator>
 )

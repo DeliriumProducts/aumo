@@ -58,7 +58,10 @@ export default ({ route, navigation }) => {
           disabled: p.stock < 1 || ctx.state.user.points < p.price
         }))}
         onItemPress={product => {
-          navigation.navigate(Routes.StoreShopProduct, product)
+          navigation.navigate(Routes.StoreShopProduct, {
+            product,
+            shop: route.params
+          })
         }}
         onCartPress={product => {
           Alert.alert(
