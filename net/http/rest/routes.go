@@ -31,10 +31,10 @@ func (rest *Rest) mount(mnt string) {
 			r.With(rest.WithAuth()).Get("/", rest.shopGetAll)
 			r.With(rest.WithAuth()).Get("/{id}", rest.shopGet)
 			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.shopCreate)
-			r.With(rest.WithAuth(aumo.Admin)).Put("/{id}", rest.shopEdit)
-			r.With(rest.WithAuth(aumo.Admin)).Delete("/{id}", rest.shopDelete)
-			r.With(rest.WithAuth(aumo.Admin)).Post("/{id}/add-owner", rest.shopAddOwner)
-			r.With(rest.WithAuth(aumo.Admin)).Post("/{id}/remove-owner", rest.shopRemoveOwner)
+			r.With(rest.WithAuth(aumo.Admin)).With(rest.WithShopOwnersAndAdmins).Put("/{id}", rest.shopEdit)
+			r.With(rest.WithAuth(aumo.Admin)).With(rest.WithShopOwnersAndAdmins).Delete("/{id}", rest.shopDelete)
+			r.With(rest.WithAuth(aumo.Admin)).With(rest.WithShopOwnersAndAdmins).Post("/{id}/add-owner", rest.shopAddOwner)
+			r.With(rest.WithAuth(aumo.Admin)).With(rest.WithShopOwnersAndAdmins).Post("/{id}/remove-owner", rest.shopRemoveOwner)
 		})
 
 		r.Route("/receipts", func(r chi.Router) {
