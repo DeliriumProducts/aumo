@@ -35,7 +35,7 @@ export default Form.create()(
     }
 
     render() {
-      const { visible, onCancel, onCreate, form, shop } = this.props
+      const { visible, onCancel, onAdd, form, shop } = this.props
       const { getFieldDecorator } = form
 
       return (
@@ -44,7 +44,7 @@ export default Form.create()(
           title={"Manage shop owners"}
           okText="Submit"
           onCancel={onCancel}
-          onOk={onCreate}
+          footer={null}
         >
           <Form layout="vertical">
             <Form.Item label="Enter new owner email">
@@ -66,6 +66,15 @@ export default Form.create()(
                     <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
                   }
                   enterButton={<Button type="primary">Add</Button>}
+                  onSearch={async () => {
+                    await onAdd(shop.id)
+
+                    const { owners: shopOwners } = await aumo.shop.getShop(
+                      this.props.shop.id
+                    )
+
+                    this.setState({ shopOwners })
+                  }}
                 />
               )}
             </Form.Item>

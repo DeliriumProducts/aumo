@@ -45,12 +45,43 @@ export const Shops = () => {
     setLoading(false)
   }
 
+  const handleSOAdd = sID => {
+    const { form } = formRefSO.props
+
+    form.validateFields(async (err, email) => {
+      if (err) {
+        return
+      }
+
+      const shopOwner = {
+        sID,
+        email
+      }
+
+      try {
+        await aumo.shop.addOwner(shopOwner)
+        message.success(`Successfully added new owner! 🎉`)
+      } catch (error) {
+        if (!err.response) {
+          message.error(`${err}`, 5)
+          return
+        }
+        if (err.response.status === 401) {
+          message.error("Unauthorized.", 1)
+        } else {
+          message.error("Server error, please try again")
+        }
+        return
+      }
+      form.resetFields()
+    })
+  }
+
   const handleSubmit = () => {
     const { form } = formRef.props
 
     form.validateFields(async (err, shop) => {
       if (err) {
-        console.log(err)
         return
       }
 
@@ -90,6 +121,7 @@ export const Shops = () => {
       }
       return
     }
+
     const prods = ctx.state?.user?.shops?.filter(ss => ss.id !== s.id)
     ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
   }
@@ -187,8 +219,9 @@ export const Shops = () => {
           wrappedComponentRef={saveFormRefSO}
           visible={visibleSO}
           onCancel={handleCancel}
-          // onCreate={handleSubmit}
+          onAdd={handleSOAdd}
           shop={curShop}
+          cancelText="Ok"
         />
       </Container>
     </>
