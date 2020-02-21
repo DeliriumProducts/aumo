@@ -17,6 +17,7 @@ export const Shops = () => {
   const [visible, setVisible] = useState(false)
   const [visibleSO, setVisibleSO] = useState(false)
   const [formRef, setFormRef] = useState(null)
+  const [formRefSO, setFormRefSO] = useState(null)
 
   React.useEffect(() => {
     ;(async () => {
@@ -49,6 +50,7 @@ export const Shops = () => {
 
     form.validateFields(async (err, shop) => {
       if (err) {
+        console.log(err)
         return
       }
 
@@ -61,7 +63,7 @@ export const Shops = () => {
           return
         }
         if (err.response.status === 401) {
-          message.error("Invalid credentials. Try again.", 1)
+          message.error("Unauthorized.", 1)
         } else {
           message.error("Server error, please try again")
         }
@@ -94,6 +96,10 @@ export const Shops = () => {
 
   const saveFormRef = fr => {
     setFormRef(fr)
+  }
+
+  const saveFormRefSO = fr => {
+    setFormRefSO(fr)
   }
 
   return (
@@ -178,10 +184,10 @@ export const Shops = () => {
           entity={curShop}
         />
         <ModalFormSO
-          wrappedComponentRef={saveFormRef}
+          wrappedComponentRef={saveFormRefSO}
           visible={visibleSO}
           onCancel={handleCancel}
-          onCreate={handleSubmit}
+          // onCreate={handleSubmit}
           shop={curShop}
         />
       </Container>
