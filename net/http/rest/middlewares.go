@@ -90,6 +90,8 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 	}
 }
 
+// WithShopOwnersAndAdmins allows only admins and shop owners of the
+// corresponding shop to access the route
 func (rest *Rest) WithShopOwnersAndAdmins(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		type request struct {
