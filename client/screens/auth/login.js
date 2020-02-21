@@ -1,59 +1,59 @@
-import { Button, Icon, Spinner } from "@ui-kitten/components"
-import aumo from "aumo"
-import React from "react"
-import { useForm } from "react-hook-form"
-import { View } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
-import ErrorContainer from "../../components/ErrorContainer"
-import FormInput from "../../components/FormInput"
-import { Context } from "../../context/context"
-import { actions } from "../../context/providers/provider"
-import Routes from "../../navigation/routes"
-import { Aumo, Container, Form, MainContainer, Subheading } from "./components"
+import { Button, Icon, Text, Spinner } from "@ui-kitten/components";
+import aumo from "aumo";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import ErrorContainer from "../../components/ErrorContainer";
+import FormInput from "../../components/FormInput";
+import { Context } from "../../context/context";
+import { actions } from "../../context/providers/provider";
+import Routes from "../../navigation/routes";
+import { Aumo, Container, Form, MainContainer, Subheading } from "./components";
 
 export default function LoginScreen(props) {
-  const { register, handleSubmit, errors, setValue } = useForm()
-  const [passwordVisible, setPasswordVisible] = React.useState(false)
-  const [err, setErr] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const ctx = React.useContext(Context)
+  const { register, handleSubmit, errors, setValue } = useForm();
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [err, setErr] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const ctx = React.useContext(Context);
 
   const handleLogin = async data => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await aumo.auth.login({
         email: data.email.trim(),
         password: data.password.trim()
-      })
+      });
 
-      ctx.dispatch({ type: actions.SET_USER, payload: response })
+      ctx.dispatch({ type: actions.SET_USER, payload: response });
     } catch (error) {
       switch (error.response.status) {
         case 400:
-          setErr("Bad Request")
-          break
+          setErr("Bad Request");
+          break;
         case 401:
-          setErr("Invalid email or password")
-          break
+          setErr("Invalid email or password");
+          break;
         case 404:
-          setErr("User doesn't exist")
-          break
+          setErr("User doesn't exist");
+          break;
         case 500:
-          setErr("Internal server error")
-          break
+          setErr("Internal server error");
+          break;
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onPasswordIconPress = () => {
-    setPasswordVisible(!passwordVisible)
-  }
+    setPasswordVisible(!passwordVisible);
+  };
 
   const goToRegister = () => {
-    props.navigation.navigate(Routes.Register)
-  }
+    props.navigation.navigate(Routes.Register);
+  };
 
   return (
     <Container>
@@ -135,5 +135,5 @@ export default function LoginScreen(props) {
         </Button>
       </MainContainer>
     </Container>
-  )
+  );
 }

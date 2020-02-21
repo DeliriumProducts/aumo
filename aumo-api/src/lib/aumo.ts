@@ -24,7 +24,7 @@ export interface User {
 }
 
 export interface ShopOwner {
-  user_id: string;
+  email: string;
   shop_id: number;
 }
 
