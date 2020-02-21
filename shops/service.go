@@ -42,42 +42,42 @@ func (ss *service) Delete(id uint) error {
 	return ss.shopStore.Delete(nil, id)
 }
 
-func (ss *service) AddOwner(so *aumo.ShopOwners) error {
+func (ss *service) AddOwner(sID uint, email string) error {
 	db := ss.shopStore.DB()
 	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
-		user, err := ss.userStore.FindByID(tx, so.UserID, false)
+		user, err := ss.userStore.FindByEmail(tx, email, false)
 		if err != nil {
 			return err
 		}
 
 		if user.Role == aumo.Customer {
 			user.Role = aumo.ShopOwner
-			err := ss.userStore.Update(tx, so.UserID, user)
+			err := ss.userStore.Update(tx, user.ID.String(), user)
 			if err != nil {
 				return err
 			}
 		}
 
-		return ss.shopOwnersStore.Save(tx, so)
+		return ss.shopOwnersStore.Save(tx, sID, user.ID.String())
 	})
 }
 
-func (ss *service) RemoveOwner(so *aumo.ShopOwners) error {
+func (ss *service) RemoveOwner(sID uint, email string) error {
 	db := ss.shopStore.DB()
 	return aumo.TxDo(context.Background(), db, func(tx sqlbuilder.Tx) error {
-		user, err := ss.userStore.FindByID(tx, so.UserID, true)
+		user, err := ss.userStore.FindByEmail(tx, email, true)
 		if err != nil {
 			return err
 		}
 
 		if user.Role == aumo.ShopOwner && len(user.Shops) == 1 {
 			user.Role = aumo.Customer
-			err := ss.userStore.Update(tx, so.UserID, user)
+			err := ss.userStore.Update(tx, user.ID.String(), user)
 			if err != nil {
 				return err
 			}
 		}
 
-		return ss.shopOwnersStore.Delete(tx, so)
+		return ss.shopOwnersStore.Delete(tx, sID, user.ID.String())
 	})
 }
