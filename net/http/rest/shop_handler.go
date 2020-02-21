@@ -107,7 +107,7 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "id")
 
 	type request struct {
-		UserID string `form:"user_id" validate:"required" json:"user_id"`
+		Email string `form:"user_email" validate:"required" json:"user_email"`
 	}
 
 	var um request
@@ -115,13 +115,14 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	so := aumo.NewShopOwners(sID, um.UserID)
-	err := rest.shopService.AddOwner(so)
+	err := rest.shopService.AddOwner(sID, um.Email)
 
 	switch {
 	case err == nil:
 		break
-	case errors.Is(err, aumo.ErrShopOwnerUserNotFound):
+	case
+		errors.Is(err, aumo.ErrUserNotFound),
+		errors.Is(err, aumo.ErrShopOwnerUserNotFound):
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
 	default:
@@ -136,7 +137,7 @@ func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "id")
 
 	type request struct {
-		UserID string `form:"user_id" validate:"required" json:"user_id"`
+		Email string `form:"user_email" validate:"required" json:"user_email"`
 	}
 
 	var um request
@@ -144,8 +145,7 @@ func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	so := aumo.NewShopOwners(sID, um.UserID)
-	err := rest.shopService.RemoveOwner(so)
+	err := rest.shopService.RemoveOwner(sID, um.Email)
 
 	switch {
 	case err == nil:
