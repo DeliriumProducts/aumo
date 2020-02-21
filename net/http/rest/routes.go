@@ -34,9 +34,7 @@ func (rest *Rest) mount(mnt string) {
 			r.With(rest.Authentication()).Get("/{shop_id}", rest.shopGet)
 
 			r.Group(func(r chi.Router) {
-				r.Use(
-					rest.Authentication(aumo.Admin, aumo.ShopOwner),
-				)
+				r.Use(rest.Authentication(aumo.Admin, aumo.ShopOwner))
 
 				r.Post("/", rest.shopCreate)
 				r.Route("/{shop_id}", func(r chi.Router) {
@@ -68,6 +66,7 @@ func (rest *Rest) mount(mnt string) {
 
 			r.Group(func(r chi.Router) {
 				r.Use(rest.Authentication(aumo.Admin))
+
 				r.Get("/", rest.orderGetAll)
 				r.Get("/{id}", rest.orderGet)
 			})
