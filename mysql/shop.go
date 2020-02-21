@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/deliriumproducts/aumo"
-	"github.com/go-sql-driver/mysql"
 	"upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -21,20 +20,9 @@ type shopStore struct {
 	db sqlbuilder.Database
 }
 
-type shopOwnersStore struct {
-	db sqlbuilder.Database
-}
-
 // NewShopStore returns a mysql instance of `aumo.ShopStore`
 func NewShopStore(db sqlbuilder.Database) aumo.ShopStore {
 	return &shopStore{
-		db: db,
-	}
-}
-
-// NewShopOwnersStore returns a mysql instance of `aumo.ShopOwnersStore`
-func NewShopOwnersStore(db sqlbuilder.Database) aumo.ShopOwnersStore {
-	return &shopOwnersStore{
 		db: db,
 	}
 }
@@ -213,106 +201,4 @@ func (s *shopStore) Delete(tx aumo.Tx, id uint) error {
 	}
 
 	return tx.Collection(ShopTable).Find("shop_id", id).Delete()
-}
-
-func (s *shopOwnersStore) Save(tx aumo.Tx, so *aumo.ShopOwners) error {
-	var err error
-
-	if tx == nil {
-		tx, err = s.db.NewTx(context.Background())
-
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if p := recover(); p != nil {
-				err = tx.Rollback()
-				panic(p)
-			}
-
-			if err != nil {
-				err = tx.Rollback()
-				return
-			}
-
-			err = tx.Commit()
-		}()
-	}
-
-	err = tx.Collection(ShopOwnersTable).InsertReturning(so)
-	if mysqlError, ok := err.(*mysql.MySQLError); ok {
-		if mysqlError.Number == ErrBadRef {
-			return aumo.ErrUserNotFound
-		}
-		if mysqlError.Number == ErrDupEntry {
-			return aumo.ErrUserAlreadyOwnsShop
-		}
-	}
-
-	return err
-}
-
-func (s *shopOwnersStore) Delete(tx aumo.Tx, so *aumo.ShopOwners) error {
-	var err error
-
-	if tx == nil {
-		tx, err = s.db.NewTx(context.Background())
-
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if p := recover(); p != nil {
-				err = tx.Rollback()
-				panic(p)
-			}
-
-			if err != nil {
-				err = tx.Rollback()
-				return
-			}
-
-			err = tx.Commit()
-		}()
-	}
-
-	_, err = tx.DeleteFrom(ShopOwnersTable).
-		Where("shop_owners.shop_id = ? AND shop_owners.user_id = ?", so.ShopID, so.UserID).
-		Exec()
-
-	return err
-}
-
-func (s *shopOwnersStore) DeleteByUser(tx aumo.Tx, uID string) error {
-	var err error
-
-	if tx == nil {
-		tx, err = s.db.NewTx(context.Background())
-
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if p := recover(); p != nil {
-				err = tx.Rollback()
-				panic(p)
-			}
-
-			if err != nil {
-				err = tx.Rollback()
-				return
-			}
-
-			err = tx.Commit()
-		}()
-	}
-
-	_, err = tx.DeleteFrom(ShopOwnersTable).
-		Where("shop_owners.user_id", uID).
-		Exec()
-
-	return err
 }
