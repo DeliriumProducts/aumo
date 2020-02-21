@@ -107,7 +107,7 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "shop_id")
 
 	type request struct {
-		Email string `form:"user_email" validate:"required" json:"user_email"`
+		Email string `form:"email" validate:"required" json:"email"`
 	}
 
 	var um request
