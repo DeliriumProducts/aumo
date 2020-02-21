@@ -106,7 +106,6 @@ export const Shops = () => {
         {loading && ctx.state.user?.shops?.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
-
         {ctx.state?.user?.shops &&
           ctx.state?.user?.shops?.length > 0 &&
           ctx.state?.user?.shops?.map(s => (

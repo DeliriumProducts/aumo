@@ -15,17 +15,22 @@ export default Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     state = {
-      shopOwners: []
+      shopOwners: [],
+      loading: true
     }
 
     async componentDidUpdate(prevProps) {
       if (this.props.shop?.id !== prevProps.shop?.id) {
         try {
+          this.setState({ loading: true })
           const { owners: shopOwners } = await aumo.shop.getShop(
             this.props.shop.id
           )
           this.setState({ shopOwners })
-        } catch (error) {}
+        } catch (error) {
+        } finally {
+          this.setState({ loading: false })
+        }
       }
     }
 
@@ -65,41 +70,45 @@ export default Form.create()(
               )}
             </Form.Item>
             <Form.Item label="Current owners of this shop">
-              <List
-                dataSource={this.state.shopOwners}
-                renderItem={owner => (
-                  <List.Item key={owner.id}>
-                    <List.Item.Meta
-                      avatar={<Avatar src={owner.avatar} />}
-                      title={owner.name}
-                      description={owner.email}
-                    />
-                    <Tooltip title="Remove this owner!">
-                      <Popconfirm
-                        onConfirm={e => {
-                          e.stopPropagation()
-                        }}
-                        disabled={false}
-                        title={`Are you sure?`}
-                        placement="bottom"
-                        okText="Yes"
-                        okType="danger"
-                        onCancel={e => e.stopPropagation()}
-                      >
-                        <Button
-                          type="danger"
-                          icon="delete"
-                          disabled={false}
-                          onClick={e => e.stopPropagation()}
-                          style={{
-                            right: 10
+              {this.state.loading ? (
+                <Icon type="loading" style={{ fontSize: 24 }} spin />
+              ) : (
+                <List
+                  dataSource={this.state.shopOwners}
+                  renderItem={owner => (
+                    <List.Item key={owner.id}>
+                      <List.Item.Meta
+                        avatar={<Avatar src={owner.avatar} />}
+                        title={owner.name}
+                        description={owner.email}
+                      />
+                      <Tooltip title="Remove this owner!">
+                        <Popconfirm
+                          onConfirm={e => {
+                            e.stopPropagation()
                           }}
-                        ></Button>
-                      </Popconfirm>
-                    </Tooltip>
-                  </List.Item>
-                )}
-              ></List>
+                          disabled={false}
+                          title={`Are you sure?`}
+                          placement="bottom"
+                          okText="Yes"
+                          okType="danger"
+                          onCancel={e => e.stopPropagation()}
+                        >
+                          <Button
+                            type="danger"
+                            icon="delete"
+                            disabled={false}
+                            onClick={e => e.stopPropagation()}
+                            style={{
+                              right: 10
+                            }}
+                          ></Button>
+                        </Popconfirm>
+                      </Tooltip>
+                    </List.Item>
+                  )}
+                ></List>
+              )}
             </Form.Item>
           </Form>
         </Modal>
