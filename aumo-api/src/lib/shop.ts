@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MessageResponse, Shop, ShopOwner } from './aumo';
+import { MessageResponse, Product, Shop } from './aumo';
 import { withAuth } from './axios';
 import { options } from './config';
 
@@ -12,10 +12,10 @@ export async function getShop(id: number, cookie?: string): Promise<Shop> {
     .data;
 }
 
-export async function editShop(shop: Shop, cookie?: string): Promise<Shop> {
+export async function editShop(id: number, shop: EditShopRequest, cookie?: string): Promise<Shop> {
   return (
     await axios.put(
-      `${options.Backend}/shops/${shop.id}`,
+      `${options.Backend}/shops/${id}`,
       shop,
       withAuth(cookie)
     )
@@ -23,7 +23,7 @@ export async function editShop(shop: Shop, cookie?: string): Promise<Shop> {
 }
 
 export async function createShop(
-  shop: CreateRequest,
+  shop: CreateShopRequest,
   cookie?: string
 ): Promise<Shop> {
   return (await axios.post(`${options.Backend}/shops`, shop, withAuth(cookie)))
@@ -40,35 +40,100 @@ export async function deleteShop(
 }
 
 export async function addOwner(
-  shopOwner: ShopOwner,
+  sID: number,
+  email: string,
   cookie?: string
 ): Promise<MessageResponse> {
   return (
     await axios.post(
-      `${options.Backend}/shops/${shopOwner.shop_id}/add-owner`,
-      shopOwner,
+      `${options.Backend}/shops/${sID}/add-owner`,
+      {
+        email
+      },
       withAuth(cookie)
     )
   ).data;
 }
 
 export async function removeOwner(
-  shopOwner: ShopOwner,
+  sID: number,
+  email: string,
   cookie?: string
 ): Promise<MessageResponse> {
   return (
     await axios.post(
-      `${options.Backend}/shops/${shopOwner.shop_id}/remove-owner`,
-      shopOwner,
+      `${options.Backend}/shops/${sID}/remove-owner`,
+      {
+        email
+      },
       withAuth(cookie)
     )
   ).data;
 }
 
-interface CreateRequest {
+export async function getAllProductsByShop(sID: number, cookie?: string): Promise<Product[]> {
+  return (await axios.get(`${options.Backend}/shops/${sID}/products`,
+    withAuth(cookie)
+  )).data;
+}
+
+export async function getProduct(sID: number, pID: number, cookie?: string): Promise<Product> {
+  return (await axios.get(`${options.Backend}/shops/${sID}/products/${pID}`,
+    withAuth(cookie)
+  ))
+    .data;
+}
+
+export async function createProduct(
+  sID: number,
+  product: CreateProductRequest,
+  cookie?: string
+): Promise<Product> {
+  return (
+    await axios.post(`${options.Backend}/shops/${sID}/products`, product, withAuth(cookie))
+  ).data;
+}
+
+export async function editProduct(
+  sID: number,
+  pID: number,
+  product: EditProductRequest,
+  cookie?: string
+): Promise<Product> {
+  return (
+    await axios.put(
+      `${options.Backend}/shops/${sID}/products/${pID}`,
+      product,
+      withAuth(cookie)
+    )
+  ).data;
+}
+
+export async function deleteProduct(
+  sID: number,
+  pID: number,
+  cookie?: string
+): Promise<MessageResponse> {
+  return (
+    await axios.delete(`${options.Backend}/shops/${sID}/products/${pID}`, withAuth(cookie))
+  ).data;
+}
+
+interface CreateProductRequest {
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+  stock: number;
+}
+
+interface CreateShopRequest {
   name: string;
   image: string;
 }
+
+interface EditProductRequest extends CreateProductRequest { }
+interface EditShopRequest extends CreateShopRequest { }
 
 export default {
   getAllShops,
@@ -77,5 +142,9 @@ export default {
   editShop,
   createShop,
   addOwner,
-  removeOwner
+  removeOwner,
+  editProduct,
+  getProduct,
+  deleteProduct,
+  getAllProductsByShop,
 };
