@@ -280,80 +280,84 @@ const UserCard = ({
           }}
         ></Button>
       </Tooltip>
-      <div onClick={e => e.stopPropagation()}>
-        <Tooltip title="Change this user's role!">
-          <Popconfirm
-            icon={<Icon type="team" style={{ color: "unset" }} />}
-            placement="bottom"
-            onCancel={e => e.stopPropagation()}
-            disabled={myEmail === user.email}
-            onConfirm={e => {
-              e.stopPropagation()
-              changeRole(e, user)
-            }}
-            title={
-              <>
-                <RadioGroup
-                  style={{ display: "flex", flexDirection: "column" }}
-                  onChange={e => {
+      {myEmail !== user.email && (
+        <>
+          <div onClick={e => e.stopPropagation()}>
+            <Tooltip title="Change this user's role!">
+              <Popconfirm
+                icon={<Icon type="team" style={{ color: "unset" }} />}
+                placement="bottom"
+                onCancel={e => e.stopPropagation()}
+                disabled={myEmail === user.email}
+                onConfirm={e => {
+                  e.stopPropagation()
+                  changeRole(e, user)
+                }}
+                title={
+                  <>
+                    <RadioGroup
+                      style={{ display: "flex", flexDirection: "column" }}
+                      onChange={e => {
+                        e.stopPropagation()
+                        const role = e.target.value
+                        handleRoleChange(role)
+                      }}
+                      value={role}
+                    >
+                      <span style={{ fontWeight: 500, marginBottom: 5 }}>
+                        Available Roles
+                      </span>
+                      <Radio value={"Customer"}>Customer</Radio>
+                      <Radio value={"Admin"}>Admin</Radio>
+                      <Radio value={"Shop Owner"}>Shop Owner</Radio>
+                    </RadioGroup>
+                  </>
+                }
+              >
+                <Button
+                  icon="edit"
+                  disabled={myEmail === user.email}
+                  onClick={e => {
                     e.stopPropagation()
-                    const role = e.target.value
-                    handleRoleChange(role)
+                    handleRoleChange(user.role)
                   }}
-                  value={role}
+                  style={{
+                    marginRight: 20
+                  }}
                 >
-                  <span style={{ fontWeight: 500, marginBottom: 5 }}>
-                    Available Roles
-                  </span>
-                  <Radio value={"Customer"}>Customer</Radio>
-                  <Radio value={"Admin"}>Admin</Radio>
-                  <Radio value={"Shop Owner"}>Shop Owner</Radio>
-                </RadioGroup>
-              </>
-            }
-          >
-            <Button
-              icon="edit"
-              disabled={myEmail === user.email}
-              onClick={e => {
+                  Change role
+                </Button>
+              </Popconfirm>
+            </Tooltip>
+          </div>
+          <Tooltip title="Delete this user!">
+            <Popconfirm
+              onConfirm={e => {
                 e.stopPropagation()
-                handleRoleChange(user.role)
+                onDelete(user)
               }}
-              style={{
-                marginRight: 20
-              }}
+              disabled={myEmail === user.email}
+              title={`Are you sure?`}
+              placement="bottom"
+              okText="Yes"
+              okType="danger"
+              onCancel={e => e.stopPropagation()}
             >
-              Change role
-            </Button>
-          </Popconfirm>
-        </Tooltip>
-      </div>
-      <Tooltip title="Delete this user!">
-        <Popconfirm
-          onConfirm={e => {
-            e.stopPropagation()
-            onDelete(user)
-          }}
-          disabled={myEmail === user.email}
-          title={`Are you sure?`}
-          placement="bottom"
-          okText="Yes"
-          okType="danger"
-          onCancel={e => e.stopPropagation()}
-        >
-          <Button
-            type="danger"
-            icon="delete"
-            disabled={myEmail === user.email}
-            onClick={e => e.stopPropagation()}
-            style={{
-              right: 10
-            }}
-          >
-            Delete
-          </Button>
-        </Popconfirm>
-      </Tooltip>
+              <Button
+                type="danger"
+                icon="delete"
+                disabled={myEmail === user.email}
+                onClick={e => e.stopPropagation()}
+                style={{
+                  right: 10
+                }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
+          </Tooltip>
+        </>
+      )}
     </UserCardContainer>
   )
 }
