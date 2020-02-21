@@ -93,7 +93,7 @@ func (us *service) SubPoints(id string, points float64) error {
 			return err
 		}
 
-		user.Points -= points
+		user.Points = Math.max(user.points-points, 0)
 
 		return us.store.Update(tx, id, user)
 	})
