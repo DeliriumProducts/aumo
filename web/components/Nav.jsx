@@ -47,21 +47,25 @@ const Nav = props => {
 
       try {
         if (props.route === "/shops") {
-          const shp = await aumo.shop.createShop(entity)
+          await aumo.shop.createShop(entity)
           message.success(`Successfully created shop ${entity.name}!`)
+          const data = await aumo.auth.me()
+          ctx.dispatch({
+            type: actions.SET_USER,
+            payload: data
+          })
         } else {
           const { shop_id } = router.query
 
-          const prdct = await aumo.product.createProduct({
+          const data = await aumo.shop.createProduct(shop_id, {
             ...entity,
-            shop_id: Number(shop_id),
             price: Number(entity.price),
             stock: Number(entity.stock)
           })
           message.success(`Successfully created product ${entity.name}!`)
           ctx.dispatch({
             type: actions.SET_PRODUCTS,
-            payload: [...ctx.state.products, prdct]
+            payload: [...ctx.state.products, data]
           })
         }
       } catch (err) {

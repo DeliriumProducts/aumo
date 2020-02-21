@@ -45,35 +45,6 @@ export const Shops = () => {
     setLoading(false)
   }
 
-  const handleSOAdd = async sID => {
-    const { form } = formRefSO.props
-
-    form.validateFields(async (err, data) => {
-      if (err) {
-        return
-      }
-
-      try {
-        await aumo.shop.addOwner(sID, data.ownerEmail)
-        message.success(`Successfully added new owner! 🎉`)
-      } catch (err) {
-        if (!err.response) {
-          message.error(`${err}`, 5)
-          return
-        }
-        if (err.response.status === 401) {
-          message.error("Unauthorized.", 1)
-        } else if (err.response.status === 404) {
-          message.error("User not found")
-        } else {
-          message.error("Server error, please try again")
-        }
-        return
-      }
-      form.resetFields()
-    })
-  }
-
   const handleSubmit = () => {
     const { form } = formRef.props
 
@@ -83,8 +54,11 @@ export const Shops = () => {
       }
 
       try {
-        await aumo.shop.editShop({ id: curShop.id, ...shop })
+        await aumo.shop.editShop(curShop.id, shop)
         message.success(`Successfully edited shop ${shop.name}! 🎉`)
+
+        const data = await aumo.auth.me()
+        ctx.dispatch({ type: actions.SET_USER, payload: data })
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -106,6 +80,9 @@ export const Shops = () => {
     try {
       await aumo.shop.deleteShop(s.id)
       message.success(`Successfully added new owner! 🎉`)
+
+      const data = await aumo.auth.me()
+      ctx.dispatch({ type: actions.SET_USER, payload: data })
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
@@ -118,9 +95,6 @@ export const Shops = () => {
       }
       return
     }
-
-    const prods = ctx.state?.user?.shops?.filter(ss => ss.id !== s.id)
-    ctx.dispatch({ type: actions.SET_SHOPS, payload: prods })
   }
 
   const saveFormRef = fr => {
@@ -141,8 +115,7 @@ export const Shops = () => {
         {loading && ctx.state.user?.shops?.length < 1 && (
           <Icon type="loading" style={{ fontSize: 24 }} spin />
         )}
-        {ctx.state?.user?.shops &&
-          ctx.state?.user?.shops?.length > 0 &&
+        {ctx.state?.user?.shops?.length > 0 &&
           ctx.state?.user?.shops?.map(s => (
             <ProductCard
               key={s.id}
