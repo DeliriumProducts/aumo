@@ -12,13 +12,13 @@ export async function getShop(id: number, cookie?: string): Promise<Shop> {
     .data;
 }
 
-export async function editShop(id: number, shop: EditShopRequest, cookie?: string): Promise<Shop> {
+export async function editShop(
+  id: number,
+  shop: EditShopRequest,
+  cookie?: string
+): Promise<Shop> {
   return (
-    await axios.put(
-      `${options.Backend}/shops/${id}`,
-      shop,
-      withAuth(cookie)
-    )
+    await axios.put(`${options.Backend}/shops/${id}`, shop, withAuth(cookie))
   ).data;
 }
 
@@ -71,17 +71,29 @@ export async function removeOwner(
   ).data;
 }
 
-export async function getAllProductsByShop(sID: number, cookie?: string): Promise<Product[]> {
-  return (await axios.get(`${options.Backend}/shops/${sID}/products`,
-    withAuth(cookie)
-  )).data;
+export async function getAllProductsByShop(
+  sID: number,
+  cookie?: string
+): Promise<Product[]> {
+  return (
+    await axios.get(
+      `${options.Backend}/shops/${sID}/products`,
+      withAuth(cookie)
+    )
+  ).data;
 }
 
-export async function getProduct(sID: number, pID: number, cookie?: string): Promise<Product> {
-  return (await axios.get(`${options.Backend}/shops/${sID}/products/${pID}`,
-    withAuth(cookie)
-  ))
-    .data;
+export async function getProduct(
+  sID: number,
+  pID: number,
+  cookie?: string
+): Promise<Product> {
+  return (
+    await axios.get(
+      `${options.Backend}/shops/${sID}/products/${pID}`,
+      withAuth(cookie)
+    )
+  ).data;
 }
 
 export async function createProduct(
@@ -90,7 +102,11 @@ export async function createProduct(
   cookie?: string
 ): Promise<Product> {
   return (
-    await axios.post(`${options.Backend}/shops/${sID}/products`, product, withAuth(cookie))
+    await axios.post(
+      `${options.Backend}/shops/${sID}/products`,
+      product,
+      withAuth(cookie)
+    )
   ).data;
 }
 
@@ -115,7 +131,10 @@ export async function deleteProduct(
   cookie?: string
 ): Promise<MessageResponse> {
   return (
-    await axios.delete(`${options.Backend}/shops/${sID}/products/${pID}`, withAuth(cookie))
+    await axios.delete(
+      `${options.Backend}/shops/${sID}/products/${pID}`,
+      withAuth(cookie)
+    )
   ).data;
 }
 
@@ -132,8 +151,8 @@ interface CreateShopRequest {
   image: string;
 }
 
-interface EditProductRequest extends CreateProductRequest { }
-interface EditShopRequest extends CreateShopRequest { }
+interface EditProductRequest extends CreateProductRequest {}
+interface EditShopRequest extends CreateShopRequest {}
 
 export default {
   getAllShops,
@@ -144,7 +163,8 @@ export default {
   addOwner,
   removeOwner,
   editProduct,
+  createProduct,
   getProduct,
   deleteProduct,
-  getAllProductsByShop,
+  getAllProductsByShop
 };
