@@ -174,12 +174,22 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	// Get shops only if the user is an admin or a shop owner
-	if user.Role != aumo.Customer {
+	if user.Role == aumo.ShopOwner {
 		err = tx.Select("s.*").
 			From("shop_owners").
 			Join("shops as s").On("shop_owners.shop_id = s.shop_id").
 			Join("users").On("users.id = shop_owners.user_id").
 			Where(where, args).
+			All(&shops)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if user.Role == aumo.Admin {
+		err = tx.
+			Collection(ShopTable).
+			Find().
 			All(&shops)
 		if err != nil {
 			return nil, err
