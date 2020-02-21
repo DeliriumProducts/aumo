@@ -6,7 +6,8 @@ export default {
   Home: "Home",
   Store: "Store",
   StoreShop: "Store Shop",
-  StoreShopProduct: "Store Shop Product",
+  ProductDetails: "Product Details",
+  ReceiptDetails: "Receipt Details",
   User: "My Profile",
   UserEdit: "Edit Profile"
 }
