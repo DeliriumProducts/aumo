@@ -68,10 +68,21 @@ func (rest *Rest) shopCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user, err := auth.CurrentUser(r.Context())
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
 	shop := aumo.NewShop(um.Name, um.Image)
 
-	err := rest.shopService.Create(shop)
+	err = rest.shopService.Create(shop)
+	if err != nil {
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
 
+	err = rest.shopService.AddOwner(shop.ID, user.Email)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
