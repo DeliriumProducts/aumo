@@ -5,6 +5,7 @@ import Router from "next/router"
 import React, { useContext, useState } from "react"
 import styled from "styled-components"
 import ModalForm from "../../components/ModalForm"
+import ModalFormSO from "../../components/ModalFormSO"
 import { Context } from "../../context/context"
 import { actions } from "../../context/providers/contextProvider"
 import withAuth from "../../hocs/withAuth"
@@ -14,6 +15,7 @@ export const Shops = () => {
   const [curShop, setCurShop] = useState(null)
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
+  const [visibleSO, setVisibleSO] = useState(false)
   const [formRef, setFormRef] = useState(null)
 
   React.useEffect(() => {
@@ -31,7 +33,10 @@ export const Shops = () => {
 
   const showModal = () => setVisible(true)
 
-  const handleCancel = () => setVisible(false)
+  const handleCancel = () => {
+    setVisible(false)
+    setVisibleSO(false)
+  }
 
   const handleSubmit = () => {
     const { form } = formRef.props
@@ -116,6 +121,18 @@ export const Shops = () => {
               <StyledMeta title={s.name} description={<p>{s.description}</p>} />
               <span className="actions">
                 <span className="actions-buttons">
+                  <Tooltip placement="bottom" title="Manage owners!">
+                    <Button
+                      size="small"
+                      type="primary"
+                      icon="user"
+                      onClick={e => {
+                        setCurShop(s)
+                        setVisibleSO(true)
+                        e.stopPropagation()
+                      }}
+                    ></Button>
+                  </Tooltip>
                   <Tooltip placement="bottom" title="Edit this shop!">
                     <Button
                       size="small"
@@ -157,6 +174,13 @@ export const Shops = () => {
         <ModalForm
           wrappedComponentRef={saveFormRef}
           visible={visible}
+          onCancel={handleCancel}
+          onCreate={handleSubmit}
+          entity={curShop}
+        />
+        <ModalFormSO
+          wrappedComponentRef={saveFormRef}
+          visible={visibleSO}
           onCancel={handleCancel}
           onCreate={handleSubmit}
           entity={curShop}
