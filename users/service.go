@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"math"
 
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
@@ -93,7 +94,7 @@ func (us *service) SubPoints(id string, points float64) error {
 			return err
 		}
 
-		user.Points = Math.max(user.points-points, 0)
+		user.Points = math.Max(user.Points-points, 0)
 
 		return us.store.Update(tx, id, user)
 	})

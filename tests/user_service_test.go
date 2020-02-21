@@ -55,7 +55,6 @@ func TestUserService(t *testing.T) {
 		// helper func for require.Nil() on the err
 		user := func(t *testing.T) *aumo.User {
 			u, err := aumo.NewUser(faker.FirstName(), faker.Email(), faker.Password(), faker.URL())
-			u.Role = aumo.Admin
 			require.Nil(t, err, "shouldn't return an err")
 			return u
 		}
