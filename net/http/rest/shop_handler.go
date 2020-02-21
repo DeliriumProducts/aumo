@@ -19,7 +19,7 @@ func (rest *Rest) shopGetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) shopGet(w http.ResponseWriter, r *http.Request) {
-	sID := rest.ParamNumber(w, r, "id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 	user, err := auth.CurrentUser(r.Context())
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
@@ -81,7 +81,7 @@ func (rest *Rest) shopCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) shopEdit(w http.ResponseWriter, r *http.Request) {
-	sID := rest.ParamNumber(w, r, "id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 
 	type request struct {
 		Name  string `form:"name" validate:"required" json:"name"`
@@ -104,7 +104,7 @@ func (rest *Rest) shopEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
-	sID := rest.ParamNumber(w, r, "id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 
 	type request struct {
 		Email string `form:"user_email" validate:"required" json:"user_email"`
@@ -134,7 +134,7 @@ func (rest *Rest) shopAddOwner(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
-	sID := rest.ParamNumber(w, r, "id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 
 	type request struct {
 		Email string `form:"user_email" validate:"required" json:"user_email"`
@@ -162,7 +162,7 @@ func (rest *Rest) shopRemoveOwner(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) shopDelete(w http.ResponseWriter, r *http.Request) {
-	sID := rest.ParamNumber(w, r, "id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 	err := rest.shopService.Delete(sID)
 
 	if err != nil {
