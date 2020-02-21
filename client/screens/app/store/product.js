@@ -144,6 +144,7 @@ const ActionContainer = styled(View)`
 
 const ActionButton = styled(Button)`
   flex: 1;
+  border-radius: 10px;
   margin-horizontal: 8px;
 `
 
