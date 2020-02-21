@@ -16,7 +16,7 @@ type Receipt struct {
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
-func NewReceipt(content string, total float64, sID uint) *Receipt {
+func NewReceipt(content string, sID uint, total float64) *Receipt {
 	return &Receipt{
 		ReceiptID: uuid.New(),
 		Total:     total,

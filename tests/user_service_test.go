@@ -96,7 +96,7 @@ func TestUserService(t *testing.T) {
 				"one_receipt",
 				user(t),
 				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 420),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 420, 500),
 				},
 				[]aumo.Product{},
 				*shop(t, 420),
@@ -118,8 +118,8 @@ func TestUserService(t *testing.T) {
 				"many_receipts",
 				user(t),
 				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 14),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 14, 5000),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 14, 300),
 				},
 				[]aumo.Product{},
 				*shop(t, 14),
@@ -129,8 +129,8 @@ func TestUserService(t *testing.T) {
 				"many_orders_many_receipts",
 				user(t),
 				[]aumo.Receipt{
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
-					*aumo.NewReceipt(faker.AmountWithCurrency(), 44),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 44, 90),
+					*aumo.NewReceipt(faker.AmountWithCurrency(), 44, 90),
 				},
 				[]aumo.Product{
 					*aumo.NewProduct(faker.Word(), 80, faker.URL(), faker.Sentence(), 2, 44),
