@@ -31,7 +31,7 @@ func TestReceiptService(t *testing.T) {
 		defer TidyDB(sess)
 
 		s := createShop(t, sstore)
-		receipt := aumo.NewReceipt("Paconi: 230", s.ID)
+		receipt := aumo.NewReceipt("Paconi: 230", s.ID, 230)
 		receipt.Shop = s
 
 		err = rs.Create(receipt)

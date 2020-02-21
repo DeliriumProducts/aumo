@@ -30,7 +30,7 @@ func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
 }
 
 func createReceipt(t *testing.T, rs aumo.ReceiptStore, s *aumo.Shop) *aumo.Receipt {
-	r := aumo.NewReceipt(faker.AmountWithCurrency(), s.ID)
+	r := aumo.NewReceipt(faker.AmountWithCurrency(), s.ID, 500)
 
 	err := rs.Save(nil, r)
 	require.Nil(t, err, "shouldn't return an error")
