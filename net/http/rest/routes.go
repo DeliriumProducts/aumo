@@ -30,27 +30,31 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/shops", func(r chi.Router) {
-			r.With(rest.Authentication()).Get("/", rest.shopGetAll)
-			r.With(rest.Authentication()).Get("/{shop_id}", rest.shopGet)
+			r.Get("/", rest.shopGetAll)
+			r.With(rest.Authentication(aumo.Admin, aumo.ShopOwner)).Post("/", rest.shopCreate)
 
-			r.Group(func(r chi.Router) {
-				r.Use(
-					rest.Authentication(aumo.Admin, aumo.ShopOwner),
-				)
+			r.Route("/{shop_id}", func(r chi.Router) {
+				r.With(rest.Authentication()).Get("/", rest.shopGet)
 
-				r.Post("/", rest.shopCreate)
-				r.Route("/{shop_id}", func(r chi.Router) {
+				r.Group(func(r chi.Router) {
+					r.Use(rest.Authentication(aumo.Admin, aumo.ShopOwner))
 					r.Use(rest.OwnsShop)
-					r.Get("/", rest.shopGet)
+
 					r.Put("/", rest.shopEdit)
 					r.Delete("/", rest.shopDelete)
 					r.Post("/add-owner", rest.shopAddOwner)
 					r.Post("/remove-owner", rest.shopRemoveOwner)
+				})
 
-					r.Route("/products", func(r chi.Router) {
-						r.Get("/", rest.productGetAllByShop)
+				r.Route("/products", func(r chi.Router) {
+					r.Get("/", rest.productGetAllByShop)
+					r.Get("/{product_id}", rest.productGet)
+
+					r.Group(func(r chi.Router) {
+						r.Use(rest.Authentication(aumo.Admin, aumo.ShopOwner))
+						r.Use(rest.OwnsShop)
+
 						r.Post("/", rest.productCreate)
-						r.Get("/{product_id}", rest.productGet)
 						r.Put("/{product_id}", rest.productEdit)
 						r.Delete("/{product_id}", rest.productDelete)
 					})
@@ -68,6 +72,7 @@ func (rest *Rest) mount(mnt string) {
 
 			r.Group(func(r chi.Router) {
 				r.Use(rest.Authentication(aumo.Admin))
+
 				r.Get("/", rest.orderGetAll)
 				r.Get("/{id}", rest.orderGet)
 			})
