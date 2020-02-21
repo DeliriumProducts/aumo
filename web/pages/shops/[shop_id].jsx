@@ -21,7 +21,7 @@ export const Products = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      const { products } = await aumo.shop.getShop(shop_id)
+      const products = await aumo.shop.getAllProductsByShop(shop_id)
       ctx.dispatch({ type: actions.SET_PRODUCTS, payload: products })
       setLoading(false)
     })()
@@ -45,7 +45,7 @@ export const Products = () => {
       }
 
       try {
-        await aumo.product.editProduct(curProduct.id, {
+        await aumo.shop.editProduct(shop_id, curProduct.id, {
           ...product,
           price: Number(product.price),
           shop_id: Number(shop_id),
@@ -83,7 +83,7 @@ export const Products = () => {
 
   const handleDelete = async p => {
     try {
-      await aumo.product.deleteProduct(p.id)
+      await aumo.shop.deleteProduct(shop_id, p.id)
       message.success(`Successfully deleted product ${p.name}! 🎉`)
     } catch (err) {
       if (!err.response) {
