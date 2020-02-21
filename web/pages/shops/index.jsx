@@ -33,9 +33,15 @@ export const Shops = () => {
 
   const showModal = () => setVisible(true)
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setVisible(false)
     setVisibleSO(false)
+    setLoading(true)
+
+    const data = await aumo.auth.me()
+    ctx.dispatch({ type: actions.SET_USER, payload: data })
+
+    setLoading(false)
   }
 
   const handleSubmit = () => {
@@ -49,12 +55,6 @@ export const Shops = () => {
       try {
         await aumo.shop.editShop({ id: curShop.id, ...shop })
         message.success(`Successfully edited shop ${shop.name}! 🎉`)
-        ;(async () => {
-          setLoading(true)
-          const data = await aumo.auth.me()
-          ctx.dispatch({ type: actions.SET_USER, payload: data })
-          setLoading(false)
-        })()
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -183,7 +183,7 @@ export const Shops = () => {
           visible={visibleSO}
           onCancel={handleCancel}
           onCreate={handleSubmit}
-          entity={curShop}
+          shop={curShop}
         />
       </Container>
     </>
