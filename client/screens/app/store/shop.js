@@ -58,7 +58,7 @@ export default ({ route, navigation }) => {
           disabled: p.stock < 1 || ctx.state.user.points < p.price
         }))}
         onItemPress={product => {
-          navigation.navigate(Routes.StoreShopProduct, {
+          navigation.navigate(Routes.ProductDetails, {
             product,
             shop: route.params
           })
