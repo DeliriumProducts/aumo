@@ -41,6 +41,7 @@ func (rest *Rest) mount(mnt string) {
 				r.Post("/", rest.shopCreate)
 				r.Route("/{shop_id}", func(r chi.Router) {
 					r.Use(rest.OwnsShop)
+					r.Get("/", rest.shopGet)
 					r.Put("/", rest.shopEdit)
 					r.Delete("/", rest.shopDelete)
 					r.Post("/add-owner", rest.shopAddOwner)
