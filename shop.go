@@ -11,12 +11,6 @@ type Shop struct {
 	Products []Product `json:"products,omitempty" db:"-"`
 }
 
-// ShopOwners is a relation between users and shops in aumo
-type ShopOwners struct {
-	ShopID uint   `json:"shop_id" db:"shop_id,omitempty"`
-	UserID string `json:"user_id" db:"user_id,omitempty"`
-}
-
 // NewShop is a constructor for `Shop`
 func NewShop(name, image string) *Shop {
 	return &Shop{
@@ -26,21 +20,13 @@ func NewShop(name, image string) *Shop {
 	}
 }
 
-// NewShopOwners is a constructor for "ShopOwners"
-func NewShopOwners(shopID uint, userID string) *ShopOwners {
-	return &ShopOwners{
-		ShopID: shopID,
-		UserID: userID,
-	}
-}
-
 // ShopService contains all `Shop`
 // related business logic
 type ShopService interface {
 	Shop(id uint, withOwners bool) (*Shop, error)
 	Shops() ([]Shop, error)
-	AddOwner(*ShopOwners) error
-	RemoveOwner(*ShopOwners) error
+	AddOwner(id uint, email string) error
+	RemoveOwner(id uint, email string) error
 	Update(id uint, o *Shop) error
 	Delete(id uint) error
 	Create(*Shop) error
@@ -60,7 +46,7 @@ type ShopStore interface {
 // ShopOwnersStore currently contains some "shop_owners table"
 // related persistence logic
 type ShopOwnersStore interface {
-	Save(tx Tx, so *ShopOwners) error
-	Delete(tx Tx, so *ShopOwners) error
+	Save(tx Tx, sID uint, uID string) error
+	Delete(tx Tx, sID uint, uID string) error
 	DeleteByUser(tx Tx, uID string) error
 }
