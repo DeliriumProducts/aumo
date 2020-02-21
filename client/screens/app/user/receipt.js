@@ -4,11 +4,7 @@ import { ImageBackground, ScrollView, View } from "react-native"
 import styled from "styled-components/native"
 import theme from "../../../theme"
 
-export default ({
-  route: {
-    params: { receipt }
-  }
-}) => {
+export default ({ route: { params: receipt } }) => {
   return (
     <Header>
       <Shop
@@ -25,7 +21,8 @@ export default ({
             flexDirection: "row",
             justifyContent: "space-between",
             flexWrap: "wrap"
-          }}>
+          }}
+        >
           <View>
             <Text category="h4">{receipt.shop.name}</Text>
           </View>

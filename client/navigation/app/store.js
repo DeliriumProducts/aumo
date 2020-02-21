@@ -19,7 +19,8 @@ export default () => (
         backgroundColor: theme["color-background-main"]
       },
       ...TransitionPresets.SlideFromRightIOS
-    }}>
+    }}
+  >
     <Stack.Screen name={Routes.Store} component={StoreScreen} />
     <Stack.Screen
       name={Routes.StoreShop}

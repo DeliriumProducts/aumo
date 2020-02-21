@@ -62,7 +62,8 @@ export default ({ navigation }) => {
     <>
       <MainLayout level="1">
         <ProfileContainer
-          style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
           <View style={{ flexDirection: "row" }}>
             <Avatar
               size="giant"
@@ -95,7 +96,8 @@ export default ({ navigation }) => {
             icon={style => <Icon name="edit-outline" {...style} />}
             onPress={() => {
               navigation.push(Routes.UserEdit)
-            }}>
+            }}
+          >
             EDIT PROFILE
           </EditButton>
         </View>
@@ -104,7 +106,8 @@ export default ({ navigation }) => {
             backgroundColor: "rgba(0, 0, 0, 0.5)"
           }}
           onBackdropPress={() => {}}
-          visible={loading}>
+          visible={loading}
+        >
           <ModalContainer level="1">
             {loading && <Spinner size="giant" />}
           </ModalContainer>
@@ -113,16 +116,18 @@ export default ({ navigation }) => {
       <TabView selectedIndex={tabIdx} onSelect={setTabIdx} style={{ flex: 1 }}>
         <Tab
           title="Orders"
-          icon={style => <Icon {...style} name="bell-outline" />}>
+          icon={style => <Icon {...style} name="bell-outline" />}
+        >
           <OrderList orders={ctx.state.user?.orders} />
         </Tab>
         <Tab
           title="Receipts"
-          icon={style => <Icon {...style} name="file-text-outline" />}>
+          icon={style => <Icon {...style} name="file-text-outline" />}
+        >
           <ReceiptList
             receipts={ctx.state.user?.receipts}
             onItemPress={receipt => {
-              navigation.push(Routes.Receipt, receipt)
+              navigation.push(Routes.ReceiptDetails, receipt)
             }}
           />
         </Tab>
