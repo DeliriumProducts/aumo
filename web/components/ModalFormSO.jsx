@@ -7,7 +7,8 @@ import {
   List,
   Modal,
   Popconfirm,
-  Tooltip
+  Tooltip,
+  message
 } from "antd"
 import aumo from "aumo"
 
@@ -35,7 +36,7 @@ export default Form.create()(
     }
 
     render() {
-      const { visible, onCancel, onAdd, form, shop } = this.props
+      const { visible, onCancel, onAdd, form, shop, currentUser } = this.props
       const { getFieldDecorator } = form
 
       return (
@@ -67,13 +68,36 @@ export default Form.create()(
                   }
                   enterButton={<Button type="primary">Add</Button>}
                   onSearch={async () => {
-                    await onAdd(shop.id)
+                    form.validateFields(async (err, data) => {
+                      if (err) {
+                        return
+                      }
 
-                    const { owners: shopOwners } = await aumo.shop.getShop(
-                      this.props.shop.id
-                    )
+                      try {
+                        await aumo.shop.addOwner(shop.id, data.ownerEmail)
+                        message.success(`Successfully added new owner! 🎉`)
 
-                    this.setState({ shopOwners })
+                        const { owners: shopOwners } = await aumo.shop.getShop(
+                          this.props.shop.id
+                        )
+
+                        this.setState({ shopOwners })
+                      } catch (err) {
+                        if (!err.response) {
+                          message.error(`${err}`, 5)
+                          return
+                        }
+                        if (err.response.status === 401) {
+                          message.error("Unauthorized.", 1)
+                        } else if (err.response.status === 404) {
+                          message.error("User not found")
+                        } else {
+                          message.error("Server error, please try again")
+                        }
+                        return
+                      }
+                      form.resetFields()
+                    })
                   }}
                 />
               )}
@@ -91,29 +115,66 @@ export default Form.create()(
                         title={owner.name}
                         description={owner.email}
                       />
-                      <Tooltip title="Remove this owner!">
-                        <Popconfirm
-                          onConfirm={e => {
-                            e.stopPropagation()
-                          }}
-                          disabled={false}
-                          title={`Are you sure?`}
-                          placement="bottom"
-                          okText="Yes"
-                          okType="danger"
-                          onCancel={e => e.stopPropagation()}
+                      {owner.email !== currentUser.email && (
+                        <Tooltip
+                          title={
+                            owner.email === currentUser.email
+                              ? "You cannot remove yourself!"
+                              : "Remove this owner!"
+                          }
                         >
-                          <Button
-                            type="danger"
-                            icon="delete"
-                            disabled={false}
-                            onClick={e => e.stopPropagation()}
-                            style={{
-                              right: 10
+                          <Popconfirm
+                            onConfirm={async e => {
+                              e.stopPropagation()
+                              try {
+                                await aumo.shop.removeOwner(
+                                  shop.id,
+                                  owner.email
+                                )
+                                message.success(
+                                  `Successfully deleted shop owner ${owner.name}! 🎉`
+                                )
+
+                                const {
+                                  owners: shopOwners
+                                } = await aumo.shop.getShop(this.props.shop.id)
+
+                                this.setState({ shopOwners })
+                              } catch (err) {
+                                if (!err.response) {
+                                  message.error(`${err}`, 5)
+                                  return
+                                }
+                                if (err.response.status === 401) {
+                                  message.error("Unathorized. Try again.", 1)
+                                } else {
+                                  message.error(
+                                    "Server error, please try again"
+                                  )
+                                }
+                                return
+                              }
                             }}
-                          ></Button>
-                        </Popconfirm>
-                      </Tooltip>
+                            disabled={false}
+                            title={`Are you sure?`}
+                            placement="bottom"
+                            okText="Yes"
+                            okType="danger"
+                            onCancel={e => e.stopPropagation()}
+                          >
+                            <Button
+                              type="danger"
+                              icon="delete"
+                              onClick={async e => {
+                                e.stopPropagation()
+                              }}
+                              style={{
+                                right: 10
+                              }}
+                            ></Button>
+                          </Popconfirm>
+                        </Tooltip>
+                      )}
                     </List.Item>
                   )}
                 ></List>

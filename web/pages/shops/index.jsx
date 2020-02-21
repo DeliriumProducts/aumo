@@ -45,29 +45,26 @@ export const Shops = () => {
     setLoading(false)
   }
 
-  const handleSOAdd = sID => {
+  const handleSOAdd = async sID => {
     const { form } = formRefSO.props
 
-    form.validateFields(async (err, email) => {
+    form.validateFields(async (err, data) => {
       if (err) {
         return
       }
 
-      const shopOwner = {
-        sID,
-        email
-      }
-
       try {
-        await aumo.shop.addOwner(shopOwner)
+        await aumo.shop.addOwner(sID, data.ownerEmail)
         message.success(`Successfully added new owner! 🎉`)
-      } catch (error) {
+      } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
           return
         }
         if (err.response.status === 401) {
           message.error("Unauthorized.", 1)
+        } else if (err.response.status === 404) {
+          message.error("User not found")
         } else {
           message.error("Server error, please try again")
         }
@@ -108,7 +105,7 @@ export const Shops = () => {
   const handleDelete = async s => {
     try {
       await aumo.shop.deleteShop(s.id)
-      message.success(`Successfully deleted shop ${s.name}! 🎉`)
+      message.success(`Successfully added new owner! 🎉`)
     } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
@@ -219,8 +216,8 @@ export const Shops = () => {
           wrappedComponentRef={saveFormRefSO}
           visible={visibleSO}
           onCancel={handleCancel}
-          onAdd={handleSOAdd}
           shop={curShop}
+          currentUser={ctx.state.user}
           cancelText="Ok"
         />
       </Container>
