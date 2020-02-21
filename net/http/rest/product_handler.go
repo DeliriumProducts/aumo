@@ -46,9 +46,9 @@ func (rest *Rest) productGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rest *Rest) productGetAllByShop(w http.ResponseWriter, r *http.Request) {
-	pID := rest.ParamNumber(w, r, "product_id")
+	sID := rest.ParamNumber(w, r, "shop_id")
 
-	products, err := rest.productService.ProductsByShopID(pID)
+	products, err := rest.productService.ProductsByShopID(sID)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusNotFound)
 		return
