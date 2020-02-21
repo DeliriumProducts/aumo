@@ -9,15 +9,17 @@ import (
 type Receipt struct {
 	ReceiptID uuid.UUID  `json:"receipt_id" db:"receipt_id"`
 	Content   string     `json:"content" db:"content"`
+	Total     float64    `json:"total" db:"total"`
 	UserID    *uuid.UUID `json:"-" db:"user_id,omitempty"`
 	ShopID    uint       `json:"shop_id" db:"shop_id"`
 	Shop      *Shop      `json:"shop" db:"-"`
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
-func NewReceipt(content string, sID uint) *Receipt {
+func NewReceipt(content string, total float64, sID uint) *Receipt {
 	return &Receipt{
 		ReceiptID: uuid.New(),
+		Total:     total,
 		Content:   content,
 		ShopID:    sID,
 	}

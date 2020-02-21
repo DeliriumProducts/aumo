@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS receipts (
   receipt_id varchar(36) NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
+  total double NOT NULL,
   user_id varchar(36) NULL,
   shop_id int(10) unsigned NOT NULL,
   FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE ON UPDATE NO ACTION,
