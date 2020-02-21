@@ -6,16 +6,6 @@ import (
 	"github.com/deliriumproducts/aumo"
 )
 
-func (rest *Rest) productGetAll(w http.ResponseWriter, r *http.Request) {
-	products, err := rest.productService.Products()
-	if err != nil {
-		rest.JSONError(w, err, http.StatusNotFound)
-		return
-	}
-
-	rest.JSON(w, products, http.StatusOK)
-}
-
 func (rest *Rest) productCreate(w http.ResponseWriter, r *http.Request) {
 	sID := rest.ParamNumber(w, r, "shop_id")
 

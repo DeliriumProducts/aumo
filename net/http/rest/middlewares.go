@@ -50,9 +50,9 @@ func RateLimit(lmt *limiter.Limiter) func(next http.Handler) http.Handler {
 	}
 }
 
-// WithAuth is a middleware that only allows authenticated users in
+// Authentication is a middleware that only allows authenticated users in
 // while also checking the role of the user
-func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Handler {
+func (rest *Rest) Authentication(roles ...aumo.Role) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		middle := func(w http.ResponseWriter, r *http.Request) {
 			user, err := rest.auth.GetFromRequest(r)
@@ -90,21 +90,11 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 	}
 }
 
-// WithShopOwnersAndAdmins allows only admins and shop owners of the
+// OwnsShop allows only admins and shop owners of the
 // corresponding shop to access the route
-func (rest *Rest) WithShopOwnersAndAdmins(next http.Handler) http.Handler {
+func (rest *Rest) OwnsShop(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		type request struct {
-			ShopID uint `form:"shop_id" validate:"required" json:"shop_id"`
-		}
-		var sID uint
-
-		var um request
-		if ok := rest.Form(w, r, &um); !ok {
-			sID = rest.ParamNumber(w, r, "id")
-		} else {
-			sID = um.ShopID
-		}
+		sID := rest.ParamNumber(w, r, "shop_id")
 
 		user, err := auth.CurrentUser(r.Context())
 		if err != nil {
@@ -112,6 +102,7 @@ func (rest *Rest) WithShopOwnersAndAdmins(next http.Handler) http.Handler {
 			return
 		}
 
+		// Allow admins through
 		if user.Role == aumo.Admin {
 			next.ServeHTTP(w, r)
 			return

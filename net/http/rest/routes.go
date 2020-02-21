@@ -11,7 +11,7 @@ func (rest *Rest) mount(mnt string) {
 		r.Post("/login", rest.userLogin)
 		r.Get("/confirm-email/{token}", rest.userConfirmEmail)
 		r.Group(func(r chi.Router) {
-			r.Use(rest.WithAuth())
+			r.Use(rest.Authentication())
 
 			r.Get("/logout", rest.userLogout)
 			r.Get("/me", rest.userGetCurrent)
@@ -19,7 +19,7 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/users", func(r chi.Router) {
-			r.Use(rest.WithAuth(aumo.Admin))
+			r.Use(rest.Authentication(aumo.Admin))
 
 			r.Get("/", rest.userGetAll)
 			r.Get("/{id}", rest.userGet)
@@ -30,17 +30,17 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/shops", func(r chi.Router) {
-			r.With(rest.WithAuth()).Get("/", rest.shopGetAll)
-			r.With(rest.WithAuth()).Get("/{shop_id}", rest.shopGet)
+			r.With(rest.Authentication()).Get("/", rest.shopGetAll)
+			r.With(rest.Authentication()).Get("/{shop_id}", rest.shopGet)
 
 			r.Group(func(r chi.Router) {
 				r.Use(
-					rest.WithAuth(aumo.Admin, aumo.ShopOwner),
-					rest.WithShopOwnersAndAdmins,
+					rest.Authentication(aumo.Admin, aumo.ShopOwner),
 				)
 
 				r.Post("/", rest.shopCreate)
 				r.Route("/{shop_id}", func(r chi.Router) {
+					r.Use(rest.OwnsShop)
 					r.Put("/", rest.shopEdit)
 					r.Delete("/", rest.shopDelete)
 					r.Post("/add-owner", rest.shopAddOwner)
@@ -49,6 +49,7 @@ func (rest *Rest) mount(mnt string) {
 					r.Route("/products", func(r chi.Router) {
 						r.Get("/", rest.productGetAllByShop)
 						r.Post("/", rest.productCreate)
+						r.Get("/{product_id}", rest.productGet)
 						r.Put("/{product_id}", rest.productEdit)
 						r.Delete("/{product_id}", rest.productDelete)
 					})
@@ -56,21 +57,16 @@ func (rest *Rest) mount(mnt string) {
 			})
 		})
 
-		r.Route("/products", func(r chi.Router) {
-			r.Get("/", rest.productGetAll)
-			r.Get("/{product_id}", rest.productGet)
-		})
-
 		r.Route("/receipts", func(r chi.Router) {
-			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.receiptCreate)
-			r.With(rest.WithAuth(aumo.Customer)).Get("/{id}", rest.receiptClaim)
+			r.With(rest.Authentication(aumo.Admin)).Post("/", rest.receiptCreate)
+			r.With(rest.Authentication(aumo.Customer)).Get("/{id}", rest.receiptClaim)
 		})
 
 		r.Route("/orders", func(r chi.Router) {
-			r.With(rest.WithAuth(aumo.Customer)).Post("/", rest.orderCreate)
+			r.With(rest.Authentication(aumo.Customer)).Post("/", rest.orderCreate)
 
 			r.Group(func(r chi.Router) {
-				r.Use(rest.WithAuth(aumo.Admin))
+				r.Use(rest.Authentication(aumo.Admin))
 				r.Get("/", rest.orderGetAll)
 				r.Get("/{id}", rest.orderGet)
 			})
