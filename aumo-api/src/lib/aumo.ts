@@ -48,6 +48,7 @@ export interface Shop {
 export interface Receipt {
   receipt_id: string;
   content: string;
+  total: number;
   shop_id: number;
   shop: Shop;
 }
