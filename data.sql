@@ -13,8 +13,8 @@ INSERT INTO `products` VALUES
     (2,'CYBERPOWERPC Gamer Master Gaming PC',500,'https://images-na.ssl-images-amazon.com/images/I/812kz16Md0L._SX466_.jpg',"Cyber PowerPC Gamer Master series is a line of gaming PCs powered by AMD's newest Ryzen CPU and accompanying AM4 architecture.",5, 2),
     (3,'iPhone 11',500,'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone11-select-2019-family?wid=882&amp;hei=1058&amp;fmt=jpeg&amp;qlt=80&amp;op_usm=0.5,0.5&amp;.v=1567022175704',"Shoot amazing videos and photos with the Ultra Wide, Wide, and Telephoto cameras. Capture your best low-light photos with Night mode. ", 1, 1);
 INSERT INTO `receipts` VALUES 
-    ('acf4e079-688f-473d-b682-d9551a2527d5',"Paconi: 250 leva",'24a2068c-a43d-43ae-b967-858953686189', 1),
-    ('5021a0cf-e7cc-4ad1-a0c6-5e5a1c079303',"Lidl: 500 leva",'19274de1-ac2b-4dd9-adee-20f4ab69e920', 2);
+    ('acf4e079-688f-473d-b682-d9551a2527d5',"Paconi: 250 leva", 250, '24a2068c-a43d-43ae-b967-858953686189', 1),
+    ('5021a0cf-e7cc-4ad1-a0c6-5e5a1c079303',"Lidl: 500 leva", 500, '19274de1-ac2b-4dd9-adee-20f4ab69e920', 2);
 INSERT INTO `orders` VALUES 
     ('02ade587-62f4-4570-acfa-c2cb5e09f0c4', '24a2068c-a43d-43ae-b967-858953686189', 2),
     ('4f2e6fea-83f7-49d1-8be2-a3ddcaea0dcb', '19274de1-ac2b-4dd9-adee-20f4ab69e920', 1),
