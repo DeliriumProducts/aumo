@@ -23,11 +23,6 @@ export interface User {
   shops: Shop[];
 }
 
-export interface ShopOwner {
-  email: string;
-  shop_id: number;
-}
-
 export type Role = 'Admin' | 'Customer' | 'Shop Owner';
 
 export interface Order {
