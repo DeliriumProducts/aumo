@@ -173,7 +173,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
-	// Get shops only if the user is an admin or a shop owner
+	// If a user is a shop owner, get their shops
 	if user.Role == aumo.ShopOwner {
 		err = tx.Select("s.*").
 			From("shop_owners").
