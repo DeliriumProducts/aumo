@@ -12,6 +12,7 @@ func (rest *Rest) mount(mnt string) {
 		r.Get("/confirm-email/{token}", rest.userConfirmEmail)
 		r.Group(func(r chi.Router) {
 			r.Use(rest.WithAuth())
+
 			r.Get("/logout", rest.userLogout)
 			r.Get("/me", rest.userGetCurrent)
 			r.Put("/me", rest.userEdit)
@@ -19,6 +20,7 @@ func (rest *Rest) mount(mnt string) {
 
 		r.Route("/users", func(r chi.Router) {
 			r.Use(rest.WithAuth(aumo.Admin))
+
 			r.Get("/", rest.userGetAll)
 			r.Get("/{id}", rest.userGet)
 			r.Put("/{id}/set-role", rest.userEditRole)
@@ -30,11 +32,16 @@ func (rest *Rest) mount(mnt string) {
 		r.Route("/shops", func(r chi.Router) {
 			r.With(rest.WithAuth()).Get("/", rest.shopGetAll)
 			r.With(rest.WithAuth()).Get("/{id}", rest.shopGet)
-			r.With(rest.WithAuth(aumo.Admin)).Post("/", rest.shopCreate)
-			r.With(rest.WithAuth(aumo.Admin), rest.WithShopOwnersAndAdmins).Put("/{id}", rest.shopEdit)
-			r.With(rest.WithAuth(aumo.Admin), rest.WithShopOwnersAndAdmins).Delete("/{id}", rest.shopDelete)
-			r.With(rest.WithAuth(aumo.Admin), rest.WithShopOwnersAndAdmins).Post("/{id}/add-owner", rest.shopAddOwner)
-			r.With(rest.WithAuth(aumo.Admin), rest.WithShopOwnersAndAdmins).Post("/{id}/remove-owner", rest.shopRemoveOwner)
+
+			r.Group(func(r chi.Router) {
+				r.Use(rest.WithAuth(aumo.Admin, aumo.ShopOwner), rest.WithShopOwnersAndAdmins)
+
+				r.Post("/", rest.shopCreate)
+				r.Put("/{id}", rest.shopEdit)
+				r.Delete("/{id}", rest.shopDelete)
+				r.Post("/{id}/add-owner", rest.shopAddOwner)
+				r.Post("/{id}/remove-owner", rest.shopRemoveOwner)
+			})
 		})
 
 		r.Route("/receipts", func(r chi.Router) {
