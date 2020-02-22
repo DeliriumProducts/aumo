@@ -45,7 +45,7 @@ jobs:
         run: 'echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties'
 
       - name: Debug
-        run: 'cat ./client/android/keystores/release.keystore.properties'
+        run: 'ls ./client/android/keystores'
 
       - name: Build
         working-directory: ./client/android
