@@ -36,7 +36,7 @@ jobs:
         working-directory: ./client
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
-          KEY_STORE_PASS: ${{ secrets.KEY_STORE_PASS }}
+          RELEASE_PROPERTIES: ${{ secrets.RELEASE_PROPERTIES }}
         run: |
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
           cd android 
