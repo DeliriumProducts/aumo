@@ -36,7 +36,7 @@ jobs:
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
         shell: bash
-        run: 'echo $KEY_STORE | base64 --decode > ./client/android/keystores/aumo.keystore'
+        run: 'echo $KEY_STORE | base64 --decode > ./client/android/app/aumo.keystore'
 
       - name: Add release properties
         env:
