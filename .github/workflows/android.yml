@@ -46,9 +46,6 @@ jobs:
         shell: bash
         run: './gen-release.sh'
 
-      - name: Debug
-        run: 'ls ./client/android/keystores'
-
       - name: Build
         working-directory: ./client/android
         run: |
