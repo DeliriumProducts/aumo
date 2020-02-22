@@ -47,10 +47,10 @@ $ keytool -genkeypair -v -keystore aumo.keystore -alias aumo -keyalg RSA -keysiz
 ... and then move the generated file in client/android/keystores. Next you need to make a file called `release.keystore.properties` in the same directory. It should contain:
 
 ```bash
-AUMO_UPLOAD_STORE_FILE=aumo.keystore
-AUMO_UPLOAD_KEY_ALIAS=aumo
-AUMO_UPLOAD_STORE_PASSWORD=****
-AUMO_UPLOAD_KEY_PASSWORD=****
+key.store=aumo.keystore
+key.alias=aumo
+key.store.password=***
+key.alias.password=***
 ```
 
 The final apk can be installed using
