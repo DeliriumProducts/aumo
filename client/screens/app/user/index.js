@@ -28,7 +28,6 @@ export default ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       const task = InteractionManager.runAfterInteractions(() => {
-        // Expensive task
         ;(async () => {
           try {
             const me = await aumo.auth.me()
