@@ -115,10 +115,10 @@ android {
     }
     signingConfigs {
         release {
-                storeFile file(keystorePropertiesFile['AUMO_UPLOAD_STORE_FILE'])
-                storePassword keystorePropertiesFile['AUMO_UPLOAD_STORE_PASSWORD']
-                keyAlias keystorePropertiesFile['AUMO_UPLOAD_KEY_ALIAS']
-                keyPassword keystorePropertiesFile['AUMO_UPLOAD_KEY_PASSWORD']
+                storeFile file(keystoreProperties['AUMO_UPLOAD_STORE_FILE'])
+                storePassword keystoreProperties['AUMO_UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProperties['AUMO_UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProperties['AUMO_UPLOAD_KEY_PASSWORD']
         }
     }
     splits {
