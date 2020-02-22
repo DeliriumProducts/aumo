@@ -17,3 +17,44 @@ Incentive for using the digital receipt, as opposed to the paper alternative, wi
 [github actions]: https://github.com/deliriumproducts/aumo/actions
 [godoc]: https://godoc.org/github.com/deliriumproducts/aumo
 [godoc widget]: https://godoc.org/github.com/deliriumproducts/aumo?status.svg
+
+## Getting started
+
+Requirements:
+
+### Backend
+
+- go
+- mysql
+- redis
+
+### Admin panel
+
+- node.js
+
+### Mobile
+
+- android sdk
+- jdk
+- node.js
+
+In order to build a release apk, you need to generate a keystore using:
+
+```console
+$ keytool -genkeypair -v -keystore aumo.keystore -alias aumo -keyalg RSA -keysize 2048 -validity 10000
+```
+
+... and then move the generated file in client/android/keystores. Next you need to make a file called `release.keystore.properties` in the same directory. It should contain:
+
+```bash
+AUMO_UPLOAD_STORE_FILE=aumo.keystore
+AUMO_UPLOAD_KEY_ALIAS=aumo
+AUMO_UPLOAD_STORE_PASSWORD=****
+AUMO_UPLOAD_KEY_PASSWORD=****
+```
+
+The final apk can be installed using
+
+```console
+$ yarn android --variant=release
+```
