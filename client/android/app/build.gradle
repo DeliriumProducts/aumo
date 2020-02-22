@@ -95,6 +95,13 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+def keystorePropertiesFile = rootProject.file("keystores/release.keystore.properties");
+
+if (keystorePropertiesFile.exists()) {
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -108,12 +115,10 @@ android {
     }
     signingConfigs {
         release {
-            if (project.hasProperty('AUMO_UPLOAD_STORE_FILE')) {
-                storeFile file(AUMO_UPLOAD_STORE_FILE)
-                storePassword AUMO_UPLOAD_STORE_PASSWORD
-                keyAlias AUMO_UPLOAD_KEY_ALIAS
-                keyPassword AUMO_UPLOAD_KEY_PASSWORD
-            }
+                storeFile file(keystorePropertiesFile['AUMO_UPLOAD_STORE_FILE'])
+                storePassword keystorePropertiesFile['AUMO_UPLOAD_STORE_PASSWORD']
+                keyAlias keystorePropertiesFile['AUMO_UPLOAD_KEY_ALIAS']
+                keyPassword keystorePropertiesFile['AUMO_UPLOAD_KEY_PASSWORD']
         }
     }
     splits {
