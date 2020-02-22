@@ -44,6 +44,9 @@ jobs:
         shell: bash
         run: 'echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties'
 
+      - name: Debug
+        run: cat ./client/android/keystores/aumo.keystores && cat ./client/android/keystores/release.keystore.properties
+
       - name: Build
         working-directory: ./client/android
         run: |
