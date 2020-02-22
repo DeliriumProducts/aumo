@@ -32,17 +32,20 @@ jobs:
         working-directory: ./client
         run: yarn --frozen-lockfile
 
-      - name: Build
-        working-directory: ./client
+      - name: Add keystore
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
+        run: echo $KEY_STORE | base64 --decode > ./client/android/keystores/aumo.keystore
+
+      - name: Add release properties
+        env:
           RELEASE_PROPERTIES: ${{ secrets.RELEASE_PROPERTIES }}
+        run: echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties
+
+      - name: Build
+        working-directory: ./client/android
         run: |
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-          cd android 
-          echo $KEY_STORE | base64 --decode > ./keystores/aumo.keystore
-          echo $RELEASE_PROPERTIES > ./keystores/release.keystore.properties
-          cat ./keystores/release.keystore.properties
           ./gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v1
