@@ -18,8 +18,6 @@ if (__DEV__) {
   })
 }
 
-let renders = 0
-
 const App = () => {
   const ctx = React.useContext(Context)
 
@@ -31,9 +29,6 @@ const App = () => {
       } catch (e) {}
     })()
   }, [])
-
-  renders++
-  console.log(renders)
 
   return (
     <>
