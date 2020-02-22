@@ -15,6 +15,8 @@
 		3DE4DAD41476765101945408 /* libPods-Aumo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FF9D506E70904424FA7E9 /* libPods-Aumo.a */; };
 		7D58F45BB231459F8044ADA4 /* AumoLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D82468578194AC6B5F40876 /* AumoLogo.png */; };
 		EBF32C38CF18481F805CD711 /* Avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A52AB3B7B8FE43E18819C863 /* Avatar.png */; };
+		DF0069711C704544A29490A8 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 75E278032AFD464090E5B4FC /* logo.png */; };
+		309BC95D140A4D1C90B438A7 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = DE684C5A59E34F93B8A44CFF /* splash.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		A52AB3B7B8FE43E18819C863 /* Avatar.png */ = {isa = PBXFileReference; name = "Avatar.png"; path = "../assets/Avatar.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		75E278032AFD464090E5B4FC /* logo.png */ = {isa = PBXFileReference; name = "logo.png"; path = "../assets/logo.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DE684C5A59E34F93B8A44CFF /* splash.png */ = {isa = PBXFileReference; name = "splash.png"; path = "../assets/splash.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,8 @@
 				D3A4B10B33B349E59886E929 /* opensans-regular.ttf */,
 				6D82468578194AC6B5F40876 /* AumoLogo.png */,
 				A52AB3B7B8FE43E18819C863 /* Avatar.png */,
+				75E278032AFD464090E5B4FC /* logo.png */,
+				DE684C5A59E34F93B8A44CFF /* splash.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -184,6 +190,8 @@
 				36C7030A622241F4972A936A /* opensans-regular.ttf in Resources */,
 				7D58F45BB231459F8044ADA4 /* AumoLogo.png in Resources */,
 				EBF32C38CF18481F805CD711 /* Avatar.png in Resources */,
+				DF0069711C704544A29490A8 /* logo.png in Resources */,
+				309BC95D140A4D1C90B438A7 /* splash.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

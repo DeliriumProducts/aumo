@@ -5,6 +5,7 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons"
 import aumo from "aumo"
 import React from "react"
 import { SafeAreaView } from "react-native"
+import SplashScreen from "react-native-splash-screen"
 import { BACKEND_URL } from "./config"
 import { Context } from "./context/context"
 import ContextProvider, { actions } from "./context/providers/provider"
@@ -26,6 +27,7 @@ const App = () => {
       try {
         const val = await aumo.auth.me()
         ctx.dispatch({ type: actions.SET_USER, payload: val })
+        SplashScreen.hide()
       } catch (e) {}
     })()
   }, [])
