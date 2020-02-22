@@ -15,8 +15,8 @@ export default ({ route, navigation }) => {
   React.useEffect(() => {
     ;(async () => {
       try {
-        const response = await aumo.shop.getShop(route.params.id)
-        setProducts(response.products)
+        const response = await aumo.shop.getAllProductsByShop(route.params.id)
+        setProducts(response)
       } catch (error) {
         console.warn(error)
       } finally {

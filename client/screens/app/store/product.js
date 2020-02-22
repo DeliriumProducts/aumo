@@ -6,6 +6,7 @@ import {
   Spinner,
   Text
 } from "@ui-kitten/components"
+import { Context } from "../../../context/context"
 import aumo from "aumo"
 import React from "react"
 import { Alert, ImageBackground, ScrollView, View } from "react-native"
@@ -14,11 +15,35 @@ import theme from "../../../theme"
 
 export default ({
   route: {
-    params: { product: p, shop }
+    params: {
+      product: { id: pID },
+      shop
+    }
   }
 }) => {
-  const [product, setProduct] = React.useState(p)
-  const [loading, setLoading] = React.useState(false)
+  const ctx = React.useContext(Context)
+  const [product, setProduct] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+
+  const fetchProduct = async () => {
+    try {
+      const data = await aumo.shop.getProduct(shop.id, pID)
+      setProduct({
+        ...data,
+        disabled: data.stock < 1 || ctx.state?.user?.points < data.price
+      })
+    } catch (error) {
+      console.warn(error)
+    }
+  }
+
+  React.useEffect(() => {
+    ;(async () => {
+      setLoading(true)
+      await fetchProduct()
+      setLoading(false)
+    })()
+  }, [])
 
   const onPress = async product => {
     try {
@@ -27,17 +52,16 @@ export default ({
         product_id: product.id
       })
       Alert.alert("Successfull!", "You successfully purchased " + product.name)
-      setProduct(p => ({ ...p, stock: p.stock - 1 }))
+      setLoading(false)
+      fetchProduct()
     } catch (error) {
       Alert.alert("Error!", error.response.data.error)
-    } finally {
-      setLoading(false)
     }
   }
 
   return (
     <Header>
-      <ProductImage source={{ uri: product.image }} resizeMode="contain" />
+      <ProductImage source={{ uri: product?.image }} resizeMode="contain" />
       <DetailsContainer level="1">
         <View
           style={{
@@ -47,7 +71,7 @@ export default ({
           }}
         >
           <View>
-            <Text category="h4">{product.name}</Text>
+            <Text category="h4">{product?.name}</Text>
             <Shop appearance="hint" category="p2">
               provided by {shop.name}
             </Shop>
@@ -60,22 +84,22 @@ export default ({
                 height={25}
                 fill={theme["color-basic-800"]}
               />
-              <Text category="h4">{product.price}</Text>
+              <Text category="h4">{product?.price}</Text>
             </Price>
             <Shop
               appearance="hint"
               category="p2"
-              status={product.stock < 1 ? "danger" : ""}
+              status={product?.stock < 1 ? "danger" : ""}
             >
-              {product.stock} in stock
+              {product?.stock} in stock
             </Shop>
           </View>
         </View>
-        <Description appearance="hint">{product.description}</Description>
+        <Description appearance="hint">{product?.description}</Description>
         <ActionContainer>
           <ActionButton
             size="giant"
-            disabled={product.disabled}
+            disabled={product?.disabled}
             onPress={() => {
               Alert.alert(
                 "Purchase confirmation",
