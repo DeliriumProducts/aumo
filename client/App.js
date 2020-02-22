@@ -27,8 +27,10 @@ const App = () => {
       try {
         const val = await aumo.auth.me()
         ctx.dispatch({ type: actions.SET_USER, payload: val })
+      } catch (e) {
+      } finally {
         SplashScreen.hide()
-      } catch (e) {}
+      }
     })()
   }, [])
 
