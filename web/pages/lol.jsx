@@ -2,7 +2,7 @@ import { Button, Form, Icon, Input, message } from "antd"
 import aumo from "aumo"
 import Head from "next/head"
 import styled from "styled-components"
-import withAuth from "../../hocs/withAuth"
+import withAuth from "../hocs/withAuth"
 
 const LOL = () => {
   const [totalSum, setTotalSum] = React.useState(0)
