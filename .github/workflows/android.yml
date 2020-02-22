@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ["13", "10"]
+        node: ['13', '10']
     name: Node ${{ matrix.node }} sample
     steps:
       - uses: actions/checkout@v1
@@ -34,7 +34,12 @@ jobs:
 
       - name: Build
         working-directory: ./client
+        env:
+          KEY_STORE: ${{ secrets.KEY_STORE }}
+          KEY_STORE_PASS: ${{ secrets.KEY_STORE_PASS }}
         run: |
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
           cd android 
+          echo $KEY_STORE | base64 --decode > ./keystores/aumo.keystore
+          echo $RELEASE_PROPERTIES > ./keystores/release.keystore.properties
           ./gradlew assembleRelease

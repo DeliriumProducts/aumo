@@ -10,7 +10,6 @@ export default () => {
   React.useEffect(() => {
     NfcManager.start()
     NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
-      console.log(tag)
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
       console.warn(msgs)
     })
