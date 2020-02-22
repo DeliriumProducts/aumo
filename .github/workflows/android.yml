@@ -42,6 +42,7 @@ jobs:
           cd android 
           echo $KEY_STORE | base64 --decode > ./keystores/aumo.keystore
           echo $RELEASE_PROPERTIES > ./keystores/release.keystore.properties
+          cat ./keystores/release.keystore.properties
           ./gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v1
