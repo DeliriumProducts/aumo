@@ -43,3 +43,8 @@ jobs:
           echo $KEY_STORE | base64 --decode > ./keystores/aumo.keystore
           echo $RELEASE_PROPERTIES > ./keystores/release.keystore.properties
           ./gradlew assembleRelease
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: aumo.apk
+          path: ./client/android/app/build/outputs/apk/release/app-release.apk
