@@ -1,17 +1,10 @@
-import {
-  Button,
-  Icon,
-  Layout,
-  Modal,
-  Spinner,
-  Text
-} from "@ui-kitten/components"
+import { Button, Icon, Spinner, Text } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
-import styled from "styled-components/native"
 import ErrorContainer from "../../components/ErrorContainer"
+import Modal from "../../components/Modal"
 import FormInput from "../../components/FormInput"
 import { Aumo, Container, Form, MainContainer, Subheading } from "./components"
 
@@ -120,31 +113,28 @@ export default function RegisterScreen(props) {
       </View>
       <Modal
         visible={showModal}
-        backdropStyle={styles.backdrop}
         onBackdropPress={() => {
           props.navigation.popToTop()
           setShowModal(false)
         }}
       >
-        <ModalContainer level="3">
-          <Text>
-            Confirmation email has been sent! Check your email to verify your
-            account!
-          </Text>
-          <Button
-            size="small"
-            style={{
-              marginTop: 10
-            }}
-            status="success"
-            onPress={() => {
-              setShowModal(false)
-              props.navigation.popToTop()
-            }}
-          >
-            DISMISS
-          </Button>
-        </ModalContainer>
+        <Text>
+          Confirmation email has been sent! Check your email to verify your
+          account!
+        </Text>
+        <Button
+          size="small"
+          style={{
+            marginTop: 10
+          }}
+          status="success"
+          onPress={() => {
+            setShowModal(false)
+            props.navigation.popToTop()
+          }}
+        >
+          DISMISS
+        </Button>
       </Modal>
       <MainContainer style={{ paddingRight: 32, paddingLeft: 32 }}>
         <View style={{ marginBottom: 15 }}>
@@ -163,14 +153,6 @@ export default function RegisterScreen(props) {
     </Container>
   )
 }
-
-const ModalContainer = styled(Layout)`
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  width: 256px;
-  padding: 16px;
-`
 
 const styles = StyleSheet.create({
   backdrop: {
