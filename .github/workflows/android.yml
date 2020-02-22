@@ -39,10 +39,12 @@ jobs:
         run: 'echo $KEY_STORE | base64 --decode > ./client/android/app/aumo.keystore'
 
       - name: Add release properties
+        working-directory: ./client/android
         env:
-          RELEASE_PROPERTIES: ${{ secrets.RELEASE_PROPERTIES }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          ALIAS_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         shell: bash
-        run: 'echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties'
+        run: './gen-release.sh'
 
       - name: Debug
         run: 'ls ./client/android/keystores'
