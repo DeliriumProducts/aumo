@@ -7,14 +7,7 @@ import theme from "../../../theme"
 export default ({ route: { params: receipt } }) => {
   return (
     <Header>
-      <Shop
-        name={receipt.shop.name}
-        image={{ uri: receipt.shop.image }}
-        style={{
-          height: 340,
-          width: "100%"
-        }}
-      />
+      <ShopImage source={{ uri: receipt.shop.image }} />
       <DetailsContainer level="1">
         <View
           style={{
@@ -47,14 +40,13 @@ export default ({ route: { params: receipt } }) => {
 const Header = styled(ScrollView)`
   min-height: 100%;
 `
-const ProductImage = styled(ImageBackground)``
+const ShopImage = styled(ImageBackground)`
+  height: 340px;
+  width: 100%;
+`
 const DetailsContainer = styled(Layout)`
   padding-vertical: 24px;
   padding-horizontal: 16px;
-`
-
-const Shop = styled(Text)`
-  margin-top: 4px;
 `
 
 const Price = styled(View)`
