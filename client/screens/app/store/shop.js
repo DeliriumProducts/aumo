@@ -1,7 +1,8 @@
 import { Layout, Modal, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Alert } from "react-native"
+import { Alert, ActionSheetIOS } from "react-native"
+import { actions } from "../../../context/providers/provider"
 import styled from "styled-components/native"
 import ProductList from "../../../components/ProductList"
 import { Context } from "../../../context/context"
@@ -12,16 +13,26 @@ export default ({ route, navigation }) => {
   const [products, setProducts] = React.useState([])
   const [loading, setLoading] = React.useState(true)
 
+  const fetchProducts = async () => {
+    try {
+      const response = await aumo.shop.getAllProductsByShop(route.params.id)
+      setProducts(response)
+    } catch (error) {
+      console.warn(error)
+    }
+  }
+
+  const fetchUser = async () => {
+    try {
+      const user = await aumo.auth.me()
+      ctx.dispatch({ type: actions.SET_USER, payload: user })
+    } catch (error) {}
+  }
+
   React.useEffect(() => {
     ;(async () => {
-      try {
-        const response = await aumo.shop.getAllProductsByShop(route.params.id)
-        setProducts(response)
-      } catch (error) {
-        console.warn(error)
-      } finally {
-        setLoading(false)
-      }
+      await fetchProducts()
+      setLoading(false)
     })()
   }, [])
 
@@ -32,21 +43,12 @@ export default ({ route, navigation }) => {
         product_id: product.id
       })
       Alert.alert("Successfull!", "You successfully purchased " + product.name)
-      setProducts(products =>
-        products.map(p => {
-          if (p.id == product.id) {
-            return {
-              ...p,
-              stock: p.stock - 1
-            }
-          }
-          return p
-        })
-      )
     } catch (error) {
       Alert.alert("Error!", error.response.data.error)
     } finally {
       setLoading(false)
+      fetchProducts()
+      fetchUser()
     }
   }
 

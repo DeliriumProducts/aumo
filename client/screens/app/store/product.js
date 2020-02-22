@@ -39,7 +39,6 @@ export default ({
 
   React.useEffect(() => {
     ;(async () => {
-      setLoading(true)
       await fetchProduct()
       setLoading(false)
     })()
@@ -52,10 +51,11 @@ export default ({
         product_id: product.id
       })
       Alert.alert("Successfull!", "You successfully purchased " + product.name)
-      setLoading(false)
-      fetchProduct()
     } catch (error) {
       Alert.alert("Error!", error.response.data.error)
+    } finally {
+      setLoading(false)
+      fetchProduct()
     }
   }
 
