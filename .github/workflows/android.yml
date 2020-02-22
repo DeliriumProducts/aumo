@@ -35,12 +35,14 @@ jobs:
       - name: Add keystore
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
-        run: echo $KEY_STORE | base64 --decode > ./client/android/keystores/aumo.keystore
+        shell: bash
+        run: 'echo $KEY_STORE | base64 --decode > ./client/android/keystores/aumo.keystore'
 
       - name: Add release properties
         env:
           RELEASE_PROPERTIES: ${{ secrets.RELEASE_PROPERTIES }}
-        run: echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties
+        shell: bash
+        run: 'echo $RELEASE_PROPERTIES > ./client/android/keystores/release.keystore.properties'
 
       - name: Build
         working-directory: ./client/android

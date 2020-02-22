@@ -1,5 +1,6 @@
 import { Layout, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
+import Modal from "../../../components/Modal"
 import React from "react"
 import styled from "styled-components/native"
 import ShopList from "../../../components/ShopList"
@@ -30,22 +31,7 @@ export default ({ navigation }) => {
           navigation.navigate(Routes.StoreShop, shop)
         }}
       />
-      {loading && (
-        <Layout
-          level="2"
-          style={{
-            height: "100%",
-            width: "100%",
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <ModalContainer level="1">
-            <Spinner size="giant" />
-          </ModalContainer>
-        </Layout>
-      )}
+      <Modal visible={loading}>{loading && <Spinner size="giant" />}</Modal>
     </Layout>
   )
 }

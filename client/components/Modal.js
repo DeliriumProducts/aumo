@@ -2,7 +2,7 @@ import { Layout, Modal } from "@ui-kitten/components"
 import React from "react"
 import styled from "styled-components/native"
 
-export default ({ visible, children, onBackdropPress }) => (
+export default ({ visible, children, onBackdropPress = () => {} }) => (
   <Modal
     visible={visible}
     backdropStyle={{
