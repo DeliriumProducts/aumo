@@ -23,6 +23,8 @@ export async function createReceipt(
 
 interface ReceiptRequest {
   content: string;
+  total: number;
+  shop_id: number;
 }
 
 export default {
