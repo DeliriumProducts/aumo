@@ -14,7 +14,6 @@ import UserStack from "./user"
 const Tab = createBottomTabNavigator()
 
 export default () => {
-  const ctx = React.useContext(Context)
   return (
     <Tab.Navigator
       screenOptions={{
@@ -66,10 +65,12 @@ export default () => {
         component={UserStack}
         options={{
           tabBarLabel: "Profile",
-          tabBarIcon: _ => (
-            <Avatar
-              source={{ uri: ctx.state.user?.avatar }}
-              fallbackSource={require("../../assets/Avatar.png")}
+          tabBarIcon: ({ focused, color }) => (
+            <Icon
+              name="person-outline"
+              fill={focused ? color : "#222222"}
+              width={24}
+              height={24}
             />
           )
         }}

@@ -6,10 +6,12 @@ import { actions } from "../../../context/providers/provider"
 import styled from "styled-components/native"
 import ProductList from "../../../components/ProductList"
 import { Context } from "../../../context/context"
+import { useIsFocused } from "@react-navigation/native"
 import Routes from "../../../navigation/routes"
 
 export default ({ route, navigation }) => {
   const ctx = React.useContext(Context)
+  const isFocused = useIsFocused()
   const [products, setProducts] = React.useState([])
   const [loading, setLoading] = React.useState(true)
 
@@ -30,11 +32,13 @@ export default ({ route, navigation }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
-      await fetchProducts()
-      setLoading(false)
-    })()
-  }, [])
+    if (isFocused) {
+      ;(async () => {
+        await fetchProducts()
+        setLoading(false)
+      })()
+    }
+  }, [isFocused])
 
   const placeOrder = async product => {
     try {

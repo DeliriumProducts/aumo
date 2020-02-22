@@ -1,4 +1,4 @@
-import { useIsFocused } from "@react-navigation/native"
+import { useFocusEffect, useIsFocused } from "@react-navigation/native"
 import {
   Button,
   Icon,
@@ -11,7 +11,7 @@ import {
 } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { View } from "react-native"
+import { View, InteractionManager } from "react-native"
 import styled from "styled-components/native"
 import PAvatar from "../../../components/Avatar"
 import OrderList from "../../../components/OrderList"
@@ -21,31 +21,35 @@ import { actions } from "../../../context/providers/provider"
 import Routes from "../../../navigation/routes"
 
 export default ({ navigation }) => {
-  const isFocused = useIsFocused()
   const ctx = React.useContext(Context)
   const [loading, setLoading] = React.useState(false)
   const [tabIdx, setTabIdx] = React.useState(0)
 
-  React.useEffect(() => {
-    if (isFocused) {
-      ;(async () => {
-        try {
-          const me = await aumo.auth.me()
-          ctx.dispatch({ type: actions.SET_USER, payload: me })
-        } catch (error) {
-          switch (error.response.status) {
-            case 400:
-            case 401:
-            case 500:
-              ctx.dispatch({ type: actions.SET_USER, payload: null })
-              break
+  useFocusEffect(
+    React.useCallback(() => {
+      const task = InteractionManager.runAfterInteractions(() => {
+        // Expensive task
+        ;(async () => {
+          try {
+            const me = await aumo.auth.me()
+            ctx.dispatch({ type: actions.SET_USER, payload: me })
+          } catch (error) {
+            switch (error.response.status) {
+              case 400:
+              case 401:
+              case 500:
+                ctx.dispatch({ type: actions.SET_USER, payload: null })
+                break
+            }
+          } finally {
+            setLoading(false)
           }
-        } finally {
-          setLoading(false)
-        }
-      })()
-    }
-  }, [isFocused])
+        })()
+      })
+
+      return () => task.cancel()
+    }, [])
+  )
 
   const logout = async () => {
     try {
