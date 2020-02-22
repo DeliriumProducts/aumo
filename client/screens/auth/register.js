@@ -118,23 +118,25 @@ export default function RegisterScreen(props) {
           setShowModal(false)
         }}
       >
-        <Text>
-          Confirmation email has been sent! Check your email to verify your
-          account!
-        </Text>
-        <Button
-          size="small"
-          style={{
-            marginTop: 10
-          }}
-          status="success"
-          onPress={() => {
-            setShowModal(false)
-            props.navigation.popToTop()
-          }}
-        >
-          DISMISS
-        </Button>
+        <View style={{ width: 256 }}>
+          <Text>
+            Confirmation email has been sent! Check your email to verify your
+            account!
+          </Text>
+          <Button
+            size="small"
+            style={{
+              marginTop: 10
+            }}
+            status="success"
+            onPress={() => {
+              setShowModal(false)
+              props.navigation.popToTop()
+            }}
+          >
+            DISMISS
+          </Button>
+        </View>
       </Modal>
       <MainContainer style={{ paddingRight: 32, paddingLeft: 32 }}>
         <View style={{ marginBottom: 15 }}>

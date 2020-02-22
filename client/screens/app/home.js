@@ -1,17 +1,32 @@
-import { Icon, Text } from "@ui-kitten/components"
+import { Icon, Text, Button, Spinner } from "@ui-kitten/components"
+import aumo from "aumo"
 import React from "react"
 import { Image, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { NeomorphBox } from "react-native-neomorph-shadows"
 import NfcManager, { NdefParser, NfcEvents } from "react-native-nfc-manager"
+import Modal from "../../components/Modal"
 import theme from "../../theme"
 
 export default () => {
+  const [loading, setLoading] = React.useState(false)
+  const [showModal, setShowModal] = React.useState(false)
+
   React.useEffect(() => {
     NfcManager.start()
-    NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+    NfcManager.setEventListener(NfcEvents.DiscoverTag, async tag => {
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
-      console.warn(msgs)
+      if (msgs.length >= 1) {
+        let receiptId = msgs[0]
+        setLoading(true)
+        try {
+          await aumo.receipt.claimReceipt(receiptId)
+        } catch (error) {
+        } finally {
+          setLoading(false)
+          setShowModal(true)
+        }
+      }
     })
 
     return () => {
@@ -89,6 +104,26 @@ export default () => {
           </NeomorphBox>
         </NeomorphBox>
       </TouchableOpacity>
+      <Modal visible={showModal} onBackdropPress={() => setShowModal(true)}>
+        <View style={{ width: 256 }}>
+          <Text>
+            You successfully claimed a receipt and were awarded 500 points!
+          </Text>
+          <Button
+            size="small"
+            style={{
+              marginTop: 10
+            }}
+            status="success"
+            onPress={() => setShowModal(false)}
+          >
+            DISMISS
+          </Button>
+        </View>
+      </Modal>
+      <Modal visible={loading} onBackdropPress={() => {}}>
+        {loading && <Spinner size="giant" />}
+      </Modal>
       <View
         style={{
           justifyContent: "center",

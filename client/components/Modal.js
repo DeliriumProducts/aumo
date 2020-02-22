@@ -18,6 +18,5 @@ const ModalContainer = styled(Layout)`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  width: 256px;
   padding: 16px;
 `
