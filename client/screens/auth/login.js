@@ -107,7 +107,7 @@ export default function LoginScreen(props) {
               Forgot password?
             </Subheading>
           </TouchableOpacity>
-          {err != "" && <ErrorContainer error={err} />}
+          {err != "" && <ErrorContainer error={err} style={{ marginTop: 8 }} />}
         </Form>
       </View>
       <MainContainer style={{ paddingRight: 32, paddingLeft: 32 }}>
