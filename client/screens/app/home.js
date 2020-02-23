@@ -1,34 +1,57 @@
 import { Icon, Text, Button, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Image, View } from "react-native"
+import { Image, View, Alert } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { NeomorphBox } from "react-native-neomorph-shadows"
-import NfcManager, { NdefParser, NfcEvents } from "react-native-nfc-manager"
+import NfcManager, {
+  NdefParser,
+  NfcEvents,
+  Ndef,
+  NfcTech
+} from "react-native-nfc-manager"
+import ndef from "react-native-nfc-manager/ndef-lib/index"
 import Modal from "../../components/Modal"
 import theme from "../../theme"
 
 export default () => {
   const [loading, setLoading] = React.useState(false)
   const [showModal, setShowModal] = React.useState(false)
+  const [listening, setListening] = React.useState(false)
+  const [text, setText] = React.useState("")
 
   React.useEffect(() => {
     NfcManager.start()
     NfcManager.setEventListener(NfcEvents.DiscoverTag, async tag => {
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
-      if (msgs.length >= 1) {
-        let receiptId = msgs[0]
+      if (msgs.length > 1) {
+        let receiptId = msgs.shift()
         setLoading(true)
         try {
-          await aumo.receipt.claimReceipt(receiptId)
+          await NfcManager.requestTechnology(NfcTech.Ndef)
+          NfcManager.writeNdefMessage(
+            Ndef.encodeMessage(msgs.map(m => Ndef.textRecord(m)))
+          )
         } catch (error) {
+          setText(error.toString())
+        }
+        try {
+          await aumo.receipt.claimReceipt(receiptId)
+          setShowModal(true)
+          setText(
+            "You successfully claimed a receipt and were awarded 500 points!"
+          )
+        } catch (error) {
+          setText(error.response.data.error)
         } finally {
           setLoading(false)
-          setShowModal(true)
         }
+      } else if (msgs[0] == ".") {
+        setText("There are is no receipt to be claimed!")
       }
+      setListening(false)
+      NfcManager.unregisterTagEvent().catch(() => 0)
     })
-
     return () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null)
       NfcManager.unregisterTagEvent().catch(() => 0)
@@ -54,9 +77,11 @@ export default () => {
         onPress={async () => {
           try {
             await NfcManager.registerTagEvent()
+            setListening(true)
           } catch (error) {
             console.warn(error)
             NfcManager.unregisterTagEvent().catch(() => 0)
+            setListening(false)
           }
         }}
       >
@@ -106,9 +131,7 @@ export default () => {
       </TouchableOpacity>
       <Modal visible={showModal} onBackdropPress={() => setShowModal(true)}>
         <View style={{ width: 256 }}>
-          <Text>
-            You successfully claimed a receipt and were awarded 500 points!
-          </Text>
+          <Text>{text}</Text>
           <Button
             size="small"
             style={{
@@ -141,6 +164,15 @@ export default () => {
           }}
         >
           Approach your phone near an Aumo device to claim your digital receipt!
+        </Text>
+        <Text
+          style={{
+            color: theme["color-primary-500"],
+            fontWeight: "bold",
+            textAlign: "center"
+          }}
+        >
+          {listening && "Listening ..."}
         </Text>
       </View>
     </View>
