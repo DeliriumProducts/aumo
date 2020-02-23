@@ -108,7 +108,7 @@ export default function RegisterScreen(props) {
             onChangeText={val => setValue("password", val)}
             caption={errors.password?.message}
           />
-          {err != "" && <ErrorContainer error={err} />}
+          {err != "" && <ErrorContainer error={err} style={{ marginTop: 8 }} />}
         </Form>
       </View>
       <Modal
