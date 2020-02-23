@@ -68,7 +68,7 @@ func (rest *Rest) mount(mnt string) {
 		})
 
 		r.Route("/orders", func(r chi.Router) {
-			r.With(rest.Authentication(aumo.Customer)).Post("/", rest.orderCreate)
+			r.With(rest.Authentication()).Post("/", rest.orderCreate)
 
 			r.Group(func(r chi.Router) {
 				r.Use(rest.Authentication(aumo.Admin))
