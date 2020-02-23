@@ -61,7 +61,7 @@ export default ({ route, navigation }) => {
       <ProductList
         products={products.map(p => ({
           ...p,
-          disabled: p.stock < 1 || ctx.state.user.points < p.price
+          disabled: p.stock < 1 || ctx.state.user?.points < p.price
         }))}
         onItemPress={product => {
           navigation.navigate(Routes.ProductDetails, {
