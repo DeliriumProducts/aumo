@@ -29,6 +29,5 @@ export const Aumo = styled(Image)`
 export const Subheading = styled(Text)`
   font-size: 17px;
   color: ${theme["color-primary-500"]};
-  margin-bottom: 20px;
   text-align: center;
 `
