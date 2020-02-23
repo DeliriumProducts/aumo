@@ -64,7 +64,7 @@ func (rest *Rest) mount(mnt string) {
 
 		r.Route("/receipts", func(r chi.Router) {
 			r.With(rest.Authentication(aumo.Admin)).Post("/", rest.receiptCreate)
-			r.With(rest.Authentication(aumo.Customer)).Get("/{id}", rest.receiptClaim)
+			r.With(rest.Authentication()).Get("/{id}", rest.receiptClaim)
 		})
 
 		r.Route("/orders", func(r chi.Router) {
