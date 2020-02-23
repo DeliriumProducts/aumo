@@ -24,33 +24,38 @@ export default () => {
     NfcManager.start()
     NfcManager.setEventListener(NfcEvents.DiscoverTag, async tag => {
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
+      console.warn(msgs)
       if (msgs.length > 1) {
-        let receiptId = msgs.shift()
+        let rid = msgs.shift()
         setLoading(true)
         try {
           await NfcManager.requestTechnology(NfcTech.Ndef)
           NfcManager.writeNdefMessage(
             Ndef.encodeMessage(msgs.map(m => Ndef.textRecord(m)))
           )
-        } catch (error) {
-          setText(error.toString())
+          await NfcManager.cancelTechnologyRequest()
+        } catch (e) {
+          setText(e.toString())
+          await NfcManager.cancelTechnologyRequest()
         }
         try {
-          await aumo.receipt.claimReceipt(receiptId)
+          await aumo.receipt.claimReceipt(rid)
           setShowModal(true)
           setText(
-            "You successfully claimed a receipt and were awarded 500 points!"
+            "You successfully claimed a receipt and were rewarded 500 points!"
           )
-        } catch (error) {
-          setText(error.response.data.error)
+        } catch (e) {
+          setShowModal(true)
+          setText(e.response.data.error)
         } finally {
           setLoading(false)
         }
       } else if (msgs[0] == ".") {
-        setText("There are is no receipt to be claimed!")
+        setShowModal(true)
+        setText("There is no receipt to be claimed.")
       }
-      setListening(false)
       NfcManager.unregisterTagEvent().catch(() => 0)
+      setListening(false)
     })
     return () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null)
@@ -78,10 +83,9 @@ export default () => {
           try {
             await NfcManager.registerTagEvent()
             setListening(true)
-          } catch (error) {
-            console.warn(error)
+          } catch (ex) {
+            console.warn("ex", ex)
             NfcManager.unregisterTagEvent().catch(() => 0)
-            setListening(false)
           }
         }}
       >
