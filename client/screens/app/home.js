@@ -1,7 +1,7 @@
 import { Icon, Text, Button, Spinner } from "@ui-kitten/components"
 import aumo from "aumo"
 import React from "react"
-import { Image, View, Alert } from "react-native"
+import { Image, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { NeomorphBox } from "react-native-neomorph-shadows"
 import NfcManager, {
@@ -10,7 +10,6 @@ import NfcManager, {
   Ndef,
   NfcTech
 } from "react-native-nfc-manager"
-import ndef from "react-native-nfc-manager/ndef-lib/index"
 import Modal from "../../components/Modal"
 import theme from "../../theme"
 
@@ -24,7 +23,6 @@ export default () => {
     NfcManager.start()
     NfcManager.setEventListener(NfcEvents.DiscoverTag, async tag => {
       let msgs = tag.ndefMessage.map(NdefParser.parseText)
-      console.warn(msgs)
       if (msgs.length > 1) {
         let rid = msgs.shift()
         setLoading(true)
@@ -80,12 +78,17 @@ export default () => {
       />
       <TouchableOpacity
         onPress={async () => {
-          try {
-            await NfcManager.registerTagEvent()
-            setListening(true)
-          } catch (ex) {
-            console.warn("ex", ex)
+          if (!listening) {
+            try {
+              await NfcManager.registerTagEvent()
+              setListening(true)
+            } catch (ex) {
+              console.warn("ex", ex)
+              NfcManager.unregisterTagEvent().catch(() => 0)
+            }
+          } else {
             NfcManager.unregisterTagEvent().catch(() => 0)
+            setListening(false)
           }
         }}
       >
@@ -105,7 +108,9 @@ export default () => {
             style={{
               shadowRadius: 7,
               borderRadius: 100,
-              backgroundColor: theme["color-primary-100"],
+              backgroundColor: listening
+                ? theme["color-primary-200"]
+                : theme["color-primary-100"],
               width: 200,
               height: 200,
               justifyContent: "center",
@@ -127,7 +132,11 @@ export default () => {
                 name="wifi-outline"
                 width={60}
                 height={60}
-                fill={theme["color-primary-500"]}
+                fill={
+                  listening
+                    ? theme["color-primary-500"]
+                    : theme["color-primary-300"]
+                }
               />
             </NeomorphBox>
           </NeomorphBox>
@@ -171,7 +180,8 @@ export default () => {
         </Text>
         <Text
           style={{
-            color: theme["color-primary-500"],
+            marginTop: 10,
+            color: theme["color-primary-300"],
             fontWeight: "bold",
             textAlign: "center"
           }}
