@@ -25,6 +25,7 @@ func TestOrderService(t *testing.T) {
 	pstore := mysql.NewProductStore(sess)
 	ustore := mysql.NewUserStore(sess)
 	ostore := mysql.NewOrderStore(sess)
+	sstore := mysql.NewShopStore(sess)
 
 	os := ordering.New(ostore, pstore, ustore)
 
@@ -34,12 +35,14 @@ func TestOrderService(t *testing.T) {
 		user := createUser(t, ustore)
 
 		var price float64 = 500
-		product := createProduct(t, pstore, price, 1)
+		product := createProduct(t, pstore, createShop(t, sstore), price, 1)
 
 		t.Run("valid", func(t *testing.T) {
 			// Place order
-			order, err := os.PlaceOrder(user.ID, product.ID)
+			order, err := os.PlaceOrder(user.ID.String(), product.ID)
 			assert.Nil(t, err, "shouldn't return an error")
+
+			order.Product.Shop = nil
 
 			// Update stock
 			product.Stock--
@@ -53,7 +56,7 @@ func TestOrderService(t *testing.T) {
 			require.Equal(t, product.Stock, gotProduct.Stock, "should've decremented stock")
 
 			// Get User
-			gotUser, err := ustore.FindByID(nil, user.ID, true)
+			gotUser, err := ustore.FindByID(nil, user.ID.String(), true)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, aumo.UserStartingPoints-price, gotUser.Points, "should've decremented user's points")
 
@@ -63,7 +66,7 @@ func TestOrderService(t *testing.T) {
 
 		t.Run("not_valid", func(t *testing.T) {
 			// Place order
-			order, err := os.PlaceOrder(user.ID, product.ID)
+			order, err := os.PlaceOrder(user.ID.String(), product.ID)
 			require.Nil(t, order, "shouldn't have returned an error")
 			require.NotNil(t, err, "should've returned an error")
 
@@ -73,7 +76,7 @@ func TestOrderService(t *testing.T) {
 			require.Equal(t, product.Stock, gotProduct.Stock, "shouldn't have been decremented")
 
 			// Get user
-			gotUser, err := ustore.FindByID(nil, user.ID, true)
+			gotUser, err := ustore.FindByID(nil, user.ID.String(), true)
 			require.Nil(t, err, "shouldn't return an error")
 			require.Equal(t, user.Points, gotUser.Points, "user shouldn't have been taxed")
 

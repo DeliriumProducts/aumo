@@ -8,4 +8,6 @@ const (
 	Admin Role = "Admin"
 	// Customer is the default role for any user
 	Customer Role = "Customer"
+	// ShopOwner is a shop owner
+	ShopOwner Role = "Shop Owner"
 )

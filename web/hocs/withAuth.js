@@ -1,10 +1,10 @@
-import React, { Component } from "react"
+import aumo from "aumo"
 import Router from "next/router"
-import { AuthAPI } from "aumo-api"
-import { BACKEND_URL } from "../config"
+import React, { Component } from "react"
 import { Context } from "../context/context.js"
+import { actions } from "../context/providers/contextProvider"
 
-export default C =>
+export default (C, roles = []) =>
   class extends Component {
     static contextType = Context
 
@@ -18,8 +18,13 @@ export default C =>
       if (req && res) {
         if (req.headers.cookie) {
           try {
-            auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
-            if (auth.role !== "Admin") {
+            auth = await aumo.auth.me(req.headers.cookie)
+            if (
+              roles.length &&
+              auth &&
+              auth.role !== "Admin" &&
+              !roles.includes(auth.role)
+            ) {
               throw {
                 status: 401
               }
@@ -27,7 +32,7 @@ export default C =>
           } catch (err) {
             if (err.status === 401) {
               res.writeHead(302, {
-                Location: "/login"
+                Location: "/shops"
               })
               res.end()
             }
@@ -40,15 +45,20 @@ export default C =>
         }
       } else {
         try {
-          auth = await new AuthAPI(BACKEND_URL).me()
-          if (auth.role !== "Admin") {
+          auth = await aumo.auth.me()
+          if (
+            roles.length &&
+            auth &&
+            auth.role !== "Admin" &&
+            !roles.includes(auth.role)
+          ) {
             throw {
               status: 401
             }
           }
         } catch (err) {
           if (err.status === 401) {
-            Router.replace("/login")
+            Router.replace("/shops")
           }
         }
       }
@@ -66,7 +76,10 @@ export default C =>
     }
 
     componentDidMount() {
-      this.context.dispatch({ type: "setUser", payload: this.props.user })
+      this.context.dispatch({
+        type: actions.SET_USER,
+        payload: this.props.user
+      })
     }
     render() {
       return <C {...this.props} />

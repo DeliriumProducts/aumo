@@ -2,9 +2,11 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/go-sql-driver/mysql"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -26,10 +28,9 @@ func NewUserStore(db sqlbuilder.Database) aumo.UserStore {
 	}
 }
 
-func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, error) {
+func (u *userStore) FindByID(tx aumo.Tx, id string, relations bool) (*aumo.User, error) {
 	var err error
 	user := &aumo.User{}
-
 	if tx == nil {
 		tx, err = u.db.NewTx(context.Background())
 
@@ -58,6 +59,16 @@ func (u *userStore) FindByID(tx aumo.Tx, id uint, relations bool) (*aumo.User, e
 		err = tx.Collection(UserTable).Find("id", id).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
+		user.Shops = []aumo.Shop{}
+	}
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrUserNotFound
+	default:
+		return nil, err
 	}
 
 	return user, err
@@ -95,6 +106,16 @@ func (u *userStore) FindByEmail(tx aumo.Tx, email string, relations bool) (*aumo
 		err = tx.Collection(UserTable).Find("email", email).One(user)
 		user.Receipts = []aumo.Receipt{}
 		user.Orders = []aumo.Order{}
+		user.Shops = []aumo.Shop{}
+	}
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrUserNotFound
+	default:
+		return nil, err
 	}
 
 	return user, err
@@ -105,18 +126,20 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	user := &aumo.User{}
 
 	type (
-		UserReceipt struct {
-			aumo.User    `db:",inline"`
-			aumo.Receipt `db:",inline"`
-		}
 		OrderProduct struct {
 			aumo.Order   `db:",inline"`
 			aumo.Product `db:",inline"`
 		}
+
+		ReceiptShop struct {
+			aumo.Receipt `db:",inline"`
+			aumo.Shop    `db:",inline"`
+		}
 	)
 	var (
-		receipts = []UserReceipt{}
 		orders   = []OrderProduct{}
+		receipts = []ReceiptShop{}
+		shops    = []aumo.Shop{}
 	)
 
 	err = tx.
@@ -129,9 +152,10 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("r.receipt_id", "r.content", "r.user_id").
+		Select("*").
 		From(UserTable).
 		Join("receipts as r").On("users.id = r.user_id").
+		Join("shops as s").On("r.shop_id = s.shop_id").
 		Where(where, args).
 		All(&receipts)
 	if err != nil {
@@ -139,7 +163,7 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 	}
 
 	err = tx.
-		Select("o.user_id", "o.product_id", "p.name", "p.description", "p.price", "p.image", "p.price", "p.image", "p.id", "p.stock", "o.order_id").
+		Select("o.*", "p.*").
 		From(UserTable).
 		Join("orders as o").On("users.id = o.user_id").
 		Join("products as p").On("o.product_id = p.id").
@@ -149,17 +173,45 @@ func (u *userStore) userRelations(tx aumo.Tx, where string, args ...interface{})
 		return nil, err
 	}
 
+	// If a user is a shop owner, get their shops
+	if user.Role == aumo.ShopOwner {
+		err = tx.Select("s.*").
+			From("shop_owners").
+			Join("shops as s").On("shop_owners.shop_id = s.shop_id").
+			Join("users").On("users.id = shop_owners.user_id").
+			Where(where, args).
+			All(&shops)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if user.Role == aumo.Admin {
+		err = tx.
+			Collection(ShopTable).
+			Find().
+			All(&shops)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	user.Orders = []aumo.Order{}
 	user.Receipts = []aumo.Receipt{}
+	user.Shops = shops
+
+	for i := range receipts {
+		receipt := receipts[i].Receipt
+		receipt.Shop = &receipts[i].Shop
+		receipt.ShopID = receipts[i].Shop.ID
+		receipt.Shop.Owners = []aumo.User{}
+		user.Receipts = append(user.Receipts, receipt)
+	}
 
 	for i := range orders {
 		order := orders[i].Order
 		order.Product = &orders[i].Product
 		user.Orders = append(user.Orders, order)
-	}
-
-	for i := range receipts {
-		user.Receipts = append(user.Receipts, receipts[i].Receipt)
 	}
 
 	return user, nil
@@ -219,7 +271,7 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 		}()
 	}
 
-	err = tx.Collection(UserTable).InsertReturning(us)
+	_, err = tx.Collection(UserTable).Insert(us)
 	if mysqlError, ok := err.(*mysql.MySQLError); ok {
 		if mysqlError.Number == ErrDupEntry {
 			return aumo.ErrDuplicateEmail
@@ -229,7 +281,7 @@ func (u *userStore) Save(tx aumo.Tx, us *aumo.User) error {
 	return err
 }
 
-func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
+func (u *userStore) Update(tx aumo.Tx, id string, ur *aumo.User) error {
 	var err error
 
 	if tx == nil {
@@ -257,7 +309,7 @@ func (u *userStore) Update(tx aumo.Tx, id uint, ur *aumo.User) error {
 	return tx.Collection(UserTable).Find("id", id).Update(ur)
 }
 
-func (u *userStore) Delete(tx aumo.Tx, id uint) error {
+func (u *userStore) Delete(tx aumo.Tx, id string) error {
 	var err error
 
 	if tx == nil {

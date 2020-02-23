@@ -1,6 +1,7 @@
-import React from "react"
 import Head from "next/head"
+import React from "react"
 import styled from "styled-components"
+import { THEME_VARIABLES } from "../config/env"
 
 const Home = props => (
   <>
@@ -47,7 +48,7 @@ const Phone = styled.img`
 
 const Title = styled.h1`
   font-size: 3rem;
-  color: #083aa4;
+  color: ${THEME_VARIABLES["@primary-color"]};
   text-align: center;
 `
 

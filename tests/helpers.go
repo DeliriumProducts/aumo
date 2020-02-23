@@ -2,10 +2,11 @@ package tests
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/deliriumproducts/aumo"
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/redis/v7"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,8 +20,17 @@ func createUser(t *testing.T, us aumo.UserStore) *aumo.User {
 	return u
 }
 
-func createReceipt(t *testing.T, rs aumo.ReceiptStore) *aumo.Receipt {
-	r := aumo.NewReceipt(faker.AmountWithCurrency())
+func createShop(t *testing.T, ss aumo.ShopStore) *aumo.Shop {
+	s := aumo.NewShop(faker.Name(), faker.URL())
+
+	err := ss.Save(nil, s)
+	require.Nil(t, err, "shouldn't return an error")
+
+	return s
+}
+
+func createReceipt(t *testing.T, rs aumo.ReceiptStore, s *aumo.Shop) *aumo.Receipt {
+	r := aumo.NewReceipt(faker.AmountWithCurrency(), s.ID, 500)
 
 	err := rs.Save(nil, r)
 	require.Nil(t, err, "shouldn't return an error")
@@ -28,8 +38,8 @@ func createReceipt(t *testing.T, rs aumo.ReceiptStore) *aumo.Receipt {
 	return r
 }
 
-func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint) *aumo.Product {
-	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock)
+func createProduct(t *testing.T, ps aumo.ProductStore, s *aumo.Shop, price float64, stock uint) *aumo.Product {
+	p := aumo.NewProduct(faker.Word(), price, faker.URL(), faker.Sentence(), stock, s.ID)
 
 	err := ps.Save(nil, p)
 	require.Nil(t, err, "shouldn't return an error")
@@ -37,10 +47,10 @@ func createProduct(t *testing.T, ps aumo.ProductStore, price float64, stock uint
 	return p
 }
 
-func createSession(t *testing.T, r redis.Conn, user *aumo.User, expiryTime int) string {
+func createSession(t *testing.T, r *redis.Client, user *aumo.User, expiryTime time.Duration) string {
 	sID := faker.UUIDDigit()
 
-	_, err := r.Do("SETEX", sID, expiryTime, user.ID)
+	err := r.Set(sID, user.ID.String(), expiryTime).Err()
 	require.Nil(t, err, "shouldn't return an error")
 	require.NotEmpty(t, sID, "should return a session ID")
 

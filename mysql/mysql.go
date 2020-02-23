@@ -6,7 +6,11 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
+// ErrDupEntry is an error code for duplicate entry
 const ErrDupEntry = 1062
+
+// ErrBadRef is an error code for bad reference on foreign key
+const ErrBadRef = 1452
 
 // ExecSchema takes a schema and splits it by `;` and executes it
 func ExecSchema(db sqlbuilder.Database) error {

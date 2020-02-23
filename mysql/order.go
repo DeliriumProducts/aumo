@@ -2,8 +2,10 @@ package mysql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/deliriumproducts/aumo"
+	upper "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
 
@@ -25,7 +27,7 @@ func (o *orderStore) DB() sqlbuilder.Database {
 	return o.db
 }
 
-func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
+func (o *orderStore) FindByID(tx aumo.Tx, id string) (*aumo.Order, error) {
 	var err error
 	order := &aumo.Order{}
 
@@ -51,7 +53,18 @@ func (o *orderStore) FindByID(tx aumo.Tx, id uint) (*aumo.Order, error) {
 		}()
 	}
 
-	return order, tx.Collection(OrderTable).Find("id", id).One(order)
+	err = tx.Collection(OrderTable).Find("id", id).One(order)
+
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, upper.ErrNoMoreRows):
+		return nil, aumo.ErrOrderNotFound
+	default:
+		return nil, err
+	}
+
+	return order, err
 }
 
 func (o *orderStore) FindAll(tx aumo.Tx) ([]aumo.Order, error) {
@@ -108,10 +121,11 @@ func (o *orderStore) Save(tx aumo.Tx, os *aumo.Order) error {
 		}()
 	}
 
-	return tx.Collection(OrderTable).InsertReturning(os)
+	_, err = tx.Collection(OrderTable).Insert(os)
+	return err
 }
 
-func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
+func (o *orderStore) Update(tx aumo.Tx, id string, or *aumo.Order) error {
 	var err error
 
 	if tx == nil {
@@ -139,7 +153,7 @@ func (o *orderStore) Update(tx aumo.Tx, id uint, or *aumo.Order) error {
 	return tx.Collection(OrderTable).Find("id", id).Update(or)
 }
 
-func (o *orderStore) Delete(tx aumo.Tx, id uint) error {
+func (o *orderStore) Delete(tx aumo.Tx, id string) error {
 	var err error
 
 	if tx == nil {

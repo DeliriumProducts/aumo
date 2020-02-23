@@ -1,10 +1,10 @@
-import React from "react"
+import { Button, Form, Icon, Input, message } from "antd"
+import aumo from "aumo"
 import Head from "next/head"
-import styled from "styled-components"
-import { Input, Icon, Form, Button, message } from "antd"
-import { AuthAPI } from "aumo-api"
-import { BACKEND_URL } from "../config"
+import Link from "next/link"
 import Router from "next/router"
+import React from "react"
+import styled from "styled-components"
 
 const FormItem = Form.Item
 
@@ -22,11 +22,15 @@ const Login = props => {
           password
         }
 
-        const authAPI = new AuthAPI(BACKEND_URL)
         setLoading(true)
         try {
-          await authAPI.login(credentials)
-          message.success("Logged in!", 3, () => Router.replace("/products"))
+          const response = await aumo.auth.login(credentials)
+          if (response.role === "Customer") {
+            message.error("You are not privileged to access the admin panel!")
+            await aumo.auth.logout()
+            return
+          }
+          message.success("Logged in!", 3, () => Router.replace("/shops"))
         } catch (err) {
           if (!err.response) {
             message.error(`${err}`, 5)
@@ -104,6 +108,10 @@ const Login = props => {
               >
                 Login
               </Button>
+              Or{" "}
+              <Link href="/register">
+                <a>register now!</a>
+              </Link>
             </FormItem>
           </Form>
         </Card>
@@ -121,10 +129,10 @@ Login.getInitialProps = async ctx => {
   if (req && res) {
     if (req.headers.cookie) {
       try {
-        auth = await new AuthAPI(BACKEND_URL).me(req.headers.cookie)
-        if (auth.role === "Admin") {
+        auth = await aumo.auth.me(req.headers.cookie)
+        if (auth.role !== "Customer") {
           res.writeHead(302, {
-            Location: "/products"
+            Location: "/shops"
           })
           res.end()
         }
@@ -132,9 +140,9 @@ Login.getInitialProps = async ctx => {
     }
   } else {
     try {
-      auth = await new AuthAPI(BACKEND_URL).me()
-      if (auth.role === "Admin") {
-        Router.replace("/products")
+      auth = await aumo.auth.me()
+      if (auth.role !== "Customer") {
+        Router.replace("/shops")
       }
     } catch (err) {}
   }
@@ -148,7 +156,7 @@ const Card = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3.5rem;
+  padding: 2rem;
   border-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.31) 0px 20px 24px -18px;
   display: flex;

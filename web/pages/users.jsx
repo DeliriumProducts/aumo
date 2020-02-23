@@ -8,19 +8,20 @@ import {
   Modal,
   Popconfirm,
   Radio,
-  Tag
+  Tag,
+  Tooltip
 } from "antd"
 import RadioGroup from "antd/lib/radio/group"
-import { UserAPI } from "aumo-api"
+import aumo from "aumo"
 import Head from "next/head"
 import React from "react"
 import styled from "styled-components"
-import { BACKEND_URL, THEME_VARIABLES } from "../config"
+import { THEME_VARIABLES } from "../config"
 import { Context } from "../context/context.js"
 import withAuth from "../hocs/withAuth.js"
 
 const colors = {
-  Waiter: "blue",
+  ["Shop Owner"]: "purple",
   Admin: "magenta"
 }
 
@@ -34,7 +35,7 @@ const Users = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      const data = await new UserAPI(BACKEND_URL).getAll()
+      const data = await aumo.user.getAllUsers()
       setUsers(data)
       setLoading(false)
     })()
@@ -45,7 +46,7 @@ const Users = () => {
     setLoading(true)
     setUserModal(true)
     try {
-      const newUser = await new UserAPI(BACKEND_URL).get(user.id)
+      const newUser = await aumo.user.getUser(user.id)
       setCurrentUser(newUser)
     } catch (e) {
       message.error(`${e.error}`)
@@ -64,7 +65,7 @@ const Users = () => {
       return
     }
     try {
-      await new UserAPI(BACKEND_URL).setRole(user.id, role)
+      await aumo.user.setRole(user.id, role)
       message.success(`Successfully changed ${user.name}'s role to ${role}! 🎉`)
     } catch (err) {
       if (!err.response) {
@@ -95,7 +96,7 @@ const Users = () => {
 
   const deleteUser = async user => {
     try {
-      await new UserAPI(BACKEND_URL).delete(user.id)
+      await aumo.user.deleteUser(user.id)
       message.success(`Successfully deleted user ${user.name}! 🎉`)
       setUsers(prevUsers =>
         prevUsers.filter(pu => {
@@ -118,9 +119,9 @@ const Users = () => {
 
   const addPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).addPoints(user.id, 500)
+      await aumo.user.addPoints(user.id, 500)
       message.success(`Successfully added 500 points to user ${user.name}! 🎉`)
-    } catch (error) {
+    } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
         return
@@ -136,11 +137,11 @@ const Users = () => {
 
   const subPoints = async user => {
     try {
-      await new UserAPI(BACKEND_URL).subPoints(user.id, 500)
+      await aumo.user.subPoints(user.id, 500)
       message.success(
         `Successfully removed 500 points from user ${user.name}! 🎉`
       )
-    } catch (error) {
+    } catch (err) {
       if (!err.response) {
         message.error(`${err}`, 5)
         return
@@ -169,7 +170,6 @@ const Users = () => {
             <UserCard
               myEmail={ctx.state.user?.email}
               key={u.id}
-              id={u.id}
               user={u}
               onClick={showUser}
               onDelete={deleteUser}
@@ -215,109 +215,149 @@ const UserCard = ({
       }}
     >
       <div>
-        <Avatar src={user.avatar} size={80} key={user.id} className="avatar" />
+        <Avatar src={user.avatar} size={80} key={user.id} />
+        {user.is_verified ? (
+          <Tooltip title="This user is verified." placement="bottom">
+            <Icon
+              type="check-circle"
+              theme="twoTone"
+              style={{
+                fontSize: 20,
+                position: "absolute",
+                bottom: 30,
+                left: 70
+              }}
+              twoToneColor="#52c41a"
+            />
+          </Tooltip>
+        ) : (
+          <Tooltip title="This user is not verified." placement="bottom">
+            <Icon
+              type="close-circle"
+              theme="twoTone"
+              twoToneColor="#eb2f96"
+              style={{
+                fontSize: 20,
+                position: "absolute",
+                bottom: 30,
+                left: 70
+              }}
+            />
+          </Tooltip>
+        )}
       </div>
       <NameContainer>
-        <div className="role">
-          <h1>{user.name}</h1>
+        <Title>
+          <Name>{user.name}</Name>
           <Tag color={colors[user.role]}>{user.role.toUpperCase()}</Tag>
-        </div>
-        <h2>{user.email}</h2>
+        </Title>
+        <Email>{user.email}</Email>
       </NameContainer>
       <Filler />
-      <Button
-        icon="plus"
-        shape="circle"
-        onClick={e => {
-          e.stopPropagation()
-          addPoints(user)
-        }}
-        style={{
-          marginRight: 20
-        }}
-      ></Button>
-      <Button
-        icon="minus"
-        shape="circle"
-        onClick={e => {
-          e.stopPropagation()
-          subPoints(user)
-        }}
-        style={{
-          marginRight: 20
-        }}
-      ></Button>
-      <div onClick={e => e.stopPropagation()}>
-        <Popconfirm
-          icon={<Icon type="team" style={{ color: "unset" }} />}
-          placement="bottom"
-          onClick={e => e.stopPropagation()}
-          onCancel={e => e.stopPropagation()}
-          disabled={myEmail === user.email}
-          onConfirm={e => {
-            e.stopPropagation()
-            changeRole(e, user)
-          }}
-          title={
-            <>
-              <RadioGroup
-                style={{ display: "flex", flexDirection: "column" }}
-                onClick={e => e.stopPropagation()}
-                onChange={e => {
-                  e.stopPropagation()
-                  const role = e.target.value
-                  handleRoleChange(role)
-                }}
-                value={role}
-              >
-                <span style={{ fontWeight: 500, marginBottom: 5 }}>
-                  Available Roles
-                </span>
-                <Radio value={"Customer"}>Customer</Radio>
-                <Radio value={"Admin"}> Admin</Radio>
-              </RadioGroup>
-            </>
-          }
-        >
-          <Button
-            icon="edit"
-            disabled={myEmail === user.email}
-            onClick={e => {
-              e.stopPropagation()
-              handleRoleChange(user.role)
-            }}
-            style={{
-              marginRight: 20
-            }}
-          >
-            Change role
-          </Button>
-        </Popconfirm>
-      </div>
-      <Popconfirm
-        onConfirm={e => {
-          e.stopPropagation()
-          onDelete(user)
-        }}
-        disabled={myEmail === user.email}
-        title={`Are you sure?`}
-        placement="bottom"
-        okText="Yes"
-        okType="danger"
-        onCancel={e => e.stopPropagation()}
-      >
+      <Tooltip title="Give 500 points to this user!">
         <Button
-          type="danger"
-          icon="delete"
-          disabled={myEmail === user.email}
-          onClick={e => e.stopPropagation()}
-          style={{
-            right: 10
+          icon="plus"
+          shape="circle"
+          onClick={e => {
+            e.stopPropagation()
+            addPoints(user)
           }}
-        >
-          Delete
-        </Button>
-      </Popconfirm>
+          style={{
+            marginRight: 20
+          }}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="Take 500 points away from this user!">
+        <Button
+          icon="minus"
+          shape="circle"
+          onClick={e => {
+            e.stopPropagation()
+            subPoints(user)
+          }}
+          style={{
+            marginRight: 20
+          }}
+        ></Button>
+      </Tooltip>
+      {myEmail !== user.email && (
+        <>
+          <div onClick={e => e.stopPropagation()}>
+            <Tooltip title="Change this user's role!">
+              <Popconfirm
+                icon={<Icon type="team" style={{ color: "unset" }} />}
+                placement="bottom"
+                onCancel={e => e.stopPropagation()}
+                disabled={myEmail === user.email}
+                onConfirm={e => {
+                  e.stopPropagation()
+                  changeRole(e, user)
+                }}
+                title={
+                  <>
+                    <RadioGroup
+                      style={{ display: "flex", flexDirection: "column" }}
+                      onChange={e => {
+                        e.stopPropagation()
+                        const role = e.target.value
+                        handleRoleChange(role)
+                      }}
+                      value={role}
+                    >
+                      <span style={{ fontWeight: 500, marginBottom: 5 }}>
+                        Available Roles
+                      </span>
+                      <Radio value={"Customer"}>Customer</Radio>
+                      <Radio value={"Admin"}>Admin</Radio>
+                      <Radio value={"Shop Owner"}>Shop Owner</Radio>
+                    </RadioGroup>
+                  </>
+                }
+              >
+                <Button
+                  icon="edit"
+                  disabled={myEmail === user.email}
+                  onClick={e => {
+                    e.stopPropagation()
+                    handleRoleChange(user.role)
+                  }}
+                  style={{
+                    marginRight: 20
+                  }}
+                >
+                  Change role
+                </Button>
+              </Popconfirm>
+            </Tooltip>
+          </div>
+          <Tooltip title="Delete this user!">
+            <Popconfirm
+              onConfirm={e => {
+                e.stopPropagation()
+                onDelete(user)
+              }}
+              disabled={myEmail === user.email}
+              title={`Are you sure?`}
+              placement="bottom"
+              okText="Yes"
+              okType="danger"
+              onCancel={e => e.stopPropagation()}
+            >
+              <Button
+                type="danger"
+                icon="delete"
+                disabled={myEmail === user.email}
+                onClick={e => e.stopPropagation()}
+                style={{
+                  right: 10
+                }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
+          </Tooltip>
+        </>
+      )}
     </UserCardContainer>
   )
 }
@@ -390,13 +430,12 @@ const User = ({ user, loading }) => {
 const Order = ({ product }) => (
   <Card
     size="small"
-    height={400}
     cover={
       <img
         src={product.image}
         alt={product.name}
         height={300}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "contain" }}
       />
     }
   >
@@ -492,25 +531,27 @@ const NameContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  * h1 {
-    margin: 0;
-    width: 100%;
-    text-align: left;
-    font-weight: 700;
-  }
-  h2 {
-    margin: 0;
-    text-align: left;
-    font-weight: 400;
-  }
-  .role {
-    width: 100%;
-  }
-  .role span {
+`
+
+const Title = styled.div`
+  width: 100%;
+  span {
     margin-top: 5px;
     margin-bottom: 5px;
     float: left;
   }
+`
+
+const Name = styled.h1`
+  margin: 0;
+  text-align: left;
+  font-weight: 700;
+`
+
+const Email = styled.h2`
+  margin: 0;
+  text-align: left;
+  font-weight: 400;
 `
 
 const Container = styled.div`
@@ -528,4 +569,4 @@ const Container = styled.div`
   }
 `
 
-export default withAuth(Users)
+export default withAuth(Users, ["Admin"])

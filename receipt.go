@@ -1,39 +1,37 @@
 package aumo
 
 import (
-	"errors"
-
+	"github.com/google/uuid"
 	"upper.io/db.v3/lib/sqlbuilder"
-)
-
-var (
-	// ErrUserAlreadySet is an error for when a user has already claimed a receipt
-	ErrUserAlreadySet = errors.New("aumo: this receipt has already been claimed")
-	// ErrReceiptUserNotExist is an error for when a user doesn't exist when trying to claim a receipt
-	ErrReceiptUserNotExist = errors.New("aumo: can't claim a receipt for a user that doesn't exist")
 )
 
 // Receipt is a digital receipt
 type Receipt struct {
-	ReceiptID uint   `json:"receipt_id" db:"receipt_id"`
-	Content   string `json:"content" db:"content" validate:"required"`
-	UserID    *uint  `json:"-" db:"user_id,omitempty"`
+	ReceiptID uuid.UUID  `json:"receipt_id" db:"receipt_id"`
+	Content   string     `json:"content" db:"content"`
+	Total     float64    `json:"total" db:"total"`
+	UserID    *uuid.UUID `json:"-" db:"user_id,omitempty"`
+	ShopID    uint       `json:"shop_id" db:"shop_id"`
+	Shop      *Shop      `json:"shop" db:"-"`
 }
 
 // NewReceipt is a contrsuctor for `Receipt`
-func NewReceipt(content string) *Receipt {
+func NewReceipt(content string, sID uint, total float64) *Receipt {
 	return &Receipt{
-		Content: content,
+		ReceiptID: uuid.New(),
+		Total:     total,
+		Content:   content,
+		ShopID:    sID,
 	}
 }
 
 // Claim sets the user field of a receipt
-func (r *Receipt) Claim(uid uint) error {
+func (r *Receipt) Claim(uID uuid.UUID) error {
 	if r.IsClaimed() {
 		return ErrUserAlreadySet
 	}
 
-	r.UserID = &uid
+	r.UserID = &uID
 	return nil
 }
 
@@ -45,21 +43,21 @@ func (r *Receipt) IsClaimed() bool {
 // ReceiptService contains all `Receipt`
 // related business logic
 type ReceiptService interface {
-	Receipt(id uint) (*Receipt, error)
+	Receipt(id string) (*Receipt, error)
 	Receipts() ([]Receipt, error)
 	Create(*Receipt) error
-	Update(id uint, r *Receipt) error
-	Delete(id uint) error
-	ClaimReceipt(uID uint, rID uint) (*Receipt, error)
+	Update(id string, r *Receipt) error
+	Delete(id string) error
+	ClaimReceipt(uID, rID string) (*Receipt, error)
 }
 
 // ReceiptStore contains all `Receipt`
 // related persistence logic
 type ReceiptStore interface {
 	DB() sqlbuilder.Database
-	FindByID(tx Tx, id uint) (*Receipt, error)
+	FindByID(tx Tx, id string) (*Receipt, error)
 	FindAll(tx Tx) ([]Receipt, error)
 	Save(tx Tx, r *Receipt) error
-	Update(tx Tx, id uint, r *Receipt) error
-	Delete(tx Tx, id uint) error
+	Update(tx Tx, id string, r *Receipt) error
+	Delete(tx Tx, id string) error
 }

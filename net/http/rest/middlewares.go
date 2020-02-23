@@ -5,6 +5,8 @@ import (
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth/limiter"
 )
 
 const (
@@ -31,13 +33,35 @@ func Security(next http.Handler) http.Handler {
 	})
 }
 
-// WithAuth is a middleware that only allows authenticated users in
-// while also checking the role of the user
-func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Handler {
+// RateLimit is a rate limiting middleware
+func RateLimit(lmt *limiter.Limiter) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		middle := func(w http.ResponseWriter, r *http.Request) {
+			httpError := tollbooth.LimitByRequest(lmt, w, r)
+			if httpError != nil {
+				lmt.ExecOnLimitReached(w, r)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		}
+
+		return http.HandlerFunc(middle)
+	}
+}
+
+// Authentication is a middleware that only allows authenticated users in
+// while also checking the role of the user
+func (rest *Rest) Authentication(roles ...aumo.Role) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		middle := func(w http.ResponseWriter, r *http.Request) {
 			user, err := rest.auth.GetFromRequest(r)
 			if err != nil {
+				rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
+				return
+			}
+
+			if !user.IsVerified {
 				rest.JSONError(w, Error{"User unauthorized"}, http.StatusUnauthorized)
 				return
 			}
@@ -60,6 +84,44 @@ func (rest *Rest) WithAuth(roles ...aumo.Role) func(next http.Handler) http.Hand
 			next.ServeHTTP(w, r.WithContext(
 				auth.WithUser(r.Context(), user),
 			))
-		})
+		}
+
+		return http.HandlerFunc(middle)
 	}
+}
+
+// OwnsShop allows only admins and shop owners of the
+// corresponding shop to access the route
+func (rest *Rest) OwnsShop(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sID := rest.ParamNumber(w, r, "shop_id")
+
+		user, err := auth.CurrentUser(r.Context())
+		if err != nil {
+			rest.JSONError(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		// Allow admins through
+		if user.Role == aumo.Admin {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		ownsShop := false
+		for _, shop := range user.Shops {
+			// If the user owns the given shop, they can get the owners
+			if shop.ID == sID {
+				ownsShop = true
+				break
+			}
+		}
+
+		if !ownsShop {
+			rest.JSONError(w, Error{"User doesn't own this shop"}, http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }

@@ -1,7 +1,9 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
+	"time"
 
 	"github.com/deliriumproducts/aumo"
 	"github.com/deliriumproducts/aumo/auth"
@@ -27,13 +29,24 @@ func (rest *Rest) userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = rest.userService.Create(user)
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrDuplicateEmail):
+		rest.JSONError(w, err, http.StatusUnprocessableEntity)
+		return
+	default:
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	_, err = rest.verifier.Send(user.Email, user.ID.String(), "Aumo Confirmation Email", "This is an email for confirming your Aumo account", rest.backendURL+"/confirm-email", time.Hour*24)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	user.ID = 0
-	rest.JSON(w, user, http.StatusOK)
+	rest.JSON(w, Message{"Email confirmation sent!"}, http.StatusOK)
 }
 
 func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
@@ -58,13 +71,17 @@ func (rest *Rest) userLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !user.IsVerified {
+		rest.JSONError(w, aumo.ErrNotVerified, http.StatusUnauthorized)
+		return
+	}
+
 	sID, err := rest.auth.NewSession(user)
 	if err != nil {
 		rest.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	user.ID = 0
 	rest.auth.SetCookieHeader(w, sID)
 	rest.JSON(w, user, http.StatusOK)
 }
@@ -76,8 +93,35 @@ func (rest *Rest) userGetCurrent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.ID = 0
 	rest.JSON(w, user, http.StatusOK)
+}
+
+func (rest *Rest) userConfirmEmail(w http.ResponseWriter, r *http.Request) {
+	token := rest.Param(r, "token")
+	if token == "" {
+		rest.JSONError(w, Error{"Token not provided"}, http.StatusBadRequest)
+		return
+	}
+
+	userID, err := rest.verifier.Verify(token)
+	if err != nil {
+		rest.JSONError(w, Error{"Token not found"}, http.StatusNotFound)
+		return
+	}
+
+	err = rest.userService.Verify(userID)
+	switch {
+	case err == nil:
+		break
+	case errors.Is(err, aumo.ErrUserNotFound):
+		rest.JSONError(w, err, http.StatusNotFound)
+		return
+	default:
+		rest.JSONError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	rest.JSON(w, Message{"User verified"}, 200)
 }
 
 func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
@@ -96,5 +140,5 @@ func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rest.auth.ExpireCookieHeader(w)
-	rest.JSON(w, Message{"User successfully logged out!"}, 200)
+	rest.JSON(w, Message{"User successfully logged out!"}, http.StatusOK)
 }

@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"math"
 
 	"github.com/deliriumproducts/aumo"
 	"upper.io/db.v3/lib/sqlbuilder"
@@ -9,16 +10,18 @@ import (
 
 type service struct {
 	store aumo.UserStore
+	so    aumo.ShopOwnersStore
 }
 
 // New returns an instance of `aumo.UserService`
-func New(store aumo.UserStore) aumo.UserService {
+func New(store aumo.UserStore, so aumo.ShopOwnersStore) aumo.UserService {
 	return &service{
 		store: store,
+		so:    so,
 	}
 }
 
-func (us *service) User(id uint, relations bool) (*aumo.User, error) {
+func (us *service) User(id string, relations bool) (*aumo.User, error) {
 	return us.store.FindByID(nil, id, relations)
 }
 
@@ -34,24 +37,44 @@ func (us *service) Create(u *aumo.User) error {
 	return us.store.Save(nil, u)
 }
 
-func (us *service) Update(id uint, u *aumo.User) error {
+func (us *service) Update(id string, u *aumo.User) error {
 	return us.store.Update(nil, id, u)
 }
 
-func (us *service) EditRole(id uint, role aumo.Role) error {
+func (us *service) EditRole(id string, role aumo.Role) error {
 	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
-		user, err := us.store.FindByID(tx, id, false)
+		user, err := us.store.FindByID(tx, id, true)
 		if err != nil {
 			return err
 		}
 
 		user.Role = role
 
+		if len(user.Shops) > 0 {
+			err = us.so.DeleteByUser(tx, user.ID.String())
+			if err != nil {
+				return err
+			}
+		}
+
 		return us.store.Update(tx, id, user)
 	})
 }
 
-func (us *service) AddPoints(id uint, points float64) error {
+func (us *service) Verify(id string) error {
+	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
+		user, err := us.store.FindByID(tx, id, false)
+		if err != nil {
+			return err
+		}
+
+		user.IsVerified = true
+
+		return us.store.Update(tx, id, user)
+	})
+}
+
+func (us *service) AddPoints(id string, points float64) error {
 	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
 		user, err := us.store.FindByID(tx, id, false)
 		if err != nil {
@@ -64,19 +87,19 @@ func (us *service) AddPoints(id uint, points float64) error {
 	})
 }
 
-func (us *service) SubPoints(id uint, points float64) error {
+func (us *service) SubPoints(id string, points float64) error {
 	return aumo.TxDo(context.Background(), us.store.DB(), func(tx sqlbuilder.Tx) error {
 		user, err := us.store.FindByID(tx, id, false)
 		if err != nil {
 			return err
 		}
 
-		user.Points -= points
+		user.Points = math.Max(user.Points-points, 0)
 
 		return us.store.Update(tx, id, user)
 	})
 }
 
-func (us *service) Delete(id uint) error {
+func (us *service) Delete(id string) error {
 	return us.store.Delete(nil, id)
 }

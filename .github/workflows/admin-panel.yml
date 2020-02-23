@@ -5,17 +5,28 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ["13", "10", "8"]
+        node: ["13", "10"]
     name: Node ${{ matrix.node }} sample
     steps:
       - uses: actions/checkout@v1
+
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: Install deps
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: client/node_modules
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+
+      - name: Install yarn dependencies
         working-directory: ./web
-        run: yarn
+        run: yarn --frozen-lockfile
+
       - name: Build
         working-directory: ./web
         run: yarn build

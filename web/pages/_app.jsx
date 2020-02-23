@@ -1,12 +1,18 @@
+import aumo from "aumo"
 import App from "next/app"
-import Nav from "../components/Nav"
 import Router from "next/router"
 import NProgress from "nprogress"
 import React from "react"
-import styled, { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from "styled-components"
 import "../assets/nprogress.less"
-import ContextProvider from "../context/providers/contextProvider"
+import Nav from "../components/Nav"
+import { BACKEND_URL } from "../config"
 import { Context } from "../context/context.js"
+import ContextProvider from "../context/providers/contextProvider"
+
+aumo.config.config({
+  Backend: BACKEND_URL
+})
 
 Router.events.on("routeChangeStart", () => {
   NProgress.start()
@@ -29,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     height: initial;
     background-color: #f9faff;
-    background-image: url('blob-shape.svg'), url('blob-shape-2.svg');
+    background-image: url('/blob-shape.svg'), url('/blob-shape-2.svg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 

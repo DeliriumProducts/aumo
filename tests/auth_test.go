@@ -2,10 +2,10 @@ package tests
 
 import (
 	"testing"
+	"time"
 
 	"github.com/deliriumproducts/aumo/auth"
 	"github.com/deliriumproducts/aumo/mysql"
-	"github.com/gomodule/redigo/redis"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,7 +30,7 @@ func TestAuthenticator(t *testing.T) {
 
 	ustore := mysql.NewUserStore(sess)
 
-	a := auth.New(r, ustore, "http://localhost:3000", "/", 60*60*24)
+	a := auth.New(r, ustore, "http://localhost:3000", "/", time.Hour*24)
 
 	t.Run("new_session", func(t *testing.T) {
 		defer TidyRedis(r)
@@ -40,16 +40,16 @@ func TestAuthenticator(t *testing.T) {
 		require.Nil(t, err, "shouldn't return an error")
 		require.NotEmpty(t, sID, "should return a session ID")
 
-		uID, err := redis.Uint64(r.Do("GET", sID))
+		uID, err := r.Get(sID).Result()
 		require.Nil(t, err, "shouldn't return an error")
-		require.Equal(t, user.ID, uint(uID))
+		require.Equal(t, user.ID.String(), uID)
 	})
 
 	t.Run("get_user_from_session", func(t *testing.T) {
 		defer TidyRedis(r)
 
 		user := createUser(t, ustore)
-		sID := createSession(t, r, user, 60*60*24)
+		sID := createSession(t, r, user, time.Hour*24)
 
 		gotUser, err := a.Get(sID)
 		require.Nil(t, err, "shouldn't return an error")
@@ -60,12 +60,12 @@ func TestAuthenticator(t *testing.T) {
 		defer TidyRedis(r)
 
 		user := createUser(t, ustore)
-		sID := createSession(t, r, user, 60*60*24)
+		sID := createSession(t, r, user, time.Hour*24)
 
 		err = a.Del(sID)
 		require.Nil(t, err, "shouldn't return an error")
 
-		uID, err := redis.Uint64(r.Do("GET", sID))
+		uID, err := r.Get(sID).Uint64()
 		require.NotNil(t, err, "should return an error")
 		require.Empty(t, uID, "shouldn't return a user ID")
 	})

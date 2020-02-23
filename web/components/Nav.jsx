@@ -1,18 +1,27 @@
-import React from "react"
-import Router from "next/router"
-import { BACKEND_URL } from "../config"
-import { AuthAPI } from "aumo-api"
+import { Button, Divider, Icon, message } from "antd"
+import aumo from "aumo"
 import Link from "next/link"
+import Router, { useRouter } from "next/router"
+import React, { useContext, useState } from "react"
 import styled from "styled-components"
-import { Icon, Divider, Button, message } from "antd"
-import { useState, useContext } from "react"
-import { ProductAPI } from "aumo-api"
-import ModalForm from "./ModalForm"
+import { THEME_VARIABLES } from "../config/env"
 import { Context } from "../context/context"
+import { actions } from "../context/providers/contextProvider"
+import ModalForm from "./ModalForm"
 
 const links = [
-  { href: "/products", label: "Products", icon: <Icon type="shop" /> },
-  { href: "/users", label: "Users", icon: <Icon type="user" /> }
+  {
+    href: "/shops",
+    label: "Shops",
+    icon: <Icon type="shop" />,
+    roles: ["Shop Owner"]
+  },
+  {
+    href: "/users",
+    label: "Users",
+    icon: <Icon type="user" />,
+    roles: ["Admin"]
+  }
 ].map(link => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`
@@ -22,6 +31,7 @@ const Nav = props => {
   const ctx = useContext(Context)
   const [visible, setVisible] = useState(false)
   const [formRef, setFormRef] = useState(null)
+  const router = useRouter()
 
   const showModal = () => setVisible(true)
 
@@ -30,22 +40,34 @@ const Nav = props => {
   const handleCreate = () => {
     const { form } = formRef.props
 
-    form.validateFields(async (err, product) => {
+    form.validateFields(async (err, entity) => {
       if (err) {
         return
       }
 
       try {
-        const prdct = await new ProductAPI(BACKEND_URL).create({
-          ...product,
-          price: Number(product.price),
-          stock: Number(product.stock)
-        })
-        message.success(`Successfully created product ${product.name}!`)
-        ctx.dispatch({
-          type: "setProducts",
-          payload: [...ctx.state.products, prdct]
-        })
+        if (props.route === "/shops") {
+          await aumo.shop.createShop(entity)
+          message.success(`Successfully created shop ${entity.name}!`)
+          const data = await aumo.auth.me()
+          ctx.dispatch({
+            type: actions.SET_USER,
+            payload: data
+          })
+        } else {
+          const { shop_id } = router.query
+
+          const data = await aumo.shop.createProduct(shop_id, {
+            ...entity,
+            price: Number(entity.price),
+            stock: Number(entity.stock)
+          })
+          message.success(`Successfully created product ${entity.name}!`)
+          ctx.dispatch({
+            type: actions.SET_PRODUCTS,
+            payload: [...ctx.state.products, data]
+          })
+        }
       } catch (err) {
         if (!err.response) {
           message.error(`${err}`, 5)
@@ -71,64 +93,93 @@ const Nav = props => {
     <nav>
       <Menu>
         <Link href={"/"}>
-          <Logo src="aumo.png" />
+          <Logo src="/aumo.png" />
         </Link>
         {props.route === "/" ? (
-          <Link href="/login">
-            <Button type="primary">GO TO ADMIN PANEL</Button>
-          </Link>
-        ) : props.route === "/login" ? (
-          <></>
-        ) : (
-          <>
-            <Welcome>
-              Welcome back, <span>{props.name}</span>
-            </Welcome>
-            {props.route === "/products" ? (
-              <>
-                <Button
-                  type="primary"
-                  icon="plus"
-                  onClick={() => showModal()}
-                  className="new-button"
-                >
-                  NEW
-                </Button>
-                <Divider type="vertical" className="btn-divider" />
-              </>
-            ) : (
-              <></>
-            )}
-            <LinkList>
-              {links.map(({ key, href, label, icon }) => (
-                <Link key={key} href={href}>
-                  <LinkItem isSelected={props.route === href}>
-                    {icon}
-                    {label}
-                  </LinkItem>
-                </Link>
-              ))}
-              <Divider type="vertical" />
-              <Button
-                type="ghost"
-                onClick={async () => {
-                  await new AuthAPI(BACKEND_URL).logout()
-                  message.success("Logged out!")
-                  Router.replace("/")
-                }}
-              >
-                <Icon type="logout" />
-                LOGOUT
+          <div>
+            <Link href="/login">
+              <Button type="primary" style={{ marginRight: 5 }} icon="login">
+                LOGIN
               </Button>
-              <ModalForm
-                wrappedComponentRef={saveFormRef}
-                visible={visible}
-                onCancel={handleCancel}
-                onCreate={handleCreate}
-                product={{}}
-              />
-            </LinkList>
-          </>
+            </Link>
+            <Link href="/register">
+              <Button type="primary" icon="form">
+                REGISTER
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          props.route !== "/login" &&
+          props.route !== "/register" && (
+            <>
+              <Welcome>
+                Welcome back, <span>{props.name}</span>
+              </Welcome>
+              {props.route.startsWith("/shops") && (
+                <>
+                  <Button
+                    type="primary"
+                    icon="plus"
+                    onClick={() => showModal()}
+                    className="new-button"
+                  >
+                    NEW
+                  </Button>
+                  <Divider type="vertical" className="btn-divider" />
+                </>
+              )}
+              <LinkList>
+                {links.map(({ key, href, label, icon, roles }) => {
+                  if (
+                    roles.length &&
+                    ctx.state.user &&
+                    ctx.state.user?.role !== "Admin" &&
+                    !roles.includes(ctx.state.user?.role)
+                  ) {
+                    return
+                  }
+                  return (
+                    <Link key={key} href={href}>
+                      <LinkItem isSelected={props.route.startsWith(href)}>
+                        {icon}
+                        {label}
+                      </LinkItem>
+                    </Link>
+                  )
+                })}
+                <Divider type="vertical" />
+                <Button
+                  type="ghost"
+                  onClick={async () => {
+                    await aumo.auth.logout()
+                    message.success("Logged out!")
+                    Router.replace("/")
+                  }}
+                >
+                  <Icon type="logout" />
+                  LOGOUT
+                </Button>
+                {props.route === "/shops" ? (
+                  <ModalForm
+                    wrappedComponentRef={saveFormRef}
+                    visible={visible}
+                    onCancel={handleCancel}
+                    onCreate={handleCreate}
+                    entity={{}}
+                  />
+                ) : (
+                  <ModalForm
+                    wrappedComponentRef={saveFormRef}
+                    visible={visible}
+                    onCancel={handleCancel}
+                    onCreate={handleCreate}
+                    entity={{}}
+                    isProduct={true}
+                  />
+                )}
+              </LinkList>
+            </>
+          )
         )}
       </Menu>
     </nav>
@@ -164,7 +215,7 @@ const Welcome = styled.div`
     text-align: left;
     font-weight: bold;
     font-family: "Montserrat";
-    color: #083aa4;
+    color: ${THEME_VARIABLES["@primary-color"]};
     font-size: 1rem;
     text-decoration: none;
   }
@@ -216,8 +267,10 @@ const LinkList = styled.ul`
 
 const LinkItem = styled.a`
   font-family: "Montserrat";
-  color: ${props => (props.isSelected ? "#fff" : "#083aa4")};
-  background-color: ${props => (props.isSelected ? "#083aa4" : "")};
+  color: ${props =>
+    props.isSelected ? "#fff" : THEME_VARIABLES["@primary-color"]};
+  background-color: ${props =>
+    props.isSelected ? THEME_VARIABLES["@primary-color"] : ""};
   font-size: 1rem;
   font-weight: 500;
   display: flex;

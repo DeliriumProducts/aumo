@@ -1,68 +1,59 @@
-import { AppLoading } from "expo"
-import { Asset } from "expo-asset"
-import * as Font from "expo-font"
-import React, { useState } from "react"
-import { Platform, StatusBar, StyleSheet, View } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { EvaIconsPack } from "@ui-kitten/eva-icons" // <-- Make sure it is installed. npm i @ui-kitten/eva-icons
-import AppNavigator from "./navigation/AppNavigator"
 import { mapping } from "@eva-design/eva"
-import { theme } from "./theme/customThemeVariables" // <-- Import custom theme
+import { NavigationContainer } from "@react-navigation/native"
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
+import { EvaIconsPack } from "@ui-kitten/eva-icons"
+import aumo from "aumo"
+import React from "react"
+import { SafeAreaView } from "react-native"
+import SplashScreen from "react-native-splash-screen"
+import { BACKEND_URL } from "./config"
+import { Context } from "./context/context"
+import ContextProvider, { actions } from "./context/providers/provider"
+import customM from "./mapping"
+import AppNavigator from "./navigation/main"
+import theme from "./theme"
 
-import { ApplicationProvider, IconRegistry } from "react-native-ui-kitten"
-
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false)
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    )
-  } else {
-    return (
-      <>
-        <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider mapping={mapping} theme={theme}>
-          <View style={styles.container}>
-            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-            <AppNavigator />
-          </View>
-        </ApplicationProvider>
-      </>
-    )
-  }
+if (__DEV__) {
+  aumo.config.config({
+    Backend: BACKEND_URL
+  })
 }
 
-async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([require("./assets/images/AumoLogo.png")]),
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
-      ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf")
-    })
-  ])
+const App = () => {
+  const ctx = React.useContext(Context)
+
+  React.useEffect(() => {
+    ;(async () => {
+      try {
+        const val = await aumo.auth.me()
+        ctx.dispatch({ type: actions.SET_USER, payload: val })
+      } catch (e) {
+      } finally {
+        SplashScreen.hide()
+      }
+    })()
+  }, [])
+
+  return (
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider
+        mapping={mapping}
+        theme={theme}
+        customMapping={customM}
+      >
+        <SafeAreaView style={{ flex: 1 }}>
+          <NavigationContainer>
+            <AppNavigator isAuthenticated={ctx.state.user != null} />
+          </NavigationContainer>
+        </SafeAreaView>
+      </ApplicationProvider>
+    </>
+  )
 }
 
-function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
-  console.warn(error)
-}
-
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true)
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  }
-})
+export default () => (
+  <ContextProvider>
+    <App />
+  </ContextProvider>
+)

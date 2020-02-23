@@ -1,8 +1,9 @@
 package aumo
 
 import (
-	"errors"
+	"strings"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"upper.io/db.v3/lib/sqlbuilder"
 )
@@ -14,30 +15,19 @@ const (
 	UserPointsPerReceipt = float64(500)
 )
 
-var (
-	// ErrNotSufficientPoints is an error for when the user doens't have enough points
-	ErrNotSufficientPoints = errors.New("aumo: user doesn't have enough points to buy this item")
-	// ErrNotInStock is an error for when an item isn't in stock
-	ErrNotInStock = errors.New("aumo: shop doesn't have enough stock of the item")
-	// ErrInvalidPassword is an error for when the user provided an invalid password
-	ErrInvalidPassword = errors.New("aumo: wrong password")
-	// ErrUserNotFound is an error for when a user hasn't been found
-	ErrUserNotFound = errors.New("aumo: user not found")
-	// ErrDuplicateEmail is an error for when a user tries to register with an already existing email
-	ErrDuplicateEmail = errors.New("aumo: duplicate email")
-)
-
 // User represents a user of aumo
 type User struct {
-	ID       uint      `json:"id,omitempty" db:"id,omitempty"`
-	Name     string    `json:"name" db:"name"`
-	Email    string    `json:"email" db:"email"`
-	Password string    `json:"-" db:"password"`
-	Avatar   string    `json:"avatar" db:"avatar"`
-	Points   float64   `json:"points" db:"points"`
-	Role     Role      `json:"role" db:"role"`
-	Orders   []Order   `json:"orders" db:"-"`
-	Receipts []Receipt `json:"receipts" db:"-"`
+	ID         uuid.UUID `json:"id,omitempty" db:"id,omitempty"`
+	Name       string    `json:"name" db:"name"`
+	Email      string    `json:"email" db:"email"`
+	Password   string    `json:"-" db:"password"`
+	Avatar     string    `json:"avatar" db:"avatar"`
+	Points     float64   `json:"points" db:"points"`
+	Role       Role      `json:"role" db:"role"`
+	Orders     []Order   `json:"orders" db:"-"`
+	Receipts   []Receipt `json:"receipts" db:"-"`
+	IsVerified bool      `json:"is_verified" db:"verified"`
+	Shops      []Shop    `json:"shops,omitempty" db:"-"`
 }
 
 // ClaimReceipt claims a receipt and adds it to the receipts array
@@ -81,45 +71,48 @@ func (u *User) PlaceOrder(o *Order) error {
 // NewUser is a constructor for `User`
 func NewUser(name string, email string, password string, avatar string) (*User, error) {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-
 	if err != nil {
 		return nil, err
 	}
 
 	return &User{
-		Name:     name,
-		Email:    email,
-		Password: string(pwd),
-		Avatar:   avatar,
-		Points:   UserStartingPoints,
-		Role:     Customer,
-		Orders:   []Order{},
-		Receipts: []Receipt{},
+		ID:         uuid.New(),
+		Name:       name,
+		Email:      strings.ToLower(strings.Trim(email, " ")),
+		Password:   string(pwd),
+		Avatar:     avatar,
+		Points:     UserStartingPoints,
+		Role:       Customer,
+		Orders:     []Order{},
+		Receipts:   []Receipt{},
+		Shops:      []Shop{},
+		IsVerified: false,
 	}, nil
 }
 
 // UserService contains all `User`
 // related business logic
 type UserService interface {
-	User(id uint, relations bool) (*User, error)
+	User(id string, relations bool) (*User, error)
 	UserByEmail(email string, relations bool) (*User, error)
 	Users() ([]User, error)
 	Create(*User) error
-	Update(id uint, u *User) error
-	EditRole(id uint, role Role) error
-	AddPoints(id uint, points float64) error
-	SubPoints(id uint, points float64) error
-	Delete(id uint) error
+	Update(id string, u *User) error
+	EditRole(id string, role Role) error
+	AddPoints(id string, points float64) error
+	SubPoints(id string, points float64) error
+	Verify(id string) error
+	Delete(id string) error
 }
 
 // UserStore contains all `User`
 // related persistence logic
 type UserStore interface {
 	DB() sqlbuilder.Database
-	FindByID(tx Tx, id uint, relations bool) (*User, error)
+	FindByID(tx Tx, id string, relations bool) (*User, error)
 	FindByEmail(tx Tx, email string, relations bool) (*User, error)
 	FindAll(tx Tx) ([]User, error)
 	Save(tx Tx, u *User) error
-	Update(tx Tx, id uint, u *User) error
-	Delete(tx Tx, id uint) error
+	Update(tx Tx, id string, u *User) error
+	Delete(tx Tx, id string) error
 }
