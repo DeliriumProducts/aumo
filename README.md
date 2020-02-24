@@ -44,8 +44,9 @@ In order to build a release apk, you need to generate a keystore using:
 $ keytool -genkeypair -v -keystore aumo.keystore -alias aumo -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-... and then move the generated file in client/android/app.
-Next you need to make a file called `release.keystore.properties` in the client/android/keystores directory. It should contain:
+... and then move the generated file in `client/android/app`.
+
+Next you need to make a file called `release.keystore.properties` in the `client/android/keystores` directory. It should contain:
 
 ```bash
 key.store=aumo.keystore
