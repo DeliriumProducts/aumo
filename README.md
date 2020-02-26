@@ -20,23 +20,125 @@ Incentive for using the digital receipt, as opposed to the paper alternative, wi
 
 ## Getting started
 
-Requirements:
-
 ### Backend
+
+Found in the root of the repo
 
 - go
 - mysql
 - redis
 
+Fill in the .env file in the root of the project
+```bash
+MYSQL_DATABASE=aumo
+MYSQL_USER=root
+MYSQL_PASSWORD=
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+
+ADDRESS=:8080
+COOKIE_SECRET=good-password
+
+REDIS_URL=localhost:6379
+REDIS_DATABASE=0
+REDIS_URL_TEST=localhost:6379
+REDIS_DATABASE_TEST=1
+
+BACKEND_URL=http://localhost:8080/api/v1
+FRONTEND_URL=http://localhost:3000
+INITIAL_ADMIN_PASSWORD=123456
+
+# Set ENV to PROD if you want to send confirmation emails, otherwise set it to DEV
+ENV=PROD
+SMTP_HOST=smtp.foo.com
+SMTP_USER=foo@bar.com
+SMTP_PASS=foobar
+```
+
+Create the needed databases:
+
+```mysql
+CREATE DATABASE aumo; -- for dev / prod
+CREATE DATABASE aumo_test; -- for tests
+```
+
+Run the server:
+
+```console
+$ go run cmd/aumo/main.go
+```
+
+The server should automatically create the initial admin with the `INITIAL_ADMIN_PASSWORD` password and `admin@deliriumproducts.me` email.
+
+If you want to get some data to work with, run:
+
+```console
+$ mysql -u root -p aumo < data.sql
+```
+
 ### Admin panel
 
+Found in the `web/` directory
+
 - node.js
+- yarn
+
+Instal deps:
+
+```console
+$ yarn
+```
+
+Fill in .env:
+
+```bash
+BACKEND_URL=localhost:8080/api/v1
+```
+
+Start in dev:
+
+```console
+$ yarn dev
+```
+
+Start in prod:
+
+```console
+$ yarn build && yarn start
+```
 
 ### Mobile
+
+Found in the `client/` directory
 
 - android sdk
 - jdk
 - node.js
+- yarn
+
+Install deps:
+
+```console
+$ yarn 
+```
+
+Build for android (only needed the first time OR when installing / changing native code)
+
+```console
+$ yarn android
+```
+
+Build for iOS (only needed the first time OR when installing / changing native code)
+
+```console
+$ yarn ios
+```
+
+Start normally after having installed the iOS app or APK:
+
+```console
+$ yarn start
+```
 
 In order to build a release apk, you need to generate a keystore using:
 
