@@ -21,6 +21,7 @@ export const Products = () => {
 
   React.useEffect(() => {
     ;(async () => {
+      console.log(aumo, aumo.shop)
       const products = await aumo.shop.getAllProductsByShop(shop_id)
       ctx.dispatch({ type: actions.SET_PRODUCTS, payload: products })
       setLoading(false)
