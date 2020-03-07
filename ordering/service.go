@@ -56,10 +56,6 @@ func (o *service) PlaceOrder(uID string, pID uint) (*aumo.Order, error) {
 		// Get User
 		user, err := o.us.FindByID(tx, uID, false)
 		if err != nil {
-			if errors.Is(err, db.ErrNoMoreRows) {
-				return aumo.ErrOrderUserNotFound
-			}
-
 			return err
 		}
 
