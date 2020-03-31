@@ -1,7 +1,7 @@
 <h3 align="center"><img src="https://i.imgur.com/VH2cLGq.png" alt="logo"></h3>
 <p align="center">📜 The digital receipts of the future.</p>
 
-[![Github Actions Widget]][github actions] [![GoReport Widget]][goreport] [![GoDoc Widget]][godoc]
+[![Github Actions Widget]][github actions] [![Github Actions Widget2]][github actions2] [![GoReport Widget]][goreport] [![GoDoc Widget]][godoc]
 
 Tons of paper receipts are produced and then immediately thrown away, for the creation of which are used trees and a human toxic chemical, requiring thousands of decares of forests to be cut down and resulting in spreading of diseases.
 
@@ -9,12 +9,13 @@ Tons of paper receipts are produced and then immediately thrown away, for the cr
 
 Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing **Aumo** over the traditional option. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
 
-[Preview here!](https://expo.io/@deliriumproducts/aumo)
 
 [goreport widget]: https://goreportcard.com/badge/github.com/deliriumproducts/aumo
 [goreport]: https://goreportcard.com/report/github.com/deliriumproducts/aumo
-[github actions widget]: https://github.com/tsoding/kgbotka/workflows/CI/badge.svg
+[github actions widget]: https://github.com/deliriumproducts/aumo/workflows/Backend%20Workflow/badge.svg
 [github actions]: https://github.com/deliriumproducts/aumo/actions
+[github actions widget2]: https://github.com/deliriumproducts/aumo/workflows/Build%20Android%20App/badge.svg
+[github actions2]: https://github.com/deliriumproducts/aumo/actions
 [godoc]: https://godoc.org/github.com/deliriumproducts/aumo
 [godoc widget]: https://godoc.org/github.com/deliriumproducts/aumo?status.svg
 
