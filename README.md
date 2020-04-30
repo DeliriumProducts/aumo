@@ -9,7 +9,6 @@ Tons of paper receipts are produced and then immediately thrown away, for the cr
 
 Incentive for using the digital receipt, as opposed to the paper alternative, will be points which users receive when choosing **Aumo** over the traditional option. Points can be exchanged for bonuses, which can either be discounts or physical items, provided by the shop or restaurant.
 
-
 [goreport widget]: https://goreportcard.com/badge/github.com/deliriumproducts/aumo
 [goreport]: https://goreportcard.com/report/github.com/deliriumproducts/aumo
 [github actions widget]: https://github.com/deliriumproducts/aumo/workflows/Backend%20Workflow/badge.svg
