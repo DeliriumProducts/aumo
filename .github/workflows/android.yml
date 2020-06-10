@@ -27,7 +27,13 @@ jobs:
           key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.OS }}-npm-cache-
-
+      - name: Install and configure s3cmd
+        env:
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+        run: |
+          sudo apt install s3cmd
+          printf "[default]\naccess_key = $S3_ACCESS_KEY\nsecret_key = $S3_SECRET_KEY\nhost_base = fra1.digitaloceanspaces.com\nhost_bucket = deliprods" > ~/.s3cfg
       - name: Install yarn dependencies
         working-directory: ./client
         run: yarn --frozen-lockfile
@@ -52,7 +58,5 @@ jobs:
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
           ./gradlew assembleRelease
       - name: Upload APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: aumo.apk
-          path: ./client/android/app/build/outputs/apk/release/app-release.apk
+        run: |
+          s3cmd put client/android/app/build/outputs/apk/release/app-release.apk s3://deliprods/aumo-android-binaries/aumo.apk --acl-public
