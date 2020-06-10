@@ -13,11 +13,9 @@ const Home = props => (
       <LeftContainer>
         <Title>The receipts of the future.</Title>
         <BadgeContainer>
-          <div>
-            <Badge src="app-store.png" style={{ opacity: 0.75 }} />
-          </div>
-          <a href="https://deliprods.fra1.digitaloceanspaces.com/aumo-android-binaries/aumo.apk">
-            <Badge src="google-play.png" />
+          <Badge src="app-store.png" style={{ opacity: 0.50, maxWidth: '33%' }} />
+          <a href="https://deliprods.fra1.digitaloceanspaces.com/aumo-android-binaries/aumo.apk" style={{ maxWidth: '33%' }} >
+            <Badge src="google-play.png" style={{ width: '100%' }} />
           </a>
         </BadgeContainer>
         <a style={{ marginTop: "3%" }} href="paper.pdf">
@@ -32,11 +30,7 @@ const Home = props => (
 )
 
 const Badge = styled.img`
-  padding: 5px;
-  width: 25%;
-  @media only screen and (max-width: 600px) {
-    width: 35%;
-  }
+  margin: 2.5px;
 `
 
 const BadgeContainer = styled.div`
