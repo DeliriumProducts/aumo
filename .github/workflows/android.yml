@@ -52,7 +52,7 @@ jobs:
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
           ./gradlew assembleRelease
       - name: Upload APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: aumo.apk
           path: ./client/android/app/build/outputs/apk/release/app-release.apk
