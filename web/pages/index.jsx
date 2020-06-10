@@ -13,9 +13,8 @@ const Home = props => (
       <LeftContainer>
         <Title>The receipts of the future.</Title>
         <BadgeContainer>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} >
+          <div>
             <Badge src="app-store.png" style={{ opacity: 0.75 }} />
-            Soon
           </div>
           <a href="https://deliprods.fra1.digitaloceanspaces.com/aumo-android-binaries/aumo.apk">
             <Badge src="google-play.png" />
