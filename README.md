@@ -157,7 +157,7 @@ key.store.password=***
 key.alias.password=***
 ```
 
-The final apk can be installed using
+The final apk can be installed using:
 
 ```console
 $ yarn android --variant=release
