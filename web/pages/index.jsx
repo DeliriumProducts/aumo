@@ -18,9 +18,6 @@ const Home = props => (
             <Badge src="google-play.png" style={{ width: '100%' }} />
           </a>
         </BadgeContainer>
-        <a style={{ marginTop: "3%" }} href="paper.pdf">
-          Learn more
-        </a>
       </LeftContainer>
       <RightContainer>
         <Phone src="iphone.png" alt="iphone screenshot" />
