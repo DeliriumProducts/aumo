@@ -121,11 +121,3 @@ func New(c *Config) *Rest {
 func (rest *Rest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rest.router.ServeHTTP(w, r)
 }
-
-func (rest *Rest) MarkdownRoutesDoc(opts docgen.MarkdownOpts) string {
-	return docgen.MarkdownRoutesDoc(rest.router, opts)
-}
-
-func (rest *Rest) JSONRoutesDoc() string {
-	return docgen.JSONRoutesDoc(rest.router)
-}
