@@ -20,3 +20,4 @@ INSERT INTO `orders` VALUES
     ('4f2e6fea-83f7-49d1-8be2-a3ddcaea0dcb', '19274de1-ac2b-4dd9-adee-20f4ab69e920', 1),
     ('4b75ddf3-334d-4120-9a41-1ced15f0d49c', '19274de1-ac2b-4dd9-adee-20f4ab69e920', 3),
     ('1f7d1e74-b37b-4537-8fcb-756911326249', '1cd005fe-213f-4c96-9966-49306b00ca90', 1);
+
