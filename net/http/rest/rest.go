@@ -10,7 +10,6 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"github.com/go-chi/docgen"
 	"github.com/go-playground/form/v4"
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
