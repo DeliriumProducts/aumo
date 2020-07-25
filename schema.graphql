@@ -1,0 +1,49 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  avatar: String!
+  points: Float!
+  role: Role!
+  orders: [Order!]!
+  receipts: [Receipt!]!
+  is_verified: Boolean!
+  shops: [Shop!]
+}
+
+enum Role {
+  Admin
+  Customer
+  ShopOwner
+}
+
+type Order {
+  id: ID!
+  user: User!
+  product: Product!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  image: String!
+  description: String!
+  stock: Int!
+  shop: Shop!
+}
+
+type Shop {
+  id: ID!
+  name: String!
+  image: String!
+  owners: [User!]!
+  products: [Product!]!
+}
+
+type Receipt {
+  id: ID!
+  content: String!
+  total: Float!
+  shop: Shop!
+}
