@@ -14,7 +14,7 @@ const Home = props => (
         <Title>The receipts of the future.</Title>
         <BadgeContainer>
           <Badge src="app-store.png" style={{ opacity: 0.50, maxWidth: '33%' }} />
-          <a href="https://deliprods.fra1.digitaloceanspaces.com/aumo-android-binaries/aumo.apk" style={{ maxWidth: '33%' }} >
+          <a style={{ maxWidth: '33%' }} >
             <Badge src="google-play.png" style={{ width: '100%' }} />
           </a>
         </BadgeContainer>
