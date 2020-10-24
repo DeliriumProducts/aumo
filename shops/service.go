@@ -13,7 +13,7 @@ type service struct {
 	shopOwnersStore aumo.ShopOwnersStore
 }
 
-//New returns an instance of `aumo.ShopService`
+// New returns an instance of `aumo.ShopService`
 func New(shopStore aumo.ShopStore, shopOwnersStore aumo.ShopOwnersStore, userStore aumo.UserStore) aumo.ShopService {
 	return &service{
 		shopStore:       shopStore,
