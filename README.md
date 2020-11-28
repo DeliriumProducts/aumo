@@ -20,6 +20,16 @@ Incentive for using the digital receipt, as opposed to the paper alternative, wi
 
 ## Getting started
 
+### Paper
+
+- pandoc
+- texlive-latex-base 
+- texlive-fonts-recommended 
+- texlive-fonts-extra 
+- texlive-latex-extra
+
+Run `make` in the corresponding directory
+
 ### Backend
 
 Found in the root of the repo
