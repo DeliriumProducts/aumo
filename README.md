@@ -23,10 +23,16 @@ Incentive for using the digital receipt, as opposed to the paper alternative, wi
 ### Paper
 
 - pandoc
-- texlive-latex-base 
+- texlive-latex-base
+- texlive-latex-extra
 - texlive-fonts-recommended 
 - texlive-fonts-extra 
-- texlive-latex-extra
+- texlive-lang-cyrillic
+- cm-super
+
+```console
+$ sudo apt install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-cyrillic cm-super
+```
 
 Run `make` in the corresponding directory
 
