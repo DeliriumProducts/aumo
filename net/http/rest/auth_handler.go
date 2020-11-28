@@ -121,7 +121,7 @@ func (rest *Rest) userConfirmEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rest.JSON(w, Message{"User verified"}, 200)
+	http.Redirect(w, r, "https://aumo.deliprods.tech", 301)
 }
 
 func (rest *Rest) userLogout(w http.ResponseWriter, r *http.Request) {
