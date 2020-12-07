@@ -18,7 +18,7 @@ jobs:
       - name: Cache NPM dependencies
         uses: actions/cache@v1
         with:
-          path: client/node_modules
+          path: web/node_modules
           key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.OS }}-npm-cache-
