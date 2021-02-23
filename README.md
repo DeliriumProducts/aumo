@@ -31,7 +31,10 @@ Incentive for using the digital receipt, as opposed to the paper alternative, wi
 - cm-super
 
 ```console
+# Ubuntu
 $ sudo apt install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-cyrillic cm-super
+# Arch
+$ yay -S pandoc texlive-core texlive-latexextra texlive-fontsextra texlive-langcyrillic 
 ```
 
 Run `make` in the corresponding directory
