@@ -12,7 +12,7 @@
     "@zeit/next-sass": "^1.0.1",
     "antd": "^3.26.7",
     "aumo": "^3.0.15",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.0",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.7.0",
