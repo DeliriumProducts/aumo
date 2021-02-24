@@ -1,7 +1,7 @@
 ---
 documentclass: article
 title: Aumo - The Digital Receipts of the Future
-fontfamily: utopia
+# fontfamily: utopia
 author:
   - "Simo Aleksandrov"
   - "Lyubo Lyubchev"
@@ -20,9 +20,6 @@ abstract: |
   \newpage
 header-includes: |
   \usepackage{sectsty}
-  \sectionfont{\LARGE\underline\bfseries\centering}
-  \subsectionfont{\large\bfseries\centering}
-  \subsubsectionfont{\normalsize\bfseries\centering}
   \usepackage{wrapfig}
   \usepackage{float}
 figPrefix:
