@@ -92,23 +92,23 @@ Every POS terminal will be connected with **Aumo** - a small computer (Raspberry
 The device will act as a middleman and intercept the required information from the POS Terminal and based on the user's choice the receipt will either be sent to the printer (if the user decides to get a traditional receipt, for example if they don't have the app or a smartphone) or to their mobile device through the use of an NFC module.
 **Aumo** is equipped with an NFC module, which it uses for receiving the receipt from the POS Terminal. The mobile app receives the receipt when it approaches **Aumo**, thanks to the on board NFC chip that majority of smartphones have.
 
-# Мотив (Геймификация)
+# Incentive (Gamification)
 
-При всяко използване на **Aumo** клиента получава точки, те могат да бъдат обменени за бонуси, промоции или предметни награди предоставени от търговския обект, като по този начин клиентите биват мотивирани да използват нашето приложение.
+Every time a user chooses **Aumo** over the traditional paper receipt, they are rewarded with bonus points, which can be exchanged for coupons or physical rewards, thus acting as an incentive to use our mobile app.
 
-Досега всичко е било "на хартия". Този подход с дигитализация на нещо толкова битово ще изисква много усилия, тъй като ние хората обичаме да стоим в комфортната си зона и често не обичаме промяна. Затова ние решихме да вкараме геймификация в **Aumo**, като по този начин клиентите ще бъдат мотивирани да използват дигитална касова бележка пред традиционната - хартиена, както и да посещават по често съответния търговски обект предлагащ услугата. Така усилията, които трябва да бъдат положени, както от страна на клиенти, така и от страна на собствениците на търговските обекти няма да се усещат и ще бъдат забавни.
+Digitalizing paper receipts will take a lot of effort, manily due to the fact that we, as humans prefer to stay within our comfort zone. We decided to implement an element of gamification into **Aumo**, thus making it both fun and rewarding to use, as well as helping out the planet.
 
-# Технологии
+# Technologies
 
 ## Backend
 
 ### go
 
-Като език за програмиране използвахме **go**, тъй като е бърз, гъвкав, лесен за писане и разбиране и може да се компилира към всички операционни системи - macOS, Linux, Windows.
+We choose **go** for our backend programming language, due to its flexibility, performance, simplicity and cross-compilation.
 
 ### go-chi
 
-Като библиотека за HTTP сървър ползвахме **go-chi**, поради факта че е тънък слой (wrapper) над стандартната библиотека на **go** - **net/http**. Предоставя лесна абстракция за създаване на REST API. Малък пример за сървър:
+We used **go-chi** as our HTTP server, because it's a thin layer on top of **go**'s standard library - **net/http**. It provides a simple abstraction for building REST APIs.
 
 ```go
 package main
@@ -129,46 +129,46 @@ func main() {
 
 ### MariaDB (MySQL)
 
-Използвахме **MySQL** (или по-конкретно **MariaDB**) като база от данни, поради широкото ѝ разпространение в индустрията. Лесна е за използване и конфигуриране.
+We used **MariaDB** for our database, due to its popularity and support in the industry. It's both easy to use and setup.
 
 ### Redis
 
-За сесии, кеширане за MySQL заявки използвахме **Redis** заедно с **go-redis**.
+For sessions and caching **MySQL** queries we used **Redis** together with **go-redis**.
 
 ### Docker
 
-За deployment (публикуване) на нашото приложение, използвахме технологията за контейнери, по-конкретно - **Docker**. Той ни предоставя еднакъв environment, независимо от операционната система, дистробуция или други фактори. Също така ни улеснява scaling (скалиране) на много иснтанции.
+For deploying our app, we used **Docker** containers. It provides the same environment, no matter the OS, Linux distribution and other factors. It also makes scaling to several instances a breeze.
 
-### GORM
+### upper/db
 
-Като библиотека за свързване и абстракция от **go** към **MySQL**, се спряхме на **GORM**. Много бързо и лесно успяхме да създадем нашите модели.
-
-Само с няколко реда код, ние можем да имаме потребители в нашата база от данни.
+As a library for connecting our backend code to our database, we used **upper/db**. Just with a few lines of code, we can save users to our database.
 
 ```go
+// User represents a user of aumo
 type User struct {
-	gorm.Model
-	Name     string     `json:"name" gorm:"not null"`
-	Email    string     `json:"email" gorm:"unique;not null"`
-	Password string     `json:"-" gorm:"not null" gob:"-"`
-	Avatar   string     `json:"avatar" `
-	Points   float64    `json:"points" gorm:"not null"`
-	Orders   []ShopItem `json:"orders" gorm:"many2many:user_shop_item;"`
-	Receipts []Receipt  `json:"receipts"`
+	ID         uuid.UUID `json:"id,omitempty" db:"id,omitempty"`
+	Name       string    `json:"name" db:"name"`
+	Email      string    `json:"email" db:"email"`
+	Password   string    `json:"-" db:"password"`
+	Avatar     string    `json:"avatar" db:"avatar"`
+	Points     float64   `json:"points" db:"points"`
+	Role       Role      `json:"role" db:"role"`
+	Orders     []Order   `json:"orders" db:"-"`
+	Receipts   []Receipt `json:"receipts" db:"-"`
+	IsVerified bool      `json:"is_verified" db:"verified"`
+	Shops      []Shop    `json:"shops,omitempty" db:"-"`
 }
 
-func (a *Aumo) CreateUser(u User) (User, error) {
-	if err := a.db.Create(u).Error; err != nil {
-		return nil, err
-	}
-
-	return u, nil
+func (u *userStore) Save(us *aumo.User) error {
+	var err error
+	_, err = tx.Collection("users").Insert(us)
+	return err
 }
 ```
 
 ### Raspberry Pi
 
-За устройството използахме **Raspberry Pi**, поставено в 3D принтиранa кутиика, направена в CAD системата **Solidworks**. Кутията беше принтирана в Русенския Университет, тъй като те разполагат с 3D принтер. (виж фиг. \ref{fig:rpi} и \ref{fig:aumo-pics})
+For the hardware device we used a **Raspberry Pi**, placed inside a 3D printed case, which was made in **Solidworks**. The case was printed in the Ruse University "Angel Kanchev", due to the fact that they have a 3D printer (fig. \ref{fig:rpi} and \ref{fig:aumo-pics}).
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/rpi.jpg}
@@ -180,56 +180,56 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 \includegraphics[width=0.5\textwidth]{images/render.png}
 \includegraphics[width=0.5\textwidth]{images/irl.jpg}
 \centering
-\caption{Устройството\label{fig:aumo-pics}}
+\caption{The device\label{fig:aumo-pics}}
 \end{figure}
 
 ## Frontend
 
-### React и React-Native
+### React & React-Native
 
-За да създадем хубав и гъвкав интерфейс, заедно с reusable компоненти използвахме **React** - библиотека създадена от Facebook. За мобилното приложение използвахме по-конкретно **React-Native**, тъй като можем да пишем един код за всички платформи - iOS и Android. (виж фиг. \ref{fig:aumo-android} и фиг. \ref{fig:aumo-ios})
+In order to create a beautiful and flexible UI, as well as have reusable components, we used **React** - a company developed from Facebok. For our mobile app we used **React-Native**, because we can share one codebase and have a mobile app both for iOS and Android (fig. \ref{aumo-android} and fig. \ref{fig:aumo-ios})
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth, height=6cm]{images/main_s9.jpg}
 \includegraphics[width=0.5\textwidth, height=6cm]{images/shop_s9.jpg}
 \centering
-\caption{Мобилното приложение на Android\label{fig:aumo-android}}
+\caption{The mobile app on Android\label{fig:aumo-android}}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth, height=6cm]{images/main_ios.png}
 \includegraphics[width=0.5\textwidth, height=6cm]{images/shop_ios.png}
 \centering
-\caption{Мобилното приложение на iOS\label{fig:aumo-ios}}
+\caption{The mobile app on iOS\label{fig:aumo-ios}}
 \end{figure}
 
-# Етапи на развитие
+# Stages of development
 
-## Избор на тема
+## Choosing a topic
 
-Двамата автори бяхме в Стара Загора (участвахме на състезание), седнахме да обядваме. Докато Симо беше на опашката, забеляза, че зад касите стояха кофи за боклук преливащи от касови бележки, които така и не влизат в употреба а само се изхвърля на вятъра един природен ресурс. Така решихме да измислим решение, с което можем да сложим край на този проблем възможно най-скоро - роди се идеята за **Aumo**.
+While having dinner at a fast food restaurant, we noticed that the trash can was overflowing with paper receipts. The receipts weren't getting used at all, and therefore only wasting precious resources. We wanted to figure out a solution as soon as possible, thus **Aumo** was born.
 
-## Проучване
+## Research
 
-При установено проучване от нас, не успяхме да открием подобни решения, действащи в момента на пазара. Така се убедихме, че е време да започнем работа върху бъдещият ни продукт - **Aumo**.
+After careful analysis and research, we weren't able to find similiar products on the market. This motivated us to create our future product - **Aumo**.
 
-## Избиране на технологии и архитектура
+## Designing our architecture and choosing technologies
 
-През този етап ни минаха доста идеи относно подхода ни с технологиите, като се спряхме на вече гореспоментати. (Виж сек. [Технологии]).
+We went through several iterations of our architecture and technology stack, but eventually settled on the aforementioned ones (Check out section [Technologies]).
 
-## Архитектура
+## Architecture
 
-1. Информацията за касовия бон е изпратена към **Aumo**
-2. В зависимост от избора на клиента, касовия бон ще бъде изпратен или към мобилното приложение или към принтера
-3. Касовия бон бива криптиран и добавен към профила на потребителя в съвръра
+1. The information for the receipt is sent to **Aumo**.
+2. Based on the user's choice, the receipt gets sent either to the printer or the mobile app.
+3. The digital receipts gets added to the user's profile on our servers.
 
 \begin{figure}[H]
 \includegraphics[height=10cm]{images/arch.png}
 \centering
-\caption{Архитектурата на Aumo\label{fig:aumo-arch}}
+\caption{Aumo's Architecture\label{fig:aumo-arch}}
 \end{figure}
 
-## Изработване
+## Development
 
 Започнахме работа върху проекта, по време на Русенския хакатон (TeenHack Ruse 2019) провел се в началото на октомври.
 
