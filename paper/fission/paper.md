@@ -3,12 +3,12 @@ documentclass: article
 title: Aumo - The Digital Receipts of the Future
 fontfamily: utopia
 author:
-  - 'Simo Aleksandrov'
-  - 'Lyubo Lyubchev'
+  - "Simo Aleksandrov"
+  - "Lyubo Lyubchev"
 lang: en
 papersize: a4
 graphics:
-    - a4paper
+  - a4paper
 keywords: [gamification, eco, internet of things]
 abstract: |
   Tons of paper receipts are produced and then immediately thrown away, for the creation of which are used trees and a human toxic chemical, requiring thousands of decares of forests to be cut down and resulting in spreading of diseases.
@@ -26,12 +26,11 @@ header-includes: |
   \usepackage{wrapfig}
   \usepackage{float}
 figPrefix:
-  - 'Figure.'
-  - 'Figures.'
+  - "Figure."
+  - "Figures."
 ---
 
 \newpage
-
 
 # Introduction
 
@@ -41,7 +40,7 @@ Some of the materials needed for creating a receipt are:
 - Wood
 
 The former is a chemical, which is toxic to the human skin and can lead to diseases such as cancer, diabetes type 2, obesity and others
-The paper needed to create a receipt requires a lot of trees - statistics show that every year 60 000+ decares of forests are cut 
+The paper needed to create a receipt requires a lot of trees - statistics show that every year 60 000+ decares of forests are cut
 Over 60 000+ decares of forests are cut down every year just for the creation of paper receipts.
 Removing the need for both of these materials will help us and our planet.
 
@@ -89,12 +88,9 @@ We provide the following features:
 
 # How it works
 
-Между всеки касов апарат и компютъра, свързан с него, ще бъде поставено по едно устройство - **Aumo**.
-**Aumo** представлява малък компютър (в случая Raspberry Pi), поставен в кутийка (изработена в случая от 3D принтер).
-Устройството ще играе роля на посредник и ще приема нужната информация от компютъра и в зависимост от избора на клиента,
-касовия бон ще бъде изпратен към принтера или към NFC модул (в случаите, когато клиента няма телефон, той може по да изисква своя касов бон по традиционния начин).
-Към този компютър - **Aumo** е свързан с NFC модул, чрез който той получава информация за касовия бон от компютъра (POS системата), а мобилното приложение ще получава касовата бележка чрез допир до устройството по NFC.
-Потребителите ще могат да допрат тяхното мобилно устройство до **Aumo**, изполвайки мобилното ни приложение и касовия бон ще бъде добавен в техния профил.
+Every POS terminal will be connected with **Aumo** - a small computer (Raspberry Pi), placed inside a 3D printed case.
+The device will act as a middleman and intercept the required information from the POS Terminal and based on the user's choice the receipt will either be sent to the printer (if the user decides to get a traditional receipt, for example if they don't have the app or a smartphone) or to their mobile device through the use of an NFC module.
+**Aumo** is equipped with an NFC module, which it uses for receiving the receipt from the POS Terminal. The mobile app receives the receipt when it approaches **Aumo**, thanks to the on board NFC chip that majority of smartphones have.
 
 # Мотив (Геймификация)
 
@@ -218,6 +214,7 @@ func (a *Aumo) CreateUser(u User) (User, error) {
 При установено проучване от нас, не успяхме да открием подобни решения, действащи в момента на пазара. Така се убедихме, че е време да започнем работа върху бъдещият ни продукт - **Aumo**.
 
 ## Избиране на технологии и архитектура
+
 През този етап ни минаха доста идеи относно подхода ни с технологиите, като се спряхме на вече гореспоментати. (Виж сек. [Технологии]).
 
 ## Архитектура
